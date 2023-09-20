@@ -1,0 +1,115 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">      
+        <div class="dialog-body">
+          <form id="form-configurar-dia-atendimento" [formGroup]="formDiaAtendimento">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-row align-items-center">
+                <nb-card-header class="aditi-header">
+                  <div class="back-link">
+                    <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                      <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                    </a>
+                  </div>
+                </nb-card-header>
+                <div class="form-group col-md-6">
+                  <h5 class="pt-3">Gerenciar Horário de Atendimento</h5>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-7">
+                  <div class="form-group">
+                    <div class="mb-lg-n4">
+                      <label for="medico">Nome do médico: {{ this.nomeMedico }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <div class="div-medico">
+                      <label for="semana">Escolha o dia da semana</label>
+                      <select class="form-control" formControlName="semana">
+                        <option value="null" selected>SELECIONE</option>
+                        <option *ngFor="let semana of listSemana" value="{{ semana.descricao }}">{{
+                          semana.descricao}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-9">
+                  <div class="form-group pt-2">
+                    <div class="text-right">
+                      <button class="btn btn-primary mr-3" (click)="addHora()">
+                        Adcionar horas
+                      </button>
+                      <button class="btn btn-danger mr-3" (click)="removerCard()">
+                        Remover card horas
+                      </button>
+                      <button class="btn btn-success" (click)="salvar(formDiaAtendimento.value)">
+                        Salvar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-7">
+                  <div class="title">
+                    Informa a sua data de Início e Fim de Atendimento, caso atenda em mais de um horário adicione mais
+                    de
+                    uma faixade horários.
+                  </div>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <nb-card-body>
+                  <section class="align-items-center">
+                    <div class="col-md-12 col-xs-12">
+                      <form #card="ngForm">
+                        <div class="form-row align-items-center">
+                          <section class="border-dark m-3 btn mt-lg-n4 paragraph-2 mb-5"
+                            style="background-color: white;" *ngFor="let card of tipoCard; let i = index;">
+                            <div class="col-md-12 col-xs-12 ">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <label for="horaInicio">Hora início</label>
+                                  <div class="row pl-3">
+                                    <input type="time" name="appt" required name="card{{card.id}}"
+                                      [(ngModel)]="card.horaInicio" />
+                                  </div>
+                                  <label for="horaFim">Hora fim</label>
+                                  <div class="row pl-3">
+                                    <input type="time" name="appt" required name="car{{card.id}}"
+                                      [(ngModel)]="card.horaFim" />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </div>
+                      </form>
+                    </div>
+                  </section>
+                </nb-card-body>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-12">
+                  <nb-card>
+                    <nb-card-body>
+                      <div class="form-row align-items-center">
+                        <div class="col-md-12 col-xs-12">
+                          <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"
+                            (editConfirm)="onSaveConfirm($event)" (createConfirm)="onCreateConfirm($event)"> </ng2-smart-table>
+                        </div>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+              </div>   
+              
+            </div>
+          </form>
+        </div>     
+    </div>
+  </div>
+</div>

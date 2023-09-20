@@ -1,0 +1,68 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <nb-card class="inline-form-card">
+        <nb-card-body>
+          <form id="form-cadastro" class="form-inline" [formGroup]="formCadastro">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-row align-items-center">
+                <div class="col-md-1">
+                  <div class="align-self-start">
+                    <img class="cadastro" src="assets/images/linhas_cadastro.png" />
+                  </div>
+                </div>
+                <div class="col-md-10">
+                  <div class="card-subtitle">
+                    <div class="text-center">
+                      <h5 class="text-center">Cadastro</h5>
+                    </div>
+                    <div class="text-center">
+                      Você é Médico ou tem uma Clínica?
+                    </div>
+                  </div>
+                  <br>
+                  <div class="text-center m-5">
+                    <button class="col-md-4 m-3" nbButton outline status="primary" type="button"
+                      (click)="cadastro($event.target.value)" value="medico"><nb-icon icon="people-outline"></nb-icon>
+                      MÉDICO</button>
+                    <button class="col-md-4 m-3" nbButton outline status="primary" type="button"
+                      (click)="cadastro($event.target.value)" value="clinica"><nb-icon icon="home-outline"></nb-icon>
+                      CLÍNICA</button>
+                  </div>
+                  <br>
+                    <!--<div class="text-center">
+                    <div *ngIf="isMedico">
+                      <label for="cpf" class="p-1">CPF</label>
+                      <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
+                        mask="000.000.000-00" maxlength="14" />
+                    </div>
+                  <div *ngIf="isClinica">
+                      <label for="cnpj" class="p-1">CNPJ</label>
+                      <input class="form-control" name="cnpj" id="cnpj" type="text" formControlName="cnpj"
+                        mask="00.000.000/0000-00" maxlength="18" />
+                    </div>
+                  </div>-->
+                  <br>
+                  <br>
+                  <div class="text-right">
+                    <button class="btn btn-primary m-2" (click)="voltar()">
+                      VOLTAR
+                    </button>
+                    <!--<button class="btn btn-primary m-2" (click)="salvar(formCadastro.value)">
+                      CONTINUAR
+                    </button>-->
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <div class="align-self-start">
+                    <img class="cadastro" src="assets/images/linhas_cadastro.png" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+</div>

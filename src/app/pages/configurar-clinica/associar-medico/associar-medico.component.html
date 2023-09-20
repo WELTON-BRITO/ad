@@ -1,0 +1,92 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">      
+        <div class="dialog-body">
+          <form id="form-associar-medico" [formGroup]="formAssociarMedico">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-6">
+                  <h5>Associar médico há clínica</h5>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group">
+                  <label class="pl-1">Por favor escolha o médico abaixo para realizar a configuração:</label>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-4">
+                  <div class="form-group">
+                    <div class="div-medico">
+                      <label for="cpf">Médico</label>
+                      <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
+                        mask="000.000.000-00" maxlength="14" placeholder="Informa o CPF do médico" />
+                    </div>
+                  </div>
+                </div>
+                <div class="p-2 pt-lg-3">
+                  <div class="form-group">
+                    <button class="btn btn-primary" (click)="pesquisaMedico(formAssociarMedico.value)">
+                      PESQUISAR
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group">
+                  <label class="pl-1">Verifique abaixo o médico retornado:</label>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-12">
+                  <nb-card>
+                    <nb-card-body>
+                      <div class="app-box">
+                        <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
+                          [footerHeight]="50" [rowHeight]="'auto'" [messages]="{emptyMessage: 'Sem dados...'}">
+                          <ngx-datatable-column name="Foto" prop="img" [width]="5"></ngx-datatable-column>
+                          <ngx-datatable-column name="Nome do médico" prop="nome" [width]="280">
+                            <ng-template ngx-datatable-cell-template let-row="row">
+                              <div class="text-left">
+                                {{ row.name }}
+                              </div>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Especialidade" prop="especialidade">
+                            <ng-template ngx-datatable-cell-template let-row="row">
+                              <div class="text-left">
+                                {{ row.specialty }}
+                              </div>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
+                            <ng-template ngx-datatable-cell-template let-row="row">
+                              <div class="text-center">
+                                <a class="home-icon" (click)="cadastrar(row)" title="Associar Médico">
+                                  <i class="fa fa-edit p-2"></i>
+                                </a>
+                              </div>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                              let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                              <div>
+                                <div class="page-count">
+                                  Total de Registros: {{rowCount}}
+                                </div>
+                              </div>
+                            </ng-template>
+                          </ngx-datatable-footer>
+                        </ngx-datatable>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>     
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="dialog-body">
+
+        <div class='div-app'>  
+          <div class='app-main'>
+            <full-calendar *ngIf='calendarVisible' [options]='calendarOptions'>
+              <ng-template #eventContent let-arg>
+                <b>{{ arg.timeText }}</b>
+                <i>{{ arg.event.title }}</i>
+              </ng-template>
+            </full-calendar>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,107 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">     
+        <div class="dialog-body">
+          <form id="form-configurar-excecao-atendimento" [formGroup]="formExcecaoAtendimento">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-group col-md-6">
+                <h5 class="ml-lg-n3">Exceção de Atendimento</h5>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-4">
+                  <div class="form-group">
+                    <label for="nome">Escolha o médico a ser consultado</label>
+                    <select class="form-control" formControlName="medico">
+                      <option value="null" selected>SELECIONE</option>
+                      <option *ngFor="let medico of listMedico" value="{{ medico.medico }}">{{
+                        medico.descricao}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <div class="form-group">
+                    <label for="dataExcecao">Escolha a data</label>
+                    <div class="row pl-3">
+                      <input class="date" type="date" id="dataExcecao" name="mydate" formControlName="dataExcecao"
+                        maxlength="10" />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-3">
+                  <div class="form-group pl-3">
+                    <label class="div-expediente">Terá expediente</label>
+                    <div class="row pl-3">
+                      <label class="radio-inline mr-3">
+                        <input class="mat-button" type="radio" id="radio" name="optradio" checked value="S"
+                          (click)="expediente($event.target.value)">
+                        Sim</label>
+                      <label class="radio-inline">
+                        <input class="mat-button" type="radio" id="radio" name="optradio" value="N"
+                          (click)="expediente($event.target.value)"> Não</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="col-md-12">
+                  <div class="text-right">
+                    <button class="btn btn-primary mr-3" id="addHoras" (click)="addHora()" *ngIf="isCardHoras">
+                      Adcionar horas
+                    </button>
+                    <button class="btn btn-danger mr-3" id="removerHoras" (click)="removerCard()" *ngIf="isCardHoras">
+                      Remover card horas
+                    </button>
+                    <button class="btn btn-success" (click)="salvar(formExcecaoAtendimento.value)">
+                      Salvar
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <nb-card-body>
+                <section class="align-items-center">
+                  <div class="col-md-12 col-xs-12">
+                    <form #card="ngForm">
+                      <div class="form-row align-items-center">
+                        <section class="border-dark m-3 btn mt-lg-n4 paragraph-2 mb-5" style="background-color: white;"
+                          *ngFor="let card of tipoCard; let i = index;">
+                          <div class="col-md-12 col-xs-12 ">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <label for="horaInicio">Hora início</label>
+                                <div class="row pl-3">
+                                  <input type="time" name="appt" required name="card{{card.id}}"
+                                    [(ngModel)]="card.horaInicio" />
+                                </div>
+                                <label for="horaFim">Hora fim</label>
+                                <div class="row pl-3">
+                                  <input type="time" name="appt" required name="car{{card.id}}"
+                                    [(ngModel)]="card.horaFim" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </form>
+                  </div>
+                </section>
+              </nb-card-body>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-12">
+                  <nb-card>
+                    <nb-card-body>
+                      <div class="form-row align-items-center">
+                        <div class="form-group col-md-12">
+                          <ng2-smart-table [settings]="settings" [source]="source"> </ng2-smart-table>
+                        </div>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+              </div>              
+            </div>
+          </form>
+        </div>     
+    </div>
+  </div>
+</div>

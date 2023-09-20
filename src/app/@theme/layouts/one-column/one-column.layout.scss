@@ -1,0 +1,15 @@
+@import '../../styles/themes';
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+
+@include nb-install-component() {
+  .menu-sidebar {
+    padding-top: nb-theme(layout-padding-top);
+    background-color: #313a46;
+    --menu-item-active-text-color: #fff;
+    --menu-item-icon-active-color: #fff;
+    --header-height: 0rem;
+    --menu-text-color: #ffffff;
+    --menu-group-text-color: #fff;
+  }
+}

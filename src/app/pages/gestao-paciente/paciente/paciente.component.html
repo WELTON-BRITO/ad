@@ -1,0 +1,94 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">     
+        <form id="form-paciente" [formGroup]="formPaciente">
+          <div class="col-md-12 col-xs-12">
+            <div class="form-row align-items-center">
+              <div class="form-group col-md-7">
+                <label for="pesquisa">Pesquisar</label>
+                <input class="form-control" name="pesquisa" id="pesquisa" type="text" formControlName="pesquisa"
+                  placeholder="Digite por nome, código, telefone ou CPF..." />
+              </div>
+              <div class="col-md-5 pl-5">
+                <button class="btn btn-success m-2 mb-lg-n1" (click)="novoPaciente()">
+                  NOVO PACIENTE
+                </button>
+                <button class="btn btn-primary m-2 mb-lg-n1" (click)="pesquisaGeral(formPaciente.value)">
+                  PESQUISAR
+                </button>
+              </div>
+            </div>
+            <div class="form-row align-items-center">
+              <div class="form-group col-md-12">
+                <nb-card>
+                  <nb-card-body>
+                    <div class="app-box">
+                      <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
+                        [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
+                        [messages]="{emptyMessage: 'Sem dados...'}" [limit]="6">
+
+                        <ngx-datatable-column name="Foto" prop="img"></ngx-datatable-column>
+                        <ngx-datatable-column name="Nome" prop="nome">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-left">
+                              {{ row.nome }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Telefone" prop="telefone">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.telefone }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Última Consulta" prop="ultimaConsulta">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.ultimaConsulta }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Data de Nascimento" prop="dataNascimento">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.dataNascimento }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              <a class="home-icon" (click)="editar(row)" title="Editar">
+                                <i class="fa fa-edit p-2"></i>
+                              </a>
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                          <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                            let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div>
+                              <div class="page-count">
+                                Total de Registros: {{rowCount}}
+                              </div>
+                            </div>
+                            <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
+                              [pagerRightArrowIcon]="'fa fa-angle-double-right '"
+                              [pagerPreviousIcon]="'fa fa-angle-left'" [pagerNextIcon]="'fa fa-angle-right '"
+                              [page]="curPage" [size]="pageSize" [count]="rowCount"
+                              [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                            </datatable-pager>
+                          </ng-template>
+                        </ngx-datatable-footer>
+                      </ngx-datatable>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </div>
+            </div>
+          </div>
+        </form>      
+    </div>
+  </div>
+</div>
