@@ -36,16 +36,16 @@ export class AssociarMedicoComponent implements OnDestroy {
 
       this.service.buscaDoctor(null, (response) => {
 
-        console.log(response[0])
+        console.log(response)
   
-        this.rowData = response
+        //this.rowData = response
 
-        /*this.rowData = this.rowData.map(data => {
+        this.rowData = this.rowData.map(data => {
           return {
-            nome: data.name,
+            name: data.name,
                        
           }
-        })*/
+        })
 
   
       }, (error) => {

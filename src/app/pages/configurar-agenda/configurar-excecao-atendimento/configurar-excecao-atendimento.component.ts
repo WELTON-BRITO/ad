@@ -3,6 +3,8 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Console } from 'console';
 import { LocalDataSource } from 'ng2-smart-table';
+import { ConfigurarExcecaoAtendimentoService } from './configurar-excecao-atendimento.service';
+import { HttpParams } from '@angular/common/http';
 
 
 @Component({
@@ -139,34 +141,18 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   source: LocalDataSource = new LocalDataSource(this.cartData);
 
   constructor(private formBuilder: FormBuilder,
-    private router: Router) {
+    private router: Router,
+    private service: ConfigurarExcecaoAtendimentoService) {
 
     //this.source = new LocalDataSource(this.cartData)
     this.tipoCard = [];
-    this.grupoCard = [];
-
-    this.listMedico = [
-      {
-        medico: '1',
-        descricao: 'Welton Luiz de Almeida Brito'
-      },
-      {
-        medico: '2',
-        descricao: 'Camila Marcia Parreira Silva'
-      },
-      {
-        medico: '3',
-        descricao: 'Ryan Carlos Silva Almeida Brito'
-      },
-      {
-        medico: '4',
-        descricao: 'Yasmim Vitória Silva Almeida Brito'
-      }
-        ]
+    this.grupoCard = [];    
 
   }
   ngOnDestroy() { }
   ngOnInit() {
+
+    this.pesquisaMedico();
 
     this.formExcecaoAtendimento = this.formBuilder.group({
       dataExcecao: [null],
@@ -179,9 +165,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   }
 
   onDeleteConfirm(event) {
-
-    console.log(event.data)
-
+    
     if (window.confirm('Tem certeza que deseja excluir?')) {
       event.confirm.resolve();
     } else {
@@ -230,6 +214,52 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       console.log('não terá expediente')
       this.isCardHoras = false
     }
+  }
+
+  pesquisaMedico() {
+
+    this.service.buscaDoctor(null, (response) => {
+
+      for (var i = 0; i < response.length; i++) {
+
+        this.listMedico = [
+          {
+            medico: response[i].id,
+            descricao: response[i].name,
+          }
+        ]
+
+      }
+
+    }, (error) => {
+      console.log(error)
+    });
+
+  }
+
+  buscarExcecaoDoctor(data){
+
+    let params = new HttpParams();
+
+    params = params.append('doctorId', data.medico)
+
+    this.service.buscarExcecaoDoctor(null, (response) => {
+
+      for (var i = 0; i < response.length; i++) {
+
+        this.listMedico = [
+          {
+            medico: response[i].id,
+            descricao: response[i].name,
+          }
+        ]
+
+      }
+
+    }, (error) => {
+      console.log(error)
+    });
+
   }
 
   salvar(data) {

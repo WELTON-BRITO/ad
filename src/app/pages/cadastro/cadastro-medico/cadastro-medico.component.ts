@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CadastroMedicoService } from './cadastro-medico.service';
+import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-cadastro-medico',
@@ -17,16 +18,21 @@ export class CadastroMedicoComponent implements OnInit {
   checked = false;
   public sexo = false;
   public listEstado = null;
+  public listEspecialidade = null;   
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private service: CadastroMedicoService) { }
+    private service: CadastroMedicoService,
+    private toastrService: NbToastrService) { 
+
+      
+    }
   ngOnDestroy() { }
 
   ngOnInit() {
-
+    
     this.buscaEstado();
-
+    this.buscaEspecialidade();
     this.formCadastroMedico = this.formBuilder.group({
       cnpj: [null, Validators.required],
       cpf: [null, Validators.required],
@@ -94,6 +100,8 @@ export class CadastroMedicoComponent implements OnInit {
 
     console.log(register)
 
+    this.toastrService.danger('teste aqui eu entrei teste aqui eu entrei teste aqui eu entrei');
+
     this.service.cadastrarMedico(register, (response => {
       console.log('entrei aqui')
       console.log(response)
@@ -112,9 +120,29 @@ export class CadastroMedicoComponent implements OnInit {
       this.listEstado = response
 
     }, (error) => {
-      console.log(error)
-      //this.notifications.error(error.message);
-      //this.limparForm();
+      console.log(error)      
+    });
+
+  }
+
+  buscaEspecialidade() {
+
+    this.service.buscaSpecialty(null, (response) => {
+      console.log(response)
+      for (var i = 0; i < response.length; i++) {
+
+        this.listEspecialidade = [
+          {
+            id: response[i].id,
+            descricao: response[i].name,
+          }
+        ]
+
+      }     
+      console.log(this.listEspecialidade)
+
+    }, (error) => {
+      console.log(error)      
     });
 
   }

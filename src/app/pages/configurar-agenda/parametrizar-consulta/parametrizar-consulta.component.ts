@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ParametrizarConsultaService } from './parametrizar-consulta.service';
 
 @Component({
   selector: 'ngx-parametrizar-consulta',
@@ -16,31 +17,14 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public checkEmergencial = null;
 
   constructor(private formBuilder: FormBuilder,
-    private router: Router) {
-
-    this.listMedico = [
-      {
-        medico: '1',
-        descricao: 'Welton Luiz de Almeida Brito'
-      },
-      {
-        medico: '2',
-        descricao: 'Camila Marcia Parreira Silva'
-      },
-      {
-        medico: '3',
-        descricao: 'Ryan Carlos Silva Almeida Brito'
-      },
-      {
-        medico: '4',
-        descricao: 'Yasmim Vitória Silva Almeida Brito'
-      }
-    ]
-
+    private router: Router,
+    private service: ParametrizarConsultaService) {
   }
+
   ngOnDestroy() { }
   ngOnInit() {
 
+    this.pesquisaMedico();
     this.formParametrizarConsulta = this.formBuilder.group({
       valorPresencial: [null],
       valorEmergencial: [null],
@@ -76,11 +60,56 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
   }
 
+  pesquisaMedico() {
+
+    this.service.buscaDoctor(null, (response) => {
+
+      for (var i = 0; i < response.length; i++) {
+
+        this.listMedico = [
+          {
+            medico: response[i].id,
+            descricao: response[i].name,
+          }
+        ]
+
+      }
+
+    }, (error) => {
+      console.log(error)
+    });
+
+  }
+
   salvar(data) {
     console.log(data)
-    console.log(this.checkEmergencial)
-    console.log(this.checkVideo)
-    console.log(this.checkPresencial)
+
+    let register = {
+
+      valueInPerson: data.valorPresencial,
+      valueRemote: data.valorVideo,
+      doctorId: data.medico,
+      valueInPersonEmergency: data.valorEmergencial,
+      valueAtHome: '3.0',
+      durationInPerson: data.tempoPresencial,
+      durationAtHome: '3.0',
+      durationRemote: data.tempoVideo,
+      durationEmergency: data.tempoEmergencial,
+      qrCode: '',
+      pixCode: '',
+
+    }
+
+    console.log(register)
+
+    this.service.cadastrarPriceDoctor(register, (response => {
+      console.log(response)
+    }), error => {
+
+      console.log(error)
+
+    });
+
   }
 
 }

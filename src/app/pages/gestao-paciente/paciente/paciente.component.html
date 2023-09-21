@@ -3,19 +3,33 @@
     <div class="col-md-12 col-xs-12">     
         <form id="form-paciente" [formGroup]="formPaciente">
           <div class="col-md-12 col-xs-12">
+            <div class="form-group col-md-4">
+              <h5 class="ml-lg-n3">Gestão Paciente</h5>
+            </div>
             <div class="form-row align-items-center">
-              <div class="form-group col-md-7">
+              <div class="form-group col-md-4">                
+                  <label for="nome">Escolha o médico a ser consultado</label>
+                  <select class="form-control" formControlName="medico">
+                    <option value="null" selected>SELECIONE</option>
+                    <option *ngFor="let medico of listMedico" value="{{ medico.medico }}">{{
+                      medico.descricao}}</option>
+                  </select>                
+              </div>
+              <div class="form-group col-md-3">
                 <label for="pesquisa">Pesquisar</label>
                 <input class="form-control" name="pesquisa" id="pesquisa" type="text" formControlName="pesquisa"
-                  placeholder="Digite por nome, código, telefone ou CPF..." />
+                  placeholder="Digite por nome, CPF..." />
               </div>
-              <div class="col-md-5 pl-5">
-                <button class="btn btn-success m-2 mb-lg-n1" (click)="novoPaciente()">
-                  NOVO PACIENTE
-                </button>
-                <button class="btn btn-primary m-2 mb-lg-n1" (click)="pesquisaGeral(formPaciente.value)">
-                  PESQUISAR
-                </button>
+              <div class="col-md-5 pl-5">  
+                <div class="text-right">
+                  <button class="btn btn-primary m-2 mb-lg-n1" (click)="pesquisaGeral(formPaciente.value)">
+                    PESQUISAR
+                  </button>
+                  <button class="btn btn-success m-2 mb-lg-n1" (click)="novoPaciente()">
+                    NOVO PACIENTE
+                  </button>
+                </div>              
+               
               </div>
             </div>
             <div class="form-row align-items-center">

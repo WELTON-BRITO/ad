@@ -19,6 +19,7 @@ import { CadastroRoutingModule } from './cadastro-routing.module';
 import { CadastroClinicaComponent } from './cadastro-clinica/cadastro-clinica.component';
 import { CadastroMedicoComponent } from './cadastro-medico/cadastro-medico.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { ToastrComponent } from '../shared/component/toastr/toastr.component';
 
 @NgModule({
   imports: [
@@ -39,11 +40,12 @@ import { NgxMaskModule } from 'ngx-mask';
     NbButtonModule,
     NgxEchartsModule,
     NbCheckboxModule, 
-    NgxMaskModule.forRoot(),
+    NgxMaskModule.forRoot(),    
   ],
   exports: [
   ],
   declarations: [
+    ToastrComponent,
     CadastroComponent,    
     CadastroMedicoComponent,
     CadastroClinicaComponent      

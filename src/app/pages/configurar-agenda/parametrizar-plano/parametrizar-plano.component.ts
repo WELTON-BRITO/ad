@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ParametrizarPlanoService } from './parametrizar-plano.service';
 
 @Component({
   selector: 'ngx-parametrizar-plano',
@@ -24,50 +25,14 @@ export class ParametrizarPlanoComponent implements OnDestroy {
   public isCardPlano = true;
 
   constructor(private formBuilder: FormBuilder,
-    private router: Router) {
-
-      this.listConvenio = [
-        {
-          convenio: '1',
-          descricao: 'Unimed'
-        },
-        {
-          convenio: '2',
-          descricao: 'Teste Vida'
-        },
-        {
-          convenio: '3',
-          descricao: 'Oni Teste'
-        },
-        {
-          convenio: '4',
-          descricao: 'Acabou'
-        }
-      ],
-      
-      this.listMedico = [
-        {
-          medico: '1',
-          descricao: 'Welton Luiz de Almeida Brito'
-        },
-        {
-          medico: '2',
-          descricao: 'Camila Marcia Parreira Silva'
-        },
-        {
-          medico: '3',
-          descricao: 'Ryan Carlos Silva Almeida Brito'
-        },
-        {
-          medico: '4',
-          descricao: 'Yasmim Vitória Silva Almeida Brito'
-        }
-      ]
+    private router: Router,
+    private service: ParametrizarPlanoService) {  }
     
-    
-  }
   ngOnDestroy() { }
   ngOnInit() {
+
+    this.pesquisaMedico();
+    this.pesquisaConvenio();
 
     this.formParametrizarPlano = this.formBuilder.group({      
       medico: [null],
@@ -120,6 +85,48 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       }
 
     }
+  }
+
+  pesquisaMedico() {
+
+    this.service.buscaDoctor(null, (response) => {
+
+      for (var i = 0; i < response.length; i++) {
+
+        this.listMedico = [
+          {
+            medico: response[i].id,
+            descricao: response[i].name,
+          }
+        ]
+
+      }
+
+    }, (error) => {
+      console.log(error)
+    });
+
+  }
+
+  pesquisaConvenio() {
+
+    this.service.buscaConvenio(null, (response) => {
+
+      for (var i = 0; i < response.length; i++) {
+
+        this.listConvenio = [
+          {
+            convenio: response[i].id,
+            descricao: response[i].name,
+          }
+        ]
+
+      }
+
+    }, (error) => {
+      console.log(error)
+    });
+
   }
 
   salvar(data){

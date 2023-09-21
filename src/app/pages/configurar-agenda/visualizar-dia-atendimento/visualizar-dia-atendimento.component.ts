@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { EncriptyUtilService } from '../../shared/services/encripty-util.services';
+import { VisualizarDiaAtendimentoService } from './visualizar-dia-atendimento.service';
 
 @Component({
   selector: 'ngx-visualizar-dia-atendimento',
@@ -133,32 +134,13 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   public listMedico = null;
   public listSemana = null; 
   public rowData: any = [];
-  //public teste1 = null;
 
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
+    private service: VisualizarDiaAtendimentoService,
     private encriptyService: EncriptyUtilService) {   
-
-    this.listMedico = [
-      {
-        medico: '1',
-        descricao: 'Welton Luiz de Almeida Brito'
-      },
-      {
-        medico: '2',
-        descricao: 'Camila Marcia Parreira Silva'
-      },
-      {
-        medico: '3',
-        descricao: 'Ryan Carlos Silva Almeida Brito'
-      },
-      {
-        medico: '4',
-        descricao: 'Yasmim Vitória Silva Almeida Brito'
-      }
-    ],
 
       this.listSemana = [
         {
@@ -195,6 +177,8 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
+    this.pesquisaMedico();
+
     this.formVisualizarDiaAtendimento = this.formBuilder.group({
       medico: [null],
     })
@@ -209,6 +193,27 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
     //let name = this.encriptyService.encriptyBySecretKey(event)
     console.log(name)
     this.router.navigate(['/pages/configurar-agenda/configurar-dia-atendimento'], { queryParams: event });
+  }
+
+  pesquisaMedico() {
+
+    this.service.buscaDoctor(null, (response) => {
+
+      for (var i = 0; i < response.length; i++) {
+
+        this.listMedico = [
+          {
+            medico: response[i].id,
+            descricao: response[i].name,
+          }
+        ]
+
+      }
+
+    }, (error) => {
+      console.log(error)
+    });
+
   }
 
   pesquisar(data) { 

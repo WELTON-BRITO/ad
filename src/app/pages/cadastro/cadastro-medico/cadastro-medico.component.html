@@ -18,7 +18,8 @@
                         icon="person-outline"></nb-icon> Informações
                       Gerais</button>
                     <button nbButton outline status="primary" type="button" class="btn btn-outline-primary col-md-5 m-3"
-                      (click)="dadosPessoais($event.target.value)" value="contato"><nb-icon icon="email-outline"></nb-icon>
+                      (click)="dadosPessoais($event.target.value)" value="contato"><nb-icon
+                        icon="email-outline"></nb-icon>
                       Contato</button>
                   </div>
                   <div *ngIf="isInfoGerais">
@@ -49,17 +50,24 @@
                       </div>
                     </div>
                     <div class="form-group row pl-3">
-                      <div class="col-md-2">
+                      <div class="col-md-3">
                         <div class="form-group">
                           <label for="dataNascimento">Data de nascimento</label>
                           <input class="date" class="form-control" type="date" id="dateNasc" name="mydate"
                             formControlName="dataNascimento" maxlength="10" />
                         </div>
                       </div>
-                      <div class="col-md-4">
-                        <label for="especialidade">Especialidade*</label>
-                        <input class="form-control" name="especialidade" id="especialidade" type="text"
-                          formControlName="especialidade" [dropSpecialCharacters]="true" />
+                      <div class="form-group col-md-4">
+                        <!--<label for="nome">Especialidade*</label>
+                        <select class="form-control" formControlName="especialidade">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let especialidade of listEspecialidade" value="{{ especialidade.especialidade }}">{{
+                            especialidade.descricao}}</option>
+                        </select>     -->
+                        <!--<div class="card flex justify-content-center">
+                          <p-multiSelect [options]="cities" [(ngModel)]="selectedCities2" defaultLabel="Select a City"
+                            optionLabel="name" display="chip"></p-multiSelect>
+                        </div>-->
                       </div>
                     </div>
                     <div class="form-group">
@@ -78,10 +86,10 @@
                       </div>
                     </div>
                   </div>
-                  <div *ngIf="isContato">                    
+                  <div *ngIf="isContato">
                     <div class="form-group">
                       <h6>Contato</h6>
-                    </div>                    
+                    </div>
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="telefoneCelular">Celular*</label>
@@ -101,7 +109,7 @@
                           [dropSpecialCharacters]="true" />
                       </div>
                     </div>
-                    <div class="form-group row pl-3">                     
+                    <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="estado">Estado</label>
                         <select class="form-control" formControlName="estado">
@@ -109,7 +117,7 @@
                           <option *ngFor="let estado of listEstado" value="{{ estado.estado }}">{{
                             estado.description}}</option>
                         </select>
-                      </div>                      
+                      </div>
                       <div class="col-md-4">
                         <label for="bairro">Bairro*</label>
                         <input class="form-control" name="bairro" id="bairro" type="text" formControlName="bairro"
@@ -125,8 +133,8 @@
                       <div class="col-md-3">
                         <label for="cep">Cep*</label>
                         <input class="form-control" name="cep" id="cep" type="text" formControlName="cep"
-                        mask="00000-000" [dropSpecialCharacters]="true" />
-                      </div>                     
+                          mask="00000-000" [dropSpecialCharacters]="true" />
+                      </div>
                       <div class="col-md-3">
                         <label for="numero">Número*</label>
                         <input class="form-control" name="numero" id="numero" type="number" formControlName="numero"
@@ -137,7 +145,7 @@
                         <input class="form-control" name="complemento" id="complemento" type="text"
                           formControlName="complemento" [dropSpecialCharacters]="true" />
                       </div>
-                    </div>                   
+                    </div>
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="email">E-mail</label>
@@ -169,7 +177,7 @@
                           <a href="#" target="_blank"> os Termos e condições </a>
                         </div>
                       </div>
-                    </div>   
+                    </div>                    
                     <div class="text-right">
                       <button class="btn btn-primary m-2" (click)="voltar()">
                         VOLTAR
@@ -179,7 +187,7 @@
                       </button>
                     </div>
                   </div>
-                </div>
+                </div>                
                 <div class="col-md-1">
                   <div class="align-self-start">
                     <img class="cadastro" src="assets/images/linhas_cadastro.png" />

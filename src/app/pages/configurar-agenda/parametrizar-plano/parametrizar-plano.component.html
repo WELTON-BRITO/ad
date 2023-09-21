@@ -21,7 +21,7 @@
                       <label for="nome">Escolha o médico a ser consultado</label>
                       <select class="form-control" formControlName="medico">
                         <option value="null" selected>SELECIONE</option>
-                        <option *ngFor="let medico of listMedico" value="{{ medico.descricao }}">{{
+                        <option *ngFor="let medico of listMedico" value="{{ medico.medico}}">{{
                           medico.descricao}}</option>
                       </select>
                     </div>

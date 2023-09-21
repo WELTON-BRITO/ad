@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { GerarQrCodeService } from './gerar-qr-code.service';
 
 @Component({
   selector: 'ngx-gerar-qr-code',
@@ -13,28 +14,8 @@ export class GerarQrCodeComponent implements OnDestroy {
   public listMedico = null;
 
   constructor(private formBuilder: FormBuilder,
-    private router: Router) {
-
-      this.listMedico = [
-        {
-          medico: '1',
-          descricao: 'Welton Luiz de Almeida Brito'
-        },
-        {
-          medico: '2',
-          descricao: 'Camila Marcia Parreira Silva'
-        },
-        {
-          medico: '3',
-          descricao: 'Ryan Carlos Silva Almeida Brito'
-        },
-        {
-          medico: '4',
-          descricao: 'Yasmim Vitória Silva Almeida Brito'
-        }
-      ]
-
-  }
+    private router: Router,
+    private service: GerarQrCodeService) {     }
   ngOnDestroy() { }
   ngOnInit() {
 
@@ -42,6 +23,27 @@ export class GerarQrCodeComponent implements OnDestroy {
       qrCode: [null],
       medico: [null]
     })
+
+  }
+
+  pesquisaMedico() {
+
+    this.service.buscaDoctor(null, (response) => {
+
+      for (var i = 0; i < response.length; i++) {
+
+        this.listMedico = [
+          {
+            medico: response[i].id,
+            descricao: response[i].name,
+          }
+        ]
+
+      }
+
+    }, (error) => {
+      console.log(error)
+    });
 
   }
 

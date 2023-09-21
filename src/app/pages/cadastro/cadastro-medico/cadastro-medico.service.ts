@@ -16,4 +16,8 @@ export class CadastroMedicoService {
     return this.httpService.doGet('/api/uf/all', data, successHandle, erroHandle)
   }
 
+  buscaSpecialty(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/specialty/all', data, successHandle, erroHandle)
+  }
+
 }

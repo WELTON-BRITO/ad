@@ -55,14 +55,15 @@ import { TokenInterceptorService } from './pages/shared/filters/token-intercepto
     GestaoPacienteModule, 
     GestaoPacienteRoutingModule,
     AgendaModule,
-    ConfigurarAgendaModule
-  ],
+    ConfigurarAgendaModule,
+   ],
   providers:    [ 
     { provide: LOCALE_ID, useValue: 'pt' },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
     LoadingBarService,
     AuthenticationService,
     HttpService,   
+    
     //NotificationsService 
  ],
  schemas: [CUSTOM_ELEMENTS_SCHEMA],

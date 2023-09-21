@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
     <nb-layout windowMode>   
 
       <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive>
+      <img  class="imagem mx-auto" src="assets/images/menu_img.png"/>
         <ng-content select="nb-menu"></ng-content>
       </nb-sidebar>
 
