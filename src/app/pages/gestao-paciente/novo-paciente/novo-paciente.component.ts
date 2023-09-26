@@ -2,6 +2,7 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NovoPacienteService } from './novo-paciente.service';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-novo-paciente',
@@ -15,6 +16,7 @@ export class NovoPacienteComponent implements OnDestroy {
   public formNovoPaciente = null;
   public listConvenio = null;
   public listEstado = null;
+  public listCidade = null;
   public isInformacao = true;
   public isLocalizacao = false;
   public isContato = false;
@@ -25,12 +27,15 @@ export class NovoPacienteComponent implements OnDestroy {
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private service: NovoPacienteService) { }
+    private service: NovoPacienteService,
+    private toastrService: NbToastrService) { }
 
   ngOnDestroy() { }
   
   ngOnInit() {
 
+    this.buscaEstado();
+    this.buscaConvenio();
     this.formNovoPaciente = this.formBuilder.group({
       codigo: [null],
       nome: [null],
@@ -56,9 +61,9 @@ export class NovoPacienteComponent implements OnDestroy {
   }
 
   tipoFormulario(data){
-    console.log(data)
+
     if(data === 'informacao'){
-      console.log('entrei aqui isInformacao')
+
       this.isInformacao = true;
       this.isLocalizacao = false;
       this.isContato = false;
@@ -67,7 +72,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isCadastrar = false;
       this.isVoltar = false;
     }else if(data === 'localizacao'){
-      console.log('entrei aqui isLocalizacao')
+
       this.isInformacao = false;
       this.isLocalizacao = true;
       this.isContato = false;
@@ -76,7 +81,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isCadastrar = false;
       this.isVoltar = true;
     }else if(data === 'contato'){
-      console.log('entrei aqui isContato')
+
       this.isInformacao = false;
       this.isLocalizacao = false;
       this.isContato = true;
@@ -85,7 +90,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isCadastrar = false;
       this.isVoltar = true;
     }else if(data === 'addFotos'){
-      console.log('entrei aqui isAddFotos')
+
       this.isInformacao = false;
       this.isLocalizacao = false;
       this.isContato = false;
@@ -99,20 +104,17 @@ export class NovoPacienteComponent implements OnDestroy {
   proximo(data){
     
     if(data.isInformacao == true){
-      console.log(data.isInformacao)
-      console.log('entrei na primeira tela')
+      
       this.isInformacao = false;
       this.isLocalizacao = true;
       this.isVoltar = true;
     }else if(data.isLocalizacao == true){
-      console.log(data.isLocalizacao)
-      console.log('entrei na segunda tela')
+      
       this.isLocalizacao = false;
       this.isContato = true;
       this.isVoltar = true;
     }else if(data.isContato == true){
-      console.log(data.isContato)
-      console.log('entrei na terceira tela')
+      
       this.isContato = false;
       this.isAddFotos = true;
       this.isProximo = false;
@@ -150,26 +152,32 @@ export class NovoPacienteComponent implements OnDestroy {
 
     this.service.buscaEstado(null, (response) => {
 
-      this.listEstado = response   
-     
+      this.listEstado = response        
     }, (error) => {
-      console.log(error)
-      //this.notifications.error(error.message);
-      //this.limparForm();
+      this.toastrService.danger(error.error.message);     
     });
 
+  }
+
+  buscaCidade(data){
+    
+   this.service.buscaCidade(null, data, (response) => {
+
+      this.listCidade = response     
+     
+    }, (error) => {
+      this.toastrService.danger(error.error.message);      
+    });
   }
 
   buscaConvenio() {   
 
     this.service.buscaConvenio(null, (response) => {
-      console.log(response)
+
       this.listConvenio = response   
      
     }, (error) => {
-      console.log(error)
-      //this.notifications.error(error.message);
-      //this.limparForm();
+      this.toastrService.danger(error.error.message);  
     });
 
   }

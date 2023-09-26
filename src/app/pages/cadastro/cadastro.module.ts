@@ -40,7 +40,7 @@ import { ToastrComponent } from '../shared/component/toastr/toastr.component';
     NbButtonModule,
     NgxEchartsModule,
     NbCheckboxModule, 
-    NgxMaskModule.forRoot(),    
+    NgxMaskModule.forRoot(),  
   ],
   exports: [
   ],

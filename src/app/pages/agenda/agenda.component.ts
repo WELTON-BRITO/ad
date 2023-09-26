@@ -60,7 +60,7 @@ export class AgendaComponent {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    console.log(selectInfo)
+
     const title = prompt('Insira um novo título para o seu evento');
     const calendarApi = selectInfo.view.calendar;
 

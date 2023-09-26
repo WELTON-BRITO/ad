@@ -34,16 +34,12 @@ export class ListMedicoComponent implements OnDestroy {
   
   pesquisaMedico(data){
 
-    let params = new HttpParams();   
+    let params = new HttpParams();       
     
-    
-  console.log(data)
     //params = params.append('federalId', data.cpf)
 
       this.service.buscaDoctor(null, (response) => {
-
-        console.log(response[0])
-  
+ 
         this.rowData = response
 
         /*this.rowData = this.rowData.map(data => {

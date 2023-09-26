@@ -16,5 +16,9 @@ export class ConfigurarExcecaoAtendimentoService {
     return this.httpService.doGet('/api/schedule/exception/all', data, successHandle, erroHandle)
   }
 
+  salvarExcecaoDoctor(data: any, successHandle: Function, errorHandle: Function) {
+    return this.httpService.doPost('/api/schedule/exception', data, successHandle, errorHandle);
+  }
+
 
 }

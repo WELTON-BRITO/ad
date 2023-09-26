@@ -21,8 +21,8 @@ export class HttpService {
   private responsecallback(
     observable: Observable<HttpResponse<Object>>,
     successHandle: Function,
-    errorHandle?: Function,
-    request?: any,
+    errorHandle?: Function
+    
   ) {
     try {
       observable.subscribe(
@@ -92,12 +92,7 @@ export class HttpService {
     return this.responsecallback(
       this.http.post(url, body, { observe: "response" }),
       successHandle,
-      errorHandle,
-      {
-        path: path,
-        body: body,
-        metodo: 'POST'
-      }
+      errorHandle
     );
 
   }
@@ -116,12 +111,7 @@ export class HttpService {
     return this.responsecallback(
       this.http.put(url, body, { observe: "response" }),
       successHandle,
-      errorHandle,
-      {
-        path: path,
-        body: body,
-        metodo: 'PUT'
-      }
+      errorHandle
     );
   }
 
@@ -138,11 +128,7 @@ export class HttpService {
     return this.responsecallback(
       this.http.delete(url, { observe: "response" }),
       successHandle,
-      errorHandle,
-      {
-        path: path,
-        metodo: 'DELETE'
-      }
+      errorHandle     
     );
   }
 
@@ -162,12 +148,7 @@ export class HttpService {
     return this.responsecallback(
       this.http.get(url, { params, observe: "response" }),
       successHandle,
-      errorHandle,
-      {
-        path: path,
-        params: params,
-        metodo: 'GET'
-      }
+      errorHandle
     );
   }
 
@@ -185,12 +166,7 @@ export class HttpService {
     return this.responsecallback(
       this.http.patch(url, body, { observe: "response" }),
       successHandle,
-      errorHandle,
-      {
-        path: path,
-        body: body,
-        metodo: 'PATCH'
-      }
+      errorHandle
     );
   }
 
@@ -208,12 +184,7 @@ export class HttpService {
     return this.responsecallback(
       this.http.get(path, { params, observe: "response" }),
       successHandle,
-      errorHandle,
-      {
-        path: path,
-        params: params,
-        metodo: 'GETPATH'
-      }
+      errorHandle
     );
   }
 }

@@ -1,10 +1,11 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Console } from 'console';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ConfigurarExcecaoAtendimentoService } from './configurar-excecao-atendimento.service';
 import { HttpParams } from '@angular/common/http';
+import { NbToastrService } from '@nebular/theme';
+import * as moment from 'moment';
 
 
 @Component({
@@ -24,129 +25,19 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   public card = null;
   public listMedico = null;
   public isCardHoras = true;
-
-  settings = {
-    actions: false,
-    attr: {
-      class: 'table table-striped table-bordered table-hover'
-    },
-    defaultStyle: true,
-    columns: {
-      name: {
-        title: 'Pesquisa por nome',
-        type: 'name',
-      },
-      date: {
-        title: 'Pesquisa por data',
-        type: 'date',
-      },
-      horaInicio: {
-        title: 'Pesquisa por hora início',
-        type: 'hora',
-      },
-      horaFim: {
-        title: 'Pesquisa por hora fim',
-        type: 'hora',
-      },
-    },
-  };
-
-  cartData = [
-    {
-      id: "1",
-      name: "Welton Luiz de Almeida Brito",
-      date: "14/08/2023",
-      horaInicio: "10:50",
-      horaFim: "11:50"
-    },
-    {
-      id: "2",
-      name: "Camila Marcia",
-      date: "02/08/2023",
-      horaInicio: "05:00",
-      horaFim: "06:00"
-    },
-    {
-      id: "3",
-      name: "Ryan Carlos",
-      date: "12/08/2023",
-      horaInicio: "11:50",
-      horaFim: "12:00"
-    },
-    {
-      id: "4",
-      name: "Yasmim Vitória",
-      date: "20/08/2023",
-      horaInicio: "09:50",
-      horaFim: "10:00"
-    },
-    {
-      id: "5",
-      name: "Welton Luiz de Almeida Brito",
-      date: "14/08/2023",
-      horaInicio: "10:50",
-      horaFim: "12:00"
-    },
-    {
-      id: "6",
-      name: "Camila Marcia",
-      date: "02/08/2023",
-      horaInicio: "05:00",
-      horaFim: "06:00"
-    },
-    {
-      id: "7",
-      name: "Ryan Carlos",
-      date: "12/08/2023",
-      horaInicio: "11:50",
-      horaFim: "12:00"
-    },
-    {
-      id: "8",
-      name: "Yasmim Vitória",
-      date: "20/08/2023",
-      horaInicio: "09:50",
-      horaFim: "10:00"
-    },
-    {
-      id: "9",
-      name: "Welton Luiz de Almeida Brito",
-      date: "14/08/2023",
-      horaInicio: "10:50",
-      horaFim: "11:00"
-    },
-    {
-      id: "10",
-      name: "Camila Marcia",
-      date: "02/08/2023",
-      horaInicio: "05:00",
-      horaFim: "06:00"
-    },
-    {
-      id: "11",
-      name: "Ryan Carlos",
-      date: "12/08/2023",
-      horaInicio: "11:50",
-      horaFim: "12:00"
-    },
-    {
-      id: "12",
-      name: "Yasmim Vitória",
-      date: "20/08/2023",
-      horaInicio: "09:50",
-      horaFim: "10:00"
-    }
-  ];
-
-  source: LocalDataSource = new LocalDataSource(this.cartData);
+  public isActive = true;
+  public rowData = null;
+  public doctorId = null;
+  public horaInicio = null;
+  public horaFim = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private service: ConfigurarExcecaoAtendimentoService) {
+    private service: ConfigurarExcecaoAtendimentoService,
+    private toastrService: NbToastrService) {
 
-    //this.source = new LocalDataSource(this.cartData)
     this.tipoCard = [];
-    this.grupoCard = [];    
+    this.grupoCard = [];
 
   }
   ngOnDestroy() { }
@@ -164,54 +55,24 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
   }
 
-  onDeleteConfirm(event) {
-    
-    if (window.confirm('Tem certeza que deseja excluir?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
-  }
-
-  onCreateConfirm(event) {
-
-    console.log(event.data);
-    //if (window.confirm('Are you sure you want to create?')) {
-    event.confirm.resolve();
-    //} else {
-    // event.confirm.reject();
-    //}
-
-  }
-
-  onSaveConfirm(event) {
-    console.log(event.data);
-    event.confirm.resolve();
-  }
-
   addHora() {
 
     this.tipoCard.push({
       id: this.tipoCard.length + 1,
-      horaInicio: '',
-      horaFim: ''
     })
   }
 
-  removerCard(){
+  removerCard() {
 
-    this.tipoCard.splice(this.tipoCard.indexOf(3), 1);         
-     
+    this.tipoCard.splice(this.tipoCard.indexOf(3), 1);
+
   }
 
-  expediente(data){
-    console.log(data)
+  expediente(data) {
 
-    if(data === 'S'){
-      console.log('tem expediente')
+    if (data === 'S') {
       this.isCardHoras = true
-    }else{
-      console.log('não terá expediente')
+    } else {
       this.isCardHoras = false
     }
   }
@@ -220,59 +81,92 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
     this.service.buscaDoctor(null, (response) => {
 
-      for (var i = 0; i < response.length; i++) {
-
-        this.listMedico = [
-          {
-            medico: response[i].id,
-            descricao: response[i].name,
-          }
-        ]
-
-      }
+      this.listMedico = response
+      this.isActive = false
 
     }, (error) => {
-      console.log(error)
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
     });
 
   }
 
-  buscarExcecaoDoctor(data){
+  buscarExcecaoDoctor(data) {
 
     let params = new HttpParams();
 
-    params = params.append('doctorId', data.medico)
+    params = params.append('doctorId', data)
 
-    this.service.buscarExcecaoDoctor(null, (response) => {
+    this.service.buscarExcecaoDoctor(params, (response) => {
 
-      for (var i = 0; i < response.length; i++) {
+      this.rowData = response;
 
-        this.listMedico = [
-          {
-            medico: response[i].id,
-            descricao: response[i].name,
+      if (response.length != 0) {
+        this.rowData = this.rowData.map(data => {
+          return {
+            nome: data.doctor.name.split(' ')[0],
+            data: moment(data.dateException).format("DD/MM/YYYY"),
+            horaInicio: data.startTime,
+            horaFim: data.endTime
           }
-        ]
-
+        })
+      } else {
+        this.toastrService.warning('Não possui exceção de atendimento !!!');
       }
 
     }, (error) => {
-      console.log(error)
+      this.toastrService.danger('Não possui hora marcada !!!');
     });
 
   }
 
   salvar(data) {
-    console.log(data)
-    console.log(this.tipoCard)
 
-   /* for (let i = 0; i < this.tipoCard.length; i++) {
-
-      this.card = this.tipoCard[i]
-      
+    if (this.isCardHoras == true) {
+      this.horaInicio = this.tipoCard[0].horaInicio;
+      this.horaFim = this.tipoCard[0].horaFim
     }
-    console.log(this.card)*/
-   
+
+    let register = {
+      doctorId: this.doctorId,
+      clinicId: null,
+      startTime: this.horaInicio,
+      endTime: this.horaFim,
+      dateException: data.dataExcecao,
+      away: this.isCardHoras
+    }
+
+    this.isActive = true;
+
+    this.service.salvarExcecaoDoctor(register, (response => {
+      this.isActive = false;
+      this.toastrService.success('Registro cadastrado com sucesso !!!');
+      this.buscarExcecaoDoctor(response.doctor.id)
+      this.limpaForm()
+    }), error => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+    });
+
+  }
+
+  limpaForm() {
+
+    this.formExcecaoAtendimento = this.formBuilder.group({
+      dataExcecao: [null],
+      horaInicio: [null],
+      horaFim: [null],
+      card: [null],
+      medico: [null]
+    })
+
+    this.removerCard()
+  }
+
+  verificaMedico(data) {
+
+    this.doctorId = data
+    this.buscarExcecaoDoctor(data)
   }
 
 }

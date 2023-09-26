@@ -46,10 +46,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'calendar-outline',
     link: '/pages/configurar-agenda',
     children: [      
-      {
+      /*{
         title: 'Configurar dia de Atendimento',
         link: '/pages/configurar-agenda/configurar-dia-atendimento',
-      },
+      },*/
       {
         title: 'Configurar Exceção',
         link: '/pages/configurar-agenda/configurar-excecao-atendimento',
@@ -77,10 +77,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Associar Médicos',
         link: '/pages/configurar-clinica/associar-medico',
       },
-      {
+      /*{
         title: 'Listar Médicos',
         link: '/pages/configurar-clinica/list-medico',
-      },
+      },*/
       
     ]
   }, 

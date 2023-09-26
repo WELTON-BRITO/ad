@@ -25,7 +25,7 @@ export class CadastroComponent implements OnInit {
   } 
   
   cadastro(data){
-    console.log(data)
+    
     if(data === 'medico'){  
       this.router.navigate(['/cadastro-medico']);       
     }else{

@@ -2,6 +2,7 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParametrizarConsultaService } from './parametrizar-consulta.service';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-parametrizar-consulta',
@@ -15,10 +16,12 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public checkPresencial = null;
   public checkVideo = null;
   public checkEmergencial = null;
+  public isActive = true;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private service: ParametrizarConsultaService) {
+    private service: ParametrizarConsultaService,
+    private toastrService: NbToastrService) {
   }
 
   ngOnDestroy() { }
@@ -64,25 +67,17 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
     this.service.buscaDoctor(null, (response) => {
 
-      for (var i = 0; i < response.length; i++) {
-
-        this.listMedico = [
-          {
-            medico: response[i].id,
-            descricao: response[i].name,
-          }
-        ]
-
-      }
+      this.listMedico = response
+      this.isActive = false
 
     }, (error) => {
-      console.log(error)
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
     });
 
   }
 
   salvar(data) {
-    console.log(data)
 
     let register = {
 
@@ -90,9 +85,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       valueRemote: data.valorVideo,
       doctorId: data.medico,
       valueInPersonEmergency: data.valorEmergencial,
-      valueAtHome: '3.0',
+      valueAtHome: null,
       durationInPerson: data.tempoPresencial,
-      durationAtHome: '3.0',
+      durationAtHome: null,
       durationRemote: data.tempoVideo,
       durationEmergency: data.tempoEmergencial,
       qrCode: '',
@@ -100,16 +95,32 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
     }
 
-    console.log(register)
+    this.isActive = true;
 
     this.service.cadastrarPriceDoctor(register, (response => {
-      console.log(response)
+      this.isActive = false;
+      this.toastrService.success('Registro cadastrado com sucesso !!!');
+      this.limpaForm()
     }), error => {
-
-      console.log(error)
-
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
     });
 
   }
+
+  limpaForm() {
+
+    this.formParametrizarConsulta = this.formBuilder.group({
+      valorPresencial: [null],
+      valorEmergencial: [null],
+      valorVideo: [null],
+      tempoPresencial: [null],
+      tempoVideo: [null],
+      tempoEmergencial: [null],
+      medico: [null],
+    })
+
+  }
+
 
 }

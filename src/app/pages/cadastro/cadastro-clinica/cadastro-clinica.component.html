@@ -28,11 +28,12 @@
                     <div class="form-group">
                       <h6>Cadastro</h6>
                     </div>
-                    <div class="form-group">
-                      <img src="assets/images/img_teste_medico.png" />
-                    </div>
-                    <div class="form-group" id="formFooter">
-                      <a class="btn underlineHover" role="button">Editar Foto</a>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-5">
+                        <label for="imgem">Adcione a logo da clínica</label>
+                        <input class="form-control-file media-body" name="imgem" id="imgem" type="file" formControlName="imgem" 
+                        (change)="converterImagem($event, $event.target)" value="imagem"/>
+                      </div>                     
                     </div>
                     <div class="form-group">
                       <div class="col-md-3">
@@ -74,20 +75,24 @@
                           mask="(00) 0 0000-0000 || (00) 0000-0000" maxlength="16" />
                       </div>
                       <div class="col-md-4">
-                        <label for="cidade">Cidade*</label>
-                        <input class="form-control" name="cidade" id="cidade" type="text" formControlName="cidade"
-                          [dropSpecialCharacters]="true" />
-                      </div>
-                    </div>
-                    <div class="form-group row pl-3">                     
-                      <div class="col-md-4">
                         <label for="estado">Estado</label>
-                        <select class="form-control" formControlName="estado">
+                        <select class="form-control" formControlName="estado"
+                        (change)="buscaCidade($event.target.value)">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let estado of listEstado" value="{{ estado.estado }}">{{
                             estado.description}}</option>
                         </select>
-                      </div>                      
+                      </div>   
+                    </div>
+                    <div class="form-group row pl-3">                     
+                      <div class="col-md-4">
+                        <label for="cidade">Cidade</label>
+                        <select class="form-control" formControlName="cidade">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{
+                            cidade.description}}</option>
+                        </select>
+                      </div>       
                       <div class="col-md-4">
                         <label for="bairro">Bairro*</label>
                         <input class="form-control" name="bairro" id="bairro" type="text" formControlName="bairro"
@@ -125,7 +130,7 @@
                       <div class="col-md-4">
                         <label for="confirmaEmail">Confirma e-mail</label>
                         <input class="form-control" name="confirmaEmail" id="confirmaEmail" type="text"
-                          formControlName="confirmaEmail" maxlength="50" />
+                          formControlName="confirmaEmail" maxlength="50" (change)="verificarEmail(formCadastroMedico.value)"/>
                       </div>
                     </div>
                     <div class="form-group row pl-3">
@@ -136,7 +141,7 @@
                       <div class="col-md-4">
                         <label for="confirmaSenha">Confirma a senha</label>
                         <input class="form-control" name="confirmaSenha" id="confirmaSenha" type="password"
-                          formControlName="confirmaSenha" maxlength="50" />
+                          formControlName="confirmaSenha" maxlength="50" (change)="verificarPassWord(formCadastroMedico.value)"/>
                       </div>
                     </div>
                     <div class="form-group">
@@ -152,7 +157,7 @@
                       <button class="btn btn-primary m-2" (click)="voltar()">
                         VOLTAR
                       </button>
-                      <button class="btn btn-primary m-2" (click)="cadastro(formCadastroClinica.value)">
+                      <button class="btn btn-success m-2" (click)="cadastro(formCadastroClinica.value)">
                         CADASTRAR
                       </button>
                     </div>

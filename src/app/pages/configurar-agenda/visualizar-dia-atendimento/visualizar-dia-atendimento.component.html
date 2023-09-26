@@ -14,10 +14,11 @@
                 <div class="form-group">
                   <div class="div-medico">
                     <label for="nome">Escolha o médico a ser consultado</label>
-                    <select class="form-control" formControlName="medico">
+                    <select class="form-control" formControlName="medico"
+                    (change)="verificaHorario($event.target.value)">
                       <option value="null" selected>SELECIONE</option>
-                      <option *ngFor="let medico of listMedico" value="{{ medico.descricao }}">{{
-                        medico.descricao}}</option>
+                      <option *ngFor="let medico of listMedico" value="{{ medico.id}}">{{
+                        medico.name}}</option>
                     </select>
                   </div>
                 </div>
@@ -25,9 +26,9 @@
               <div class="col-md-8">
                 <div class="form-group pt-2">
                   <div class="text-right">
-                    <button class="btn btn-primary mr-3" (click)="pesquisar(formVisualizarDiaAtendimento.value)">
+                    <!--<button class="btn btn-primary mr-3" (click)="pesquisar(formVisualizarDiaAtendimento.value)">
                       Pesquisar
-                    </button>
+                    </button>-->
                     <button class="btn btn-success mr-3"
                       (click)="configAtendimento(formVisualizarDiaAtendimento.value)">
                       Configurar atendimento
@@ -40,6 +41,101 @@
               <div class="form-group col-md-12">
                 <nb-card>
                   <nb-card-body>
+                    <div class="app-box">
+                      <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
+                        [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
+                        [messages]="{emptyMessage: 'Sem dados...'}" [limit]="8">
+                        
+                        <ngx-datatable-column name="Nome" prop="nome">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.nome }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Segunda" prop="segunda">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.segunda }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Terça" prop="terca">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.terca }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Quarta" prop="quarta">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.quarta }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Quinta" prop="quinta">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.quinta }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Sexta" prop="sexta">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.sexta }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Sabado" prop="sabado">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.sabado }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Domingo" prop="domingo">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.domingo }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                          <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                            let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div>
+                              <div class="page-count">
+                                Total de Registros: {{rowCount}}
+                              </div>
+                            </div>
+                            <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
+                              [pagerRightArrowIcon]="'fa fa-angle-double-right '"
+                              [pagerPreviousIcon]="'fa fa-angle-left'" [pagerNextIcon]="'fa fa-angle-right '"
+                              [page]="curPage" [size]="pageSize" [count]="rowCount"
+                              [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                            </datatable-pager>
+                          </ng-template>
+                        </ngx-datatable-footer>
+                      </ngx-datatable>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </div>
+            </div>
+            <div class="row" *ngIf="isActive" class="loader">
+              <div class="text-center" style="margin-top: -250px;">
+                <button class="btn btn-primary" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Carregando...
+                </button>
+              </div>
+            </div>
+           <!-- <div class="form-row align-items-center">
+              <div class="form-group col-md-12">
+                <nb-card>
+                  <nb-card-body>
                     <div class="form-row align-items-center">
                       <div class="col-md-12 col-xs-12">
                         <ng2-smart-table [settings]="settings" [source]="source"> </ng2-smart-table>
@@ -48,7 +144,7 @@
                   </nb-card-body>
                 </nb-card>
               </div>
-            </div>
+            </div>-->
           </div>
         </form>
       </div>

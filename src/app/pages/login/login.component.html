@@ -1,54 +1,67 @@
-<div class="row">  
-    <div class="col-md-4">
-      <nb-card>
-        <nb-card-body>
-          <form id="form-cadastro-medico" [formGroup]="formLogin">
-            <div class="form-group">
-              <img class="text-center" src="assets/images/login_aditi.png" />
-            </div>
-            <br>
-            <div class="form-group">
-              <h6>Entrar</h6>
-            </div>
-            <br>         
-            <div class="form-group">
-              <p>Digite login e senha para acessar conta.</p>
-            </div>
-            <div class="form-group">
-              <label for="exampleInputEmail1" class="label">Login</label>
-              <input class="form-control" name="login" id="login" type="email" formControlName="login" nbInput fullWidth
-                placeholder="Login" />
-            </div>   
-            <div class="form-group">
-              <label for="password" class="label">Password</label>           
-                <a class="label col-sm-4 col-form-label a-senha" href="#" target="_blank">Esqueceu sua senha?</a>  
-              <input class="form-control" type="password" id="password" formControlName="password" maxlength="30" nbInput fullWidth placeholder="Password">
-            </div>
-            <div class="form-group">
-              <nb-checkbox>Lembre de mim</nb-checkbox>
-            </div>
-            <div class="form-group">
-              <div class="login_btn">
-                <button type="button" class="btn btn-primary nb-custom-message-full-width"
-                  (click)="login()">Entrar</button>
+<div class="row">
+  <div class="col-md-12 col-xs-12">
+    <nb-card class="inline-form-card">
+      <nb-card-body>
+        <form id="form-cadastro-medico" [formGroup]="formLogin">
+          <div class="col-md-12 col-xs-12">
+            <div class="form-row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <img class="text-center" src="assets/images/login_aditi.png" />
+                </div>               
+                <div class="form-group">
+                  <h6>Entrar</h6>
+                </div>                
+                <div class="form-group">
+                  <p>Digite login e senha para acessar conta.</p>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1" class="label">Login</label>
+                  <input class="form-control" name="login" id="login" type="email" formControlName="login" nbInput
+                    fullWidth placeholder="Login" />
+                </div>
+                <div class="form-group">
+                  <label for="password" class="label">Password</label>
+                  <a class="label col-sm-4 col-form-label a-senha" href="#" target="_blank">Esqueceu sua senha?</a>
+                  <input class="form-control" type="password" id="password" formControlName="password" maxlength="30"
+                    nbInput fullWidth placeholder="Password">
+                </div>
+                <div class="form-group">
+                  <nb-checkbox>Lembre de mim</nb-checkbox>
+                </div>
+                <div class="form-group">
+                  <div class="login_btn">
+                    <button type="button" class="btn btn-primary nb-custom-message-full-width"
+                      (click)="login()">Entrar</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="login_btn">
+                    <button type="button" class="btn btn-success nb-custom-message-full-width"
+                      (click)="register()">Cadastrar</button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="form-group">
+                  <div class="text-center">
+                    <img src="assets/images/login_img.png" />
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="isActive" class="loader">
+                <div class="text-center" style="margin-top: -400px;margin-left: 580px;">
+                  <button class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Carregando...
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="form-group">
-              <div class="login_btn">
-                <button type="button" class="btn btn-success nb-custom-message-full-width"
-                  (click)="register()">Cadastrar</button>
-              </div>
-            </div>
-          </form>
-        </nb-card-body>
-      </nb-card>
-    </div>
-    <div class="col-md-8">
-      <div class="form-group">
-        <div class="text-center">
-          <img src="assets/images/login_img.png" />
-        </div>
-      </div>
-    </div>
-  
+          </div>
+        </form>
+      </nb-card-body>
+    </nb-card>
+
+  </div>
 </div>

@@ -26,6 +26,7 @@ import { ParametrizarPlanoComponent } from './parametrizar-plano/parametrizar-pl
 import { ParametrizarConsultaComponent } from './parametrizar-consulta/parametrizar-consulta.component';
 import { VisualizarDiaAtendimentoService } from './visualizar-dia-atendimento/visualizar-dia-atendimento.service';
 import { EncriptyUtilService } from '../shared/services/encripty-util.services';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { EncriptyUtilService } from '../shared/services/encripty-util.services';
     NgxEchartsModule,
     //NgxMaskModule.forRoot(),
     Ng2SmartTableModule,  
-    CurrencyMaskModule  
+    CurrencyMaskModule,
+    NgxDatatableModule  
   ],
   declarations: [
     ConfigurarAgendaComponent,

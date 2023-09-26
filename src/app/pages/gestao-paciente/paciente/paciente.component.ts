@@ -21,7 +21,7 @@ export class PacienteComponent implements OnInit {
     private service: PacienteService) { }
 
   ngOnInit() {
-    console.log('entrei')
+
     this.pesquisaMedico();
 
     this.formPaciente = this.formBuilder.group({
@@ -80,7 +80,6 @@ export class PacienteComponent implements OnInit {
   }
 
   pesquisaGeral(data) {
-    console.log(data)
 
     let params = new HttpParams();
 
@@ -96,7 +95,6 @@ export class PacienteComponent implements OnInit {
 
     this.service.buscaPaciente(params, (response) => {
 
-      console.log(response)
 
       ///this.rowData = response
 
@@ -137,8 +135,6 @@ export class PacienteComponent implements OnInit {
   }
 
   novoPaciente() {
-
-    console.log('entrei aqui')
     this.router.navigate(['/pages/gestao-paciente/novo-paciente']);
   }
 }

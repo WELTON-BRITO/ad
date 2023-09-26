@@ -15,5 +15,9 @@ export class NovoPacienteService {
   buscaConvenio(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/healthPlan/all', data, successHandle, erroHandle)
   }
+  
+  buscaCidade(data, ufId:any,successHandle: Function, errorHandle: Function){
+    return this.httpService.doGet('/api/city/uf/' + ufId + '/all',  data, successHandle, errorHandle)
+  }
 
 }

@@ -102,8 +102,8 @@
                     <label for="nome">Convênio</label>
                     <select class="form-control" formControlName="convenio">
                       <option value="null" selected>SELECIONE</option>
-                      <option *ngFor="let convenio of listConvenio" value="{{ convenio.convenio }}">{{
-                        convenio.descricao}}</option>
+                      <option *ngFor="let convenio of listConvenio" value="{{ convenio.id }}">{{
+                        convenio.name}}</option>
                     </select>
                   </div>
                   <div class="form-group col-md-3">
@@ -146,16 +146,21 @@
                   </div>
                 </div>
                 <div class="form-row align-items-center">
-                  <div class="form-group col-md-5">
-                    <label for="cidade">Cidade</label>
-                    <input class="form-control" name="cidade" id="cidade" type="text" formControlName="cidade" />
-                  </div>
                   <div class="form-group col-md-4">
                     <label for="estado">Estado</label>
-                    <select class="form-control" formControlName="estado">
+                    <select class="form-control" formControlName="estado"
+                    (change)="buscaCidade($event.target.value)">
                       <option value="null" selected>SELECIONE</option>
-                      <option *ngFor="let estado of listEstado" value="{{ estado.estado }}">{{
-                        estado.description}}</option>
+                      <option *ngFor="let estado of listEstado" value="{{ estado.id }}">{{
+                        estado.description }}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="cidade">Cidade</label>
+                    <select class="form-control" formControlName="cidade">
+                      <option value="null" selected>SELECIONE</option>
+                      <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{
+                        cidade.description}}</option>
                     </select>
                   </div>
                 </div>

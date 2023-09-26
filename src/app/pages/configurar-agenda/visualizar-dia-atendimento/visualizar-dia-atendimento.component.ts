@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { EncriptyUtilService } from '../../shared/services/encripty-util.services';
 import { VisualizarDiaAtendimentoService } from './visualizar-dia-atendimento.service';
+import { NbToastrService } from '@nebular/theme';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-visualizar-dia-atendimento',
@@ -12,166 +14,56 @@ import { VisualizarDiaAtendimentoService } from './visualizar-dia-atendimento.se
 })
 export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
-  public formVisualizarDiaAtendimento = null;
-
-  settings = {
-    actions: false,
-    attr: {
-      class: 'table table-striped table-bordered table-hover'
-    },
-    defaultStyle: false,
-    hideSubHeader: true,
-    columns: {
-      name: {
-        title: 'Nome',
-        type: 'name',
-      },
-      Segunda: {
-        title: 'Segunda',
-        //type: 'name',
-      },
-      Terça: {
-        title: 'Terça',
-        type: 'date',
-      },
-      Quarta: {
-        title: 'Quarta',
-        type: 'hora',
-      },
-      Quinta: {
-        title: 'Quinta',
-        //type: 'name',
-      },
-      Sexta: {
-        title: 'Sexta',
-        //type: 'name',
-      },
-      Sabado: {
-        title: 'Sabado',
-        //type: 'name',
-      },
-      Domingo: {
-        title: 'Domingo',
-        //type: 'name',
-      },
-    },
-  };
-
-  cartData = [
-    {
-      id: "1",
-      name: "Welton Luiz de Almeida Brito",
-      Segunda: "06:00 - 11:50",
-      Terca: "13:50 - 18:50",
-      Quarta: "11:50 - 12:50",
-      Quinta: "10:50 - 11:50",
-      Sexta: "10:50 - 11:50",
-      Sabado: "",
-      Domingo: "",
-    },
-    {
-      id: "1",
-      name: "Welton Luiz de Almeida Brito",
-      Segunda: "13:00 - 15:50",
-      Terca: "08:50 - 11:50",
-      Quarta: "",
-      Quinta: "15:50 - 18:50",
-      Sexta: "",
-      Sabado: "",
-      Domingo: "",
-    },
-    {
-      id: "1",
-      name: "Welton Luiz de Almeida Brito",
-      Segunda: "",
-      Terca: "08:50 - 11:50",
-      Quarta: "",
-      Quinta: "",
-      Sexta: "",
-      Sabado: "15:50 - 18:50",
-      Domingo: "06:30 - 13:30",
-    },
-    {
-      id: "1",
-      name: "Welton Luiz de Almeida Brito",
-      Segunda: "",
-      Terca: "13:50 - 15:50",
-      Quarta: "",
-      Quinta: "",
-      Sexta: "",
-      Sabado: "08:50 - 11:50",
-      Domingo: "16:30 - 18:30",
-    },
-    {
-      id: "2",
-      name: "Camila Marcia Parreira Silva",
-      Segunda: "10:50 - 11:50",
-      Terca: "11:50 - 12:50",
-      Quarta: "11:50 - 12:50",
-      Quinta: "10:50 - 11:50",
-      Sexta: "10:50 - 11:50",
-    },
-    {
-      id: "3",
-      name: "Ryan Carlos Silva Almeida Brito",
-      Segunda: "10:50 - 11:50",
-      Terca: "11:50 - 12:50",
-      Quarta: "11:50 - 12:50",
-      Quinta: "10:50 - 11:50",
-      Sexta: "10:50 - 11:50",
-    },
-    {
-      id: "4",
-      name: "Yasmim Vitória Silva Almeida Brito",
-      Terça: "10:50 - 11:50",
-      Terca: "11:50 - 12:50",
-      Quarta: "11:50 - 12:50",
-      Quinta: "10:50 - 11:50",
-      Sexta: "10:50 - 11:50",
-    },
-  ];
-
+  public formVisualizarDiaAtendimento = null; 
   public listMedico = null;
-  public listSemana = null; 
+  public listSemana = null;
   public rowData: any = [];
-
-  source: LocalDataSource = new LocalDataSource();
+  public cartData: any = [];
+  public segunda = null;
+  public terca = null;
+  public quarta = null;
+  public quinta = null;
+  public sexta = null;
+  public sabado = null;
+  public domingo = null;
+  public isActive = true;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: VisualizarDiaAtendimentoService,
-    private encriptyService: EncriptyUtilService) {   
+    private encriptyService: EncriptyUtilService,
+    private toastrService: NbToastrService) {
 
-      this.listSemana = [
-        {
-          semana: '1',
-          descricao: 'Segunda'
-        },
-        {
-          semana: '2',
-          descricao: 'Terça'
-        },
-        {
-          semana: '3',
-          descricao: 'Quarta'
-        },
-        {
-          semana: '4',
-          descricao: 'Quinta'
-        },
-        {
-          semana: '5',
-          descricao: 'Sexta'
-        },
-        {
-          semana: '6',
-          descricao: 'Sabado'
-        },
-        {
-          semana: '7',
-          descricao: 'Domingo'
-        }
-      ]
+    this.listSemana = [
+      {
+        semana: '1',
+        descricao: 'Segunda'
+      },
+      {
+        semana: '2',
+        descricao: 'Terça'
+      },
+      {
+        semana: '3',
+        descricao: 'Quarta'
+      },
+      {
+        semana: '4',
+        descricao: 'Quinta'
+      },
+      {
+        semana: '5',
+        descricao: 'Sexta'
+      },
+      {
+        semana: '6',
+        descricao: 'Sabado'
+      },
+      {
+        semana: '7',
+        descricao: 'Domingo'
+      }
+    ]
 
   }
   ngOnDestroy() { }
@@ -185,52 +77,100 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
   }
 
-  configAtendimento(event) {
-    console.log(event)
-    //console.log(this.rowData)
-    //this.teste1 = this.rowData
-    //console.log(this.teste1)
+  configAtendimento(data) {
+    console.log(data)
+    console.log(data.medico)
     //let name = this.encriptyService.encriptyBySecretKey(event)
-    console.log(name)
-    this.router.navigate(['/pages/configurar-agenda/configurar-dia-atendimento'], { queryParams: event });
+   
+    this.router.navigate(['/pages/configurar-agenda/configurar-dia-atendimento'], { queryParams: data.medico });
   }
 
   pesquisaMedico() {
 
+    this.isActive = true
+
     this.service.buscaDoctor(null, (response) => {
-
-      for (var i = 0; i < response.length; i++) {
-
-        this.listMedico = [
-          {
-            medico: response[i].id,
-            descricao: response[i].name,
-          }
-        ]
-
-      }
+      
+      this.listMedico = response
+      this.isActive = false
 
     }, (error) => {
-      console.log(error)
+      this.isActive = false
+      this.toastrService.danger(error.error.message);
     });
 
   }
 
-  pesquisar(data) { 
+  verificaHorario(data) {
+    this.isActive = true
+    this.rowData = [];
+    
+    let params = new HttpParams();
+    params = params.append('doctorId', data)
+
+    this.service.agendaDoctor(params, (response) => {
+
+      if(response.length != 0){        
+        
+        this.rowData = response;
+
+        this.rowData = this.rowData.map(data => {
+
+          if (data.weekday == 1) {
+            this.segunda = [data.startTime.concat(' - ', data.endTime)]
+          } else if (data.weekday == 2) {
+            this.terca = [data.startTime.concat(' - ', data.endTime)]
+          } else if (data.weekday == 3) {
+            this.quarta = [data.startTime.concat(' - ', data.endTime)]
+          } else if (data.weekday == 4) {
+            this.quinta = [data.startTime.concat(' - ', data.endTime)]
+          } else if (data.weekday == 5) {
+            this.sexta = [data.startTime.concat(' - ', data.endTime)]
+          } else if (data.weekday == 6) {
+            this.sabado = [data.startTime.concat(' - ', data.endTime)]
+          } else if (data.weekday == 7) {
+            this.domingo = [data.startTime.concat(' - ', data.endTime)]
+          }
+  
+          return {
+            nome: data.doctor.name.split(' ')[0],
+            segunda: this.segunda,
+            terca: this.terca,
+            quarta: this.quarta,
+            quinta: this.quinta,
+            sexta: this.sexta,
+            sabado: this.sabado,
+            domingo: this.domingo,
+          }
+        })
+        this.isActive = false
+      }else{
+        this.isActive = false
+        this.toastrService.warning('Não possui hora marcada !!!');
+      }
+
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
+    });
+
+  }
+
+  /*pesquisar(data) {
 
     console.log(data)
 
     for (let item of this.cartData) {
-      
+      console.log(item)
+      console.log(this.cartData)
       if (item.name == data.medico) {
 
-        this.rowData = this.cartData.filter(teste => teste.id === item.id);      
+        this.rowData = this.cartData.filter(teste => teste.id === item.id);
         this.source = new LocalDataSource(this.rowData);
         //this.teste1 = this.rowData
         //console.log(this.teste1)
       }
     }
 
-  }
+  }*/
 
 }
