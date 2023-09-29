@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { MENU_ITEMS } from './pages-menu';
+import { PagesService } from './pages.services';
 
 @Component({
   selector: 'ngx-pages',
@@ -14,5 +15,12 @@ import { MENU_ITEMS } from './pages-menu';
 })
 export class PagesComponent {
 
-  menu = MENU_ITEMS;
+  //menu = MENU_ITEMS;
+  menu = [];
+
+  constructor( private pageService: PagesService) {
+    this.menu = MENU_ITEMS;
+    this.pageService.setHidden(this.menu);
+
+  }
 }

@@ -21,7 +21,8 @@
                   <div class="form-group">
                     <div>
                       <label for="nome">Escolha o médico a ser consultado</label>
-                      <select class="form-control" formControlName="medico">
+                      <select class="form-control" formControlName="medico"
+                      (change)="verificaValor($event.target.value)">
                         <option value="null" selected>SELECIONE</option>
                         <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
                           medico.name}}</option>

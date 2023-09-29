@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NovoPacienteService } from './novo-paciente.service';
 import { NbToastrService } from '@nebular/theme';
+import { Observable, Subscriber } from 'rxjs';
 
 @Component({
   selector: 'ngx-novo-paciente',
@@ -24,14 +25,68 @@ export class NovoPacienteComponent implements OnDestroy {
   public isVoltar = false;
   public isProximo = true;
   public isCadastrar = false;
+  public isActive = false;
+  public sexo = null;
+  public listSanguino = null;
+  public imagem = null;
+  public imagemDep = null;
+  public register = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: NovoPacienteService,
-    private toastrService: NbToastrService) { }
+    private toastrService: NbToastrService) {
+
+    this.listSanguino = [
+      {
+        tipoSanguineo: '1',
+        descricao: 'A'
+      },
+      {
+        tipoSanguineo: '2',
+        descricao: 'B'
+      },
+      {
+        tipoSanguineo: '3',
+        descricao: 'O'
+      },
+      {
+        tipoSanguineo: '4',
+        descricao: 'AB'
+      },
+      {
+        tipoSanguineo: '5',
+        descricao: 'O+'
+      },
+      {
+        tipoSanguineo: '6',
+        descricao: 'B+'
+      },
+      {
+        tipoSanguineo: '7',
+        descricao: 'B-'
+      },
+      {
+        tipoSanguineo: '8',
+        descricao: 'A+'
+      },
+      {
+        tipoSanguineo: '9',
+        descricao: 'A-'
+      },
+      {
+        tipoSanguineo: '10',
+        descricao: 'AB+'
+      },
+      {
+        tipoSanguineo: '11',
+        descricao: 'AB-'
+      },
+    ]
+  }
 
   ngOnDestroy() { }
-  
+
   ngOnInit() {
 
     this.buscaEstado();
@@ -39,7 +94,7 @@ export class NovoPacienteComponent implements OnDestroy {
     this.formNovoPaciente = this.formBuilder.group({
       codigo: [null],
       nome: [null],
-      dataNascimento: [null],
+      dateNasc: [null],
       nomeResp01: [null],
       nomeResp02: [null],
       cpf: [null],
@@ -54,15 +109,21 @@ export class NovoPacienteComponent implements OnDestroy {
       email: [null],
       foneRecado: [null],
       celular: [null],
-      observacao: [null],
-      conhecer: [null],
+      complemento: [null],
+      nomeDep: [null],
+      dateNascDep: [null],
+      tipoSanguineo: [null],
+      rgDep: [null],
+      cpfDep: [null],
+      imagem: [null],
+      imagemDep: [null]
     })
 
   }
 
-  tipoFormulario(data){
+  tipoFormulario(data) {
 
-    if(data === 'informacao'){
+    if (data === 'informacao') {
 
       this.isInformacao = true;
       this.isLocalizacao = false;
@@ -71,7 +132,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isProximo = true;
       this.isCadastrar = false;
       this.isVoltar = false;
-    }else if(data === 'localizacao'){
+    } else if (data === 'localizacao') {
 
       this.isInformacao = false;
       this.isLocalizacao = true;
@@ -80,7 +141,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isProximo = true;
       this.isCadastrar = false;
       this.isVoltar = true;
-    }else if(data === 'contato'){
+    } else if (data === 'contato') {
 
       this.isInformacao = false;
       this.isLocalizacao = false;
@@ -89,7 +150,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isProximo = true;
       this.isCadastrar = false;
       this.isVoltar = true;
-    }else if(data === 'addFotos'){
+    } else if (data === 'addFotos') {
 
       this.isInformacao = false;
       this.isLocalizacao = false;
@@ -101,44 +162,44 @@ export class NovoPacienteComponent implements OnDestroy {
     }
   }
 
-  proximo(data){
-    
-    if(data.isInformacao == true){
-      
+  proximo(data) {
+
+    if (data.isInformacao == true) {
+
       this.isInformacao = false;
       this.isLocalizacao = true;
       this.isVoltar = true;
-    }else if(data.isLocalizacao == true){
-      
+    } else if (data.isLocalizacao == true) {
+
       this.isLocalizacao = false;
       this.isContato = true;
       this.isVoltar = true;
-    }else if(data.isContato == true){
-      
+    } else if (data.isContato == true) {
+
       this.isContato = false;
       this.isAddFotos = true;
       this.isProximo = false;
       this.isVoltar = true;
       this.isCadastrar = true;
     }
- 
-  }  
 
-  voltar(data){
+  }
 
-    if(data.isLocalizacao == true){      
+  voltar(data) {
+
+    if (data.isLocalizacao == true) {
       this.isLocalizacao = false;
       this.isInformacao = true;
       this.isVoltar = false;
       this.isProximo = true;
       this.isCadastrar = false;
-    }else if(data.isContato == true){      
+    } else if (data.isContato == true) {
       this.isContato = false;
       this.isLocalizacao = true;
       this.isVoltar = true;
       this.isProximo = true;
       this.isCadastrar = false;
-    }else if(data.isAddFotos == true){
+    } else if (data.isAddFotos == true) {
       this.isAddFotos = false;
       this.isContato = true;
       this.isProximo = true;
@@ -148,41 +209,198 @@ export class NovoPacienteComponent implements OnDestroy {
 
   }
 
-  buscaEstado() {   
+  buscaEstado() {
 
     this.service.buscaEstado(null, (response) => {
 
-      this.listEstado = response        
+      this.listEstado = response
     }, (error) => {
-      this.toastrService.danger(error.error.message);     
+      this.toastrService.danger(error.error.message);
     });
 
   }
 
-  buscaCidade(data){
-    
-   this.service.buscaCidade(null, data, (response) => {
+  buscaCidade(data) {
 
-      this.listCidade = response     
-     
+    this.service.buscaCidade(null, data, (response) => {
+
+      this.listCidade = response
+
     }, (error) => {
-      this.toastrService.danger(error.error.message);      
+      this.toastrService.danger(error.error.message);
     });
   }
 
-  buscaConvenio() {   
+  buscaConvenio() {
 
     this.service.buscaConvenio(null, (response) => {
 
-      this.listConvenio = response   
-     
+      this.listConvenio = response
+
     }, (error) => {
-      this.toastrService.danger(error.error.message);  
+      this.toastrService.danger(error.error.message);
     });
 
   }
 
-  previousPage(){
+  cadastrarPaciente(data) {
+    console.log(data)
+
+    if (data.nomeDep != null) {
+
+      this.register = {
+        doctorId: null,
+        user: {
+          name: data.nome,
+          birthDate: data.dateNasc,
+          cellPhone: data.celular,
+          email: data.email,
+          avatar: data.imagem,
+          cityId: data.cidade,
+          ufId: data.estado,
+          zipCode: data.cep,
+          street: data.bairro,
+          neighborhood: data.endereco,
+          number: data.numero,
+          complement: data.complemento,
+          password: 'Teste@21*19',
+          federalId: data.cpf,
+        },
+        child: {
+          name: data.nomeDep,
+          nameMother: data.nomeResp01,
+          nameFather: data.nomeResp02,
+          cpf: data.cpfDep,
+          rg: data.rgDep,
+          biologicalSex: this.sexo,
+          birthCountry: null,
+          birthDate: data.dateNascDep,
+          ufId: data.estado,
+          cityId: data.cidade,
+          bloodType: null,
+          avatar: data.imagemDep,
+          userId: null,
+        }
+      }
+
+    } else {
+
+       this.register = {
+        doctorId: null,
+        user: {
+          name: data.nome,
+          birthDate: data.dateNasc,
+          cellPhone: data.celular,
+          email: data.email,
+          avatar: data.imagem,
+          cityId: data.cidade,
+          ufId: data.estado,
+          zipCode: data.cep,
+          street: data.bairro,
+          neighborhood: data.endereco,
+          number: data.numero,
+          complement: data.complemento,
+          password: 'Teste@21*19',
+          federalId: data.cpf,
+        }
+
+      }
+    }
+
+
+      this.isActive = true;
+
+      this.service.salvarPaciente(this.register, (response => {
+        console.log(response)
+        this.isActive = false;
+        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.limpaForm()
+      }), error => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+
+    }
+
+    viewdiv(data) {
+      this.sexo = data;
+    }
+
+    limpaForm() {
+
+      this.formNovoPaciente = this.formBuilder.group({
+        codigo: [null],
+        nome: [null],
+        dateNasc: [null],
+        nomeResp01: [null],
+        nomeResp02: [null],
+        cpf: [null],
+        rg: [null],
+        convenio: [null],
+        estado: [null],
+        cidade: [null],
+        bairro: [null],
+        numero: [null],
+        endereco: [null],
+        cep: [null],
+        email: [null],
+        foneRecado: [null],
+        celular: [null],
+        complemento: [null],
+        nomeDep: [null],
+        dateNascDep: [null],
+        tipoSanguineo: [null],
+        rgDep: [null],
+        cpfDep: [null],
+        imagem: [null],
+        imagemDep: [null]
+      })
+
+    }
+
+  public converterImagem = ($event: Event, element) => {
+
+    console.log(Event)
+    console.log(element.id)
+
+    const target = $event.target as HTMLInputElement;
+    const file: File = (target.files as FileList)[0];
+    this.convertToBase64(file, element);
+  }
+
+  public convertToBase64(file: File, element) {
+
+    const observable = new Observable((subscriber: Subscriber<any>) => {
+      this.readFile(file, subscriber)
+    })
+
+    observable.subscribe((d: String) => {
+
+      if (element.id == 'imagem') {
+        this.imagem = d.slice(d.indexOf(",") + 1);
+      } else {
+        this.imagemDep = d.slice(d.indexOf(",") + 1);
+      }
+
+    })
+
+  }
+
+  public readFile(file: File, subscribe: Subscriber<any>) {
+    const filereader = new FileReader();
+
+    filereader.readAsDataURL(file)
+    filereader.onload = () => {
+      subscribe.next(filereader.result);
+      subscribe.complete()
+    }
+    filereader.onerror = () => {
+      subscribe.error()
+      subscribe.complete()
+    }
+  }
+
+  previousPage() {
     this.router.navigate(['/pages/gestao-paciente/paciente'])
   }
 }

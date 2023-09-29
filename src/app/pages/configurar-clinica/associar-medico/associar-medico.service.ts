@@ -12,8 +12,9 @@ export class AssociarMedicoService {
     return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
   }
 
-  cadastrarDoctor(data:any, successHandle: Function, erroHandle: Function){
+  associarDoctor(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doPost('/api/clinic/associate/doctor', data, successHandle, erroHandle)
   }
 
+  
 }

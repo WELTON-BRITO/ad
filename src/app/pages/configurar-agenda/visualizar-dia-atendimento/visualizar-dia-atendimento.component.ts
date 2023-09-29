@@ -69,7 +69,14 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
-    this.pesquisaMedico();
+    var name = localStorage.getItem('bway-domain');
+    var id = localStorage.getItem('bway-entityId');   
+    
+    if(name == 'CLINIC'){
+      this.pesquisaClinica(id)
+    }else{
+      this.pesquisaMedico(id);
+    }
 
     this.formVisualizarDiaAtendimento = this.formBuilder.group({
       medico: [null],
@@ -85,18 +92,35 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
     this.router.navigate(['/pages/configurar-agenda/configurar-dia-atendimento'], { queryParams: data.medico });
   }
 
-  pesquisaMedico() {
+  pesquisaMedico(data) {
 
     this.isActive = true
 
-    this.service.buscaDoctor(null, (response) => {
-      
+    let params = new HttpParams();
+    params = params.append('doctorId', data)
+
+    this.service.buscaDoctor(params, (response) => {
+
       this.listMedico = response
       this.isActive = false
 
     }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.message);
+    });    
+
+  }
+ 
+ pesquisaClinica(data) {
+    this.isActive = true   
+    this.service.buscaClinica(data, null, (response) => {
+
+      this.listMedico = response
       this.isActive = false
-      this.toastrService.danger(error.error.message);
+
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.message);
     });
 
   }

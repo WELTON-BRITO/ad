@@ -14,7 +14,7 @@
                   <label class="pl-1">Por favor escolha o médico abaixo para realizar a configuração:</label>
                 </div>
               </div>
-              <div class="form-row align-items-center">
+              <div class="form-row align-items-center">                
                 <div class="form-group col-md-4">
                   <div class="form-group">
                     <div class="div-medico">
@@ -44,26 +44,35 @@
                       <div class="app-box">
                         <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
                           [footerHeight]="50" [rowHeight]="'auto'" [messages]="{emptyMessage: 'Sem dados...'}">
-                          <ngx-datatable-column name="Foto" prop="img" [width]="5"></ngx-datatable-column>
-                          <ngx-datatable-column name="Nome do médico" prop="nome" [width]="280">
+                          <ngx-datatable-column name="Foto" prop="avatar">
                             <ng-template ngx-datatable-cell-template let-row="row">
-                              <div class="text-left">
+                              <div class="text-center">                                 
+                                <img src="{{row.avatar}}" style="height: 80px;"> 
+                              </div> 
+                            </ng-template>                                                       
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Nome do médico" prop="nome">
+                            <ng-template ngx-datatable-cell-template let-row="row">
+                              <div class="text-center p-4">
                                 {{ row.name }}
                               </div>
                             </ng-template>
                           </ngx-datatable-column>
                           <ngx-datatable-column name="Especialidade" prop="especialidade">
                             <ng-template ngx-datatable-cell-template let-row="row">
-                              <div class="text-left">
+                              <div class="text-center p-4">
                                 {{ row.specialty }}
                               </div>
                             </ng-template>
                           </ngx-datatable-column>
                           <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
                             <ng-template ngx-datatable-cell-template let-row="row">
-                              <div class="text-center">
+                              <div class="text-center p-4">
                                 <a class="home-icon" (click)="cadastrar(row)" title="Associar Médico">
                                   <i class="fa fa-edit p-2"></i>
+                                </a>
+                                <a class="home-icon" (click)="excluir(row)" title="Excluir">
+                                  <i class="fas fa-solid fa-ban p-2"></i>
                                 </a>
                               </div>
                             </ng-template>
@@ -84,6 +93,14 @@
                   </nb-card>
                 </div>
               </div>
+              <div class="row" *ngIf="isActive" class="loader">
+                <div class="text-center" style="margin-top: -260px;margin-right: 40px;">
+                  <button class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Carregando...
+                  </button>
+                </div>
+              </div>   
             </div>
           </form>
         </div>     

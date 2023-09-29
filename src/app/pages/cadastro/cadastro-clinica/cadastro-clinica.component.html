@@ -30,21 +30,26 @@
                     </div>
                     <div class="form-group row pl-3">
                       <div class="col-md-5">
-                        <label for="imgem">Adcione a logo da clínica</label>
+                        <label for="imgem">Adicione a logo da clínica</label>
                         <input class="form-control-file media-body" name="imgem" id="imgem" type="file" formControlName="imgem" 
                         (change)="converterImagem($event, $event.target)" value="imagem"/>
                       </div>                     
                     </div>
-                    <div class="form-group">
+                    <div class="form-group row pl-3">
                       <div class="col-md-3">
                         <label for="cnpj">CNPJ</label>
                         <input class="form-control" name="cnpj" id="cnpj" type="text" formControlName="cnpj"
                           mask="00.000.000/0000-00" maxlength="18" />
-                      </div>                      
+                      </div>   
+                      <div class="col-md-3">
+                        <label for="cpf">CPF do responsável</label>
+                        <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
+                          mask="000.000.000-00" maxlength="14" />
+                      </div>                    
                     </div>
                     <div class="form-group">
                       <div class="col-md-6">
-                        <label for="nomeEmpresa">Nome da Empresa</label>
+                        <label for="nomeEmpresa">Nome da empresa</label>
                         <input class="form-control" name="nomeEmpresa" id="nomeEmpresa" type="text"
                           formControlName="nomeEmpresa" />
                       </div>
@@ -55,7 +60,7 @@
                         <input class="form-control" name="nomeResponsavel" id="nomeResponsavel" type="text"
                           formControlName="nomeResponsavel" />
                       </div>
-                    </div>
+                    </div>                    
                   </div>
                   <div *ngIf="isContato">                  
                     <div class="form-group">
@@ -79,7 +84,7 @@
                         <select class="form-control" formControlName="estado"
                         (change)="buscaCidade($event.target.value)">
                           <option value="null" selected>SELECIONE</option>
-                          <option *ngFor="let estado of listEstado" value="{{ estado.estado }}">{{
+                          <option *ngFor="let estado of listEstado" value="{{ estado.id }}">{{
                             estado.description}}</option>
                         </select>
                       </div>   
@@ -130,7 +135,7 @@
                       <div class="col-md-4">
                         <label for="confirmaEmail">Confirma e-mail</label>
                         <input class="form-control" name="confirmaEmail" id="confirmaEmail" type="text"
-                          formControlName="confirmaEmail" maxlength="50" (change)="verificarEmail(formCadastroMedico.value)"/>
+                          formControlName="confirmaEmail" maxlength="50" (change)="verificarEmail(formCadastroClinica.value)"/>
                       </div>
                     </div>
                     <div class="form-group row pl-3">
@@ -141,7 +146,7 @@
                       <div class="col-md-4">
                         <label for="confirmaSenha">Confirma a senha</label>
                         <input class="form-control" name="confirmaSenha" id="confirmaSenha" type="password"
-                          formControlName="confirmaSenha" maxlength="50" (change)="verificarPassWord(formCadastroMedico.value)"/>
+                          formControlName="confirmaSenha" maxlength="50" (change)="verificarPassWord(formCadastroClinica.value)"/>
                       </div>
                     </div>
                     <div class="form-group">
@@ -168,11 +173,19 @@
                     <img class="cadastro" src="assets/images/linhas_cadastro.png" />
                   </div>
                 </div>
-              </div>
+              </div>              
             </div>
           </form>
         </nb-card-body>
       </nb-card>
+      <div class="row" *ngIf="isActive" class="loader">
+        <div class="text-center" style="margin-top: -600px;margin-right: 40px;">
+          <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Carregando...
+          </button>
+        </div>
+      </div>   
     </div>
   </div>
 </div>

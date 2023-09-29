@@ -5,13 +5,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Dashboard',
     icon: 'home-outline',
     link: '/pages/dashboard',
-    home: true,
+    data: 'USER',
+    hidden: true,
   },
   {
     title: 'Painel',
     icon: 'home-outline',
     link: '/pages/iot-dashboard',
-    home: true,
+    hidden: true,
   },
   {
     title: 'Agenda',

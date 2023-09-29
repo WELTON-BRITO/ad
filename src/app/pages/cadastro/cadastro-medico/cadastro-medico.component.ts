@@ -22,6 +22,7 @@ export class CadastroMedicoComponent implements OnInit {
   public listCidade = null;
   public listEspecialidade: Array<number> = [];
   public imagem = null;
+  public isActive = true;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -100,36 +101,46 @@ export class CadastroMedicoComponent implements OnInit {
 
     }
 
+    this.isActive = true;
+
     this.service.cadastrarMedico(register, (response => {
 
-      this.formCadastroMedico = this.formBuilder.group({
-        cpf: [null],
-        nome: [null],
-        dataNascimento: [null],
-        crm: [null],
-        telefoneCelular: [null],
-        telefoneRecado: [null],
-        email: [null],
-        confirmaEmail: [null],
-        aceitoTermo: [null],
-        confirmaSenha: [null],
-        senha: [null],
-        estado: [null],
-        cidade: [null],
-        especialidade: [null],
-        cep: [null],
-        rua: [null],
-        bairro: [null],
-        numero: [null],
-        complemento: [null],
-        imgem: [null]
-      });
-
+      this.isActive = false;
       this.toastrService.success('Dr°' + response.name + 'cadastrado com sucesso !!!');
       this.isInfoGerais = true;
       this.isContato = false;
+      this.limparForm();
+
     }), error => {
+      this.isActive = false;
       this.toastrService.danger(error.error.message);
+    });
+
+  }
+
+  limparForm() {
+
+    this.formCadastroMedico = this.formBuilder.group({
+      cpf: [null],
+      nome: [null],
+      dataNascimento: [null],
+      crm: [null],
+      telefoneCelular: [null],
+      telefoneRecado: [null],
+      email: [null],
+      confirmaEmail: [null],
+      aceitoTermo: [null],
+      confirmaSenha: [null],
+      senha: [null],
+      estado: [null],
+      cidade: [null],
+      especialidade: [null],
+      cep: [null],
+      rua: [null],
+      bairro: [null],
+      numero: [null],
+      complemento: [null],
+      imgem: [null]
     });
 
   }

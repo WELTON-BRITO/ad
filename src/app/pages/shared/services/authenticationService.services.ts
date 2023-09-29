@@ -14,10 +14,11 @@ export class AuthenticationService {
 
   ) { }
   
-  getToken(login, password): Observable<any> {
+  getToken(login, password, domain): Observable<any> {
       const loginForm = {
         login: login,
         password: password,
+        domain: domain
       };
 
       const httpOptions = {

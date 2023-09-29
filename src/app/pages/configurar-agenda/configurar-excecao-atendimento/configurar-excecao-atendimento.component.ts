@@ -25,7 +25,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   public card = null;
   public listMedico = null;
   public isCardHoras = true;
-  public isActive = true;
+  public isActive = false;
   public rowData = null;
   public doctorId = null;
   public horaInicio = null;
@@ -43,7 +43,14 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
-    this.pesquisaMedico();
+    var name = localStorage.getItem('bway-domain');
+    var id = localStorage.getItem('bway-entityId');
+
+    if (name == 'CLINIC') {
+      this.pesquisaClinica(id)
+    } else {
+      this.pesquisaMedico(id);
+    }
 
     this.formExcecaoAtendimento = this.formBuilder.group({
       dataExcecao: [null],
@@ -77,9 +84,28 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
     }
   }
 
-  pesquisaMedico() {
+  pesquisaMedico(data) {
 
-    this.service.buscaDoctor(null, (response) => {
+    this.isActive = true
+
+    let params = new HttpParams();
+    params = params.append('doctorId', data)
+
+    this.service.buscaDoctor(params, (response) => {
+
+      this.listMedico = response
+      this.isActive = false
+
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+    });
+
+  }
+
+  pesquisaClinica(data) {
+    this.isActive = true
+    this.service.buscaClinica(data, null, (response) => {
 
       this.listMedico = response
       this.isActive = false

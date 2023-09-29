@@ -28,7 +28,7 @@
                     </div>                   
                     <div class="form-group row pl-3">
                       <div class="col-md-5">
-                        <label for="imgem">Adcione sua foto</label>
+                        <label for="imgem">Adicione sua foto</label>
                         <input class="form-control-file media-body" name="imgem" id="imgem" type="file" formControlName="imgem" 
                         (change)="converterImagem($event, $event.target)" value="imagem"/>
                       </div>                     
@@ -202,5 +202,13 @@
           </form>
         </nb-card-body>
       </nb-card>
+      <div class="row" *ngIf="isActive" class="loader">
+        <div class="text-center" style="margin-top: -600px;margin-right: 40px;">
+          <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Carregando...
+          </button>
+        </div>
+      </div>   
     </div>
   </div>

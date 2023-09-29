@@ -19,6 +19,7 @@ export class CadastroClinicaComponent implements OnDestroy {
   public listEstado = null;
   public listCidade = null;
   public imagem = null;
+  public isActive = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -72,12 +73,12 @@ export class CadastroClinicaComponent implements OnDestroy {
 
     let register = {
 
-      name: null,
+      name: data.nomeEmpresa,
       socialName: data.nomeEmpresa,
-      responsibleFederalId: data.cnpj,
+      responsibleFederalId: data.cpf,
       responsibleName: data.nomeResponsavel,
       password: data.senha,
-      federalId: data.cpf,
+      federalId: data.cnpj,
       avatar: this.imagem,
       email: data.email,
       cellPhone: data.telefoneCelular,
@@ -91,40 +92,49 @@ export class CadastroClinicaComponent implements OnDestroy {
 
     }
 
-    this.service.cadastrarClinica(register, (response => {
+    this.isActive = true;
 
-      this.formCadastroClinica = this.formBuilder.group({
-        nomeEmpresa: [null],
-        nomeResponsavel: [null],
-        cnpj: [null],
-        cpf: [null],
-        telefoneCelular: [null],
-        email: [null],
-        senha: [null],
-        aceitoTermo: [null],
-        crm: [null],
-        telefoneRecado: [null],
-        confirmaEmail: [null],
-        confirmaSenha: [null],
-        estado: [null],
-        cidade: [null],
-        especialidade: [null],
-        cep: [null],
-        rua: [null],
-        bairro: [null],
-        numero: [null],
-        complemento: [null],
-        imgem: [null]
-      })
+    this.service.cadastrarClinica(register, (response => {  
 
-      this.toastrService.success(response.nomeEmpresa + 'cadastrado com sucesso !!!');
+      this.isActive = false;
+      this.toastrService.success(response.socialName + 'cadastrado com sucesso !!!');
       this.isInfoGerais = true;
       this.isContato = false;
-    }), error => {
+      this.limparForm();
 
-      this.toastrService.danger(error.error.message);
+    }), error => {
+      this.isActive = false;
+      this.toastrService.danger(error.message);
 
     });
+  }
+
+  limparForm(){
+
+    this.formCadastroClinica = this.formBuilder.group({
+      nomeEmpresa: [null],
+      nomeResponsavel: [null],
+      cnpj: [null],
+      cpf: [null],
+      telefoneCelular: [null],
+      email: [null],
+      senha: [null],
+      aceitoTermo: [null],
+      crm: [null],
+      telefoneRecado: [null],
+      confirmaEmail: [null],
+      confirmaSenha: [null],
+      estado: [null],
+      cidade: [null],
+      especialidade: [null],
+      cep: [null],
+      rua: [null],
+      bairro: [null],
+      numero: [null],
+      complemento: [null],
+      imgem: [null],
+    })
+    
   }
 
   buscaEstado() {
@@ -141,23 +151,27 @@ export class CadastroClinicaComponent implements OnDestroy {
 
   buscaCidade(data) {
 
-    this.service.buscaCidade(null, data, (response) => {
+    this.isActive = true;
 
+    this.service.buscaCidade(null, data, (response) => {
+      this.isActive = false;
       this.listCidade = response
 
     }, (error) => {
+      this.isActive = false;
       this.toastrService.danger(error.error.message);
     });
   }
 
   verificarPassWord(data) {
+    console.log(data)
     if (data.senha != data.confirmaSenha) {
       this.toastrService.danger('Por gentileza verificar a senha, não confere!!!');
     }
   }
 
   verificarEmail(data) {
-
+    console.log(data)
     if (data.email != data.confirmaEmail) {
       this.toastrService.danger('Por gentileza verificar o email, não confere!!!');
     }

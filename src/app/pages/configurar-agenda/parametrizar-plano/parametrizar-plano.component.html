@@ -1,143 +1,152 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-12 col-xs-12">      
-        <div class="dialog-body">
-          <form id="form-parametrizar-plano" [formGroup]="formParametrizarPlano">
-            <div class="col-md-12 col-xs-12">
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-6">
-                  <h5>Configurar planos de saúde</h5>
+    <div class="col-md-12 col-xs-12">
+      <div class="dialog-body">
+        <form id="form-parametrizar-plano" [formGroup]="formParametrizarPlano">
+          <div class="col-md-12 col-xs-12">
+            <div class="form-row align-items-center">
+              <div class="form-group col-md-6">
+                <h5>Configurar planos de saúde</h5>
+              </div>
+            </div>
+            <div class="form-row align-items-center">
+              <div class="form-group">
+                <label class="pl-1">Por favor escolha o médico abaixo para realizar a configuração:</label>
+              </div>
+            </div>
+            <div class="form-row align-items-center">
+              <div class="form-group col-md-4">
+                <div class="form-group">
+                  <div class="div-medico">
+                    <label for="nome">Escolha o médico a ser consultado</label>
+                    <select class="form-control" formControlName="medico"
+                      (change)="verificaConvenio($event.target.value)">
+                      <option value="null" selected>SELECIONE</option>
+                      <option *ngFor="let medico of listMedico" value="{{ medico.id}}">{{
+                        medico.name}}</option>
+                    </select>
+                  </div>
                 </div>
               </div>
+              <div class="form-group col-md-3">
+                <div class="form-group pl-3">
+                  <label class="div-expediente">Aceita plano de saúde</label>
+                  <div class="row pl-3">
+                    <label class="radio-inline mr-3">
+                      <input class="mat-button" type="radio" id="radio" name="optradio" checked value="S"
+                        (click)="planoSaude($event.target.value)">
+                      Sim</label>
+                    <label class="radio-inline">
+                      <input class="mat-button" type="radio" id="radio" name="optradio" value="N"
+                        (click)="planoSaude($event.target.value)"> Não</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="isCardPlano">
               <div class="form-row align-items-center">
                 <div class="form-group">
-                  <label class="pl-1">Por favor escolha o médico abaixo para realizar a configuração:</label>
+                  <label class="pl-1">Selecione abaixo quais convênios que médico atende.</label>
                 </div>
               </div>
               <div class="form-row align-items-center">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                   <div class="form-group">
-                    <div class="div-medico">
-                      <label for="nome">Escolha o médico a ser consultado</label>
-                      <select class="form-control" formControlName="medico">
-                        <option value="null" selected>SELECIONE</option>
-                        <option *ngFor="let medico of listMedico" value="{{ medico.medico}}">{{
-                          medico.descricao}}</option>
-                      </select>
-                    </div>
+                    <label for="nome"><span style="font-weight: bold">Tipo de Convênio</span></label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row align-items-center pl-4 mt-lg-n4">
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="unimed" name="optcheckbox" value="1"
+                       (click)="funcValor($event.target.value, $event.target)" />
+                      Unimed</label>
                   </div>
                 </div>
                 <div class="form-group col-md-3">
-                  <div class="form-group pl-3">
-                    <label class="div-expediente">Tem plano de saúde</label>
-                    <div class="row pl-3">
-                      <label class="radio-inline mr-3">
-                        <input class="mat-button" type="radio" id="radio" name="optradio" checked value="S"
-                          (click)="planoSaude($event.target.value)">
-                        Sim</label>
-                      <label class="radio-inline">
-                        <input class="mat-button" type="radio" id="radio" name="optradio" value="N"
-                          (click)="planoSaude($event.target.value)"> Não</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div *ngIf="isCardPlano">
-                <div class="form-row align-items-center">
                   <div class="form-group">
-                    <label class="pl-1">Selecione abaixo quais convênios que médico atende.</label>
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="sulAmerica" name="optcheckbox" value="3"
+                         (click)="funcValor($event.target.value, $event.target)" />
+                      Sul América Saúde</label>
                   </div>
                 </div>
-                <div class="form-row align-items-center">
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label for="nome"><span style="font-weight: bold">Tipo de Convênio</span></label>
-                    </div>
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="norteDame" name="optcheckbox" value="4"
+                        (click)="funcValor($event.target.value, $event.target)" />
+                      Norte Dame Intermédica</label>
                   </div>
                 </div>
-                <div class="form-row align-items-center pl-4 mt-lg-n4">
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="unimed" name="optcheckbox" value="U"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        Unimed</label>
-                    </div>
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="bradescoSaude" name="optcheckbox" value="2"
+                        (click)="funcValor($event.target.value, $event.target)" />
+                      Bradesco Saúde</label>
                   </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="sulAmerica" name="optcheckbox" value="SA"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        Sul América Saúde</label>
-                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="amil" name="optcheckbox" value="5"
+                        (click)="funcValor($event.target.value, $event.target)" />
+                      Amil</label>
                   </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="norteDame" name="optcheckbox" value="ND"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        Norte Dame Intermédica</label>
-                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="portoSeguro" name="optcheckbox" value="6"
+                        (click)="funcValor($event.target.value, $event.target)" />
+                      Porto Seguro Saúde</label>
                   </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="bradescoSaude" name="optcheckbox" value="BS"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        Bradesco Saúde</label>
-                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="assimSaude" name="optcheckbox" value="7"
+                        (click)="funcValor($event.target.value, $event.target)" />
+                      Assim Saúde</label>
                   </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="amil" name="optcheckbox" value="A"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        Amil</label>
-                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="hpVida" name="optcheckbox" value="8"
+                        (click)="funcValor($event.target.value, $event.target)" />
+                      HapVida Assistência Médica</label>
                   </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="portoSeguro" name="optcheckbox" value="PSS"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        Porto Seguro Saúde</label>
-                    </div>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="assimSaude" name="optcheckbox" value="AS"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        Assim Saúde</label>
-                    </div>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="hpVida" name="optcheckbox" value="HA"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        HapVida Assistência Médica</label>
-                    </div>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="preventSenior" name="optcheckbox" value="PS"
-                          (click)="funcValor($event.target.value, $event.target)" />
-                        Prevent Senior</label>
-                    </div>
+                </div>               
+                <div class="form-group col-md-3">
+                  <div class="form-group">
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="checkbox" id="preventSenior" name="optcheckbox" value="9"
+                       (click)="funcValor($event.target.value, $event.target)" />
+                      Prevent Senior</label>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="text-right">
-              <button class="btn btn-success" (click)="salvar(formParametrizarPlano.value)">
-                SALVAR
+          </div>
+          <div class="text-right">
+            <button class="btn btn-success" (click)="salvar(formParametrizarPlano.value)">
+              SALVAR
+            </button>
+          </div>
+          <div class="row" *ngIf="isActive" class="loader">
+            <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
+              <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Carregando...
               </button>
             </div>
-          </form>
-        </div>      
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

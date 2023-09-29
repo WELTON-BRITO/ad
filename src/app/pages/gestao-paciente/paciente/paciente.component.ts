@@ -3,6 +3,8 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PacienteService } from './paciente.service';
 import { HttpParams } from '@angular/common/http';
+import { NbToastrService } from '@nebular/theme';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-paciente',
@@ -15,71 +17,33 @@ export class PacienteComponent implements OnInit {
   public listPaciente = null;
   public rowData = null;
   public listMedico = null;
-
+  public isActive = true;
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private service: PacienteService) { }
+    private service: PacienteService,
+    private toastrService: NbToastrService,) { }
 
   ngOnInit() {
 
-    this.pesquisaMedico();
+    var name = localStorage.getItem('bway-domain');
+    var id = localStorage.getItem('bway-entityId');   
+    
+    if(name == 'CLINIC'){
+      this.pesquisaClinica(id)
+    }else{
+      this.pesquisaMedico(id);
+    }
 
     this.formPaciente = this.formBuilder.group({
       pesquisa: [null],
       medico: [null]
     })
 
-    this.rowData = [
-      {
-        img: '<img  class="w-25" src="assets/images/teste-imagem.png"/>',
-        nome: " Welton Luiz de Almeida Brito",
-        telefone: "34-98825-3972",
-        codigo: "01",
-        ultimaConsulta: "01/02/2023",
-        dataNascimento: "19/06/1981",
-        convenio: "Unimed",
-      },
-      {
-        img: '<img  class="w-25" src="assets/images/teste-imagem.png"/>',
-        nome: "Camila Marcia Parreira Silva",
-        telefone: "34-98825-3972",
-        codigo: "01",
-        ultimaConsulta: "01/02/2023",
-        dataNascimento: "19/06/1981",
-        convenio: "Unimed",
-      },
-      {
-        img: '<img  class="w-25" src="assets/images/teste-imagem.png"/>',
-        nome: "Ryan Carlos Silva Almeida Brito",
-        telefone: "34-98825-3972",
-        codigo: "01",
-        ultimaConsulta: "01/02/2023",
-        dataNascimento: "19/06/1981",
-        convenio: "Unimed",
-      },
-      {
-        img: '<img  class="w-25" src="assets/images/teste-imagem.png"/>',
-        nome: "Yasmim Vitoria Silva Almeida Brito",
-        telefone: "34-98825-3972",
-        codigo: "01",
-        ultimaConsulta: "01/02/2023",
-        dataNascimento: "19/06/1981",
-        convenio: "Unimed",
-      },
-      {
-        img: '<img  class="w-25" src="assets/images/teste-imagem.png"/>',
-        nome: "Welton Luiz de Almeida Brito",
-        telefone: "34-98825-3972",
-        codigo: "01",
-        ultimaConsulta: "01/02/2023",
-        dataNascimento: "19/06/1981",
-        convenio: "Unimed",
-      },
-    ]
-
   }
 
   pesquisaGeral(data) {
+
+    console.log(data)
 
     let params = new HttpParams();
 
@@ -93,43 +57,62 @@ export class PacienteComponent implements OnInit {
       params = params.append('federalId', data.cnpjCpf)
     }
 
+    this.isActive = true;
+
     this.service.buscaPaciente(params, (response) => {
 
+      this.isActive = false;
+      console.log(response)
 
-      ///this.rowData = response
+      this.rowData = response
 
-      /*this.rowData = this.rowData.map(data => {
+      this.rowData = this.rowData.map(data => {       
+
         return {
-          nome: data.name,
-                     
+          avatar: 'data:application/pdf;base64,' + data.avatar,
+          name: data.user.name,
+          cellPhone: data.user.cellPhone,
+          birthDate:  moment(data.user.birthDate).format('DD/MM/YYYY'),        
         }
-      })*/
+      })
 
 
     }, (error) => {
-      console.log(error)
-      //this.notifications.error(error.message);        
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);   
     });
 
   }
 
-  pesquisaMedico() {
+  pesquisaMedico(data) {
 
-    this.service.buscaDoctor(null, (response) => {
+    this.isActive = true
 
-      for (var i = 0; i < response.length; i++) {
+    let params = new HttpParams();
+    params = params.append('doctorId', data)
 
-        this.listMedico = [
-          {
-            medico: response[i].id,
-            descricao: response[i].name,
-          }
-        ]
+    this.service.buscaDoctor(params, (response) => {
 
-      }
+      this.listMedico = response
+      this.isActive = false
 
     }, (error) => {
-      console.log(error)
+      this.isActive = false;
+      this.toastrService.danger(error.message);
+    });    
+
+  }
+ 
+ pesquisaClinica(data) {
+    this.isActive = true   
+    this.service.buscaClinica(data, null, (response) => {
+
+      this.listMedico = response
+      this.isActive = false
+
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.message);
     });
 
   }

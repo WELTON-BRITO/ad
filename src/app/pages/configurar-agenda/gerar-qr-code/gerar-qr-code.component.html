@@ -14,10 +14,11 @@
                   <div class="form-group">
                     <div class="div-medico">
                       <label for="nome">Escolha o médico a ser consultado</label>
-                      <select class="form-control" formControlName="medico">
+                      <select class="form-control" formControlName="medico"
+                      (change)="verificaValor($event.target.value)">
                         <option value="null" selected>SELECIONE</option>
-                        <option *ngFor="let medico of listMedico" value="{{ medico.descricao }}">{{
-                          medico.descricao}}</option>
+                        <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
+                          medico.name}}</option>
                       </select>
                     </div>
                   </div>
@@ -44,6 +45,14 @@
                   </div>
                 </div>
               </div>
+              <div class="row" *ngIf="isActive" class="loader">
+                <div class="text-center" style="margin-top: -260px;margin-right: 40px;">
+                  <button class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Carregando...
+                  </button>
+                </div>
+              </div>   
             </div>
           </form>
         </div>    

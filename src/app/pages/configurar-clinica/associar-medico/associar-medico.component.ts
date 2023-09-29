@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ListMedicoService } from '../list-medico/list-medico.service';
 import { HttpParams } from '@angular/common/http';
+import { NbToastrService } from '@nebular/theme';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AssociarMedicoService } from './associar-medico.service';
 
 @Component({
   selector: 'ngx-associar-medico',
@@ -12,55 +14,92 @@ import { HttpParams } from '@angular/common/http';
 export class AssociarMedicoComponent implements OnDestroy {
 
   public formAssociarMedico = null;
-  public rowData: any [];
+  public rowData: any[];
+  public isActive = false;
+
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private service: ListMedicoService) {      
-    
+    private service: AssociarMedicoService,
+    private toastrService: NbToastrService,
+    private sanitizer: DomSanitizer,) {
+
   }
   ngOnDestroy() { }
   ngOnInit() {
 
-    this.formAssociarMedico = this.formBuilder.group({      
-      cpf: [null],
-      checkMedico: [null]
+    this.formAssociarMedico = this.formBuilder.group({
+      cpf: [null]
     })
 
   }
-  
-  pesquisaMedico(data){
+
+
+  pesquisaMedico(data) {
 
     let params = new HttpParams();
-  
-    //params = params.append('federalId', data.cpf)
+    params = params.append('federalId', data.cpf)
 
-      this.service.buscaDoctor(null, (response) => {
+    this.isActive = true;
 
-        console.log(response)
-  
-        //this.rowData = response
+    this.service.buscaDoctor(params, (response) => {
 
-        this.rowData = this.rowData.map(data => {
-          return {
-            name: data.name,
-                       
-          }
-        })
+      this.rowData = response
+      this.isActive = false;
+      this.rowData = this.rowData.map(data => {
+        return {
+          avatar: 'data:application/pdf;base64,' + data.avatar,
+          id: data.id,
+          name: data.name,
+          specialty: data.specialty[0].name
+        }
+      })
 
-  
-      }, (error) => {
-        console.log(error)
-        //this.notifications.error(error.message);        
-      });
-  
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+    });
   }
 
-  cadastrar(data){
+  cadastrar(data) {
+
+    let clinicId = localStorage.getItem('bway-entityId')
+
+    let register = {
+
+      doctorId: data.id,
+      clinicId: clinicId
+
+    }
+
+    this.isActive = true;
+
+    this.service.associarDoctor(register, (response => {
+
+      this.isActive = false;
+      this.toastrService.success(response.socialName + 'associado com sucesso !!!');
+
+      this.limparForm();
+
+    }), error => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+
+    });
+  }
+
+  excluir(data) {
+
     console.log(data)
+
   }
 
-  salvar(data){
-   
+  limparForm() {
+
+    this.formAssociarMedico = this.formBuilder.group({
+      cpf: [null]
+    })
+    this.rowData = [];
+
   }
- 
+
 }

@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   public formLogin = null;
   checked = false;
   public isActive = false;
+  public domain = null;
 
   constructor(
     private router: Router,
@@ -46,12 +47,20 @@ export class LoginComponent implements OnInit {
 
     let usuario = this.formLogin.controls['login'].value;
     let password = this.formLogin.controls['password'].value;
+    
+      var str = usuario.length;
+      
+      if(str == 11){        
+        this.domain = 4
+      }else{
+        this.domain = 2
+      }      
 
     this.isActive = true;
     
     this.service.loader
 
-    this.authenticationService.getToken(usuario, password)
+    this.authenticationService.getToken(usuario, password, this.domain)
       .subscribe(
         re => this.saveLogin(re),
         (error) => {  

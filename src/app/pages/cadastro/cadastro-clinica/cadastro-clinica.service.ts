@@ -19,5 +19,5 @@ export class CadastroClinicaService {
   buscaCidade(data, ufId:any,successHandle: Function, errorHandle: Function){
     return this.httpService.doGet('/api/city/uf/' + ufId + '/all',  data, successHandle, errorHandle)
   }
-
+ 
 }
