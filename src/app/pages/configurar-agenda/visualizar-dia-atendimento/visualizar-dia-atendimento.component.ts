@@ -1,8 +1,6 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LocalDataSource } from 'ng2-smart-table';
-import { EncriptyUtilService } from '../../shared/services/encripty-util.services';
 import { VisualizarDiaAtendimentoService } from './visualizar-dia-atendimento.service';
 import { NbToastrService } from '@nebular/theme';
 import { HttpParams } from '@angular/common/http';
@@ -31,7 +29,6 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: VisualizarDiaAtendimentoService,
-    private encriptyService: EncriptyUtilService,
     private toastrService: NbToastrService) {
 
     this.listSemana = [
@@ -69,6 +66,8 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
+    document.getElementById('bntConfig').setAttribute('disabled', 'true');
+
     var name = localStorage.getItem('bway-domain');
     var id = localStorage.getItem('bway-entityId');   
     
@@ -85,11 +84,8 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   }
 
   configAtendimento(data) {
-    console.log(data)
-    console.log(data.medico)
-    //let name = this.encriptyService.encriptyBySecretKey(event)
-   
-    this.router.navigate(['/pages/configurar-agenda/configurar-dia-atendimento'], { queryParams: data.medico });
+  
+    this.router.navigate(['/pages/configurar-agenda/configurar-dia-atendimento/'], { queryParams: data });
   }
 
   pesquisaMedico(data) {
@@ -104,9 +100,9 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(message);
     });    
 
   }
@@ -118,9 +114,9 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(message);
     });
 
   }
@@ -156,8 +152,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.domingo = [data.startTime.concat(' - ', data.endTime)]
           }
   
-          return {
-            nome: data.doctor.name.split(' ')[0],
+          return {           
             segunda: this.segunda,
             terca: this.terca,
             quarta: this.quarta,
@@ -168,33 +163,18 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
           }
         })
         this.isActive = false
+        document.getElementById('bntConfig').removeAttribute('disabled');
       }else{
         this.isActive = false
         this.toastrService.warning('Não possui hora marcada !!!');
+        document.getElementById('bntConfig').removeAttribute('disabled');
       }
 
-    }, (error) => {
-      this.toastrService.danger(error.error.message);
+    }, (message) => {
+      this.toastrService.danger(message);
+      document.getElementById('bntConfig').removeAttribute('disabled');
     });
 
   }
-
-  /*pesquisar(data) {
-
-    console.log(data)
-
-    for (let item of this.cartData) {
-      console.log(item)
-      console.log(this.cartData)
-      if (item.name == data.medico) {
-
-        this.rowData = this.cartData.filter(teste => teste.id === item.id);
-        this.source = new LocalDataSource(this.rowData);
-        //this.teste1 = this.rowData
-        //console.log(this.teste1)
-      }
-    }
-
-  }*/
-
+ 
 }

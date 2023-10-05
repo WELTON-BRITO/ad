@@ -25,9 +25,11 @@ import { CadastroRoutingModule } from './pages/cadastro/cadastro-routing.module'
 import { GestaoPacienteModule } from './pages/gestao-paciente/gestao-paciente.module';
 import { GestaoPacienteRoutingModule } from './pages/gestao-paciente/gestao-paciente-routing.module';
 import { CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule } from '@angular/core';
-import { AgendaModule } from './pages/agenda/agenda.module';
 import { ConfigurarAgendaModule } from './pages/configurar-agenda/configurar-agenda.module';
 import { TokenInterceptorService } from './pages/shared/filters/token-interceptor.service';
+import { VisualizarAgendaModule } from './pages/visualizar-agenda/visualizar-agenda.module';
+import { VisualizarAgendaRoutingModule } from './pages/visualizar-agenda/visualizar-agenda-routing.module';
+import { ConfigurarAgendaRoutingModule } from './pages/configurar-agenda/configurar-agenda-routing.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -54,17 +56,17 @@ import { TokenInterceptorService } from './pages/shared/filters/token-intercepto
     CadastroRoutingModule,
     GestaoPacienteModule, 
     GestaoPacienteRoutingModule,
-    AgendaModule,
+    VisualizarAgendaModule,
+    VisualizarAgendaRoutingModule,
     ConfigurarAgendaModule,
+    ConfigurarAgendaRoutingModule
    ],
   providers:    [ 
     { provide: LOCALE_ID, useValue: 'pt' },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
     LoadingBarService,
     AuthenticationService,
-    HttpService,   
-    
-    //NotificationsService 
+    HttpService,       
  ],
  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],

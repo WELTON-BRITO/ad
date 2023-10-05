@@ -1,10 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { NB_WINDOW, NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { HeaderService } from './header.service';
+import { AuthenticationService } from '../../../pages/shared/services/authenticationService.services';
 
 @Component({
   selector: 'ngx-header',
@@ -12,7 +14,10 @@ import { Subject } from 'rxjs';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
+  
+  headerInformation = {
+    enterpriseName: '',
+  };
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
@@ -38,23 +43,33 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [ { title: 'Sair' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private userService: UserData,
               private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService) {
-  }
+              private breakpointService: NbMediaBreakpointsService,
+              private headerService: HeaderService,
+              private authenticationService: AuthenticationService,
+              private nbMenuService: NbMenuService,
+              @Inject(NB_WINDOW) private window) {
+                this.headerInformation.enterpriseName = localStorage.getItem('bway-user');   
+                //this.headerService.assignHeaderInformation(this.headerInformation);          
+              }
+              
+   
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.userService.getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
+    let userName = localStorage.getItem('bway-enterprise-name');
 
+    this.user = {
+      name: userName,     
+    }
+   
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(
@@ -69,6 +84,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+
+      this.nbMenuService.onItemClick()
+      .pipe(
+        filter(({ tag }) => tag === 'context-user'),
+        map(({ item: { title } }) => title),
+      )
+      .subscribe(title => this.userContexMenuSwitch(title));
   }
 
   ngOnDestroy() {
@@ -91,4 +113,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuService.navigateHome();
     return false;
   }
+
+  doLogout() {
+    this.authenticationService.doLogout();
+  }
+
+  userContexMenuSwitch(title) {
+    if (title === 'Sair') {
+      this.doLogout();
+    }
+  }
+
 }

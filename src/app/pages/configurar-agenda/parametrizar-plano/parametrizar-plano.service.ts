@@ -22,7 +22,7 @@ export class ParametrizarPlanoService {
   } 
 
   cadastrarConvenio(data: any, successHandle: Function, errorHandle: Function) {
-    return this.httpService.doPost('/api/doctor/associate/healthPlan', data, successHandle, errorHandle);
+    return this.httpService.doPost('/api/doctor/healthPlan', data, successHandle, errorHandle);
   }
   
 }

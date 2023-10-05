@@ -214,8 +214,8 @@ export class NovoPacienteComponent implements OnDestroy {
     this.service.buscaEstado(null, (response) => {
 
       this.listEstado = response
-    }, (error) => {
-      this.toastrService.danger(error.error.message);
+    }, (message) => {
+      this.toastrService.danger(message);
     });
 
   }
@@ -226,8 +226,8 @@ export class NovoPacienteComponent implements OnDestroy {
 
       this.listCidade = response
 
-    }, (error) => {
-      this.toastrService.danger(error.error.message);
+    }, (message) => {
+      this.toastrService.danger(message);
     });
   }
 
@@ -237,14 +237,13 @@ export class NovoPacienteComponent implements OnDestroy {
 
       this.listConvenio = response
 
-    }, (error) => {
-      this.toastrService.danger(error.error.message);
+    }, (message) => {
+      this.toastrService.danger(message);
     });
 
   }
 
   cadastrarPaciente(data) {
-    console.log(data)
 
     if (data.nomeDep != null) {
 
@@ -311,13 +310,12 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isActive = true;
 
       this.service.salvarPaciente(this.register, (response => {
-        console.log(response)
         this.isActive = false;
         this.toastrService.success('Registro cadastrado com sucesso !!!');
         this.limpaForm()
-      }), error => {
+      }), message => {
         this.isActive = false;
-        this.toastrService.danger(error.error.message);
+        this.toastrService.danger(message);
       });
 
     }
@@ -359,9 +357,6 @@ export class NovoPacienteComponent implements OnDestroy {
     }
 
   public converterImagem = ($event: Event, element) => {
-
-    console.log(Event)
-    console.log(element.id)
 
     const target = $event.target as HTMLInputElement;
     const file: File = (target.files as FileList)[0];

@@ -43,8 +43,6 @@ export class PacienteComponent implements OnInit {
 
   pesquisaGeral(data) {
 
-    console.log(data)
-
     let params = new HttpParams();
 
     params = params.append('doctorId', data.medico)
@@ -62,8 +60,6 @@ export class PacienteComponent implements OnInit {
     this.service.buscaPaciente(params, (response) => {
 
       this.isActive = false;
-      console.log(response)
-
       this.rowData = response
 
       this.rowData = this.rowData.map(data => {       
@@ -77,9 +73,9 @@ export class PacienteComponent implements OnInit {
       })
 
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);   
+      this.toastrService.danger(message);   
     });
 
   }
@@ -96,9 +92,9 @@ export class PacienteComponent implements OnInit {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(message);
     });    
 
   }
@@ -110,9 +106,9 @@ export class PacienteComponent implements OnInit {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(message);
     });
 
   }

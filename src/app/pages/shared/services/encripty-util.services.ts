@@ -5,10 +5,7 @@ import * as CryptoJS from 'crypto-js';
 export class EncriptyUtilService {
   private encryptSecretKey = '@mp1u5';
 
-  constructor(
-   
-
-  ) { }
+  constructor( ) { }
 
   encriptyBySecretKey(data:any){
     let iv = CryptoJS.lib.WordArray.random(16);

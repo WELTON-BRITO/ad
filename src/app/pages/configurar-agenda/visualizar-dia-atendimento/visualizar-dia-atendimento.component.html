@@ -1,58 +1,46 @@
 <div class="container-fluid">
   <div class="row">
-
     <div class="col-md-12 col-xs-12">
       <div class="dialog-body">
-        <form id="form-visualizar-dia-atendimento" [formGroup]="formVisualizarDiaAtendimento">
-
-          <div class="col-md-12 col-xs-12">
-            <div class="form-group col-md-4">
-              <h5 class="ml-lg-n3">Atendimento</h5>
-            </div>
-            <div class="form-row align-items-center">
-              <div class="form-group col-md-4">
-                <div class="form-group">
-                  <div class="div-medico">
-                    <label for="nome">Escolha o médico a ser consultado</label>
-                    <select class="form-control" formControlName="medico"
-                    (change)="verificaHorario($event.target.value)">
-                      <option value="null" selected>SELECIONE</option>
-                      <option *ngFor="let medico of listMedico" value="{{ medico.id}}">{{
-                        medico.name}}</option>
-                    </select>
+        <nb-card>
+          <nb-card-body>
+            <form id="form-visualizar-dia-atendimento" [formGroup]="formVisualizarDiaAtendimento">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group col-md-4">
+                  <h5 class="ml-lg-n3">Atendimento</h5>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label for="nome">Escolha o médico a ser consultado</label>
+                        <select class="form-control" formControlName="medico"
+                          (change)="verificaHorario($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let medico of listMedico" value="{{ medico.id}}">{{
+                            medico.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="form-group pt-2">
+                      <div class="text-right">
+                        <button class="btn btn-success mr-3" id="bntConfig"
+                          (click)="configAtendimento(formVisualizarDiaAtendimento.value)">
+                          Configurar atendimento
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-md-8">
-                <div class="form-group pt-2">
-                  <div class="text-right">
-                    <!--<button class="btn btn-primary mr-3" (click)="pesquisar(formVisualizarDiaAtendimento.value)">
-                      Pesquisar
-                    </button>-->
-                    <button class="btn btn-success mr-3"
-                      (click)="configAtendimento(formVisualizarDiaAtendimento.value)">
-                      Configurar atendimento
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-row align-items-center">
-              <div class="form-group col-md-12">
-                <nb-card>
-                  <nb-card-body>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-12">
                     <div class="app-box">
                       <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
                         [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
                         [messages]="{emptyMessage: 'Sem dados...'}" [limit]="8">
-                        
-                        <ngx-datatable-column name="Nome" prop="nome">
-                          <ng-template ngx-datatable-cell-template let-row="row">
-                            <div class="text-center">
-                              {{ row.nome }}
-                            </div>
-                          </ng-template>
-                        </ngx-datatable-column>
+
                         <ngx-datatable-column name="Segunda" prop="segunda">
                           <ng-template ngx-datatable-cell-template let-row="row">
                             <div class="text-center">
@@ -120,35 +108,26 @@
                         </ngx-datatable-footer>
                       </ngx-datatable>
                     </div>
-                  </nb-card-body>
-                </nb-card>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="row" *ngIf="isActive" class="loader">
-              <div class="text-center" style="margin-top: -250px;">
-                <button class="btn btn-primary" type="button" disabled>
-                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  Carregando...
-                </button>
-              </div>
-            </div>
-           <!-- <div class="form-row align-items-center">
-              <div class="form-group col-md-12">
-                <nb-card>
-                  <nb-card-body>
-                    <div class="form-row align-items-center">
-                      <div class="col-md-12 col-xs-12">
-                        <ng2-smart-table [settings]="settings" [source]="source"> </ng2-smart-table>
-                      </div>
-                    </div>
-                  </nb-card-body>
-                </nb-card>
-              </div>
-            </div>-->
-          </div>
-        </form>
+            </form>
+          </nb-card-body>
+        </nb-card>
       </div>
     </div>
+  </div>
+</div>
 
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -250px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
+      </div>
+    </div>
   </div>
 </div>

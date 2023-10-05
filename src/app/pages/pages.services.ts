@@ -6,19 +6,34 @@ import { MENU_ITEMS } from './pages-menu';
 })
 export class PagesService {
 
+    role = [];
     constructor() { }
 
     async setHidden(menus) {
 
-        await menus.forEach(menu => {
-            console.log(menu)
-            console.log(menu.data)
-            if (menu.data == 'USER') {
-                console.log('entrei dentro do meu user')
-                menu['hidden'] = false;
-            }
+        var name = localStorage.getItem('bway-domain');
 
-        });
+        await  menus.forEach(menu => {
+
+            this.role = menu.data
+            menu['hidden'] = false;
+           /* if (menu.data) {
+
+                if(name == 'DOCTOR' && menu.title == 'Configurar Clínica'){
+                    menu['hidden'] = true;
+                }
+      
+              /*let hasRole = this.role.indexOf(menu.data.toString()) >= 0;
+            if (hasRole) {
+              menu['hidden'] = false;
+            }else {
+              menu['hidden'] = false;
+            }
+              if (menu['children'] && menu['children'].length > 0) {
+                this.setHidden(menu['children']);
+              }
+            }*/
+          });
     }
 
 }

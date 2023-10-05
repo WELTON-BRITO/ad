@@ -54,9 +54,9 @@ export class AssociarMedicoComponent implements OnDestroy {
         }
       })
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
   }
 
@@ -80,16 +80,14 @@ export class AssociarMedicoComponent implements OnDestroy {
 
       this.limparForm();
 
-    }), error => {
+    }), message => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
 
     });
   }
 
   excluir(data) {
-
-    console.log(data)
 
   }
 

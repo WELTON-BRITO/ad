@@ -122,9 +122,9 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
@@ -136,15 +136,14 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
 
   salvar(data) {
-    console.log(data)
 
     var checkbox_items = new Array(data.unimed, data.sulAmerica, data.norteDame, data.bradescoSaude,
       data.amil, data.portoSeguro, data.assimSaude, data.hpVida, data.preventSenior);
@@ -161,15 +160,13 @@ export class ParametrizarPlanoComponent implements OnDestroy {
     }
 
     this.isActive = true;
-    console.log(register)
     this.service.cadastrarConvenio(register, (response => {
-
       this.isActive = false;
       this.toastrService.success('Registro cadastrado com sucesso !!!');
       this.limpaForm()
-    }), error => {
+    }), message => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
@@ -274,9 +271,9 @@ export class ParametrizarPlanoComponent implements OnDestroy {
 
       }
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
 
@@ -296,6 +293,19 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       hpVida: [null],
       preventSenior: [null],
     })
+    var checkbox = document.querySelector("#unimed");
+    var checkbox = document.querySelector("#bradescoSaude");
+    var checkbox = document.querySelector("#sulAmerica");
+    var checkbox = document.querySelector("#norteDame");
+    var checkbox = document.querySelector("#amil");
+    var checkbox = document.querySelector("#portoSeguro");
+    var checkbox = document.querySelector("#assimSaude");
+    var checkbox = document.querySelector("#hpVida");
+    var checkbox = document.querySelector("#preventSenior");
+    function ativarCheckbox(el) {
+      el.checked = false;
+    }
+    ativarCheckbox(checkbox);
 
   }
 

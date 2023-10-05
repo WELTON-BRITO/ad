@@ -28,44 +28,52 @@
                     <div class="form-group">
                       <h6>Cadastro</h6>
                     </div>
-                    <div class="form-group row pl-3">
-                      <div class="col-md-5">
-                        <label for="imgem">Adicione a logo da clínica</label>
-                        <input class="form-control-file media-body" name="imgem" id="imgem" type="file" formControlName="imgem" 
-                        (change)="converterImagem($event, $event.target)" value="imagem"/>
-                      </div>                     
-                    </div>
-                    <div class="form-group row pl-3">
-                      <div class="col-md-3">
-                        <label for="cnpj">CNPJ</label>
-                        <input class="form-control" name="cnpj" id="cnpj" type="text" formControlName="cnpj"
-                          mask="00.000.000/0000-00" maxlength="18" />
-                      </div>   
-                      <div class="col-md-3">
-                        <label for="cpf">CPF do responsável</label>
-                        <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
-                          mask="000.000.000-00" maxlength="14" />
-                      </div>                    
-                    </div>
                     <div class="form-group">
                       <div class="col-md-6">
-                        <label for="nomeEmpresa">Nome da empresa</label>
+                        <label for="nomeEmpresa">Nome da empresa*</label>
                         <input class="form-control" name="nomeEmpresa" id="nomeEmpresa" type="text"
                           formControlName="nomeEmpresa" />
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-6">
-                        <label for="nomeResponsavel">Nome do responsável</label>
+                        <label for="nomeResponsavel">Nome do responsável*</label>
                         <input class="form-control" name="nomeResponsavel" id="nomeResponsavel" type="text"
                           formControlName="nomeResponsavel" />
                       </div>
-                    </div>                    
+                    </div>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-3">
+                        <label for="cnpj">CNPJ*</label>
+                        <input class="form-control" name="cnpj" id="cnpj" type="text" formControlName="cnpj"
+                          mask="00.000.000/0000-00" maxlength="18" />
+                      </div>
+                      <div class="col-md-3">
+                        <label for="cpf">CPF do responsável*</label>
+                        <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
+                          mask="000.000.000-00" maxlength="14" (change)="isValidCpf(formCadastroClinica.value)" />
+                        <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
+                          {{this.msgErro}} <br /><br />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-5">
+                        <label for="imgem">Adicione a logo da clínica</label>
+                        <input class="form-control-file media-body" name="imgem" id="imgem" type="file"
+                          formControlName="imgem" (change)="converterImagem($event, $event.target)" value="imagem" />
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <button class="btn btn-primary m-2" (click)="proximo(this)">
+                        PRÓXIMO
+                      </button>
+                    </div>
                   </div>
-                  <div *ngIf="isContato">                  
+                  <div *ngIf="isContato">
                     <div class="form-group">
                       <h6>Contato</h6>
-                    </div>                   
+                    </div>
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="telefoneCelular">Celular*</label>
@@ -74,34 +82,34 @@
                           mask="(00) 0 0000-0000 || (00) 0000-0000" maxlength="16" />
                       </div>
                       <div class="col-md-4">
-                        <label for="telefoneRecado">Telefone para recado</label>
-                        <input class="form-control" name="telefoneRecado" id="telefoneRecado" type="text"
-                          formControlName="telefoneRecado" [dropSpecialCharacters]="true"
+                        <label for="numeroEmpresa">Número da Empresa</label>
+                        <input class="form-control" name="numeroEmpresa" id="numeroEmpresa" type="text"
+                          formControlName="numeroEmpresa" [dropSpecialCharacters]="true"
                           mask="(00) 0 0000-0000 || (00) 0000-0000" maxlength="16" />
                       </div>
                       <div class="col-md-4">
-                        <label for="estado">Estado</label>
+                        <label for="estado">Estado*</label>
                         <select class="form-control" formControlName="estado"
-                        (change)="buscaCidade($event.target.value)">
+                          (change)="buscaCidade($event.target.value)">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let estado of listEstado" value="{{ estado.id }}">{{
                             estado.description}}</option>
                         </select>
-                      </div>   
+                      </div>
                     </div>
-                    <div class="form-group row pl-3">                     
+                    <div class="form-group row pl-3">
                       <div class="col-md-4">
-                        <label for="cidade">Cidade</label>
+                        <label for="cidade">Cidade*</label>
                         <select class="form-control" formControlName="cidade">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{
                             cidade.description}}</option>
                         </select>
-                      </div>       
-                      <div class="col-md-4">
-                        <label for="bairro">Bairro*</label>
-                        <input class="form-control" name="bairro" id="bairro" type="text" formControlName="bairro"
-                          [dropSpecialCharacters]="true" />
+                      </div>
+                      <div class="col-md-3">
+                        <label for="cep">Cep*</label>
+                        <input class="form-control" name="cep" id="cep" type="text" formControlName="cep"
+                          mask="00000-000" [dropSpecialCharacters]="true" />
                       </div>
                       <div class="col-md-4">
                         <label for="rua">Rua*</label>
@@ -110,22 +118,22 @@
                       </div>
                     </div>
                     <div class="form-group row pl-3">
-                      <div class="col-md-3">
-                        <label for="cep">Cep*</label>
-                        <input class="form-control" name="cep" id="cep" type="text" formControlName="cep"
-                        mask="00000-000" [dropSpecialCharacters]="true" />
-                      </div>                     
+                      <div class="col-md-4">
+                        <label for="bairro">Bairro*</label>
+                        <input class="form-control" name="bairro" id="bairro" type="text" formControlName="bairro"
+                          [dropSpecialCharacters]="true" />
+                      </div>
                       <div class="col-md-3">
                         <label for="numero">Número*</label>
                         <input class="form-control" name="numero" id="numero" type="number" formControlName="numero"
                           [dropSpecialCharacters]="true" />
                       </div>
                       <div class="col-md-4">
-                        <label for="complemento">Complemento*</label>
+                        <label for="complemento">Complemento</label>
                         <input class="form-control" name="complemento" id="complemento" type="text"
                           formControlName="complemento" [dropSpecialCharacters]="true" />
                       </div>
-                    </div>     
+                    </div>
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="email">E-mail</label>
@@ -135,18 +143,20 @@
                       <div class="col-md-4">
                         <label for="confirmaEmail">Confirma e-mail</label>
                         <input class="form-control" name="confirmaEmail" id="confirmaEmail" type="text"
-                          formControlName="confirmaEmail" maxlength="50" (change)="verificarEmail(formCadastroClinica.value)"/>
+                          formControlName="confirmaEmail" maxlength="50"
+                          (change)="verificarEmail(formCadastroClinica.value)" />
                       </div>
                     </div>
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
-                        <label for="senha">Escolha a senha</label>
+                        <label for="senha">Criei uma senha</label>
                         <input class="form-control" name="senha" id="senha" type="password" formControlName="senha" />
                       </div>
                       <div class="col-md-4">
                         <label for="confirmaSenha">Confirma a senha</label>
                         <input class="form-control" name="confirmaSenha" id="confirmaSenha" type="password"
-                          formControlName="confirmaSenha" maxlength="50" (change)="verificarPassWord(formCadastroClinica.value)"/>
+                          formControlName="confirmaSenha" maxlength="50"
+                          (change)="verificarPassWord(formCadastroClinica.value)" />
                       </div>
                     </div>
                     <div class="form-group">
@@ -157,7 +167,7 @@
                           <a class="a-termo" href="#" target="_blank"> os Termos e condições</a>
                         </div>
                       </div>
-                    </div>                   
+                    </div>
                     <div class="text-right">
                       <button class="btn btn-primary m-2" (click)="voltar()">
                         VOLTAR
@@ -173,19 +183,24 @@
                     <img class="cadastro" src="assets/images/linhas_cadastro.png" />
                   </div>
                 </div>
-              </div>              
+              </div>
             </div>
           </form>
         </nb-card-body>
       </nb-card>
-      <div class="row" *ngIf="isActive" class="loader">
-        <div class="text-center" style="margin-top: -600px;margin-right: 40px;">
-          <button class="btn btn-primary" type="button" disabled>
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Carregando...
-          </button>
-        </div>
-      </div>   
+    </div>
+  </div>
+</div>
+
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -600px;margin-right: 40px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
+      </div>
     </div>
   </div>
 </div>

@@ -42,11 +42,9 @@ export class AuthenticationService {
   doLogout() {
     
     var token = String(localStorage.getItem('bway-token'));
-    token = token.replace('"', '').replace('"', '');
-    
-    var headers = new Headers();
-    headers.append('Content-Type', 'application/json');  
-    localStorage.clear(); 
+    token = token.replace('"', '').replace('"', '');   
+    localStorage.setItem('bway-enterprise-name', '');
+    localStorage.setItem('bway-user', '');   
     this.router.navigate(['/login']);        
      
   } 

@@ -95,9 +95,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });    
 
   }
@@ -109,9 +109,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
@@ -140,9 +140,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       this.isActive = false;
       this.toastrService.success('Registro cadastrado com sucesso !!!');
       this.limpaForm()
-    }), error => {
+    }), message => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }

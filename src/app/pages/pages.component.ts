@@ -15,8 +15,8 @@ import { PagesService } from './pages.services';
 })
 export class PagesComponent {
 
-  //menu = MENU_ITEMS;
-  menu = [];
+  menu = MENU_ITEMS;
+  //menu = [];
 
   constructor( private pageService: PagesService) {
     this.menu = MENU_ITEMS;

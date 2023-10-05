@@ -45,10 +45,10 @@ export class LoginComponent implements OnInit {
 
   login() {
 
-    let usuario = this.formLogin.controls['login'].value;
+    let usuario = this.formLogin.controls['login'].value.replace(/\D/g, '');
     let password = this.formLogin.controls['password'].value;
-    
-      var str = usuario.length;
+
+    var str = usuario.length;
       
       if(str == 11){        
         this.domain = 4
@@ -59,26 +59,28 @@ export class LoginComponent implements OnInit {
     this.isActive = true;
     
     this.service.loader
-
+    
     this.authenticationService.getToken(usuario, password, this.domain)
       .subscribe(
         re => this.saveLogin(re),
-        (error) => {  
+        (message) => {  
           this.isActive = false;        
-          this.toastrService.danger(error.error.message);           
+          this.toastrService.danger(message);           
         });
   }
 
   private saveLogin(result) {
 
     this.isActive = false;
-    this.toastrService.success('Sucesso!!!');  
+    this.toastrService.success('Bem vindo a Aditi Care !');  
     
     localStorage.clear();
     localStorage.setItem('Authorization', 'Bearer ' + result.token);
     localStorage.setItem('bway-logged-date', new Date().toString());
     localStorage.setItem('bway-domain', result.domain);
     localStorage.setItem('bway-entityId', result.entityId);
+    localStorage.setItem('bway-enterprise-name', result.name)
+    localStorage.setItem('bway-user', result.federalId),
 
     this.router.navigate(['/pages/dashboard']);
 

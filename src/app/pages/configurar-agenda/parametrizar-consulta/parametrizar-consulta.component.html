@@ -1,152 +1,162 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-12 col-xs-12">      
-        <div class="dialog-body">
-          <form id="form-parametrizar-consulta" [formGroup]="formParametrizarConsulta">
-            <div class="col-md-12 col-xs-12">
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-6">
-                  <div class="form-group">
-                    <h5>Configurar Atendimento</h5>
+    <div class="col-md-12 col-xs-12">
+      <div class="dialog-body">
+        <nb-card>
+          <nb-card-body>
+            <form id="form-parametrizar-consulta" [formGroup]="formParametrizarConsulta">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-6">
+                    <div class="form-group">
+                      <h5>Configurar Atendimento</h5>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group">
-                  <label class="pl-1">Por favor escolha o médico abaixo para realizar a configuração:</label>
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-4">
+                <div class="form-row align-items-center">
                   <div class="form-group">
-                    <div>
-                      <label for="nome">Escolha o médico a ser consultado</label>
-                      <select class="form-control" formControlName="medico"
-                      (change)="verificaValor($event.target.value)">
-                        <option value="null" selected>SELECIONE</option>
-                        <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
-                          medico.name}}</option>
-                      </select>
+                    <label class="pl-1">Por favor escolha o médico abaixo para realizar a configuração:</label>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <div>
+                        <label for="nome">Escolha o médico a ser consultado</label>
+                        <select class="form-control" formControlName="medico"
+                          (change)="verificaValor($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
+                            medico.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group">
+                    <label class="pl-1">Selecione abaixo quais as modalidades de consultas o médico atende.</label>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <label for="nome"><span style="font-weight: bold">Tipo de Atendimento</span></label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <label for="nome">
+                        <span style="font-weight: bold">Valor do Atendimento</span></label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <label for="nome"><span style="font-weight: bold">Duração de Atendimento(Minutos)</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center pl-4 mt-lg-n4">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="P"
+                          (click)="funcValor($event.target.value, $event.target)" />
+                        Atendimento Presencial</label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <input class="div-presencial" autocomplete="off" currencyMask
+                        [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                        class="form-control m-lg-n3" id="valorPresencial" formControlName="valorPresencial"
+                        placeholder="R$ 0,00" />
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group" style="margin-left: 70px;">
+                      <div class="text-right">
+                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoPresencial"
+                          formControlName="tempoPresencial" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center pl-4 mt-lg-n4">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="video" name="optcheckbox" value="V"
+                          (click)="funcValor($event.target.value, $event.target)" />
+                        Atendimento por Video</label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <input class="div-video" autocomplete="off" currencyMask
+                        [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                        class="form-control m-lg-n3" id="valorVideo" formControlName="valorVideo"
+                        placeholder="R$ 0,00" />
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group" style="margin-left: 70px;">
+                      <div class="text-right">
+                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoVideo"
+                          formControlName="tempoVideo" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center pl-4 mt-lg-n4">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="emergencial" name="optcheckbox" value="E"
+                          (click)="funcValor($event.target.value, $event.target)" />
+                        Atendimento Emergencial</label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <input class="div-emergencial" autocomplete="off" currencyMask
+                        [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                        class="form-control m-lg-n3" name="valorEmergencial" id="valorEmergencial"
+                        formControlName="valorEmergencial" placeholder="R$ 0,00">
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group" style="margin-left: 70px;">
+                      <div class="text-right">
+                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoEmergencial"
+                          formControlName="tempoEmergencial" />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="form-row align-items-center">
-                <div class="form-group">
-                  <label class="pl-1">Selecione abaixo quais as modalidades de consultas o médico atende.</label>
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-3">
-                  <div class="form-group">
-                    <label for="nome"><span style="font-weight: bold">Tipo de Atendimento</span></label>
-                  </div>
-                </div>
-                <div class="form-group col-md-3">
-                  <div class="form-group">
-                    <label for="nome">
-                      <span style="font-weight: bold">Valor do Atendimento</span></label>
-                  </div>
-                </div>
-                <div class="form-group col-md-4">
-                  <div class="form-group">
-                    <label for="nome"><span style="font-weight: bold">Duração de Atendimento(Minutos)</span></label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row align-items-center pl-4 mt-lg-n4">
-                <div class="form-group col-md-3">
-                  <div class="form-group">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="P"
-                        (click)="funcValor($event.target.value, $event.target)" />
-                      Atendimento Presencial</label>
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <div class="form-group">
-                    <input class="div-presencial" autocomplete="off" currencyMask
-                      [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                      class="form-control m-lg-n3" id="valorPresencial" formControlName="valorPresencial"
-                      placeholder="R$ 0,00" />
-                  </div>
-                </div>
-                <div class="form-group col-md-3">
-                  <div class="form-group" style="margin-left: 70px;">
-                    <div class="text-right">
-                      <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoPresencial"
-                        formControlName="tempoPresencial" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row align-items-center pl-4 mt-lg-n4">
-                <div class="form-group col-md-3">
-                  <div class="form-group">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" id="video" name="optcheckbox" value="V"
-                        (click)="funcValor($event.target.value, $event.target)" />
-                      Atendimento por Video</label>
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <div class="form-group">
-                    <input class="div-video" autocomplete="off" currencyMask
-                      [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                      class="form-control m-lg-n3" id="valorVideo" formControlName="valorVideo" placeholder="R$ 0,00" />
-                  </div>
-                </div>
-                <div class="form-group col-md-3">
-                  <div class="form-group" style="margin-left: 70px;">
-                    <div class="text-right">
-                      <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoVideo"
-                        formControlName="tempoVideo" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row align-items-center pl-4 mt-lg-n4">
-                <div class="form-group col-md-3">
-                  <div class="form-group">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" id="emergencial" name="optcheckbox" value="E"
-                        (click)="funcValor($event.target.value, $event.target)" />
-                      Atendimento Emergencial</label>
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <div class="form-group">
-                    <input class="div-emergencial" autocomplete="off" currencyMask
-                      [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                      class="form-control m-lg-n3" name="valorEmergencial" id="valorEmergencial"
-                      formControlName="valorEmergencial" placeholder="R$ 0,00">
-                  </div>
-                </div>
-                <div class="form-group col-md-3">
-                  <div class="form-group" style="margin-left: 70px;">
-                    <div class="text-right">
-                      <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoEmergencial"
-                        formControlName="tempoEmergencial" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="text-right">
-              <button class="btn btn-success" (click)="salvar(formParametrizarConsulta.value)">
-                SALVAR
-              </button>
-            </div>
-            <div class="row" *ngIf="isActive" class="loader">
-              <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
-                <button class="btn btn-primary" type="button" disabled>
-                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  Carregando...
+              <div class="text-right">
+                <button class="btn btn-success" (click)="salvar(formParametrizarConsulta.value)">
+                  SALVAR
                 </button>
               </div>
-            </div>     
-          </form>
-        </div>     
+            </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
+      </div>
     </div>
   </div>
 </div>

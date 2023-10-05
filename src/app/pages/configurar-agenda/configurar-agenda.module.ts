@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
-//import { NgxMaskModule } from 'ngx-mask';
 import { ConfigurarAgendaRoutingModule } from './configurar-agenda-routing.module';
 import { ConfigurarAgendaComponent } from './configurar-agenda.component';
 import { VisualizarDiaAtendimentoComponent } from './visualizar-dia-atendimento/visualizar-dia-atendimento.component';
@@ -46,7 +45,6 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     NbIconModule,
     NbButtonModule,
     NgxEchartsModule,
-    //NgxMaskModule.forRoot(),
     Ng2SmartTableModule,  
     CurrencyMaskModule,
     NgxDatatableModule  

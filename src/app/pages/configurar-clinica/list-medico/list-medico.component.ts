@@ -50,15 +50,13 @@ export class ListMedicoComponent implements OnDestroy {
         })*/
 
   
-      }, (error) => {
-        console.log(error)
-        //this.notifications.error(error.message);        
+      }, (message) => {
+        //this.notifications.error(message);        
       });
   
   }
 
   cadastrar(data){
-    console.log(data)
   }
 
   salvar(data){

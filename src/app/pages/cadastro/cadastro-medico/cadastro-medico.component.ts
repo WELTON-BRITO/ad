@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CadastroMedicoService } from './cadastro-medico.service';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { Observable, Subscriber } from 'rxjs';
+import { co } from '@fullcalendar/core/internal-common';
+import { CPFValidator } from '../../shared/validators/CPFValidator';
 
 @Component({
   selector: 'ngx-cadastro-medico',
@@ -22,7 +24,9 @@ export class CadastroMedicoComponent implements OnInit {
   public listCidade = null;
   public listEspecialidade: Array<number> = [];
   public imagem = null;
-  public isActive = true;
+  public isActive = false;
+  public msgErro = 'CPF inválido!!!';
+  public showMsgErro = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -41,7 +45,7 @@ export class CadastroMedicoComponent implements OnInit {
       dataNascimento: [null],
       crm: [null],
       telefoneCelular: [null],
-      telefoneRecado: [null],
+      numeroEmpresa: [null],
       email: [null],
       confirmaEmail: [null],
       aceitoTermo: [null],
@@ -78,6 +82,7 @@ export class CadastroMedicoComponent implements OnInit {
 
     this.verificarPassWord(data)
     this.verificarEmail(data)
+    this.validaCampo(data)
 
     let register = {
 
@@ -101,21 +106,24 @@ export class CadastroMedicoComponent implements OnInit {
 
     }
 
-    this.isActive = true;
+    if ((data.nome != null) && (data.cpf != null) && (data.crm != null) && (data.dataNascimento != null) && (data.especialidade != null)
+      && (this.sexo != false) && (data.telefoneCelular != null) && (data.bairro != null) && (data.rua != null)
+      && (data.cep != null) && (data.numero != null)) {
 
-    this.service.cadastrarMedico(register, (response => {
+      this.isActive = true;
 
-      this.isActive = false;
-      this.toastrService.success('Dr°' + response.name + 'cadastrado com sucesso !!!');
-      this.isInfoGerais = true;
-      this.isContato = false;
-      this.limparForm();
+      this.service.cadastrarMedico(register, (response => {
 
-    }), error => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
-
+        this.isActive = false;
+        this.toastrService.success('Cadastrado com sucesso !!!');
+        this.isInfoGerais = true;
+        this.isContato = false;
+        this.limparForm();        
+      }), message => {        
+        this.isActive = false;
+        this.toastrService.danger(message);
+      });
+    }
   }
 
   limparForm() {
@@ -126,7 +134,7 @@ export class CadastroMedicoComponent implements OnInit {
       dataNascimento: [null],
       crm: [null],
       telefoneCelular: [null],
-      telefoneRecado: [null],
+      numeroEmpresa: [null],
       email: [null],
       confirmaEmail: [null],
       aceitoTermo: [null],
@@ -151,8 +159,8 @@ export class CadastroMedicoComponent implements OnInit {
 
       this.listEstado = response
 
-    }, (error) => {
-      this.toastrService.danger(error.error.message);
+    }, (message) => {
+      this.toastrService.danger(message);
     });
 
   }
@@ -163,8 +171,8 @@ export class CadastroMedicoComponent implements OnInit {
 
       this.listCidade = response
 
-    }, (error) => {
-      this.toastrService.danger(error.error.message);
+    }, (message) => {
+      this.toastrService.danger(message);
     });
   }
 
@@ -174,8 +182,8 @@ export class CadastroMedicoComponent implements OnInit {
 
       this.listEspecialidade = response
 
-    }, (error) => {
-      this.toastrService.danger(error.error.message);
+    }, (message) => {
+      this.toastrService.danger(message);
     });
 
   }
@@ -230,6 +238,67 @@ export class CadastroMedicoComponent implements OnInit {
 
   toggle(checked: boolean) {
     this.checked = checked;
+  }
+
+  validaCampo(data) {
+
+    if (data.nome == null) {
+      this.toastrService.danger('O campo nome é obrigatório!!!');
+    }
+    if (data.cpf == null) {
+      this.toastrService.danger('O campo cpf é obrigatório!!!');
+    }
+    if (data.crm == null) {
+      this.toastrService.danger('O campo crm é obrigatório!!!');
+    }
+    if (data.dataNascimento == null) {
+      this.toastrService.danger('O campo data de nascimento é obrigatório!!!');
+    }
+    if (data.especialidade == null) {
+      this.toastrService.danger('O campo especialidade é obrigatório!!!');
+    }
+    if (this.sexo == false) {
+      this.toastrService.danger('O campo sexo biologico é obrigatório!!!');
+    }
+    if (data.telefoneCelular == null) {
+      this.toastrService.danger('O campo celular é obrigatório!!!');
+    }
+    if (data.bairro == null) {
+      this.toastrService.danger('O campo bairro é obrigatório!!!');
+    }
+    if (data.rua == null) {
+      this.toastrService.danger('O campo rua é obrigatório!!!');
+    }
+    if (data.cep == null) {
+      this.toastrService.danger('O campo cep é obrigatório!!!');
+    }
+    if (data.numero == null) {
+      this.toastrService.danger('O campo numéro é obrigatório!!!');
+    }
+    if (data.estado == null) {
+      this.toastrService.danger('O campo estado é obrigatório!!!');
+    }
+    if (data.cidade == null) {
+      this.toastrService.danger('O campo cidade é obrigatório!!!');
+    }
+
+  }
+
+  isValidCpf(data) {
+
+    if (!CPFValidator.isValidCPF(data.cpf)) {
+      this.showMsgErro = true;
+      return false;
+    }
+    this.showMsgErro = false;
+    return true;
+  }
+
+  proximo() {
+
+    this.isInfoGerais = false;
+    this.isContato = true;
+
   }
 
   voltar() {

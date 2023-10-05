@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-//import { NotificationsService } from "angular2-notifications";
 import "rxjs/add/operator/map";
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { LoadingBarService } from "ng2-loading-bar";
@@ -13,7 +12,6 @@ export class HttpService {
 
   constructor(
     private http: HttpClient,
-    //private notifications: NotificationsService,
     private loadingBarService: LoadingBarService,
     private route: ActivatedRoute
   ) { }
@@ -36,7 +34,6 @@ export class HttpService {
             errorHandle(this.getErrorMessage(err));
             this.loadingBarService.complete();
           } else {
-           // this.notifications.error(this.getErrorMessage(err).message);
             this.loadingBarService.complete();
             throw err;
           }
@@ -51,7 +48,6 @@ export class HttpService {
         });
         this.loadingBarService.complete();
       } else {
-        //this.notifications.error(this.getErrorMessage(err).message);
         this.loadingBarService.complete();
         throw err;
       }

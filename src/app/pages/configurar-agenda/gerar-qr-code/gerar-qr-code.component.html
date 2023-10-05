@@ -1,61 +1,70 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12 col-xs-12">
-        <div class="dialog-body">
-          <form id="form-qr-code" [formGroup]="formQrCode">
-            <div class="col-md-12 col-xs-12">
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-3">
-                  <h5>Pagamento por PIX</h5>
+      <div class="dialog-body">
+        <nb-card>
+          <nb-card-body>
+            <form id="form-qr-code" [formGroup]="formQrCode">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-3">
+                    <h5>Pagamento por PIX</h5>
+                  </div>
                 </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-4">
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label for="nome">Escolha o médico a ser consultado</label>
+                        <select class="form-control" formControlName="medico"
+                          (change)="verificaValor($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
+                            medico.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
                   <div class="form-group">
-                    <div class="div-medico">
-                      <label for="nome">Escolha o médico a ser consultado</label>
-                      <select class="form-control" formControlName="medico"
-                      (change)="verificaValor($event.target.value)">
-                        <option value="null" selected>SELECIONE</option>
-                        <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
-                          medico.name}}</option>
-                      </select>
+                    <label class="pl-2">Cole abaixo o código copia e cola da conta de pagamento a qual a consulta será
+                      paga ao médico ou a clínica.</label>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-12">
+                    <textarea class="form-control" rows="3" formControlName="qrCode" id="qrCode"
+                      maxlength="1000"></textarea>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-12 text-center">
+                    <div class="text-right">
+                      <button class="btn btn-success" (click)="salvar(formQrCode.value)">
+                        SALVAR
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="form-row align-items-center">
-                <div class="form-group">
-                  <label class="pl-2">Cole abaixo o código copia e cola da conta de pagamento a qual a consulta será
-                    paga ao médico ou a clínica.</label>
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-12">
-                  <textarea class="form-control" rows="3" formControlName="qrCode" id="qrCode"
-                    maxlength="1000"></textarea>
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-12 text-center">
-                  <div class="text-right">
-                    <button class="btn btn-success" (click)="salvar(formQrCode.value)">
-                      SALVAR
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="row" *ngIf="isActive" class="loader">
-                <div class="text-center" style="margin-top: -260px;margin-right: 40px;">
-                  <button class="btn btn-primary" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Carregando...
-                  </button>
-                </div>
-              </div>   
-            </div>
-          </form>
-        </div>    
+            </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
+      </div>
     </div>
   </div>
 </div>

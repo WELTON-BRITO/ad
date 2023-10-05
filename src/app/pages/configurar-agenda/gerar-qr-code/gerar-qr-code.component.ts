@@ -62,9 +62,9 @@ export class GerarQrCodeComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });    
 
   }
@@ -76,9 +76,9 @@ export class GerarQrCodeComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
@@ -106,16 +106,14 @@ export class GerarQrCodeComponent implements OnDestroy {
         this.valueRemote = response.valueRemote,
         this.doctorId = response.doctor.id
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
 
   salvar(data) {
-
-    console.log(data)
 
     let register = {
       valueInPerson: this.valueInPerson,
@@ -135,15 +133,14 @@ export class GerarQrCodeComponent implements OnDestroy {
 
     this.service.salvarQRCode(register, (response => {
 
-      console.log(response),
-        this.isActive = false;
+      this.isActive = false;
       this.toastrService.success(response.nomeEmpresa + 'cadastrado com sucesso !!!');
 
       this.limparForm();
 
-    }), error => {
+    }), message => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
 
     });
   }

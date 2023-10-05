@@ -3,22 +3,7 @@
 @import '@nebular/theme/styles/global/breakpoints';
 
 @include nb-install-component() {
-  .menu-sidebar {
+  .menu-sidebar ::ng-deep .scrollable {
     padding-top: nb-theme(layout-padding-top);
-    background-color: #313a46;
-    --menu-item-active-text-color: #fff;
-    --menu-item-icon-active-color: #fff;
-    --header-height: 0rem;
-    --menu-text-color: #ffffff;
-    --menu-group-text-color: #fff;
-  }
-
-  .imagem {
-    display: flex;
-    margin-left: 50px;
-    width: 60px;
-    height: 76px;
-    top: 10px;
-    left: 91px;  
   }
 }

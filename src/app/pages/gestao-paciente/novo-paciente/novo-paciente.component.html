@@ -2,281 +2,293 @@
   <div class="row">
     <div class="col-md-12 col-xs-12">
       <div class="dialog-body">
-        <form id="form-novo-paciente" [formGroup]="formNovoPaciente">
-          <div class="col-md-12 col-xs-12">
-            <div class="form-row align-items-center">
-              <nb-card-header class="aditi-header">
-                <div class="back-link">
-                  <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
-                    <nb-icon icon="arrow-back" title="voltar"></nb-icon>
-                  </a>
+        <nb-card>
+          <nb-card-body>
+            <form id="form-novo-paciente" [formGroup]="formNovoPaciente">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-row align-items-center">
+                  <nb-card-header class="aditi-header">
+                    <div class="back-link">
+                      <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                        <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                      </a>
+                    </div>
+                  </nb-card-header>
+                  <div class="form-group col-md-3">
+                    <h5 class="pt-3">Novo Paciente</h5>
+                  </div>
                 </div>
-              </nb-card-header>
-              <div class="form-group col-md-3">
-                <h5 class="pt-3">Novo Paciente</h5>
-              </div>
-            </div>                    
-            <div class="form-row align-items-center">
-              <div class="form-group col-md-3">
-                <div class="form-group">
-                  <div class="btn_clinica">
-                    <button nbButton outline status="primary" type="button" id="informacao"
-                      class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="informacao"
-                      (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
-                        icon="home-outline"></nb-icon> Informações Gerais</button>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="btn_clinica">
+                        <button nbButton outline status="primary" type="button" id="informacao"
+                          class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="informacao"
+                          (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
+                            icon="home-outline"></nb-icon> Informações Gerais</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="btn_clinica">
+                        <button nbButton outline status="primary" type="button" id="localizacao"
+                          class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="localizacao"
+                          (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
+                            icon="car-outline"></nb-icon> Localização</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="btn_clinica">
+                        <button nbButton outline status="primary" type="button" id="contato"
+                          class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="contato"
+                          (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
+                            icon="email-outline"></nb-icon> Contato</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="btn_clinica">
+                        <button nbButton outline status="primary" type="button" id="addFotos"
+                          class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="addFotos"
+                          (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
+                            icon="plus-circle-outline"></nb-icon> Dados do dependente</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isInformacao">
+                  <div class="form-row align-items-center">
+                    <h6 class="p-1">Informações Gerais</h6>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="imagem">Adicione sua foto</label>
+                        <input class="form-control-file media-body" name="imagem" id="imagem" type="file"
+                          formControlName="imagem" (change)="converterImagem($event, $event.target)" value="imagem" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-6">
+                      <label for="nome">Nome</label>
+                      <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" />
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label for="dateNasc">Data de nascimento</label>
+                      <div class="row pl-3">
+                        <input class="date" type="date" id="dateNasc" name="mydate" formControlName="dateNasc"
+                          maxlength="10" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-3">
+                      <label for="CPF">CPF</label>
+                      <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
+                        mask="000.000.000-00" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label class="mat-button mb-3">Sexo biologico:</label>
+                      <div class="row">
+                        <label class="radio-inline mr-3 pl-3">
+                          <input class="mat-button" type="radio" id="radio" name="optradio" value="M"
+                            (click)="viewdiv($event.target.value)">
+                          Masculino</label>
+                        <label class="radio-inline">
+                          <input class="mat-button" type="radio" id="radio" name="optradio" value="F"
+                            (click)="viewdiv($event.target.value)"> Feminino</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isLocalizacao">
+                  <div class="form-row align-items-center">
+                    <h6 class="p-1">Localização</h6>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-3">
+                      <label for="CEP">CEP</label>
+                      <input class="form-control" name="cep" id="cep" type="text" formControlName="cep"
+                        mask="00000-000" />
+                    </div>
+                    <div class="form-group col-md-1">
+                      <label for="numero">N°</label>
+                      <input class="form-control" name="numero" id="numero" type="text" formControlName="numero" />
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="complemento">Complemento</label>
+                      <input class="form-control" name="complemento" id="complemento" type="text"
+                        formControlName="complemento" [dropSpecialCharacters]="true" />
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-4">
+                      <label for="endereco">Endereço</label>
+                      <input class="form-control" name="endereco" id="endereco" type="text"
+                        formControlName="endereco" />
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="bairro">Bairro</label>
+                      <input class="form-control" name="bairro" id="bairro" type="text" formControlName="bairro" />
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-4">
+                      <label for="estado">Estado</label>
+                      <select class="form-control" formControlName="estado" (change)="buscaCidade($event.target.value)">
+                        <option value="null" selected>SELECIONE</option>
+                        <option *ngFor="let estado of listEstado" value="{{ estado.id }}">{{
+                          estado.description }}</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="cidade">Cidade</label>
+                      <select class="form-control" formControlName="cidade">
+                        <option value="null" selected>SELECIONE</option>
+                        <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{
+                          cidade.description}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isContato">
+                  <div class="form-row align-items-center">
+                    <h6 class="p-1">Contato</h6>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-5">
+                      <label for="celular">Celular</label>
+                      <input class="form-control" name="celular" id="celular" type="text" formControlName="celular"
+                        mask="(00) 0 0000-0000 || (00) 0000-0000" />
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-5">
+                      <label for="email">E-mail</label>
+                      <input class="form-control" name="email" id="email" type="text" formControlName="email" />
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isAddFotos">
+                  <div class="form-row align-items-center">
+                    <h6 class="p-1">Informações Gerais</h6>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="imagemDep">Adicione sua foto</label>
+                        <input class="form-control-file media-body" name="imagemDep" id="imagemDep" type="file"
+                          formControlName="imagemDep" (change)="converterImagem($event, $event.target)"
+                          value="imagemDep" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-6">
+                      <label for="nomeDep">Nome do dependente</label>
+                      <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label for="dateNascDep">Data de nascimento</label>
+                      <div class="row pl-3">
+                        <input class="date" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
+                          maxlength="10" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-6">
+                      <label for="nome">Nome da Mãe</label>
+                      <input class="form-control" name="nomeResp01" id="nomeResp01" type="text"
+                        formControlName="nomeResp01" />
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="nome">Nome do Pai</label>
+                      <input class="form-control" name="nomeResp02" id="nomeResp02" type="text"
+                        formControlName="nomeResp02" />
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-3">
+                      <label for="cpfDep">CPF</label>
+                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
+                        mask="000.000.000-00" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="rgDep">RG</label>
+                      <input class="form-control" name="rgDep" id="rgDep" type="text" formControlName="rgDep"
+                        mask="00.000.000-0" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label class="mat-button mb-3">Sexo biologico:</label>
+                      <div class="row">
+                        <label class="radio-inline mr-3 pl-3">
+                          <input class="mat-button" type="radio" id="radio" name="optradio" value="M"
+                            (click)="viewdiv($event.target.value)">
+                          Masculino</label>
+                        <label class="radio-inline">
+                          <input class="mat-button" type="radio" id="radio" name="optradio" value="F"
+                            (click)="viewdiv($event.target.value)"> Feminino</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label for="tipoSanguineo">Tipo sanguineo</label>
+                      <select class="form-control" formControlName="tipoSanguineo">
+                        <option value="null" selected>SELECIONE</option>
+                        <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.id }}">{{
+                          tipoSanguineo.descricao}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center pt-5 modal-footer">
+                  <div class="form-group col-md-2" *ngIf="isVoltar">
+                    <div class="form-group">
+                      <div class="login_btn">
+                        <button type="button" id="voltar" class="btn btn-primary nb-custom-message-full-width"
+                          (click)="voltar(this)">Voltar</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2 mr-lg-n4" *ngIf="isProximo">
+                    <div class="form-group">
+                      <div class="login_btn">
+                        <button type="button" id="proximo" class="btn btn-primary nb-custom-message-full-width"
+                          (click)="proximo(this)">Próximo</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2 mr-lg-n4" *ngIf="isCadastrar">
+                    <div class="form-group">
+                      <div class="login_btn">
+                        <button type="button" id="cadastrar" class="btn btn-success nb-custom-message-full-width"
+                          (click)="cadastrarPaciente(formNovoPaciente.value)">Cadastrar</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="form-group col-md-3">
-                <div class="form-group">
-                  <div class="btn_clinica">
-                    <button nbButton outline status="primary" type="button" id="localizacao"
-                      class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="localizacao"
-                      (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
-                        icon="car-outline"></nb-icon> Localização</button>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-md-3">
-                <div class="form-group">
-                  <div class="btn_clinica">
-                    <button nbButton outline status="primary" type="button" id="contato"
-                      class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="contato"
-                      (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
-                        icon="email-outline"></nb-icon> Contato</button>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-md-3">
-                <div class="form-group">
-                  <div class="btn_clinica">
-                    <button nbButton outline status="primary" type="button" id="addFotos"
-                      class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="addFotos"
-                      (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
-                        icon="plus-circle-outline"></nb-icon> Dados do dependente</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div *ngIf="isInformacao">
-              <div class="form-row align-items-center">
-                <h6 class="p-1">Informações Gerais</h6>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label for="imagem">Adicione sua foto</label>
-                    <input class="form-control-file media-body" name="imagem" id="imagem" type="file" formControlName="imagem" 
-                    (change)="converterImagem($event, $event.target)" value="imagem"/>
-                  </div>                     
-                </div>
-              </div>    
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-6">
-                  <label for="nome">Nome</label>
-                  <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" />
-                </div>
-                <div class="form-group col-md-2">
-                  <label for="dateNasc">Data de nascimento</label>
-                  <div class="row pl-3">
-                    <input class="date" type="date" id="dateNasc" name="mydate" formControlName="dateNasc"
-                      maxlength="10" />
-                  </div>
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-3">
-                  <label for="CPF">CPF</label>
-                  <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
-                    mask="000.000.000-00" />
-                </div>
-                <div class="form-group col-md-3">
-                  <label class="mat-button mb-3">Sexo biologico:</label>
-                  <div class="row">
-                    <label class="radio-inline mr-3 pl-3">
-                      <input class="mat-button" type="radio" id="radio" name="optradio" value="M"
-                        (click)="viewdiv($event.target.value)">
-                      Masculino</label>
-                    <label class="radio-inline">
-                      <input class="mat-button" type="radio" id="radio" name="optradio" value="F"
-                        (click)="viewdiv($event.target.value)"> Feminino</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div *ngIf="isLocalizacao">
-              <div class="form-row align-items-center">
-                <h6 class="p-1">Localização</h6>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-3">
-                  <label for="CEP">CEP</label>
-                  <input class="form-control" name="cep" id="cep" type="text" formControlName="cep" mask="00000-000" />
-                </div>
-                <div class="form-group col-md-1">
-                  <label for="numero">N°</label>
-                  <input class="form-control" name="numero" id="numero" type="text" formControlName="numero" />
-                </div>
-                <div class="form-group col-md-4">
-                  <label for="complemento">Complemento</label>
-                  <input class="form-control" name="complemento" id="complemento" type="text"
-                    formControlName="complemento" [dropSpecialCharacters]="true" />
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-4">
-                  <label for="endereco">Endereço</label>
-                  <input class="form-control" name="endereco" id="endereco" type="text" formControlName="endereco" />
-                </div>
-                <div class="form-group col-md-4">
-                  <label for="bairro">Bairro</label>
-                  <input class="form-control" name="bairro" id="bairro" type="text" formControlName="bairro" />
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-4">
-                  <label for="estado">Estado</label>
-                  <select class="form-control" formControlName="estado" (change)="buscaCidade($event.target.value)">
-                    <option value="null" selected>SELECIONE</option>
-                    <option *ngFor="let estado of listEstado" value="{{ estado.id }}">{{
-                      estado.description }}</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-4">
-                  <label for="cidade">Cidade</label>
-                  <select class="form-control" formControlName="cidade">
-                    <option value="null" selected>SELECIONE</option>
-                    <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{
-                      cidade.description}}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div *ngIf="isContato">
-              <div class="form-row align-items-center">
-                <h6 class="p-1">Contato</h6>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-5">
-                  <label for="celular">Celular</label>
-                  <input class="form-control" name="celular" id="celular" type="text" formControlName="celular"
-                    mask="(00) 0 0000-0000 || (00) 0000-0000" />
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-5">
-                  <label for="email">E-mail</label>
-                  <input class="form-control" name="email" id="email" type="text" formControlName="email" />
-                </div>
-              </div>
-            </div>
-            <div *ngIf="isAddFotos">
-              <div class="form-row align-items-center">
-                <h6 class="p-1">Informações Gerais</h6>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <label for="imagemDep">Adicione sua foto</label>
-                    <input class="form-control-file media-body" name="imagemDep" id="imagemDep" type="file" formControlName="imagemDep" 
-                    (change)="converterImagem($event, $event.target)" value="imagemDep"/>
-                  </div>                     
-                </div>
-              </div>    
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-6">
-                  <label for="nomeDep">Nome do dependente</label>
-                  <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
-                </div>
-                <div class="form-group col-md-2">
-                  <label for="dateNascDep">Data de nascimento</label>
-                  <div class="row pl-3">
-                    <input class="date" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
-                      maxlength="10" />
-                  </div>
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-6">
-                  <label for="nome">Nome da Mãe</label>
-                  <input class="form-control" name="nomeResp01" id="nomeResp01" type="text"
-                    formControlName="nomeResp01" />
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="nome">Nome do Pai</label>
-                  <input class="form-control" name="nomeResp02" id="nomeResp02" type="text"
-                    formControlName="nomeResp02" />
-                </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-3">
-                  <label for="cpfDep">CPF</label>
-                  <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
-                    mask="000.000.000-00" />
-                </div>
-                <div class="form-group col-md-3">
-                  <label for="rgDep">RG</label>
-                  <input class="form-control" name="rgDep" id="rgDep" type="text" formControlName="rgDep"
-                    mask="00.000.000-0" />
-                </div>
-                <div class="form-group col-md-2">
-                  <label class="mat-button mb-3">Sexo biologico:</label>
-                  <div class="row">
-                    <label class="radio-inline mr-3 pl-3">
-                      <input class="mat-button" type="radio" id="radio" name="optradio" value="M"
-                        (click)="viewdiv($event.target.value)">
-                      Masculino</label>
-                    <label class="radio-inline">
-                      <input class="mat-button" type="radio" id="radio" name="optradio" value="F"
-                        (click)="viewdiv($event.target.value)"> Feminino</label>
-                  </div>
-                </div>
-                <div class="form-group col-md-2">
-                  <label for="tipoSanguineo">Tipo sanguineo</label>
-                  <select class="form-control" formControlName="tipoSanguineo">
-                    <option value="null" selected>SELECIONE</option>
-                    <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.id }}">{{
-                      tipoSanguineo.descricao}}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="form-row align-items-center pt-5 modal-footer">
-              <div class="form-group col-md-2" *ngIf="isVoltar">
-                <div class="form-group">
-                  <div class="login_btn">
-                    <button type="button" id="voltar" class="btn btn-primary nb-custom-message-full-width"
-                      (click)="voltar(this)">Voltar</button>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-md-2 mr-lg-n4" *ngIf="isProximo">
-                <div class="form-group">
-                  <div class="login_btn">
-                    <button type="button" id="proximo" class="btn btn-primary nb-custom-message-full-width"
-                      (click)="proximo(this)">Próximo</button>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group col-md-2 mr-lg-n4" *ngIf="isCadastrar">
-                <div class="form-group">
-                  <div class="login_btn">
-                    <button type="button" id="cadastrar" class="btn btn-success nb-custom-message-full-width"
-                      (click)="cadastrarPaciente(formNovoPaciente.value)">Cadastrar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row" *ngIf="isActive" class="loader">
-              <div class="text-center" style="margin-top: -360px;margin-right: 40px;">
-                <button class="btn btn-primary" type="button" disabled>
-                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  Carregando...
-                </button>
-              </div>
-            </div>
-          </div>
-        </form>
+            </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -360px;margin-right: 40px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
       </div>
     </div>
   </div>

@@ -26,64 +26,6 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   public sabado = null;
   public domingo = null;
   public isActive = true;
-
-  settings = {
-    //actions: false,
-    attr: {
-      class: 'table table-striped table-bordered table-hover'
-    },
-    defaultStyle: true,
-    hideSubHeader: true,
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-      confirmCreate: true,
-
-    },
-    edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-      confirmSave: true
-    },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
-    },
-    columns: {
-      Segunda: {
-        title: 'Segunda',
-        //type: 'name',
-      },
-      Terça: {
-        title: 'Terça',
-        type: 'date',
-      },
-      Quarta: {
-        title: 'Quarta',
-        type: 'hora',
-      },
-      Quinta: {
-        title: 'Quinta',
-        //type: 'name',
-      },
-      Sexta: {
-        title: 'Sexta',
-        //type: 'name',
-      },
-      Sabado: {
-        title: 'Sabado',
-        //type: 'name',
-      },
-      Domingo: {
-        title: 'Domingo',
-        //type: 'name',
-      },
-    },
-  };
-
-
   public listMedico = null;
   public listSemana = null;
   public tipoCard: any[] = [{
@@ -94,15 +36,12 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   public grupoCard = null;
   public card = null;
   public doctor = null;
-  
-  source: LocalDataSource = new LocalDataSource();
+  public semana = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private activatedRouter: ActivatedRoute,
-    private _visualizarAtendimento: VisualizarDiaAtendimentoComponent,
     private service: ConfigurarDiaAtendimentoService,
-    private encriptyService: EncriptyUtilService,
     private toastrService: NbToastrService) {
 
     this.tipoCard = [];
@@ -144,13 +83,12 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   ngOnInit() {
 
     this.activatedRouter.queryParams.subscribe(register => {
-      //this.nomeMedico = this.encriptyService.decriptyBySecretKey(register.medico) ;      
-      this.doctorId = register[0];
-      this.pesquisaMedico(this.doctorId)   
+      this.doctorId = register.medico;
+      this.pesquisaMedico(this.doctorId)
     })
-    
+
     this.verificaHorario(this.doctorId)
-   
+
     this.formDiaAtendimento = this.formBuilder.group({
       semana: [null]
     })
@@ -158,51 +96,28 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   }
 
   pesquisaMedico(data) {
-    
+
     this.isActive = true
     let params = new HttpParams();
 
-    params = params.append('doctorId', data)   
+    params = params.append('doctorId', data)
 
     this.service.buscaDoctor(params, (response) => {
       this.listMedico = response[0].id
       this.doctor = response[0].name
       this.isActive = false;
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);  
+      this.toastrService.danger(message);
     });
 
-  }
-
-  onDeleteConfirm(event) {
-
-    if (window.confirm('Tem certeza que deseja excluir?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
-  }
-
-  onCreateConfirm(event) {
-    
-    //if (window.confirm('Are you sure you want to create?')) {
-    event.confirm.resolve();
-    //} else {
-    // event.confirm.reject();
-    //}
-
-  }
-
-  onSaveConfirm(event) {   
-    event.confirm.resolve();
   }
 
   addHora() {
 
     this.tipoCard.push({
-      id: this.tipoCard.length + 1,      
+      id: this.tipoCard.length + 1,
     })
   }
 
@@ -214,37 +129,43 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
 
   salvar(event) {
 
-    let register = {
-    doctorId: this.listMedico,
-    items: [
-      {
-        weekday: event.semana,
-        timeRangeList: [
+    if (this.tipoCard.length <= 0)  {      
+      this.toastrService.warning('Não é possível salvar horário de atendimento sem marcar a hora!!!');
+    } else {
+
+      let register = {
+        doctorId: this.listMedico,
+        items: [
           {
-            clinicId: null,
-            startTime: this.tipoCard[0].horaInicio,
-            endTime: this.tipoCard[0].horaFim
+            weekday: event.semana != null ? event.semana : this.semana,
+            timeRangeList: [
+              {
+                clinicId: null,
+                startTime: this.tipoCard[0].horaInicio,
+                endTime: this.tipoCard[0].horaFim
+              }
+            ]
           }
         ]
       }
-    ]
+  
+      console.log(register)
+
+      this.isActive = true;
+      this.service.salveAtenHora(register, (response => {
+        this.isActive = false;
+        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.limpaForm()
+        this.verificaHorario(this.listMedico)
+      }), message => {
+        this.isActive = false;
+        this.toastrService.danger(message);
+      });
+
+    }
   }
 
-  this.isActive = true;
-    this.service.salveAtenHora(register, (response => {
-      this.isActive = false;
-      this.toastrService.success('Registro cadastrado com sucesso !!!');
-      this.limpaForm()
-      this.verificaHorario(this.listMedico)
-    }), error => {      
-      this.isActive = false;
-      this.toastrService.danger(error.error.message); 
-    });
-   
-
-  }
-
-  limpaForm(){
+  limpaForm() {
     this.formDiaAtendimento = this.formBuilder.group({
       semana: [null]
     })
@@ -254,36 +175,78 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   verificaHorario(data) {
     this.isActive = true
     this.rowData = [];
-    
+
     let params = new HttpParams();
     params = params.append('doctorId', data)
 
     this.service.agendaDoctor(params, (response) => {
 
-      if(response.length != 0){        
-        
+      if (response.length != 0) {
+
         this.rowData = response;
 
         this.rowData = this.rowData.map(data => {
 
           if (data.weekday == 1) {
             this.segunda = [data.startTime.concat(' - ', data.endTime)]
+            this.terca = null;
+            this.quarta = null;
+            this.quinta = null;
+            this.sexta = null;
+            this.sabado = null;
+            this.domingo = null;
           } else if (data.weekday == 2) {
             this.terca = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = null;
+            this.quarta = null;
+            this.quinta = null;
+            this.sexta = null;
+            this.sabado = null;
+            this.domingo = null;
           } else if (data.weekday == 3) {
             this.quarta = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = null;
+            this.terca = null;
+            this.quinta = null;
+            this.sexta = null;
+            this.sabado = null;
+            this.domingo = null;
           } else if (data.weekday == 4) {
             this.quinta = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = null;
+            this.terca = null;
+            this.quarta = null;
+            this.sexta = null;
+            this.sabado = null;
+            this.domingo = null;
           } else if (data.weekday == 5) {
             this.sexta = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = null;
+            this.terca = null;
+            this.quarta = null;
+            this.quinta = null;
+            this.sabado = null;
+            this.domingo = null;
           } else if (data.weekday == 6) {
             this.sabado = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = null;
+            this.terca = null;
+            this.quarta = null;
+            this.quinta = null;
+            this.sexta = null;
+            this.domingo = null;
           } else if (data.weekday == 7) {
             this.domingo = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = null;
+            this.terca = null;
+            this.quarta = null;
+            this.quinta = null;
+            this.sexta = null;
+            this.sabado = null;
           }
-  
+
           return {
-            nome: data.doctor.name.split(' ')[0],
+            id: data.weekday,
             segunda: this.segunda,
             terca: this.terca,
             quarta: this.quarta,
@@ -293,16 +256,26 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             domingo: this.domingo,
           }
         })
+        console.log(this.rowData)
+
         this.isActive = false
-      }else{
+      } else {
         this.isActive = false
         this.toastrService.warning('Não possui hora marcada !!!');
       }
 
-    }, (error) => {
-      this.toastrService.danger(error.error.message);
+    }, (message) => {
+      this.toastrService.danger(message);
     });
 
+  }
+
+  editar(data) {
+    console.log(data)
+
+    this.semana = data.id;
+
+    this.addHora();
   }
 
   previousPage() {

@@ -2,55 +2,60 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Home',
     icon: 'home-outline',
     link: '/pages/dashboard',
-    data: 'USER',
-    hidden: true,
+    data:  ['USER','DOCTOR','CLINIC'],
+    hidden: false,
   },
   {
     title: 'Painel',
     icon: 'home-outline',
     link: '/pages/iot-dashboard',
-    hidden: true,
-  },
-  {
-    title: 'Agenda',
-    icon: 'home-outline',
-    link: '/pages/agenda',
-  },
+    data: ['USER','DOCTOR','CLINIC'],
+    hidden: false,
+  },  
   {
     title: 'Visualizar Agenda',
     icon: 'calendar-outline',
-    link: '/pages/configurar-agenda',
+    link: '/pages/visualizar-agenda',
+    data: ['USER','DOCTOR','CLINIC'],
+    hidden: false,
     children: [      
       {
-        title: 'Consultar Agenda',
-        link: '/pages/configurar-agenda/visualizar-dia-atendimento',
-      },
-      
+        title: 'Agenda',
+        link: '/pages/visualizar-agenda/agenda',
+      }      
     ]
   },
   {
     title: 'Gestão de Pacientes',
     icon: 'people-outline',
     link: '/pages/gestao-paciente',
+    data: ['USER','DOCTOR','CLINIC'],
+    hidden: false,
     children: [      
       {
         title: 'Listar Pacientes',
         link: '/pages/gestao-paciente/paciente',
-      }
+      },
     ]
   },
   {
     title: 'Configurar Agenda',
     icon: 'calendar-outline',
     link: '/pages/configurar-agenda',
+    data: ['USER','DOCTOR','CLINIC'],
+    hidden: false,
     children: [      
       /*{
         title: 'Configurar dia de Atendimento',
         link: '/pages/configurar-agenda/configurar-dia-atendimento',
-      },*/
+      },*/     
+      {
+        title: 'Consultar Agenda',
+        link: '/pages/configurar-agenda/visualizar-dia-atendimento',
+      },
       {
         title: 'Configurar Exceção',
         link: '/pages/configurar-agenda/configurar-excecao-atendimento',
@@ -73,6 +78,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Configurar Clínica',
     icon: 'calendar-outline',
     link: '/pages/configurar-clinica',
+    data: ['CLINIC'],
+    hidden: false,
     children: [      
       {
         title: 'Associar Médicos',
@@ -85,14 +92,5 @@ export const MENU_ITEMS: NbMenuItem[] = [
       
     ]
   }, 
-  {
-    title: '',
-    group: true,
-  },
-  {
-    title: 'Sair',
-    icon: 'shopping-cart-outline',
-    link: '/login',
-
-  },
+ 
 ]

@@ -1,162 +1,165 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-12 col-xs-12">     
-        <div class="dialog-body">
-          <form id="form-configurar-excecao-atendimento" [formGroup]="formExcecaoAtendimento">
-            <div class="col-md-12 col-xs-12">
-              <div class="form-group col-md-6">
-                <h5 class="ml-lg-n3">Exceção de Atendimento</h5>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-4">
-                  <div class="form-group">
-                    <label for="nome">Escolha o médico a ser consultado</label>
-                    <select class="form-control" formControlName="medico"
-                    (change)="verificaMedico($event.target.value)">
-                      <option value="null" selected>SELECIONE</option>
-                      <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
-                        medico.name}}</option>
-                    </select>
-                  </div>
+    <div class="col-md-12 col-xs-12">
+      <div class="dialog-body">
+        <nb-card>
+          <nb-card-body>
+            <form id="form-configurar-excecao-atendimento" [formGroup]="formExcecaoAtendimento">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group col-md-6">
+                  <h5 class="ml-lg-n3">Exceção de Atendimento</h5>
                 </div>
-                <div class="form-group col-md-2">
-                  <div class="form-group">
-                    <label for="dataExcecao">Escolha a data</label>
-                    <div class="row pl-3">
-                      <input class="date" type="date" id="dataExcecao" name="mydate" formControlName="dataExcecao"
-                        maxlength="10" />
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <label for="nome">Escolha o médico a ser consultado</label>
+                      <select class="form-control" formControlName="medico"
+                        (change)="verificaMedico($event.target.value)">
+                        <option value="null" selected>SELECIONE</option>
+                        <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
+                          medico.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <label for="dataExcecao">Escolha a data</label>
+                      <div class="row pl-3">
+                        <input class="date" type="date" id="dataExcecao" name="mydate" formControlName="dataExcecao"
+                          maxlength="10" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group pl-3">
+                      <label class="div-expediente">Terá expediente</label>
+                      <div class="row pl-3">
+                        <label class="radio-inline mr-3">
+                          <input class="mat-button" type="radio" id="radio" name="optradio" checked value="S"
+                            (click)="expediente($event.target.value)">
+                          Sim</label>
+                        <label class="radio-inline">
+                          <input class="mat-button" type="radio" id="radio" name="optradio" value="N"
+                            (click)="expediente($event.target.value)"> Não</label>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-md-3">
-                  <div class="form-group pl-3">
-                    <label class="div-expediente">Terá expediente</label>
-                    <div class="row pl-3">
-                      <label class="radio-inline mr-3">
-                        <input class="mat-button" type="radio" id="radio" name="optradio" checked value="S"
-                          (click)="expediente($event.target.value)">
-                        Sim</label>
-                      <label class="radio-inline">
-                        <input class="mat-button" type="radio" id="radio" name="optradio" value="N"
-                          (click)="expediente($event.target.value)"> Não</label>
+                <div class="form-row align-items-center">
+                  <div class="col-md-12">
+                    <div class="text-right">
+                      <button class="btn btn-primary mr-3" id="addHoras" (click)="addHora()" *ngIf="isCardHoras">
+                        Adcionar horas
+                      </button>
+                      <button class="btn btn-success" (click)="salvar(formExcecaoAtendimento.value)">
+                        Salvar
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="form-row align-items-center">
-                <div class="col-md-12">
-                  <div class="text-right">
-                    <button class="btn btn-primary mr-3" id="addHoras" (click)="addHora()" *ngIf="isCardHoras">
-                      Adcionar horas
-                    </button>
-                    <button class="btn btn-danger mr-3" id="removerHoras" (click)="removerCard()" *ngIf="isCardHoras">
-                      Remover card horas
-                    </button>
-                    <button class="btn btn-success" (click)="salvar(formExcecaoAtendimento.value)">
-                      Salvar
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <nb-card-body>
-                <section class="align-items-center">
-                  <div class="col-md-12 col-xs-12">
-                    <form #card="ngForm">
-                      <div class="form-row align-items-center">
-                        <section class="border-dark m-3 btn mt-lg-n4 paragraph-2 mb-5" style="background-color: white;"
-                          *ngFor="let card of tipoCard; let i = index;">
-                          <div class="col-md-12 col-xs-12 ">
-                            <div class="row">
-                              <div class="col-md-12">
-                                <label for="horaInicio">Hora início</label>
-                                <div class="row pl-3">
-                                  <input type="time" name="appt" required name="card{{card.id}}"
-                                    [(ngModel)]="card.horaInicio" />
-                                </div>
-                                <label for="horaFim">Hora fim</label>
-                                <div class="row pl-3">
-                                  <input type="time" name="appt" required name="car{{card.id}}"
-                                    [(ngModel)]="card.horaFim" />
+                <nb-card-body>
+                  <section class="align-items-center">
+                    <div class="col-md-12 col-xs-12">
+                      <form #card="ngForm">
+                        <div class="form-row align-items-center">
+                          <section class="border-dark m-3 btn mt-lg-n4 paragraph-2 mb-5"
+                            style="background-color: white;" *ngFor="let card of tipoCard; let i = index;">
+                            <div class="col-md-12 col-xs-12 ">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <label for="horaInicio">Hora início</label>
+                                  <i class="fa fa-window-close alert-danger carousel-item-next" aria-hidden="true"
+                                    (click)="removerCard()"></i>
+                                  <div class="row pl-3">
+                                    <input type="time" name="appt" required name="card{{card.id}}"
+                                      [(ngModel)]="card.horaInicio" />
+                                  </div>
+                                  <label for="horaFim">Hora fim</label>
+                                  <div class="row pl-3">
+                                    <input type="time" name="appt" required name="car{{card.id}}"
+                                      [(ngModel)]="card.horaFim" />
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </section>
-                      </div>
-                    </form>
+                          </section>
+                        </div>
+                      </form>
+                    </div>
+                  </section>
+                </nb-card-body>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-12">
+                    <div class="app-box">
+                      <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
+                        [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
+                        [messages]="{emptyMessage: 'Sem dados...'}" [limit]="8">
+                        <ngx-datatable-column name="Nome" prop="nome">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.nome }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Data" prop="data">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.data }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Hora Início" prop="horaInicio">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.horaInicio }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Hora Fim" prop="horaFim">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.horaFim }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-footer>
+                          <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                            let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                            <div>
+                              <div class="page-count">
+                                Total de Registros: {{rowCount}}
+                              </div>
+                            </div>
+                            <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
+                              [pagerRightArrowIcon]="'fa fa-angle-double-right '"
+                              [pagerPreviousIcon]="'fa fa-angle-left'" [pagerNextIcon]="'fa fa-angle-right '"
+                              [page]="curPage" [size]="pageSize" [count]="rowCount"
+                              [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                            </datatable-pager>
+                          </ng-template>
+                        </ngx-datatable-footer>
+                      </ngx-datatable>
+                    </div>
                   </div>
-                </section>
-              </nb-card-body>              
-              <div class="form-row align-items-center">
-                <div class="form-group col-md-12">
-                  <nb-card>
-                    <nb-card-body>
-                      <div class="app-box">
-                        <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
-                          [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
-                          [messages]="{emptyMessage: 'Sem dados...'}" [limit]="8">
-  
-                          <ngx-datatable-column name="Nome" prop="nome">
-                            <ng-template ngx-datatable-cell-template let-row="row">
-                              <div class="text-center">
-                                {{ row.nome }}
-                              </div>
-                            </ng-template>
-                          </ngx-datatable-column>
-                          <ngx-datatable-column name="Data" prop="data">
-                            <ng-template ngx-datatable-cell-template let-row="row">
-                              <div class="text-center">
-                                {{ row.data }}
-                              </div>
-                            </ng-template>
-                          </ngx-datatable-column>
-                          <ngx-datatable-column name="Hora Início" prop="horaInicio">
-                            <ng-template ngx-datatable-cell-template let-row="row">
-                              <div class="text-center">
-                                {{ row.horaInicio }}
-                              </div>
-                            </ng-template>
-                          </ngx-datatable-column>
-                          <ngx-datatable-column name="Hora Fim" prop="horaFim">
-                            <ng-template ngx-datatable-cell-template let-row="row">
-                              <div class="text-center">
-                                {{ row.horaFim }}
-                              </div>
-                            </ng-template>
-                          </ngx-datatable-column>   
-                          <ngx-datatable-footer>
-                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
-                              let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
-                              <div>
-                                <div class="page-count">
-                                  Total de Registros: {{rowCount}}
-                                </div>
-                              </div>
-                              <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
-                                [pagerRightArrowIcon]="'fa fa-angle-double-right '"
-                                [pagerPreviousIcon]="'fa fa-angle-left'" [pagerNextIcon]="'fa fa-angle-right '"
-                                [page]="curPage" [size]="pageSize" [count]="rowCount"
-                                [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
-                              </datatable-pager>
-                            </ng-template>
-                          </ngx-datatable-footer>
-                        </ngx-datatable>
-                      </div>
-                    </nb-card-body>
-                  </nb-card>
                 </div>
-              </div>  
-              <div class="row" *ngIf="isActive" class="loader">
-                <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
-                  <button class="btn btn-primary" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Carregando...
-                  </button>
-                </div>
-              </div>          
-            </div>
-          </form>
-        </div>     
+              </div>
+            </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
+      </div>
     </div>
   </div>
 </div>

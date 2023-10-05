@@ -96,9 +96,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
@@ -110,9 +110,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (error) => {
+    }, (message) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
@@ -137,7 +137,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
           }
         })
       } else {
-        this.toastrService.warning('Não possui exceção de atendimento !!!');
+        this.toastrService.warning('Ainda não foi configurado nenhuma exceção no horário de atendimento !!!');
       }
 
     }, (error) => {
@@ -169,9 +169,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.toastrService.success('Registro cadastrado com sucesso !!!');
       this.buscarExcecaoDoctor(response.doctor.id)
       this.limpaForm()
-    }), error => {
+    }), message => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(message);
     });
 
   }
