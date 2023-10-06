@@ -24,12 +24,13 @@ import { CadastroModule } from './pages/cadastro/cadastro.module';
 import { CadastroRoutingModule } from './pages/cadastro/cadastro-routing.module';
 import { GestaoPacienteModule } from './pages/gestao-paciente/gestao-paciente.module';
 import { GestaoPacienteRoutingModule } from './pages/gestao-paciente/gestao-paciente-routing.module';
-import { CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, LOCALE_ID, NgModule } from '@angular/core';
 import { ConfigurarAgendaModule } from './pages/configurar-agenda/configurar-agenda.module';
 import { TokenInterceptorService } from './pages/shared/filters/token-interceptor.service';
 import { VisualizarAgendaModule } from './pages/visualizar-agenda/visualizar-agenda.module';
 import { VisualizarAgendaRoutingModule } from './pages/visualizar-agenda/visualizar-agenda-routing.module';
 import { ConfigurarAgendaRoutingModule } from './pages/configurar-agenda/configurar-agenda-routing.module';
+import { ErrorHandlerService } from './pages/shared/services/http/error-handler.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -64,6 +65,7 @@ import { ConfigurarAgendaRoutingModule } from './pages/configurar-agenda/configu
   providers:    [ 
     { provide: LOCALE_ID, useValue: 'pt' },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
     LoadingBarService,
     AuthenticationService,
     HttpService,       

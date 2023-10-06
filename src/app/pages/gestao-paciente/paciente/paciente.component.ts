@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ErrorHandler, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PacienteService } from './paciente.service';
@@ -21,7 +21,8 @@ export class PacienteComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: PacienteService,
-    private toastrService: NbToastrService,) { }
+    private toastrService: NbToastrService,
+    private errorHandler: ErrorHandler) { }
 
   ngOnInit() {
 
@@ -43,16 +44,15 @@ export class PacienteComponent implements OnInit {
 
   pesquisaGeral(data) {
 
+    console.log(data)
+
     let params = new HttpParams();
 
     params = params.append('doctorId', data.medico)
-
-    if (data.cnpjCpf != null) {
-      params = params.append('name', data.cnpjCpf)
-    }
-
-    if (data.cnpjCpf != null) {
-      params = params.append('federalId', data.cnpjCpf)
+   
+    if (data.pesquisa != null) {
+      console.log('entrei aqui no cpf 2')
+      params = params.append('federalId', data.pesquisa)
     }
 
     this.isActive = true;
@@ -73,11 +73,23 @@ export class PacienteComponent implements OnInit {
       })
 
 
-    }, (message) => {
+    }, (error) => {
+      console.log('entrei dentro do erro')
+      console.log(error)
       this.isActive = false;
-      this.toastrService.danger(message);   
-    });
+      if (error.error instanceof ErrorEvent) {
+        // A client-side or network error occurred. Handle it accordingly.
+        console.error('An error occurred:', error.error.message);
+      } else {
+        // The backend returned an unsuccessful response code.
+        // The response body may contain clues as to what went wrong.
+        console.error(
+          `Backend returned code ${error.status}, ` +
+          `body was: ${error.error}`);
+      }
+      this.toastrService.danger(error.error.message);  
 
+    });
   }
 
   pesquisaMedico(data) {
@@ -106,9 +118,14 @@ export class PacienteComponent implements OnInit {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    },(error) => {
+      console.log('entrei dentro do erro')
+      console.log(this.errorHandler.handleError(error))
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.errorHandler.handleError(error);
+      
+      this.toastrService.danger(error.error.message);  
+
     });
 
   }

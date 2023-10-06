@@ -35,11 +35,11 @@ export class GerarQrCodeComponent implements OnDestroy {
   ngOnInit() {
 
     var name = localStorage.getItem('bway-domain');
-    var id = localStorage.getItem('bway-entityId');   
-    
-    if(name == 'CLINIC'){
+    var id = localStorage.getItem('bway-entityId');
+
+    if (name == 'CLINIC') {
       this.pesquisaClinica(id)
-    }else{
+    } else {
       this.pesquisaMedico(id);
     }
 
@@ -65,12 +65,12 @@ export class GerarQrCodeComponent implements OnDestroy {
     }, (message) => {
       this.isActive = false;
       this.toastrService.danger(message);
-    });    
+    });
 
   }
 
   pesquisaClinica(data) {
-    this.isActive = true   
+    this.isActive = true
     this.service.buscaClinica(data, null, (response) => {
 
       this.listMedico = response
@@ -94,7 +94,7 @@ export class GerarQrCodeComponent implements OnDestroy {
     this.service.buscaValor(null, data, (response) => {
       this.isActive = false;
 
-        this.durationAtHome = response.durationAtHome,
+      this.durationAtHome = response.durationAtHome,
         this.durationEmergency = response.durationEmergency,
         this.durationInPerson = response.durationInPerson,
         this.durationRemote = response.durationRemote,
@@ -115,34 +115,45 @@ export class GerarQrCodeComponent implements OnDestroy {
 
   salvar(data) {
 
-    let register = {
-      valueInPerson: this.valueInPerson,
-      valueRemote: this.valueRemote,
-      doctorId: this.doctorId,
-      valueInPersonEmergency: this.valueInPersonEmergency,
-      valueAtHome: this.valueAtHome,
-      durationInPerson: this.durationInPerson,
-      durationAtHome: this.durationAtHome,
-      durationRemote: this.durationRemote,
-      durationEmergency: this.durationEmergency,
-      qrCode: data.qrCode,
-      pixCode: this.pixCode,
+    console.log(data)
+
+    if (data.medico == null || data.qrCode == null) {
+      console.log('entrei aqui')
+
+      this.toastrService.warning('Campo médico e código copia e cola tem que ser preenchidos !!!');
+
+    } else {
+
+      let register = {
+        valueInPerson: this.valueInPerson,
+        valueRemote: this.valueRemote,
+        doctorId: this.doctorId,
+        valueInPersonEmergency: this.valueInPersonEmergency,
+        valueAtHome: this.valueAtHome,
+        durationInPerson: this.durationInPerson,
+        durationAtHome: this.durationAtHome,
+        durationRemote: this.durationRemote,
+        durationEmergency: this.durationEmergency,
+        qrCode: data.qrCode,
+        pixCode: this.pixCode,
+      }
+
+      this.isActive = true;
+
+      this.service.salvarQRCode(register, (response => {
+
+        this.isActive = false;
+        this.toastrService.success('QR code cadastrado com sucesso !!!');
+
+        this.limparForm();
+
+      }), message => {
+        this.isActive = false;
+        this.toastrService.danger(message);
+
+      });
     }
 
-    this.isActive = true;
-
-    this.service.salvarQRCode(register, (response => {
-
-      this.isActive = false;
-      this.toastrService.success(response.nomeEmpresa + 'cadastrado com sucesso !!!');
-
-      this.limparForm();
-
-    }), message => {
-      this.isActive = false;
-      this.toastrService.danger(message);
-
-    });
   }
 
   limparForm() {

@@ -188,7 +188,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
         this.rowData = this.rowData.map(data => {
 
           if (data.weekday == 1) {
-            this.segunda = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = [data.startTime.concat(' - ', data.endTime)]   
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
@@ -196,53 +196,53 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 2) {
-            this.terca = [data.startTime.concat(' - ', data.endTime)]
+            this.terca = [data.startTime.concat(' - ', data.endTime)]  
             this.segunda = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;
+            this.domingo = null;          
           } else if (data.weekday == 3) {
-            this.quarta = [data.startTime.concat(' - ', data.endTime)]
+            this.quarta = [data.startTime.concat(' - ', data.endTime)] 
             this.segunda = null;
             this.terca = null;
             this.quinta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;
+            this.domingo = null;              
           } else if (data.weekday == 4) {
-            this.quinta = [data.startTime.concat(' - ', data.endTime)]
+            this.quinta = [data.startTime.concat(' - ', data.endTime)]  
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;
+            this.domingo = null;             
           } else if (data.weekday == 5) {
-            this.sexta = [data.startTime.concat(' - ', data.endTime)]
+            this.sexta = [data.startTime.concat(' - ', data.endTime)]    
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sabado = null;
-            this.domingo = null;
+            this.domingo = null;           
           } else if (data.weekday == 6) {
-            this.sabado = [data.startTime.concat(' - ', data.endTime)]
+            this.sabado = [data.startTime.concat(' - ', data.endTime)]    
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
-            this.domingo = null;
+            this.domingo = null;            
           } else if (data.weekday == 7) {
-            this.domingo = [data.startTime.concat(' - ', data.endTime)]
+            this.domingo = [data.startTime.concat(' - ', data.endTime)]  
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
-            this.sabado = null;
+            this.sabado = null;              
           }
 
           return {

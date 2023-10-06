@@ -5,7 +5,7 @@
         <form id="form-cadastro-medico" [formGroup]="formLogin">
           <div class="col-md-12 col-xs-12">
             <div class="form-row">
-              <div class="col-md-4">
+              <div >
                 <div class="form-group">
                   <img class="text-center" src="assets/images/login_aditi.png" />
                 </div>               
@@ -20,16 +20,19 @@
                 <div class="form-group">
                   <label for="exampleInputEmail1" class="label">CPF/CNPJ</label>
                   <input class="form-control" name="login" id="login" type="email" formControlName="login" nbInput
-                    fullWidth placeholder="Login" />
+                    fullWidth placeholder="CPF/CNPJ" />
                 </div>
                 <div class="form-group">
-                  <label for="password" class="label">Senha</label>
-                  <a class="label col-sm-4 col-form-label a-senha" href="#" target="_blank">Esqueceu sua senha?</a>
+                  <label for="password" class="label">Senha</label>                  
                   <input class="form-control" type="password" id="password" formControlName="password" maxlength="30"
-                    nbInput fullWidth placeholder="Password">
+                    nbInput fullWidth placeholder="Senha">
                 </div>
                 <div class="form-group">
-                  <nb-checkbox>Lembre de mim</nb-checkbox>
+                  <div class="text-center">
+                    <a class="label col-form-label" href="#" target="_blank">Esqueceu sua senha?</a>
+                  </div>
+                  
+                  <!--<nb-checkbox>Lembre de mim</nb-checkbox>-->
                 </div>
                 <div class="form-group">
                   <div class="login_btn">
@@ -47,7 +50,7 @@
               <div class="col-md-8">
                 <div class="form-group">
                   <div class="text-center">
-                    <img src="assets/images/login_img.png" />
+                    <img class="d-none d-sm-block img-fluid mx-auto d-block" src="assets/images/login_img.png" />
                   </div>
                 </div>
               </div>

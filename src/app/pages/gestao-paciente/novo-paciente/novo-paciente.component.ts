@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NovoPacienteService } from './novo-paciente.service';
 import { NbToastrService } from '@nebular/theme';
 import { Observable, Subscriber } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-novo-paciente',
@@ -21,7 +22,7 @@ export class NovoPacienteComponent implements OnDestroy {
   public isInformacao = true;
   public isLocalizacao = false;
   public isContato = false;
-  public isAddFotos = false;
+  public isAddDependente = false;
   public isVoltar = false;
   public isProximo = true;
   public isCadastrar = false;
@@ -31,6 +32,8 @@ export class NovoPacienteComponent implements OnDestroy {
   public imagem = null;
   public imagemDep = null;
   public register = null;
+  public listMedico = null;
+  public doctorId = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -89,6 +92,15 @@ export class NovoPacienteComponent implements OnDestroy {
 
   ngOnInit() {
 
+    var name = localStorage.getItem('bway-domain');
+    var id = localStorage.getItem('bway-entityId');
+
+    if (name == 'CLINIC') {
+      this.pesquisaClinica(id)
+    } else {
+      this.pesquisaMedico(id);
+    }
+
     this.buscaEstado();
     this.buscaConvenio();
     this.formNovoPaciente = this.formBuilder.group({
@@ -116,7 +128,8 @@ export class NovoPacienteComponent implements OnDestroy {
       rgDep: [null],
       cpfDep: [null],
       imagem: [null],
-      imagemDep: [null]
+      imagemDep: [null],
+      medico: [null]
     })
 
   }
@@ -128,7 +141,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isInformacao = true;
       this.isLocalizacao = false;
       this.isContato = false;
-      this.isAddFotos = false;
+      this.isAddDependente = false;
       this.isProximo = true;
       this.isCadastrar = false;
       this.isVoltar = false;
@@ -137,7 +150,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isInformacao = false;
       this.isLocalizacao = true;
       this.isContato = false;
-      this.isAddFotos = false;
+      this.isAddDependente = false;
       this.isProximo = true;
       this.isCadastrar = false;
       this.isVoltar = true;
@@ -146,7 +159,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isInformacao = false;
       this.isLocalizacao = false;
       this.isContato = true;
-      this.isAddFotos = false;
+      this.isAddDependente = false;
       this.isProximo = true;
       this.isCadastrar = false;
       this.isVoltar = true;
@@ -155,7 +168,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isInformacao = false;
       this.isLocalizacao = false;
       this.isContato = false;
-      this.isAddFotos = true;
+      this.isAddDependente = true;
       this.isProximo = false;
       this.isCadastrar = true;
       this.isVoltar = true;
@@ -165,22 +178,34 @@ export class NovoPacienteComponent implements OnDestroy {
   proximo(data) {
 
     if (data.isInformacao == true) {
-
       this.isInformacao = false;
       this.isLocalizacao = true;
+      this.isContato = false;
+      this.isAddDependente = false;
+      this.isProximo = true;
+      this.isCadastrar = false;
       this.isVoltar = true;
+
     } else if (data.isLocalizacao == true) {
 
+      this.isInformacao = false;
       this.isLocalizacao = false;
       this.isContato = true;
+      this.isAddDependente = false;
+      this.isProximo = true;
+      this.isCadastrar = false;
       this.isVoltar = true;
+
     } else if (data.isContato == true) {
 
+      this.isInformacao = false;
+      this.isLocalizacao = false;
       this.isContato = false;
-      this.isAddFotos = true;
+      this.isAddDependente = true;
       this.isProximo = false;
-      this.isVoltar = true;
       this.isCadastrar = true;
+      this.isVoltar = true;
+
     }
 
   }
@@ -199,8 +224,8 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isVoltar = true;
       this.isProximo = true;
       this.isCadastrar = false;
-    } else if (data.isAddFotos == true) {
-      this.isAddFotos = false;
+    } else if (data.isAddDependente == true) {
+      this.isAddDependente = false;
       this.isContato = true;
       this.isProximo = true;
       this.isVoltar = true;
@@ -248,7 +273,7 @@ export class NovoPacienteComponent implements OnDestroy {
     if (data.nomeDep != null) {
 
       this.register = {
-        doctorId: null,
+        doctorId: this.doctorId,
         user: {
           name: data.nome,
           birthDate: data.dateNasc,
@@ -284,8 +309,8 @@ export class NovoPacienteComponent implements OnDestroy {
 
     } else {
 
-       this.register = {
-        doctorId: null,
+      this.register = {
+        doctorId: this.doctorId,
         user: {
           name: data.nome,
           birthDate: data.dateNasc,
@@ -307,54 +332,90 @@ export class NovoPacienteComponent implements OnDestroy {
     }
 
 
-      this.isActive = true;
+    this.isActive = true;
 
-      this.service.salvarPaciente(this.register, (response => {
-        this.isActive = false;
-        this.toastrService.success('Registro cadastrado com sucesso !!!');
-        this.limpaForm()
-      }), message => {
-        this.isActive = false;
-        this.toastrService.danger(message);
-      });
+    this.service.salvarPaciente(this.register, (response => {
+      this.isActive = false;
+      this.toastrService.success('Registro cadastrado com sucesso !!!');
+      this.limpaForm()
+      this.previousPage()
+    }), message => {
+      this.isActive = false;
+      this.toastrService.danger(message);
+    });
 
-    }
+  }
 
-    viewdiv(data) {
-      this.sexo = data;
-    }
+  verificaMedico(data) {
+    this.doctorId = data
+  }
 
-    limpaForm() {
+  pesquisaMedico(data) {
 
-      this.formNovoPaciente = this.formBuilder.group({
-        codigo: [null],
-        nome: [null],
-        dateNasc: [null],
-        nomeResp01: [null],
-        nomeResp02: [null],
-        cpf: [null],
-        rg: [null],
-        convenio: [null],
-        estado: [null],
-        cidade: [null],
-        bairro: [null],
-        numero: [null],
-        endereco: [null],
-        cep: [null],
-        email: [null],
-        foneRecado: [null],
-        celular: [null],
-        complemento: [null],
-        nomeDep: [null],
-        dateNascDep: [null],
-        tipoSanguineo: [null],
-        rgDep: [null],
-        cpfDep: [null],
-        imagem: [null],
-        imagemDep: [null]
-      })
+    this.isActive = true
 
-    }
+    let params = new HttpParams();
+    params = params.append('doctorId', data)
+
+    this.service.buscaDoctor(params, (response) => {
+      this.listMedico = response
+      this.isActive = false
+
+    }, (message) => {
+      this.isActive = false;
+      this.toastrService.danger(message);
+    });
+
+  }
+
+  pesquisaClinica(data) {
+    this.isActive = true
+    this.service.buscaClinica(data, null, (response) => {
+      this.listMedico = response
+      this.isActive = false
+
+    }, (message) => {
+      this.isActive = false;
+      this.toastrService.danger(message);
+    });
+
+  }
+
+  viewdiv(data) {
+    this.sexo = data;
+  }
+
+  limpaForm() {
+
+    this.formNovoPaciente = this.formBuilder.group({
+      codigo: [null],
+      nome: [null],
+      dateNasc: [null],
+      nomeResp01: [null],
+      nomeResp02: [null],
+      cpf: [null],
+      rg: [null],
+      convenio: [null],
+      estado: [null],
+      cidade: [null],
+      bairro: [null],
+      numero: [null],
+      endereco: [null],
+      cep: [null],
+      email: [null],
+      foneRecado: [null],
+      celular: [null],
+      complemento: [null],
+      nomeDep: [null],
+      dateNascDep: [null],
+      tipoSanguineo: [null],
+      rgDep: [null],
+      cpfDep: [null],
+      imagem: [null],
+      imagemDep: [null]
+    })
+
+  }
 
   public converterImagem = ($event: Event, element) => {
 

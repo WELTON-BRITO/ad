@@ -21,7 +21,7 @@ export class GerarQrCodeService {
   }
 
   salvarQRCode(data: any, successHandle: Function, errorHandle: Function) {
-    return this.httpService.doPost('/api/doctor/price', data, successHandle, errorHandle);
+    return this.httpService.doPut('/api/doctor/price', data, successHandle, errorHandle);
   }
 
  }

@@ -63,9 +63,9 @@ export class LoginComponent implements OnInit {
     this.authenticationService.getToken(usuario, password, this.domain)
       .subscribe(
         re => this.saveLogin(re),
-        (message) => {  
-          this.isActive = false;        
-          this.toastrService.danger(message);           
+        (error) => {  
+          this.isActive = false;    
+          this.toastrService.danger(error.error.message);     
         });
   }
 

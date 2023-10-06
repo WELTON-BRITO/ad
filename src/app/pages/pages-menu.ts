@@ -61,7 +61,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/configurar-agenda/configurar-excecao-atendimento',
       },
       {
-        title: 'Configurar Atendimento',
+        title: 'Configurar Valores e Modalidades',
         link: '/pages/configurar-agenda/parametrizar-consulta',
       },     
       {
@@ -80,16 +80,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/configurar-clinica',
     data: ['CLINIC'],
     hidden: false,
-    children: [      
+    children: [ 
+      {
+        title: 'Listar Médicos',
+        link: '/pages/configurar-clinica/list-medico',
+      },
       {
         title: 'Associar Médicos',
         link: '/pages/configurar-clinica/associar-medico',
-      },
-      /*{
-        title: 'Listar Médicos',
-        link: '/pages/configurar-clinica/list-medico',
-      },*/
-      
+      }      
     ]
   }, 
  

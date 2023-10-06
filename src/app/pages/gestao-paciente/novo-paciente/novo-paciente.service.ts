@@ -12,6 +12,10 @@ export class NovoPacienteService {
     return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
   }
 
+  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/doctor/clinic/' + id, data, successHandle, erroHandle)
+  } 
+
   buscaEstado(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/uf/all', data, successHandle, erroHandle)
   }

@@ -12,4 +12,8 @@ export class ListMedicoService {
     return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
   }
 
+  buscaDoctorClinic(clinicId:any, data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/doctor/clinic/'+ clinicId, data, successHandle, erroHandle)
+  }
+
 }

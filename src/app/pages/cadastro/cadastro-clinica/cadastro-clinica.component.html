@@ -8,7 +8,7 @@
               <div class="form-row align-items-center">
                 <div class="col-md-1">
                   <div class="align-self-start">
-                    <img class="cadastro" src="assets/images/linhas_cadastro.png" />
+                    <img class="cadastro d-none d-sm-block" src="assets/images/linhas_cadastro.png" />
                   </div>
                 </div>
                 <div class="col-md-10">
@@ -16,8 +16,7 @@
                     <div class="text-center m-5">
                       <button nbButton outline status="primary" type="button"
                         class="btn btn-outline-primary col-md-5 m-3" (click)="dadosPessoais($event.target.value)"
-                        value="informacao"><nb-icon icon="person-outline"></nb-icon> Informações
-                        Gerais</button>
+                        value="informacao"><nb-icon icon="person-outline"></nb-icon>Dados Gerais</button>
                       <button nbButton outline status="primary" type="button"
                         class="btn btn-outline-primary col-md-5 m-3" (click)="dadosPessoais($event.target.value)"
                         value="contato"><nb-icon icon="email-outline"></nb-icon>
@@ -28,25 +27,23 @@
                     <div class="form-group">
                       <h6>Cadastro</h6>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group row pl-3">
                       <div class="col-md-6">
                         <label for="nomeEmpresa">Nome da empresa*</label>
                         <input class="form-control" name="nomeEmpresa" id="nomeEmpresa" type="text"
                           formControlName="nomeEmpresa" />
                       </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-md-6">
-                        <label for="nomeResponsavel">Nome do responsável*</label>
-                        <input class="form-control" name="nomeResponsavel" id="nomeResponsavel" type="text"
-                          formControlName="nomeResponsavel" />
-                      </div>
-                    </div>
-                    <div class="form-group row pl-3">
                       <div class="col-md-3">
                         <label for="cnpj">CNPJ*</label>
                         <input class="form-control" name="cnpj" id="cnpj" type="text" formControlName="cnpj"
                           mask="00.000.000/0000-00" maxlength="18" />
+                      </div>
+                    </div>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-6">
+                        <label for="nomeResponsavel">Nome do responsável*</label>
+                        <input class="form-control" name="nomeResponsavel" id="nomeResponsavel" type="text"
+                          formControlName="nomeResponsavel" />
                       </div>
                       <div class="col-md-3">
                         <label for="cpf">CPF do responsável*</label>
@@ -56,7 +53,7 @@
                           {{this.msgErro}} <br /><br />
                         </div>
                       </div>
-                    </div>
+                    </div>                    
                     <div class="form-group row pl-3">
                       <div class="col-md-5">
                         <label for="imgem">Adicione a logo da clínica</label>
@@ -163,8 +160,8 @@
                       <div class="col-md-4">
                         <div class="form-check-inline">
                           <input type="checkbox" class="form-check-input" id="aceitoTermo" name="grupo"
-                            formControlName="aceitoTermo" value="" /> Aceito
-                          <a class="a-termo" href="#" target="_blank"> os Termos e condições</a>
+                            formControlName="aceitoTermo" value="" /> Li e aceito
+                          <a class="a-termo p-1" href="http://aditi.care.saude.ws/termo_clinica.pdf" target="_blank"> os Termos e condições</a>
                         </div>
                       </div>
                     </div>
@@ -180,7 +177,7 @@
                 </div>
                 <div class="col-md-1">
                   <div class="align-self-start">
-                    <img class="cadastro" src="assets/images/linhas_cadastro.png" />
+                    <img class="cadastro d-none d-sm-block" src="assets/images/linhas_cadastro.png" />
                   </div>
                 </div>
               </div>
