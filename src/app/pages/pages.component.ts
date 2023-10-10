@@ -16,11 +16,13 @@ import { PagesService } from './pages.services';
 export class PagesComponent {
 
   menu = MENU_ITEMS;
-  //menu = [];
 
-  constructor( private pageService: PagesService) {
+  constructor(private pageService: PagesService) {
     this.menu = MENU_ITEMS;
     this.pageService.setHidden(this.menu);
 
   }
+
 }
+
+

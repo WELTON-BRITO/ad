@@ -149,10 +149,7 @@
                           </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
-                          <ng-template ngx-datatable-cell-template let-row="row">
-                            <a class="home-icon" (click)="editar(row)" title="Editar">
-                              <i class="fa fa-edit p-2"></i>
-                            </a>
+                          <ng-template ngx-datatable-cell-template let-row="row">                           
                             <a class="home-icon" (click)="excluir(row)" title="Excluir">
                               <i class="fas fa-solid fa-ban p-2"></i>
                             </a>

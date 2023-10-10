@@ -24,12 +24,12 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   public grupoCard = null;
   public card = null;
   public listMedico = null;
-  public isCardHoras = true;
+  public isCardHoras = false;
   public isActive = false;
   public rowData = null;
   public doctorId = null;
-  public horaInicio = null;
-  public horaFim = null;
+  public horaInicio = [];
+  public horaFim = [];
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -96,9 +96,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -110,9 +110,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -132,8 +132,8 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
           return {
             nome: data.doctor.name.split(' ')[0],
             data: moment(data.dateException).format("DD/MM/YYYY"),
-            horaInicio: data.startTime,
-            horaFim: data.endTime
+            horaInicio: data.startTime == null ? 'sem expediente' : data.startTime,
+            horaFim: data.endTime == null ? 'sem expediente' : data.endTime,
           }
         })
       } else {
@@ -141,16 +141,22 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       }
 
     }, (error) => {
-      this.toastrService.danger('Não possui hora marcada !!!');
+      this.toastrService.danger(error.error.message);
     });
 
   }
 
-  salvar(data) {
+  salvar(data) {    
 
-    if (this.isCardHoras == true) {
-      this.horaInicio = this.tipoCard[0].horaInicio;
-      this.horaFim = this.tipoCard[0].horaFim
+    for (var i = 0; i < this.tipoCard.length; i++) {
+
+      if(this.tipoCard[i].horaInicio != null){
+        this.horaInicio.push(this.tipoCard[0].horaInicio)
+      }
+      if(this.tipoCard[i].horaFim != null){
+        this.horaFim.push(this.tipoCard[i].horaFim)
+      }    
+      
     }
 
     let register = {
@@ -162,17 +168,22 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       away: this.isCardHoras
     }
 
-    this.isActive = true;
+    if ((this.doctorId != null) && (data.dataExcecao != null) && ((this.isCardHoras == true) || (this.isCardHoras == false))) {
 
-    this.service.salvarExcecaoDoctor(register, (response => {
-      this.isActive = false;
-      this.toastrService.success('Registro cadastrado com sucesso !!!');
-      this.buscarExcecaoDoctor(response.doctor.id)
-      this.limpaForm()
-    }), message => {
-      this.isActive = false;
-      this.toastrService.danger(message);
-    });
+      this.isActive = true;
+
+      this.service.salvarExcecaoDoctor(register, (response => {
+        this.isActive = false;
+        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.buscarExcecaoDoctor(response.doctor.id)
+        this.limpaForm()
+      }), (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+    } else {
+      this.toastrService.danger('Preencher os campos obrigatório!!!');
+    }
 
   }
 
@@ -190,9 +201,14 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   }
 
   verificaMedico(data) {
-
-    this.doctorId = data
-    this.buscarExcecaoDoctor(data)
+   
+    if(data != 'null'){    
+      this.doctorId = data
+      this.buscarExcecaoDoctor(data)
+    }else{
+      this.toastrService.danger('Preencher o campo obrigatório!!!');
+    }
+    
   }
 
 }

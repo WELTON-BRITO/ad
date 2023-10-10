@@ -24,5 +24,11 @@ export class ParametrizarPlanoService {
   cadastrarConvenio(data: any, successHandle: Function, errorHandle: Function) {
     return this.httpService.doPost('/api/doctor/healthPlan', data, successHandle, errorHandle);
   }
-  
+
+  removerConvenio(doctorId: any, data: any, successHandle:Function, errorHandle:Function) {
+
+    this.httpService.doPut('/api/doctor/'+ doctorId +'/healthPlan',data, successHandle, errorHandle);
+
+  }
+ 
 }

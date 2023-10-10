@@ -54,27 +54,27 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Nome do médico" prop="nome" [width]="280">
                           <ng-template ngx-datatable-cell-template let-row="row">
-                            <div class="text-left">
+                            <div class="text-left p-4">
                               {{ row.name }}
                             </div>
                           </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Especialidade" prop="especialidade">
                           <ng-template ngx-datatable-cell-template let-row="row">
-                            <div class="text-left">
+                            <div class="text-left p-4">
                               {{ row.specialty }}
                             </div>
                           </ng-template>
                         </ngx-datatable-column>
-                        <!--<ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
+                        <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
                           <ng-template ngx-datatable-cell-template let-row="row">
-                            <div class="text-center">
-                              <a class="home-icon" (click)="cadastrar(row)" title="Associar Médico">
+                            <div class="text-center p-4">
+                              <a class="home-icon" (click)="desvincular(row)" title="Associar Médico">
                                 <i class="fa fa-edit p-2"></i>
                               </a>
                             </div>
                           </ng-template>
-                        </ngx-datatable-column>-->
+                        </ngx-datatable-column>
                         <ngx-datatable-footer>
                           <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                             let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">

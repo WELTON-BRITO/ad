@@ -100,9 +100,9 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });    
 
   }
@@ -114,9 +114,9 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -208,12 +208,12 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
         document.getElementById('bntConfig').removeAttribute('disabled');
       }else{
         this.isActive = false
-        this.toastrService.warning('Não possui hora marcada !!!');
+        //this.toastrService.warning('Não possui hora marcada !!!');
         document.getElementById('bntConfig').removeAttribute('disabled');
       }
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
       document.getElementById('bntConfig').removeAttribute('disabled');
     });
 

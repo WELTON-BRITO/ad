@@ -29,6 +29,8 @@ export class HttpService {
           this.loadingBarService.complete();
         },
         (err) => {
+
+          errorHandle(err)
           
           if (errorHandle != null) {
             errorHandle(this.getErrorMessage(err));
@@ -120,14 +122,14 @@ export class HttpService {
     this.loadingBarService.start();
 
     let url = this.urlBase + path;
-
     return this.responsecallback(
-      this.http.delete(url, { observe: "response" }),
+      this.http.delete(url,{ observe: "response" }),
       successHandle,
-      errorHandle     
+      errorHandle
     );
-  }
 
+  }  
+  
   public doGet(
     path: string,
     params: any,

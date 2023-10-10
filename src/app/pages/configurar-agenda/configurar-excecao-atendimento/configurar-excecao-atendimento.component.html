@@ -12,7 +12,7 @@
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-4">
                     <div class="form-group">
-                      <label for="nome">Escolha o médico a ser consultado</label>
+                      <label for="nome">Escolha o médico a ser consultado*</label>
                       <select class="form-control" formControlName="medico"
                         (change)="verificaMedico($event.target.value)">
                         <option value="null" selected>SELECIONE</option>
@@ -23,7 +23,7 @@
                   </div>
                   <div class="form-group col-md-2">
                     <div class="form-group">
-                      <label for="dataExcecao">Escolha a data</label>
+                      <label for="dataExcecao">Escolha a data*</label>
                       <div class="row pl-3">
                         <input class="date" type="date" id="dataExcecao" name="mydate" formControlName="dataExcecao"
                           maxlength="10" />
@@ -32,7 +32,7 @@
                   </div>
                   <div class="form-group col-md-3">
                     <div class="form-group pl-3">
-                      <label class="div-expediente">Terá expediente</label>
+                      <label class="div-expediente">Terá expediente*</label>
                       <div class="row pl-3">
                         <label class="radio-inline mr-3">
                           <input class="mat-button" type="radio" id="radio" name="optradio" value="S"

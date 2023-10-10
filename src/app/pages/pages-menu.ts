@@ -10,14 +10,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Painel',
-    icon: 'home-outline',
+    icon: 'flip-2-outline',
     link: '/pages/iot-dashboard',
     data: ['USER','DOCTOR','CLINIC'],
     hidden: false,
   },  
   {
     title: 'Visualizar Agenda',
-    icon: 'calendar-outline',
+    icon: 'monitor-outline',
     link: '/pages/visualizar-agenda',
     data: ['USER','DOCTOR','CLINIC'],
     hidden: false,
@@ -79,7 +79,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'calendar-outline',
     link: '/pages/configurar-clinica',
     data: ['CLINIC'],
-    hidden: false,
+    hidden: true,
     children: [ 
       {
         title: 'Listar Médicos',

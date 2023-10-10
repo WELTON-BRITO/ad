@@ -23,7 +23,8 @@ export class CadastroClinicaComponent implements OnDestroy {
   public isActive = false;
   public msgErro = 'CPF inválido!!!';
   public showMsgErro = false;
-
+  public avatar = null;
+  
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: CadastroClinicaService,
@@ -98,7 +99,7 @@ export class CadastroClinicaComponent implements OnDestroy {
 
     if ((data.nomeEmpresa != null) && (data.cpf != null) && (data.nomeResponsavel != null) && (data.cnpj != null)
       && (data.telefoneCelular != null) && (data.bairro != null) && (data.rua != null) && (data.cep != null) && (data.numero != null)
-      && (data.estado != null) && (data.cidade != null)) {
+      && (data.estado != null) && (data.cidade != null) && (data.aceitoTermo != null)) {
 
       this.isActive = true;
 
@@ -110,11 +111,14 @@ export class CadastroClinicaComponent implements OnDestroy {
         this.isContato = false;
         this.limparForm();
         this.voltar();
-      }), message => {
+      }),(error) => {
         this.isActive = false;
-        this.toastrService.danger(message);
+        this.toastrService.danger(error.error.message);
 
       });
+
+    } else {
+      this.toastrService.danger('Preencher os campos obrigatórios !!!');
     }
   }
 
@@ -144,6 +148,8 @@ export class CadastroClinicaComponent implements OnDestroy {
       imgem: [null],
     })
 
+    this.avatar = null;
+
   }
 
   buscaEstado() {
@@ -152,8 +158,8 @@ export class CadastroClinicaComponent implements OnDestroy {
 
       this.listEstado = response
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -166,9 +172,9 @@ export class CadastroClinicaComponent implements OnDestroy {
       this.isActive = false;
       this.listCidade = response
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
   }
 
@@ -200,7 +206,7 @@ export class CadastroClinicaComponent implements OnDestroy {
     observable.subscribe((d: String) => {
 
       this.imagem = d.slice(d.indexOf(",") + 1);
-
+      this.avatar = 'data:application/pdf;base64,' + this.imagem;
     })
 
   }

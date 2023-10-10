@@ -34,6 +34,8 @@ export class NovoPacienteComponent implements OnDestroy {
   public register = null;
   public listMedico = null;
   public doctorId = null;
+  public avatar = null;
+  public avatarDep = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -239,8 +241,8 @@ export class NovoPacienteComponent implements OnDestroy {
     this.service.buscaEstado(null, (response) => {
 
       this.listEstado = response
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -251,8 +253,8 @@ export class NovoPacienteComponent implements OnDestroy {
 
       this.listCidade = response
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
   }
 
@@ -262,8 +264,8 @@ export class NovoPacienteComponent implements OnDestroy {
 
       this.listConvenio = response
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -279,7 +281,7 @@ export class NovoPacienteComponent implements OnDestroy {
           birthDate: data.dateNasc,
           cellPhone: data.celular,
           email: data.email,
-          avatar: data.imagem,
+          avatar: this.imagem,
           cityId: data.cidade,
           ufId: data.estado,
           zipCode: data.cep,
@@ -302,7 +304,7 @@ export class NovoPacienteComponent implements OnDestroy {
           ufId: data.estado,
           cityId: data.cidade,
           bloodType: null,
-          avatar: data.imagemDep,
+          avatar: this.imagemDep,
           userId: null,
         }
       }
@@ -316,7 +318,7 @@ export class NovoPacienteComponent implements OnDestroy {
           birthDate: data.dateNasc,
           cellPhone: data.celular,
           email: data.email,
-          avatar: data.imagem,
+          avatar: this.imagem,
           cityId: data.cidade,
           ufId: data.estado,
           zipCode: data.cep,
@@ -337,11 +339,11 @@ export class NovoPacienteComponent implements OnDestroy {
     this.service.salvarPaciente(this.register, (response => {
       this.isActive = false;
       this.toastrService.success('Registro cadastrado com sucesso !!!');
-      this.limpaForm()
+      this.limparForm()
       this.previousPage()
-    }), message => {
+    }), (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -361,9 +363,9 @@ export class NovoPacienteComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -374,9 +376,9 @@ export class NovoPacienteComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -385,7 +387,7 @@ export class NovoPacienteComponent implements OnDestroy {
     this.sexo = data;
   }
 
-  limpaForm() {
+  limparForm() {
 
     this.formNovoPaciente = this.formBuilder.group({
       codigo: [null],
@@ -415,6 +417,9 @@ export class NovoPacienteComponent implements OnDestroy {
       imagemDep: [null]
     })
 
+    this.avatar = null;
+    this.avatarDep = null;
+
   }
 
   public converterImagem = ($event: Event, element) => {
@@ -431,12 +436,15 @@ export class NovoPacienteComponent implements OnDestroy {
     })
 
     observable.subscribe((d: String) => {
-
+      
       if (element.id == 'imagem') {
         this.imagem = d.slice(d.indexOf(",") + 1);
+        this.avatar = 'data:application/pdf;base64,' + this.imagem;
       } else {
         this.imagemDep = d.slice(d.indexOf(",") + 1);
+        this.avatarDep = 'data:application/pdf;base64,' + this.imagemDep;
       }
+
 
     })
 

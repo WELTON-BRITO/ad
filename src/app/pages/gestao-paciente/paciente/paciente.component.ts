@@ -27,11 +27,11 @@ export class PacienteComponent implements OnInit {
   ngOnInit() {
 
     var name = localStorage.getItem('bway-domain');
-    var id = localStorage.getItem('bway-entityId');   
-    
-    if(name == 'CLINIC'){
+    var id = localStorage.getItem('bway-entityId');
+
+    if (name == 'CLINIC') {
       this.pesquisaClinica(id)
-    }else{
+    } else {
       this.pesquisaMedico(id);
     }
 
@@ -44,52 +44,44 @@ export class PacienteComponent implements OnInit {
 
   pesquisaGeral(data) {
 
-    console.log(data)
-
     let params = new HttpParams();
 
-    params = params.append('doctorId', data.medico)
-   
+    if (data.medico != null) {
+      params = params.append('doctorId', data.medico)
+    }
     if (data.pesquisa != null) {
-      console.log('entrei aqui no cpf 2')
       params = params.append('federalId', data.pesquisa)
     }
 
-    this.isActive = true;
+    if ((data.pesquisa != null) || (data.medico != 'null')) {
 
-    this.service.buscaPaciente(params, (response) => {
+      this.isActive = true;
 
-      this.isActive = false;
-      this.rowData = response
+      this.service.buscaPaciente(params, (response) => {
 
-      this.rowData = this.rowData.map(data => {       
+        this.isActive = false;
+        this.rowData = response
 
-        return {
-          avatar: 'data:application/pdf;base64,' + data.avatar,
-          name: data.user.name,
-          cellPhone: data.user.cellPhone,
-          birthDate:  moment(data.user.birthDate).format('DD/MM/YYYY'),        
-        }
-      })
+        this.rowData = this.rowData.map(data => {
 
+          return {
+            avatar: 'data:application/pdf;base64,' + data.user.avatar,
+            name: data.user.name,
+            cellPhone: data.user.cellPhone,
+            email: data.user.emailUser,
+            birthDate: moment(data.user.birthDate).format('DD/MM/YYYY'),
+          }
+        })
 
-    }, (error) => {
-      console.log('entrei dentro do erro')
-      console.log(error)
-      this.isActive = false;
-      if (error.error instanceof ErrorEvent) {
-        // A client-side or network error occurred. Handle it accordingly.
-        console.error('An error occurred:', error.error.message);
-      } else {
-        // The backend returned an unsuccessful response code.
-        // The response body may contain clues as to what went wrong.
-        console.error(
-          `Backend returned code ${error.status}, ` +
-          `body was: ${error.error}`);
-      }
-      this.toastrService.danger(error.error.message);  
+      }, (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
 
-    });
+    } else {
+      this.toastrService.danger('O campos médico ou CPF são obrigatórios!!!');
+    }
+
   }
 
   pesquisaMedico(data) {
@@ -104,27 +96,23 @@ export class PacienteComponent implements OnInit {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
-    });    
+      this.toastrService.danger(error.error.message);
+    });
 
   }
- 
- pesquisaClinica(data) {
-    this.isActive = true   
+
+  pesquisaClinica(data) {
+    this.isActive = true
     this.service.buscaClinica(data, null, (response) => {
 
       this.listMedico = response
       this.isActive = false
 
-    },(error) => {
-      console.log('entrei dentro do erro')
-      console.log(this.errorHandler.handleError(error))
+    }, (error) => {
       this.isActive = false;
-      this.errorHandler.handleError(error);
-      
-      this.toastrService.danger(error.error.message);  
+      this.toastrService.danger(error.error.message);
 
     });
 

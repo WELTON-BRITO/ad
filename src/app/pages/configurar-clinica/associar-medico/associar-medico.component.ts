@@ -37,27 +37,35 @@ export class AssociarMedicoComponent implements OnDestroy {
   pesquisaMedico(data) {
 
     let params = new HttpParams();
-    params = params.append('federalId', data.cpf)
 
-    this.isActive = true;
+    if (data.cpf != null) {
 
-    this.service.buscaDoctor(params, (response) => {
+      params = params.append('federalId', data.cpf)
 
-      this.rowData = response
-      this.isActive = false;
-      this.rowData = this.rowData.map(data => {
-        return {
-          avatar: 'data:application/pdf;base64,' + data.avatar,
-          id: data.id,
-          name: data.name,
-          specialty: data.specialty[0].name
-        }
-      })
+      this.isActive = true;
 
-    }, (message) => {
-      this.isActive = false;
-      this.toastrService.danger(message);
-    });
+      this.service.buscaDoctor(params, (response) => {
+
+        this.rowData = response
+        this.isActive = false;
+        this.rowData = this.rowData.map(data => {
+          return {
+            avatar: 'data:application/pdf;base64,' + data.avatar,
+            id: data.id,
+            name: data.name,
+            specialty: data.specialty == null ? null : data.specialty[0].name,
+          }
+        })
+
+      }, (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+
+    } else {
+      this.toastrService.danger('Campo CPF é obrigatório!!!');
+    }
+
   }
 
   cadastrar(data) {
@@ -76,13 +84,13 @@ export class AssociarMedicoComponent implements OnDestroy {
     this.service.associarDoctor(register, (response => {
 
       this.isActive = false;
-      this.toastrService.success(response.socialName + 'associado com sucesso !!!');
+      this.toastrService.success('Cadastro com sucesso !!!');
 
       this.limparForm();
 
-    }), message => {
+    }), (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
 
     });
   }

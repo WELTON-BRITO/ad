@@ -24,4 +24,8 @@ export class ParametrizarConsultaService {
     return this.httpService.doGet('/api/doctor/' + doctorId + '/price', data, successHandle, erroHandle)
   }
 
+  atualizarValor(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doPut('/api/doctor/price', data, successHandle, erroHandle)
+  }
+
 }

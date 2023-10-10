@@ -18,6 +18,8 @@ export class ListMedicoComponent implements OnDestroy {
   public rowData: any[];
   public listEstado = null;
   public isActive = false;
+  public clinicId = null;
+  public avatar = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -30,47 +32,82 @@ export class ListMedicoComponent implements OnDestroy {
 
     this.formListMedico = this.formBuilder.group({
       cpf: [null],
-      checkMedico: [null]
     })
 
     let clinicId = localStorage.getItem('bway-entityId')
 
     this.service.buscaDoctorClinic(clinicId, null, (response) => {
 
-      this.rowData = response
+      this.rowData = response    
+      this.rowData = this.rowData.map(data => {
+       
+        return {
+          avatar: 'data:application/pdf;base64,' + data.avatar,
+          id: data.id,
+          name: data.name,
+          specialty: data.specialty == null ? null : data.specialty[0].name,
+        }
+      })  
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
 
   }
 
   pesquisaMedico(data) {
 
-    let params = new HttpParams();
-    params = params.append('federalId', data.cpf)
+    if (data.cpf != null) {
 
-    this.isActive = true;
+      let params = new HttpParams();
+      params = params.append('federalId', data.cpf)
 
-    this.service.buscaDoctor(params, (response) => {
+      this.isActive = true;
 
-      this.rowData = response
-      this.isActive = false;
-      this.rowData = this.rowData.map(data => {
-        return {
-          avatar: 'data:application/pdf;base64,' + data.avatar,
-          id: data.id,
-          name: data.name,
-          specialty: data.specialty[0].name
-        }
-      })
+      this.service.buscaDoctor(params, (response) => {
 
-    }, (message) => {
-      this.isActive = false;
-      this.toastrService.danger(message);
-    });
+        this.rowData = response       
+        this.isActive = false;
+        this.rowData = this.rowData.map(data => {
+          return {
+            avatar: 'data:application/pdf;base64,' + data.avatar,
+            id: data.id,
+            name: data.name,
+            specialty: data.specialty == null ? null : data.specialty[0].name,
+          }
+        })
+
+      }, (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+
+    } else {
+      this.toastrService.danger('Preencher campo obrigatório!!!');
+    }
 
   }
 
+  desvincular(data){
+
+     this.clinicId = localStorage.getItem('bway-entityId')
+
+    let register = {
+
+      doctorId: data.id,
+      clinicId: this.clinicId
+
+    }
+
+    this.service.doctorClinic(register, (response) => {
+
+      this.isActive = false;
+     
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+    });
+   
+  }
 
 }

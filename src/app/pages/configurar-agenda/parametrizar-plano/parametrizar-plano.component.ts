@@ -27,7 +27,8 @@ export class ParametrizarPlanoComponent implements OnDestroy {
   public isCardPlano = true;
   public isActive = false;
   public doctorId = false;
-  public teste: any[];
+  public convenioId = null;
+  public convenio = [];
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -62,15 +63,13 @@ export class ParametrizarPlanoComponent implements OnDestroy {
   }
 
   funcValor(event, element) {
-  
+
     if (element.checked == true) {
       if (event == "1") {
         this.formParametrizarPlano.controls['unimed'].setValue(event);
       } else if (event == "3") {
-        element.setValue = 3;
         this.formParametrizarPlano.controls['sulAmerica'].setValue(event);
       } else if (event == "4") {
-        this.checkNorteDame = event
         this.formParametrizarPlano.controls['norteDame'].setValue(event);
       } else if (event == "2") {
         this.formParametrizarPlano.controls['bradescoSaude'].setValue(event);
@@ -105,9 +104,17 @@ export class ParametrizarPlanoComponent implements OnDestroy {
         this.formParametrizarPlano.controls['preventSenior'].setValue(null);
       } else if (event == "8") {
         this.formParametrizarPlano.controls['hpVida'].setValue(null);
-      }     
+      }
+
+      this.removerConvenio(event)
     }
 
+  }
+
+  removerConvenio(event) {
+
+    this.convenio.push(event); 
+       
   }
 
   pesquisaMedico(data) {
@@ -122,9 +129,9 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -136,9 +143,9 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -150,8 +157,27 @@ export class ParametrizarPlanoComponent implements OnDestroy {
 
     function retornaConvenio(value) {
       return value;
-    }
-    var resultado = checkbox_items.filter(retornaConvenio);
+    }     
+   
+    var resultado = checkbox_items.filter(retornaConvenio); 
+
+   
+   if(this.convenio != null){   
+    
+    this.isActive = true;
+    this.service.removerConvenio(this.doctorId, this.convenio, (response => {
+      this.isActive = false;
+      this.toastrService.success('Registro removido com sucesso !!!');
+      this.limpaForm()
+    }), (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+    });
+
+
+   }
+
+   if(data != null){
 
     let register = {
 
@@ -164,21 +190,27 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       this.isActive = false;
       this.toastrService.success('Registro cadastrado com sucesso !!!');
       this.limpaForm()
-    }), message => {
+    }), (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
+
+
+   }
+
+   
+   
 
   }
 
   planoSaude(data) {
-   
-    if (data === 'S') {   
+
+    if (data === 'S') {
       this.isCardPlano = true
-    } else {    
+    } else {
       this.isCardPlano = false
 
-      this.formParametrizarPlano = this.formBuilder.group({       
+      this.formParametrizarPlano = this.formBuilder.group({
         unimed: [null],
         bradescoSaude: [null],
         norteDame: [null],
@@ -225,7 +257,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
           }
           ativarCheckbox(checkbox);
           this.formParametrizarPlano.controls['sulAmerica'].setValue(response[i].id);
-        }  else if (response[i].id == "4") {
+        } else if (response[i].id == "4") {
           var checkbox = document.querySelector("#norteDame");
           function ativarCheckbox(el) {
             el.checked = true;
@@ -271,15 +303,15 @@ export class ParametrizarPlanoComponent implements OnDestroy {
 
       }
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
 
   }
 
-  limpaForm(){
+  limpaForm() {
 
     this.formParametrizarPlano = this.formBuilder.group({
       medico: [null],
@@ -293,19 +325,80 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       hpVida: [null],
       preventSenior: [null],
     })
+
+
+
     var checkbox = document.querySelector("#unimed");
-    var checkbox = document.querySelector("#bradescoSaude");
-    var checkbox = document.querySelector("#sulAmerica");
-    var checkbox = document.querySelector("#norteDame");
-    var checkbox = document.querySelector("#amil");
-    var checkbox = document.querySelector("#portoSeguro");
-    var checkbox = document.querySelector("#assimSaude");
-    var checkbox = document.querySelector("#hpVida");
-    var checkbox = document.querySelector("#preventSenior");
-    function ativarCheckbox(el) {
-      el.checked = false;
+    if (checkbox.id == 'unimed') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
     }
-    ativarCheckbox(checkbox);
+    var checkbox = document.querySelector("#bradescoSaude");
+    if (checkbox.id == 'bradescoSaude') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#sulAmerica");
+    if (checkbox.id == 'sulAmerica') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#norteDame");
+    if (checkbox.id == 'norteDame') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#amil");
+    if (checkbox.id == 'amil') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#portoSeguro");
+    if (checkbox.id == 'portoSeguro') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#assimSaude");
+    if (checkbox.id == 'assimSaude') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#hpVida");
+    if (checkbox.id == 'hpVida') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#preventSenior");
+    if (checkbox.id == 'preventSenior') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+
+    var checkbox = document.querySelector("#radio");
+    if (checkbox.id == 'radio') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
 
   }
 

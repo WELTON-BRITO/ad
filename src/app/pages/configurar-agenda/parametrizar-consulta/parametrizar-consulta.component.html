@@ -22,7 +22,7 @@
                   <div class="form-group col-md-4">
                     <div class="form-group">
                       <div>
-                        <label for="nome">Escolha o médico a ser consultado</label>
+                        <label for="nome">Escolha o médico a ser consultado*</label>
                         <select class="form-control" formControlName="medico"
                           (change)="verificaValor($event.target.value)">
                           <option value="null" selected>SELECIONE</option>
@@ -41,18 +41,18 @@
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-3">
                     <div class="form-group">
-                      <label for="nome"><span style="font-weight: bold">Tipo de Atendimento</span></label>
+                      <label for="nome"><span style="font-weight: bold">Tipo de Atendimento*</span></label>
                     </div>
                   </div>
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <label for="nome">
-                        <span style="font-weight: bold">Valor do Atendimento</span></label>
+                        <span style="font-weight: bold">Valor do Atendimento*</span></label>
                     </div>
                   </div>
                   <div class="form-group col-md-4">
                     <div class="form-group">
-                      <label for="nome"><span style="font-weight: bold">Duração de Atendimento(Minutos)</span></label>
+                      <label for="nome"><span style="font-weight: bold">Duração de Atendimento(Minutos)*</span></label>
                     </div>
                   </div>
                 </div>
@@ -61,7 +61,7 @@
                     <div class="form-group">
                       <label class="form-check-label">
                         <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="P"
-                          (click)="funcValor($event.target.value, $event.target)" />
+                          (click)="funcValor($event.target.value, $event.target)"/>
                         Atendimento Presencial</label>
                     </div>
                   </div>
@@ -87,7 +87,7 @@
                     <div class="form-group">
                       <label class="form-check-label">
                         <input class="form-check-input" type="checkbox" id="video" name="optcheckbox" value="V"
-                          (click)="funcValor($event.target.value, $event.target)" />
+                          (click)="funcValor($event.target.value, $event.target)"/>
                         Atendimento por Video</label>
                     </div>
                   </div>
@@ -113,7 +113,7 @@
                     <div class="form-group">
                       <label class="form-check-label">
                         <input class="form-check-input" type="checkbox" id="emergencial" name="optcheckbox" value="E"
-                          (click)="funcValor($event.target.value, $event.target)" />
+                          (click)="funcValor($event.target.value, $event.target)"/>
                         Atendimento Emergencial</label>
                     </div>
                   </div>
@@ -147,7 +147,6 @@
     </div>
   </div>
 </div>
-
 <div #card>
   <div class="col-md-12 col-xs-12">
     <div class="row" *ngIf="isActive" class="loader">

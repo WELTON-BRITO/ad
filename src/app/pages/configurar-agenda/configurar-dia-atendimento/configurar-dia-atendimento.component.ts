@@ -37,6 +37,9 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   public card = null;
   public doctor = null;
   public semana = null;
+  public horaInicio = [];
+  public horaFim = [];
+  public timeRange = [];
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -107,9 +110,9 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
       this.doctor = response[0].name
       this.isActive = false;
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -119,6 +122,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     this.tipoCard.push({
       id: this.tipoCard.length + 1,
     })
+
   }
 
   removerCard() {
@@ -126,8 +130,19 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     this.tipoCard.splice(this.tipoCard.indexOf(3), 1);
 
   }
+ 
+  salvar(event) {   
 
-  salvar(event) {
+      for (var i = 0; i < this.tipoCard.length; i++) {
+       
+        this.timeRange.push(
+          {
+            clinicId: null,
+            startTime: this.tipoCard[i].horaInicio,
+            endTime:this.tipoCard[i].horaFim
+          }
+        ) 
+      }    
 
     if (this.tipoCard.length <= 0)  {      
       this.toastrService.warning('Não é possível salvar horário de atendimento sem marcar a hora!!!');
@@ -138,28 +153,20 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
         items: [
           {
             weekday: event.semana != null ? event.semana : this.semana,
-            timeRangeList: [
-              {
-                clinicId: null,
-                startTime: this.tipoCard[0].horaInicio,
-                endTime: this.tipoCard[0].horaFim
-              }
-            ]
+            timeRangeList: this.timeRange
           }
         ]
       }
-  
-      console.log(register)
-
+      
       this.isActive = true;
       this.service.salveAtenHora(register, (response => {
         this.isActive = false;
         this.toastrService.success('Registro cadastrado com sucesso !!!');
         this.limpaForm()
         this.verificaHorario(this.listMedico)
-      }), message => {
+      }), (error) => {
         this.isActive = false;
-        this.toastrService.danger(message);
+        this.toastrService.danger(error.error.message);
       });
 
     }
@@ -169,7 +176,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     this.formDiaAtendimento = this.formBuilder.group({
       semana: [null]
     })
-    this.removerCard()
+    this.tipoCard.splice(null);
   }
 
   verificaHorario(data) {
@@ -255,27 +262,56 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             sabado: this.sabado,
             domingo: this.domingo,
           }
-        })
-        console.log(this.rowData)
-
+        })        
         this.isActive = false
       } else {
         this.isActive = false
         this.toastrService.warning('Não possui hora marcada !!!');
       }
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
 
-  }
+  }  
 
-  editar(data) {
-    console.log(data)
+  excluir(event){
 
-    this.semana = data.id;
+    for (var i = 0; i < this.tipoCard.length; i++) {
+       
+      this.timeRange.push(
+        {
+          clinicId: null,
+          startTime: null,
+          endTime: null
+        }
+      ) 
+    }    
 
-    this.addHora();
+    let register = {
+      doctorId: this.listMedico,
+      items: [
+        {
+          weekday: event.id,
+          timeRangeList: this.timeRange
+        }
+      ]
+    }
+    
+    this.isActive = true;
+    this.service.salveAtenHora(register, (response => {
+
+      this.isActive = false;
+      this.toastrService.success('Registro removido com sucesso !!!');
+      this.limpaForm()
+      this.verificaHorario(this.listMedico)
+    }), (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+    });
+
+  
+
   }
 
   previousPage() {

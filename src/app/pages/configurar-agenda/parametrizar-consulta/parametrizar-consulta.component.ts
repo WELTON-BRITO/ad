@@ -5,8 +5,6 @@ import { ParametrizarConsultaService } from './parametrizar-consulta.service';
 import { NbToastrService } from '@nebular/theme';
 import { HttpParams } from '@angular/common/http';
 
-declare var $: any;
-
 @Component({
   selector: 'ngx-parametrizar-consulta',
   styleUrls: ['./parametrizar-consulta.component.scss'],
@@ -29,6 +27,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public valueInPersonEmergency = null;
   public valueRemote = null;
   public checked = false;
+  public atualizar = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -40,14 +39,14 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   ngOnInit() {
 
     var name = localStorage.getItem('bway-domain');
-    var id = localStorage.getItem('bway-entityId');   
-    
-    if(name == 'CLINIC'){
+    var id = localStorage.getItem('bway-entityId');
+
+    if (name == 'CLINIC') {
       this.pesquisaClinica(id)
-    }else{
+    } else {
       this.pesquisaMedico(id);
     }
-    
+
     this.formParametrizarConsulta = this.formBuilder.group({
       valorPresencial: [null],
       valorEmergencial: [null],
@@ -95,23 +94,23 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
-    });    
+      this.toastrService.danger(error.error.message);
+    });
 
   }
- 
- pesquisaClinica(data) {
-    this.isActive = true   
+
+  pesquisaClinica(data) {
+    this.isActive = true
     this.service.buscaClinica(data, null, (response) => {
 
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -134,16 +133,39 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
     }
 
-    this.isActive = true;
+    if ((data.medico == null) || ((data.valorPresencial == null) && (data.valorEmergencial == null) &&
+      (data.valorVideo == null)) || ((data.tempoEmergencial == null) && (data.tempoPresencial == null) && (data.tempoVideo == null))) {
 
-    this.service.cadastrarPriceDoctor(register, (response => {
-      this.isActive = false;
-      this.toastrService.success('Registro cadastrado com sucesso !!!');
-      this.limpaForm()
-    }), message => {
-      this.isActive = false;
-      this.toastrService.danger(message);
-    });
+      this.toastrService.danger('Preencher os campos obrigatórios!!!');
+
+    } else {
+
+      if (this.atualizar == null) {
+
+        this.isActive = true;
+        this.service.cadastrarPriceDoctor(register, (response => {
+          this.isActive = false;
+          this.toastrService.success('Registro cadastrado com sucesso !!!');
+          this.limpaForm()
+        }), (error) => {
+          this.isActive = false;
+          this.toastrService.danger(error.error.message);
+        });
+
+      } else {
+
+        this.isActive = true;
+        this.service.atualizarValor(register, (response => {
+          this.isActive = false;
+          this.toastrService.success('Registro atualizado com sucesso !!!');
+          this.limpaForm()
+        }), (error) => {
+          this.isActive = false;
+          this.toastrService.danger(error.error.message);
+        });
+      }
+
+    }
 
   }
 
@@ -159,122 +181,142 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       medico: [null],
     })
 
+    var checkbox = document.querySelector("#presencial");
+    if (checkbox.id == 'presencial') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+
+    var checkbox = document.querySelector("#video");
+    if (checkbox.id == 'video') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+
+    var checkbox = document.querySelector("#emergencial");
+    if (checkbox.id == 'emergencial') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+
   }
 
   verificaValor(data) {
 
     this.isActive = true
-
     let params = new HttpParams();
     params = params.append('doctorId', data)
 
     this.service.buscaValor(null, data, (response) => {
-      this.isActive = false;   
-
-      if(response.valueInPersonEmergency && response.durationEmergency != null){
+      this.isActive = false;
+      this.atualizar = response;
+      if (response.valueInPersonEmergency && response.durationEmergency != null) {
 
         this.formParametrizarConsulta.controls['valorEmergencial'].setValue(response.valueInPersonEmergency);
         this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(response.durationEmergency);
 
         var checkbox = document.querySelector("#emergencial");
-        function ativarCheckbox(el) {         
-            el.checked = true;
+        function ativarCheckbox(el) {
+          el.checked = true;
         }
         ativarCheckbox(checkbox);
-      }else{
+      } else {
 
         this.formParametrizarConsulta.controls['valorEmergencial'].setValue(null);
         this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(null);
 
         var checkbox = document.querySelector("#emergencial");
-        function ativarCheckbox(el) {         
-            el.checked = false;
+        function ativarCheckbox(el) {
+          el.checked = false;
         }
         ativarCheckbox(checkbox);
 
       }
 
-     if(response.valueAtHome && response.durationAtHome != null){
+      if (response.valueRemote && response.durationRemote != null) {
 
-      this.formParametrizarConsulta.controls['valorVideo'].setValue(response.valueAtHome);
-      this.formParametrizarConsulta.controls['tempoVideo'].setValue(response.durationAtHome);      
-      var checkbox = document.querySelector("#video");
-      function ativarCheckbox(el) {         
+        this.formParametrizarConsulta.controls['valorVideo'].setValue(response.valueRemote);
+        this.formParametrizarConsulta.controls['tempoVideo'].setValue(response.durationRemote);
+        var checkbox = document.querySelector("#video");
+        function ativarCheckbox(el) {
           el.checked = true;
-      }
-      ativarCheckbox(checkbox);
+        }
+        ativarCheckbox(checkbox);
 
-     }else{
+      } else {
 
-      this.formParametrizarConsulta.controls['valorVideo'].setValue(null);
-      this.formParametrizarConsulta.controls['tempoVideo'].setValue(null);      
-      var checkbox = document.querySelector("#video");
-      function ativarCheckbox(el) {         
+        this.formParametrizarConsulta.controls['valorVideo'].setValue(null);
+        this.formParametrizarConsulta.controls['tempoVideo'].setValue(null);
+        var checkbox = document.querySelector("#video");
+        function ativarCheckbox(el) {
           el.checked = false;
+        }
+        ativarCheckbox(checkbox);
+
       }
-      ativarCheckbox(checkbox);
 
-     }
+      if (response.valueInPerson && response.durationInPerson != null) {
 
-     if(response.valueInPerson && response.durationInPerson != null){
+        this.formParametrizarConsulta.controls['tempoPresencial'].setValue(response.durationInPerson);
+        this.formParametrizarConsulta.controls['valorPresencial'].setValue(response.valueInPerson);
 
-      this.formParametrizarConsulta.controls['tempoPresencial'].setValue(response.durationInPerson);
-      this.formParametrizarConsulta.controls['valorPresencial'].setValue(response.valueInPerson); 
-   
-      var checkbox = document.querySelector("#presencial");
-      function ativarCheckbox(el) {         
+        var checkbox = document.querySelector("#presencial");
+        function ativarCheckbox(el) {
           el.checked = true;
-      }
-      ativarCheckbox(checkbox);
+        }
+        ativarCheckbox(checkbox);
 
-     }else{
+      } else {
 
-      this.formParametrizarConsulta.controls['tempoPresencial'].setValue(null);
-      this.formParametrizarConsulta.controls['valorPresencial'].setValue(null); 
-   
-      var checkbox = document.querySelector("#presencial");
-      function ativarCheckbox(el) {         
+        this.formParametrizarConsulta.controls['tempoPresencial'].setValue(null);
+        this.formParametrizarConsulta.controls['valorPresencial'].setValue(null);
+
+        var checkbox = document.querySelector("#presencial");
+        function ativarCheckbox(el) {
           el.checked = false;
-      }
-      ativarCheckbox(checkbox);
+        }
+        ativarCheckbox(checkbox);
 
-     }     
+      }
 
     }, (error) => {
       this.isActive = false;
-      
-      if(error == undefined){
+      if (error == undefined) {
         this.formParametrizarConsulta.controls['valorEmergencial'].setValue(null);
         this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(null);
         var checkbox = document.querySelector("#emergencial");
-        function ativarCheckbox(el) {         
-            el.checked = false;
+        function ativarCheckbox(el) {
+          el.checked = false;
         }
-        ativarCheckbox(checkbox);        
+        ativarCheckbox(checkbox);
       }
-      if(error == undefined){
-      this.formParametrizarConsulta.controls['valorVideo'].setValue(null);
-      this.formParametrizarConsulta.controls['tempoVideo'].setValue(null);      
-      var checkbox = document.querySelector("#video");
-      function ativarCheckbox(el) {         
+      if (error == undefined) {
+        this.formParametrizarConsulta.controls['valorVideo'].setValue(null);
+        this.formParametrizarConsulta.controls['tempoVideo'].setValue(null);
+        var checkbox = document.querySelector("#video");
+        function ativarCheckbox(el) {
           el.checked = false;
+        }
+        ativarCheckbox(checkbox);
       }
-      ativarCheckbox(checkbox);
-     }
-     if(error == undefined){
-      this.formParametrizarConsulta.controls['tempoPresencial'].setValue(null);
-      this.formParametrizarConsulta.controls['valorPresencial'].setValue(null);    
-      var checkbox = document.querySelector("#presencial");
-      function ativarCheckbox(el) {         
+      if (error == undefined) {
+        this.formParametrizarConsulta.controls['tempoPresencial'].setValue(null);
+        this.formParametrizarConsulta.controls['valorPresencial'].setValue(null);
+        var checkbox = document.querySelector("#presencial");
+        function ativarCheckbox(el) {
           el.checked = false;
+        }
+        ativarCheckbox(checkbox);
       }
-      ativarCheckbox(checkbox);
-     }
 
-      this.toastrService.danger('Tabela de preços não encontrada para o doutor informado');
     });
 
   }
-
 
 }

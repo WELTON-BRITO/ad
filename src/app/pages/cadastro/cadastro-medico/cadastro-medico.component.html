@@ -11,7 +11,7 @@
                     <img class="cadastro d-none d-sm-block" src="assets/images/linhas_cadastro.png" />
                   </div>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10 mb-auto">
                   <div class="text-center m-5">
                     <button nbButton outline status="primary" type="button" class="btn btn-outline-primary col-md-5 m-3"
                       (click)="dadosPessoais($event.target.value)" value="informacao"><nb-icon
@@ -70,6 +70,13 @@
                             <input class="mat-button" type="radio" id="radio" name="optradio" value="F"
                               (click)="viewdiv($event.target.value)">
                             Feminino</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row pl-3 mt-lg-n4">                     
+                      <div class="col-md-5">                        
+                        <div class="align-self-start">
+                          <img src="{{this.avatar }}" style="height: 80px;"/>
                         </div>
                       </div>
                     </div>
@@ -179,8 +186,8 @@
                       <div class="col-md-4">
                         <div class="form-check-inline">
                           <input type="checkbox" class="form-check-input" id="aceitoTermo" name="grupo"
-                            formControlName="aceitoTermo" value=" " /> Li e aceito
-                          <a class="a-termo p-1" href="http://aditi.care.saude.ws/termo_medico.pdf" target="_blank"> os Termos e condições </a>
+                            formControlName="aceitoTermo" value=""/> Li e aceito
+                          <a class="a-termo p-1" href="http://aditi.care.saude.ws/termo_medico.pdf" target="_blank"> os Termos e condições* </a>                          
                         </div>
                       </div>
                     </div>

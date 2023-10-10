@@ -20,7 +20,7 @@
                 <div class="form-group col-md-3">
                   <label for="pesquisa">Pesquisar</label>
                   <input class="form-control" name="pesquisa" id="pesquisa" type="text" formControlName="pesquisa"
-                    placeholder="Digite por nome, CPF..." />
+                    placeholder="Digite o CPF..." />
                 </div>
                 <div class="col-md-5 pl-5">
                   <div class="text-right">
@@ -45,21 +45,28 @@
                       <ngx-datatable-column name="Foto" prop="avatar">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
-                            <img src="{{row.avatar}}">
+                            <img src="{{row.avatar}}" style="height: 80px;">
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-column name="Nome" prop="nome">
                         <ng-template ngx-datatable-cell-template let-row="row">
-                          <div class="text-left">
+                          <div class="text-left pt-4">
                             {{ row.name }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-column name="Telefone" prop="telefone">
                         <ng-template ngx-datatable-cell-template let-row="row">
-                          <div class="text-center">
+                          <div class="text-center pt-4">
                             {{ row.cellPhone }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Email" prop="email">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center pt-4">
+                            {{ row.email }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
@@ -72,7 +79,7 @@
                       </ngx-datatable-column>-->
                       <ngx-datatable-column name="Data de Nascimento" prop="dataNascimento">
                         <ng-template ngx-datatable-cell-template let-row="row">
-                          <div class="text-center">
+                          <div class="text-center pt-4">
                             {{ row.birthDate }}
                           </div>
                         </ng-template>

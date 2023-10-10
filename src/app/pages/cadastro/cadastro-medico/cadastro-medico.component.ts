@@ -27,6 +27,7 @@ export class CadastroMedicoComponent implements OnInit {
   public isActive = false;
   public msgErro = 'CPF inválido!!!';
   public showMsgErro = false;
+  public avatar = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -108,7 +109,7 @@ export class CadastroMedicoComponent implements OnInit {
 
     if ((data.nome != null) && (data.cpf != null) && (data.crm != null) && (data.dataNascimento != null) && (data.especialidade != null)
       && (this.sexo != false) && (data.telefoneCelular != null) && (data.bairro != null) && (data.rua != null)
-      && (data.cep != null) && (data.numero != null)) {
+      && (data.cep != null) && (data.numero != null) && (data.aceitoTermo != null)) {
 
       this.isActive = true;
 
@@ -116,13 +117,17 @@ export class CadastroMedicoComponent implements OnInit {
 
         this.isActive = false;
         this.toastrService.success('Cadastrado com sucesso !!!');
-        this.isInfoGerais = true;
+        this.isInfoGerais = false;
         this.isContato = false;
-        this.limparForm();        
-      }), message => {        
+        this.limparForm();
+        this.voltar();
+      }), (error) => {
         this.isActive = false;
-        this.toastrService.danger(message);
+        this.toastrService.danger(error.error.message);
       });
+
+    } else {
+      this.toastrService.danger('Preencher os campos obrigatórios !!!');
     }
   }
 
@@ -151,6 +156,8 @@ export class CadastroMedicoComponent implements OnInit {
       imgem: [null]
     });
 
+    this.avatar = null;
+
   }
 
   buscaEstado() {
@@ -159,8 +166,8 @@ export class CadastroMedicoComponent implements OnInit {
 
       this.listEstado = response
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -171,8 +178,8 @@ export class CadastroMedicoComponent implements OnInit {
 
       this.listCidade = response
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
   }
 
@@ -182,8 +189,8 @@ export class CadastroMedicoComponent implements OnInit {
 
       this.listEspecialidade = response
 
-    }, (message) => {
-      this.toastrService.danger(message);
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -200,7 +207,7 @@ export class CadastroMedicoComponent implements OnInit {
       this.toastrService.danger('Por gentileza verificar o email, não confere!!!');
     }
   }
-
+  
   public converterImagem = ($event: Event, element) => {
 
     const target = $event.target as HTMLInputElement;
@@ -217,8 +224,10 @@ export class CadastroMedicoComponent implements OnInit {
     observable.subscribe((d: String) => {
 
       this.imagem = d.slice(d.indexOf(",") + 1);
-
+      this.avatar = 'data:application/pdf;base64,' + this.imagem;
     })
+
+    
 
   }
 

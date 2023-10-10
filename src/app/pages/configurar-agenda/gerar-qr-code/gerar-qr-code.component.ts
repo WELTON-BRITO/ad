@@ -62,9 +62,9 @@ export class GerarQrCodeComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -76,9 +76,9 @@ export class GerarQrCodeComponent implements OnDestroy {
       this.listMedico = response
       this.isActive = false
 
-    }, (message) => {
+    }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -88,39 +88,41 @@ export class GerarQrCodeComponent implements OnDestroy {
 
     this.isActive = true
 
-    let params = new HttpParams();
-    params = params.append('doctorId', data)
+    if (data != 'null') {
 
-    this.service.buscaValor(null, data, (response) => {
-      this.isActive = false;
+      let params = new HttpParams();
+      params = params.append('doctorId', data)
 
-      this.durationAtHome = response.durationAtHome,
-        this.durationEmergency = response.durationEmergency,
-        this.durationInPerson = response.durationInPerson,
-        this.durationRemote = response.durationRemote,
-        this.pixCode = response.pixCode,
-        this.qrCode = response.qrCode,
-        this.valueAtHome = response.valueAtHome,
-        this.valueInPerson = response.valueInPerson,
-        this.valueInPersonEmergency = response.valueInPersonEmergency,
-        this.valueRemote = response.valueRemote,
-        this.doctorId = response.doctor.id
+      this.service.buscaValor(null, data, (response) => {
+        this.isActive = false;
 
-    }, (message) => {
-      this.isActive = false;
-      this.toastrService.danger(message);
-    });
+        this.durationAtHome = response.durationAtHome,
+          this.durationEmergency = response.durationEmergency,
+          this.durationInPerson = response.durationInPerson,
+          this.durationRemote = response.durationRemote,
+          this.pixCode = response.pixCode,
+          this.qrCode = response.qrCode,
+          this.valueAtHome = response.valueAtHome,
+          this.valueInPerson = response.valueInPerson,
+          this.valueInPersonEmergency = response.valueInPersonEmergency,
+          this.valueRemote = response.valueRemote,
+          this.doctorId = response.doctor.id
 
+      }, (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+
+    } else {
+      this.toastrService.danger('Preencher o campo obrigatório!!!');
+    }
   }
 
   salvar(data) {
 
-    console.log(data)
-
     if (data.medico == null || data.qrCode == null) {
-      console.log('entrei aqui')
 
-      this.toastrService.warning('Campo médico e código copia e cola tem que ser preenchidos !!!');
+      this.toastrService.danger('Campo médico e código copia e cola tem que ser preenchidos !!!');
 
     } else {
 
@@ -147,9 +149,9 @@ export class GerarQrCodeComponent implements OnDestroy {
 
         this.limparForm();
 
-      }), message => {
+      }), (error) => {
         this.isActive = false;
-        this.toastrService.danger(message);
+        this.toastrService.danger(error.error.message);
 
       });
     }

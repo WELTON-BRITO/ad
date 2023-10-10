@@ -74,16 +74,7 @@
                           medico.name}}</option>
                       </select>
                     </div>
-                  </div>                 
-                  <div class="form-row align-items-center">
-                    <div class="form-group row">
-                      <div class="col-md-12">
-                        <label for="imagem">Adicione sua foto</label>
-                        <input class="form-control-file media-body" name="imagem" id="imagem" type="file"
-                          formControlName="imagem" (change)="converterImagem($event, $event.target)" value="imagem" />
-                      </div>
-                    </div>
-                  </div>
+                  </div>  
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-6">
                       <label for="nome">Nome*</label>
@@ -113,6 +104,22 @@
                         <label class="radio-inline">
                           <input class="mat-button" type="radio" id="radio" name="optradio" value="F"
                             (click)="viewdiv($event.target.value)"> Feminino</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row pl-3">                     
+                    <div class="col-md-5">                        
+                      <div class="align-self-start">
+                        <img src="{{this.avatar }}" style="height: 80px;"/>
+                      </div>
+                    </div>
+                  </div>             
+                  <div class="form-row align-items-center">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="imagem">Adicione sua foto</label>
+                        <input class="form-control-file media-body" name="imagem" id="imagem" type="file"
+                          formControlName="imagem" (change)="converterImagem($event, $event.target)" value="imagem" />
                       </div>
                     </div>
                   </div>
@@ -189,6 +196,13 @@
                   <div class="form-row align-items-center">
                     <h6 class="p-1">Informações Gerais</h6>
                   </div>
+                  <div class="form-group row pl-3">                     
+                    <div class="col-md-5">                        
+                      <div class="align-self-start">
+                        <img src="{{this.avatarDep }}" style="height: 80px;"/>
+                      </div>
+                    </div>
+                  </div>  
                   <div class="form-row align-items-center">
                     <div class="form-group row">
                       <div class="col-md-12">

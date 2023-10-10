@@ -5,6 +5,7 @@ import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -31,6 +32,7 @@ import { VisualizarAgendaModule } from './pages/visualizar-agenda/visualizar-age
 import { VisualizarAgendaRoutingModule } from './pages/visualizar-agenda/visualizar-agenda-routing.module';
 import { ConfigurarAgendaRoutingModule } from './pages/configurar-agenda/configurar-agenda-routing.module';
 import { ErrorHandlerService } from './pages/shared/services/http/error-handler.service';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -65,6 +67,7 @@ import { ErrorHandlerService } from './pages/shared/services/http/error-handler.
   providers:    [ 
     { provide: LOCALE_ID, useValue: 'pt' },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     LoadingBarService,
     AuthenticationService,
