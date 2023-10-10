@@ -17,15 +17,15 @@ const routes: Routes = [{
     {
       path: 'iot-dashboard',
       component: DashboardComponent,
-    },    
+    },
     {
       path: 'gestao-paciente',
       loadChildren: () => import('./gestao-paciente/gestao-paciente.module').then(m => m.GestaoPacienteModule)
-    },  
+    },
     {
       path: 'configurar-agenda',
       loadChildren: () => import('./configurar-agenda/configurar-agenda.module').then(m => m.ConfigurarAgendaModule)
-    },   
+    },
     {
       path: 'visualizar-agenda',
       loadChildren: () => import('./visualizar-agenda/visualizar-agenda.module').then(m => m.VisualizarAgendaModule)
@@ -34,8 +34,11 @@ const routes: Routes = [{
       path: 'configurar-clinica',
       loadChildren: () => import('./configurar-clinica/configurar-clinica.module').then(m => m.ConfigurarClinicaModule)
     },
-   
-      
+    {
+      path: 'atendimento',
+      loadChildren: () => import('./atendimento/atendimento.module').then(m => m.AtendimentoModule)
+    },
+
     {
       path: 'miscellaneous',
       loadChildren: () => import('./miscellaneous/miscellaneous.module')

@@ -1,0 +1,175 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="dialog-body">
+        <nb-card>
+          <nb-card-body>
+            <form
+              id="form-buscar-atendimento"
+              [formGroup]="formBuscarAtendimento">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-group col-md-4">
+                  <h5 class="ml-lg-n3">Atendimento</h5>
+                </div>
+                <div class="form-row ">
+                  <div class="form-group col-md-4 ">
+                    <div class="form-group ">
+                      <div class="div-medico mb-4">
+                        <label for="medico">Escolha o médico * </label>
+                        <select class="form-control" formControlName="medico">
+                          <option value="null" selected>SELECIONE</option>
+                          <option
+                            *ngFor="let medico of listMedico"
+                            value="{{ medico.id }}">
+                            {{ medico.name }}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="div-nome">
+                        <label for="nome">Buscar por nome</label>
+                        <input class="form-control" name="nome" id="nome" type="text" formControlName="nome"
+                          placeholder="Nome do paciente" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-8">
+                    <div class="div-bucar-periodo mb-4">
+                      <label for="nome">Buscar por periodo *</label>
+                      <div class="form-row">
+                        <div class="div-data-inicio col-md-6 px-1">
+                          <input
+                            class="form-control date"
+                            type="date"
+                            id="dataInicio"
+                            name="Data Início"
+                            formControlName="dataInicio"
+                            maxlength="10"/>
+                        </div>
+                        <div class="div-data-fim col-md-6">
+                          <input
+                            class="form-control date"
+                            type="date"
+                            id="dataFim"
+                            name="Data Fim"
+                            formControlName="dataFim"
+                            maxlength="10"/>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="form-row">
+                        <div class="div-cpf col-md-6"> <label for="cpf">Buscar por cpf</label>
+                          <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf" mask="000.000.000-00"
+                            maxlength="14" (change)="isValidCpf(formBuscarAtendimento.value)" placeholder="000.000.000-00"/>
+                          <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
+                            {{this.msgErro}} <br /><br />
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <div class="text-right">
+                        <button
+                          class="btn btn-primary mr-2"
+                          (click)="buscarAtendimento(formBuscarAtendimento.value)" >
+                          BUSCAR ATENDIMENTOS
+                        </button>
+                        <button
+                          class="btn btn-success ml-2"
+                          (click)="buscarAtendimento(formBuscarAtendimento.value)">
+                          AGENDAR ATENDIMENTO
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-12"></div>
+                </div>
+
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-12">
+                  <div class="app-box">
+                    <ngx-datatable
+                      #myTable class="bootstrap" [rows]="rowData"
+                      [columnMode]="'force'" [headerHeight]="35" [footerHeight]="50"
+                      [rowHeight]="'auto'" [messages]="{ emptyMessage: 'Sem dados...' }" [limit]="8">
+                      <ngx-datatable-column name="Data" prop="data">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center">
+                            {{ row.data }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Horário" prop="horario">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center">
+                            {{ row.horario }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Paciente" prop="nome">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center">
+                            {{ row.nome }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column
+                        name="Especialidade"
+                        prop="especialidade">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center">
+                            {{ row.especialidade }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column
+                        name="Status"
+                        prop="status">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center">
+                            {{ row.status }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                          let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                          <div>
+                            <div class="page-count">
+                              Total de Registros: {{ rowCount }}
+                            </div>
+                          </div>
+                          <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
+                            [pagerRightArrowIcon]="'fa fa-angle-double-right '"[pagerPreviousIcon]="'fa fa-angle-left'"
+                            [pagerNextIcon]="'fa fa-angle-right '" [page]="curPage" [size]="pageSize"
+                            [count]="rowCount" [hidden]="!(rowCount / pageSize > 1)"
+                            (change)="myTable.onFooterPage($event)">
+                          </datatable-pager>
+                        </ng-template>
+                      </ngx-datatable-footer>
+                    </ngx-datatable>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
