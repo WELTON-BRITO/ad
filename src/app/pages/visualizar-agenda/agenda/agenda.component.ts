@@ -5,6 +5,10 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { INITIAL_EVENTS, createEventId } from './event-utils';
+import { NbDialogService } from '@nebular/theme';
+import { ModalAgendaPacienteComponent } from './modal-agenda-paciente/modal-agenda-paciente.component';
+
+declare var $: any;
 
 @Component({
   selector: 'agenda-root', 
@@ -45,7 +49,8 @@ export class AgendaComponent {
   };
   currentEvents: EventApi[] = [];
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(private changeDetector: ChangeDetectorRef,
+    private dialogService: NbDialogService) {
   }
 
   ngOnInit() {}
@@ -61,21 +66,34 @@ export class AgendaComponent {
 
   handleDateSelect(selectInfo: DateSelectArg) {
 
-    const title = prompt('Insira um novo título para o seu evento');
+    console.log('entrei aqui no click')
+    console.log( selectInfo)
+    console.log( selectInfo.view.calendar)
+
+    //const title = prompt('Insira um novo título para o seu evento');
     const calendarApi = selectInfo.view.calendar;
 
     calendarApi.unselect(); // clear date selection
 
-    if (title) {
+    //if (title) {
       calendarApi.addEvent({
         id: createEventId(),
-        title,
+        title: 'teste',
         start: selectInfo.startStr,
         end: selectInfo.endStr,
         allDay: selectInfo.allDay
       });
+   // }
+   
+   this.dialogService.open(ModalAgendaPacienteComponent, {
+    context: {
+      razaoSocial: 'TESTE',
+      cnpjCpf: 'TESTE',
+      editar: "EDITAR"
+    },
+  });
+
     }
-  }
 
   handleEventClick(clickInfo: EventClickArg) {
     if (confirm(`Tem certeza de que deseja excluir o evento '${clickInfo.event.title}'`)) {

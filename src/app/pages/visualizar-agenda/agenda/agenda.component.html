@@ -21,5 +21,35 @@
   </div>
 </div>
 
+<section id="dados-modal">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="row">
+    <div class="col-lg-6">
+      <nb-card size="small">
+        <nb-card-header>Popover Position</nb-card-header>
+        <nb-card-body>
+          <p>When popover has not enough space based on the configured placement, it will adjust accordingly trying to fit the screen.</p>
+          <button nbButton status="danger" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint" nbPopoverPlacement="left">Left</button>
+          <button nbButton status="danger" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint" nbPopoverPlacement="top">Top</button>
+          <button nbButton status="danger" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint" nbPopoverPlacement="bottom">Bottom</button>
+          <button nbButton status="danger" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint" nbPopoverPlacement="right">Right</button>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-lg-6">
+      <nb-card size="small">
+        <nb-card-header>Simple Popovers</nb-card-header>
+        <nb-card-body>
+          <p>In a simples form popover can take a string of text to render.</p>
+          <button nbButton status="success" nbPopover="Hello, how are you today?">on click</button>
+          <button nbButton status="success" nbPopover="Hello, how are you today?" nbPopoverTrigger="hover">on hover</button>
+          <button nbButton status="success" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint">on hint</button>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+  
+</div>
+</section>
 
 
