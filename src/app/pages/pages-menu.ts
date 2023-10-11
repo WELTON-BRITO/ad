@@ -14,18 +14,31 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/iot-dashboard',
     data: ['USER','DOCTOR','CLINIC'],
     hidden: false,
-  },  
+  },
+  {
+    title: 'Atendimento',
+    icon: 'clock-outline',
+    link: '/pages/atendimento',
+    data: ['DOCTOR','CLINIC'],
+    hidden: false,
+    children: [
+      {
+        title: 'Buscar atendimentos',
+        link: '/pages/atendimento/buscar-atendimento',
+      }
+    ]
+  },
   {
     title: 'Visualizar Agenda',
     icon: 'monitor-outline',
     link: '/pages/visualizar-agenda',
     data: ['USER','DOCTOR','CLINIC'],
     hidden: false,
-    children: [      
+    children: [
       {
         title: 'Agenda',
         link: '/pages/visualizar-agenda/agenda',
-      }      
+      }
     ]
   },
   {
@@ -34,7 +47,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/gestao-paciente',
     data: ['USER','DOCTOR','CLINIC'],
     hidden: false,
-    children: [      
+    children: [
       {
         title: 'Listar Pacientes',
         link: '/pages/gestao-paciente/paciente',
@@ -47,11 +60,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/configurar-agenda',
     data: ['USER','DOCTOR','CLINIC'],
     hidden: false,
-    children: [      
+    children: [
       /*{
         title: 'Configurar dia de Atendimento',
         link: '/pages/configurar-agenda/configurar-dia-atendimento',
-      },*/     
+      },*/
       {
         title: 'Consultar Agenda',
         link: '/pages/configurar-agenda/visualizar-dia-atendimento',
@@ -63,7 +76,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Configurar Valores e Modalidades',
         link: '/pages/configurar-agenda/parametrizar-consulta',
-      },     
+      },
       {
         title: 'Configurar Plano',
         link: '/pages/configurar-agenda/parametrizar-plano',
@@ -80,16 +93,17 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/configurar-clinica',
     data: ['CLINIC'],
     hidden: true,
-    children: [ 
+    children: [
       {
         title: 'Listar Médicos',
         link: '/pages/configurar-clinica/list-medico',
       },
       {
-        title: 'Associar Médicos',
+
+       title: 'Associar Médicos',
         link: '/pages/configurar-clinica/associar-medico',
-      }      
+      }
     ]
-  }, 
- 
+  },
+
 ]

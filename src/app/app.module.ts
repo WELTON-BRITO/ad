@@ -32,6 +32,7 @@ import { VisualizarAgendaModule } from './pages/visualizar-agenda/visualizar-age
 import { VisualizarAgendaRoutingModule } from './pages/visualizar-agenda/visualizar-agenda-routing.module';
 import { ConfigurarAgendaRoutingModule } from './pages/configurar-agenda/configurar-agenda-routing.module';
 import { ErrorHandlerService } from './pages/shared/services/http/error-handler.service';
+import { AtendimentoModule } from './pages/atendimento/atendimento.module';
 
 
 @NgModule({
@@ -51,27 +52,28 @@ import { ErrorHandlerService } from './pages/shared/services/http/error-handler.
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
     CoreModule.forRoot(),
-    ThemeModule.forRoot(),    
+    ThemeModule.forRoot(),
     NgxDatatableModule,
     AuthCustomModule,
     LoginModule,
     CadastroModule,
     CadastroRoutingModule,
-    GestaoPacienteModule, 
+    GestaoPacienteModule,
     GestaoPacienteRoutingModule,
     VisualizarAgendaModule,
     VisualizarAgendaRoutingModule,
     ConfigurarAgendaModule,
-    ConfigurarAgendaRoutingModule
+    ConfigurarAgendaRoutingModule,
+    AtendimentoModule,
    ],
-  providers:    [ 
+  providers:    [
     { provide: LOCALE_ID, useValue: 'pt' },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     { provide: ErrorHandler, useClass: ErrorHandlerService },
     LoadingBarService,
     AuthenticationService,
-    HttpService,       
+    HttpService,
  ],
  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
