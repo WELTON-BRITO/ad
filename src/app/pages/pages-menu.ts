@@ -20,7 +20,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'clock-outline',
     link: '/pages/atendimento',
     data: ['DOCTOR','CLINIC'],
-    hidden: false,
+    hidden: true,
     children: [
       {
         title: 'Buscar atendimentos',

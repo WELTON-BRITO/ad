@@ -33,6 +33,7 @@ import { VisualizarAgendaRoutingModule } from './pages/visualizar-agenda/visuali
 import { ConfigurarAgendaRoutingModule } from './pages/configurar-agenda/configurar-agenda-routing.module';
 import { ErrorHandlerService } from './pages/shared/services/http/error-handler.service';
 import { AtendimentoModule } from './pages/atendimento/atendimento.module';
+import { AtendimentoRoutingModule } from './pages/atendimento/atendimento-routing-module';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { AtendimentoModule } from './pages/atendimento/atendimento.module';
     VisualizarAgendaRoutingModule,
     ConfigurarAgendaModule,
     ConfigurarAgendaRoutingModule,
+    AtendimentoRoutingModule,
     AtendimentoModule,
    ],
   providers:    [

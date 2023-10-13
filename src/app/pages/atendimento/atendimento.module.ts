@@ -11,6 +11,7 @@ import { AtendimentoRoutingModule } from "./atendimento-routing-module";
 import { AtendimentoComponent } from "./atendimento.component";
 import { BuscarAtendimentoComponent } from "./buscar-atendimento/buscar-atendimento.component";
 import { ToastrComponent } from "../shared/component/toastr/toastr.component";
+import { NovoAtendimentoComponent } from "./novo-atendimento/novo-atendimento.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +38,8 @@ import { ToastrComponent } from "../shared/component/toastr/toastr.component";
   ],
   declarations: [
     AtendimentoComponent,
-    BuscarAtendimentoComponent
+    BuscarAtendimentoComponent,
+    NovoAtendimentoComponent,
   ],
 })
 export class AtendimentoModule { }

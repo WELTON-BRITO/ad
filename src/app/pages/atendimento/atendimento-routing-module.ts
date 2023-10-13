@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { BuscarAtendimentoComponent } from "./buscar-atendimento/buscar-atendimento.component";
 import { AtendimentoComponent } from "./atendimento.component";
+import { NovoAtendimentoComponent } from "./novo-atendimento/novo-atendimento.component";
 
 const routes: Routes = [{
   path: '',
@@ -12,7 +13,10 @@ const routes: Routes = [{
       path: 'buscar-atendimento',
       component: BuscarAtendimentoComponent,
     },
-
+    {
+      path: 'novo-atendimento',
+      component: NovoAtendimentoComponent,
+    },
   ],
 
 }];
@@ -31,4 +35,5 @@ export class AtendimentoRoutingModule { }
 
 export const routedComponents = [
   BuscarAtendimentoComponent,
+  NovoAtendimentoComponent
 ];

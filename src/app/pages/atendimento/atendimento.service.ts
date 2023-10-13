@@ -12,6 +12,10 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
   }
 
+  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/doctor/clinic/' + id, data, successHandle, erroHandle)
+  } 
+
   buscaSpecialty(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/specialty/all', data, successHandle, erroHandle)
   }
@@ -19,5 +23,26 @@ export class AtendimentoService {
   buscaAtendimentos(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/appointments/all', data, successHandle, erroHandle)
   }
+
+  buscaPagamentos(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/configuration/payment/all', data, successHandle, erroHandle)
+  }
+  
+  buscaConvenio(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/healthPlan/all', data, successHandle, erroHandle)
+  }
+
+  buscaDependente(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/child/all', data, successHandle, erroHandle)
+  } 
+
+  buscaPaciente(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/patient/all', data, successHandle, erroHandle)
+  }
+
+  salvarAgendamento(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doPost('/api/appointments', data, successHandle, erroHandle)
+  }
+   
 
 }

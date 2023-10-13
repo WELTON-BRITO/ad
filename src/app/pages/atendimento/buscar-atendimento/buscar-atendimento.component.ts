@@ -185,5 +185,11 @@ export class BuscarAtendimentoComponent implements OnInit
     return true;
   }
 
+  agendarAtendimento(){
+
+    this.router.navigate(['/pages/atendimento/novo-atendimento']);
+
+  }
+
  }
 
