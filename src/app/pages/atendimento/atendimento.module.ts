@@ -12,6 +12,7 @@ import { AtendimentoComponent } from "./atendimento.component";
 import { BuscarAtendimentoComponent } from "./buscar-atendimento/buscar-atendimento.component";
 import { ToastrComponent } from "../shared/component/toastr/toastr.component";
 import { NovoAtendimentoComponent } from "./novo-atendimento/novo-atendimento.component";
+import { ConsultaPacienteComponent } from "./consulta-paciente/consulta-paciente.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -40,6 +41,7 @@ import { NovoAtendimentoComponent } from "./novo-atendimento/novo-atendimento.co
     AtendimentoComponent,
     BuscarAtendimentoComponent,
     NovoAtendimentoComponent,
+    ConsultaPacienteComponent
   ],
 })
 export class AtendimentoModule { }

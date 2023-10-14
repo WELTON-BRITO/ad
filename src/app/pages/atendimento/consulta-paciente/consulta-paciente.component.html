@@ -1,0 +1,42 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="dialog-body">
+                <nb-card>
+                    <nb-card-body>
+                        <form id="form-novo-atendimento" [formGroup]="formConsultaPaciente">
+                            <div class="col-md-12 col-xs-12">
+                                <div class="form-row align-items-center">
+                                    <nb-card-header class="aditi-header">
+                                        <div class="back-link">
+                                            <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                                                <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                                            </a>
+                                        </div>
+                                    </nb-card-header>
+                                    <div class="form-group col-md-6">
+                                        <h5 class="pt-3">Consulta do Paciente</h5>
+                                    </div>
+                                </div>
+                            </div>
+                              
+                               
+                        </form>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>
+<div #card>
+    <div class="col-md-12 col-xs-12">
+        <div class="row" *ngIf="isActive" class="loader">
+            <div class="text-center" style="margin-top: -200px;margin-right: 100px;">
+                <button class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Carregando...
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

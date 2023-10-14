@@ -9,161 +9,222 @@
                                 <div class="form-row align-items-center">
                                     <nb-card-header class="aditi-header">
                                         <div class="back-link">
-                                          <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
-                                            <nb-icon icon="arrow-back" title="voltar"></nb-icon>
-                                          </a>
+                                            <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                                                <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                                            </a>
                                         </div>
-                                      </nb-card-header>
+                                    </nb-card-header>
                                     <div class="form-group col-md-6">
                                         <h5 class="pt-3">Agendar Consulta</h5>
                                     </div>
-                                </div>                               
+                                </div>
                                 <div class="form-row align-items-center">
                                     <div class="form-group col-md-4">
                                         <div class="form-group">
                                             <label for="nome">Escolha o médico*</label>
                                             <select class="form-control" formControlName="medico"
-                                            (change)="verificaMedico($event.target.value)">
+                                                (change)="verificaMedico($event.target.value)">
                                                 <option value="null" selected>SELECIONE</option>
                                                 <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
                                                     medico.name}}</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <div class="form-group">
-                                            <label for="dataConsulta">Data*</label>
-                                            <div class="row pl-3">
-                                                <input class="form-control date" type="date" id="dataConsulta"
-                                                    name="mydate" formControlName="dataConsulta" maxlength="10" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <div class="form-group">
-                                            <label for="horaConsulta" class="pl-3">Hora*</label>
-                                            <div class="pl-3">
-                                                <input class="form-control" type="time" id="horaConsulta"
-                                                    name="horaConsulta" formControlName="horaConsulta" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row align-items-center mt-lg-n3">
                                     <div class="form-group col-md-4">
                                         <div class="form-group">
-                                            <label for="nomeResponsavel">Buscar por cpf*</label>
-                                            <input class="form-control" name="cpf" id="cpf" type="text"
-                                                formControlName="cpf" mask="000.000.000-00" maxlength="14"
-                                                (change)="isValidCpf(formNovoAtendimento.value)"
-                                                placeholder="000.000.000-00" />
-                                            <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
-                                                {{this.msgErro}} <br /><br />
+                                            <label for="tipoConsulta">Tipo de consulta*</label>
+                                            <select class="form-control" formControlName="tipoConsulta">
+                                                <option value="null" selected>SELECIONE</option>
+                                                <option *ngFor="let tipoConsulta of listTipoConsulta"
+                                                    value="{{ tipoConsulta.id }}">{{
+                                                    tipoConsulta.descricao}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="form-group">
+                                            <label for="tipoEspecialidade">Tipo de especialidade*</label>
+                                            <select class="form-control" formControlName="tipoEspecialidade"
+                                            (change)="especialidade($event.target.value)">
+                                                <option value="null" selected>SELECIONE</option>
+                                                <option *ngFor="let tipoEspecialidade of listTipoEspecialidade"
+                                                    value="{{ tipoEspecialidade.id }}">{{
+                                                    tipoEspecialidade.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <div class="form-group">
+                                            <label for="dataInicio">Data início*</label>
+                                            <div class="row pl-3">
+                                                <input class="form-control date" type="date" id="dataInicio"
+                                                    name="mydate" formControlName="dataInicio" maxlength="10" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <div class="form-group">
-                                            <label for="nomeResponsavel">Nome do responsável</label>
-                                            <input class="form-control" name="nomeResponsavel" id="nomeResponsavel"
-                                                type="text" formControlName="nomeResponsavel" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row align-items-center mt-lg-n3">                                     
-                                    <div class="col-md-5 pt-4">
-                                        <label for="incluirDep"></label>
-                                        <div class="form-group">
-                                            <label class="consultaDependente">Consulta para dependente?</label>
-                                            <label class="radio-inline pl-2 pl-3">
-                                                <input class="mat-button" type="radio" id="radio" name="optDep"
-                                                    value="S" (click)="consultaDependente($event.target.value)" />
-                                                Sim</label>
-                                            <label class="radio-inline pl-2">
-                                                <input class="mat-button" type="radio" id="radio" name="optDep"
-                                                    value="N" (click)="consultaDependente($event.target.value)" />
-                                                Não</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-4" *ngIf="isDependente">
-                                        <label for="incluirDep">Incluir filho(a)*</label>
-                                        <select class="form-control" formControlName="incluirDep">
-                                            <option value="null" selected>SELECIONE</option>
-                                            <option *ngFor="let pagto of listDependente" value="{{ pagto.id }}">{{
-                                                pagto.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-row align-items-center">
-                                    <div class="col-md-5 pt-4">
-                                        <label for="incluirDep"></label>
-                                        <div class="form-group">
-                                            <label class="consultaParticular">Consulta particula?</label>
-                                            <label class="radio-inline pl-2 pl-3">
-                                                <input class="mat-button" type="radio" id="radio" name="optPart"
-                                                    value="S" (click)="consultaParticular($event.target.value)" />
-                                                Sim</label>
-                                            <label class="radio-inline pl-2">
-                                                <input class="mat-button" type="radio" id="radio" name="optPart"
-                                                    value="N" (click)="consultaParticular($event.target.value)" />
-                                                Não</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-4" *ngIf="isPagto">
-                                        <label for="formaPagto">Forma de pagamento*</label>
-                                        <select class="form-control" formControlName="formaPagto">
-                                            <option value="null" selected>SELECIONE</option>
-                                            <option *ngFor="let pagto of listPagto" value="{{ pagto.id }}">{{
-                                                pagto.description}}</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-4" *ngIf="isConvenio">
-                                        <label for="convenio">Convênio*</label>
-                                        <select class="form-control">
-                                            <option value="null" selected>SELECIONE</option>
-                                            <option *ngFor="let convenio of listConvenio" value="{{ convenio.id }}">{{
-                                                convenio.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-row align-items-center">
-                                    <div class="form-group col-md-5">
-                                        <label class="consultaDependente"></label>
-                                        <div class="form-group">
-                                            <label class="consultaDependente">Consulta paga?</label>
-                                            <label class="radio-inline pl-2 pl-3">
-                                                <input class="mat-button" type="radio" id="radio" name="optCons"
-                                                    value="S" />
-                                                Sim</label>
-                                            <label class="radio-inline pl-2">
-                                                <input class="mat-button" type="radio" id="radio" name="optCons"
-                                                    value="N" />
-                                                Não</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row align-items-center">
-                                    <div class="form-group col-md-12">
-                                        <div class="input-box">
-                                            <label for="detalhes">Detalhes:</label>
-                                            <textarea class="form-control" rows="3" formControlName="consPagto"
-                                                id="consPagto" [value]="null" (keypress)="qdadeCaracteres()"
-                                                maxlength="2000"></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamanho}}</span></small>
-                                                quantidade máxima de caracteres</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row align-items-center">
-                                    <div class="col-md-12">
-                                      <div class="text-right">                                       
-                                        <button class="btn btn-success" (click)="salvar(formNovoAtendimento.value)">
-                                          Salvar
+                                    <div class="text-right">
+                                        <button class="btn btn-primary m-4 mb-lg-4"
+                                            (click)="pesquisarConsulta(formNovoAtendimento.value)">
+                                            Pesquisar
                                         </button>
-                                      </div>
                                     </div>
-                                  </div>
+                                </div>
+
+                                <div *ngIf="isHorario">
+                                    <div class="form-group col-md-6">
+                                        <h6 class="pt-3">Horários disponíveis para consulta</h6>
+                                    </div>
+                                    <div class="modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-body alert-primary card-columns">
+                                                <section class="btn m-1" style="background-color: white;"
+                                                    *ngFor="let card of tipoCard; let i = index;"
+                                                    (click)="confHorario(card)">
+                                                    <div class="form-row align-items-center">
+                                                        <div class="col-md-1">
+                                                            <i class="fa fa-calendar image" aria-hidden="true"></i>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <div class="div-tamanho">
+                                                                <label for="data" class="m-0">Data: {{tipoCard[i].data
+                                                                    }}</label>
+                                                                <label for="horario">Horário: {{ tipoCard[i].horario
+                                                                    }}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isConfAtendimento">
+                                    <div class="form-row align-items-center mt-lg-n3">
+                                        <div class="form-group col-md-3">
+                                            <div class="form-group">
+                                                <label for="nomeResponsavel">Buscar por cpf*</label>
+                                                <input class="form-control" name="cpf" id="cpf" type="text"
+                                                    formControlName="cpf" mask="000.000.000-00" maxlength="14"
+                                                    (change)="isValidCpf(formNovoAtendimento.value)"
+                                                    placeholder="000.000.000-00" />
+                                                <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
+                                                    {{this.msgErro}} <br /><br />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                            <div class="form-group">
+                                                <label for="nomeResponsavel">Nome do responsável</label>
+                                                <input class="form-control" name="nomeResponsavel" id="nomeResponsavel"
+                                                    type="text" formControlName="nomeResponsavel" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isDadosAtendimento">
+                                        <div class="form-row align-items-center mt-lg-n3">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="consultaDependente">Consulta para dependente?</label>
+                                                    <div class="p-1 row">
+                                                        <label class="radio-inline pl-2 pl-3">
+                                                            <input class="mat-button" type="radio" id="radio"
+                                                                name="optDep" value="S"
+                                                                (click)="consultaDependente($event.target.value)" />
+                                                            Sim</label>
+                                                        <label class="radio-inline pl-2">
+                                                            <input class="mat-button" type="radio" id="radio"
+                                                                name="optDep" value="N"
+                                                                (click)="consultaDependente($event.target.value)" />
+                                                            Não</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4" *ngIf="isDependente">
+                                                <label for="incluirDep">Incluir filho(a)*</label>
+                                                <select class="form-control" formControlName="incluirDep">
+                                                    <option value="null" selected>SELECIONE</option>
+                                                    <option *ngFor="let pagto of listDependente" value="{{ pagto.id }}">
+                                                        {{
+                                                        pagto.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row align-items-center">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="consultaParticular">Consulta particula?</label>
+                                                    <div class="p-1 row">
+                                                        <label class="radio-inline pl-2 pl-3">
+                                                            <input class="mat-button" type="radio" id="radio"
+                                                                name="optPart" value="S"
+                                                                (click)="consultaParticular($event.target.value)" />
+                                                            Sim</label>
+                                                        <label class="radio-inline pl-2">
+                                                            <input class="mat-button" type="radio" id="radio"
+                                                                name="optPart" value="N"
+                                                                (click)="consultaParticular($event.target.value)" />
+                                                            Não</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4" *ngIf="isPagto">
+                                                <label for="formaPagto">Forma de pagamento*</label>
+                                                <select class="form-control" formControlName="formaPagto">
+                                                    <option value="null" selected>SELECIONE</option>
+                                                    <option *ngFor="let pagto of listPagto" value="{{ pagto.id }}">{{
+                                                        pagto.description}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-4" *ngIf="isConvenio">
+                                                <label for="formaConvenio">Convênio*</label>
+                                                <select class="form-control" formControlName="formaConvenio">
+                                                    <option value="null" selected>SELECIONE</option>
+                                                    <option *ngFor="let convenio of listConvenio"
+                                                        value="{{ convenio.id }}">{{
+                                                        convenio.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row align-items-center">
+                                            <div class="form-group col-md-4">
+                                                <div class="form-group">
+                                                    <label class="consultaDependente">Consulta paga?</label>
+                                                    <div class="p-1 row">
+                                                        <label class="radio-inline pl-2 pl-3">
+                                                            <input class="mat-button" type="radio" id="radio"
+                                                                name="optCons" value="S" />
+                                                            Sim</label>
+                                                        <label class="radio-inline pl-2">
+                                                            <input class="mat-button" type="radio" id="radio"
+                                                                name="optCons" value="N" />
+                                                            Não</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12 mt-lg-n4">
+                                                <div class="input-box">
+                                                    <label for="detalhes">Detalhes:</label>
+                                                    <textarea class="form-control" rows="3" formControlName="consPagto"
+                                                        id="consPagto" [value]="null" (keypress)="qdadeCaracteres()"
+                                                        maxlength="2000"></textarea>
+                                                    <p class="text-muted"><small><span class="caracteres"
+                                                                name="txtArea">{{this.tamanho}}</span></small>
+                                                        quantidade máxima de caracteres</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row align-items-center">
+                                        <div class="col-md-12">
+                                            <div class="text-right">
+                                                <button class="btn btn-success"
+                                                    (click)="salvar(formNovoAtendimento.value)">
+                                                    Salvar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </nb-card-body>
@@ -175,7 +236,7 @@
 <div #card>
     <div class="col-md-12 col-xs-12">
         <div class="row" *ngIf="isActive" class="loader">
-            <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
+            <div class="text-center" style="margin-top: -200px;margin-right: 100px;">
                 <button class="btn btn-primary" type="button" disabled>
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     Carregando...

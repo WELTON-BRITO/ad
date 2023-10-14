@@ -6,6 +6,7 @@ import { NbToastrService } from '@nebular/theme';
 import { AtendimentoService } from '../atendimento.service';
 import { deCamelCase } from '@swimlane/ngx-datatable';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
+import * as moment from 'moment';
 
 declare var $: any;
 
@@ -21,6 +22,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
     public isActive = false;
     public listPagto = null;
     public listDependente = null;
+    public listTipoEspecialidade = null;
     public listConvenio = null;
     public isConvenio = false;
     public isPagto = false;
@@ -32,11 +34,31 @@ export class NovoAtendimentoComponent implements OnDestroy {
     public userId = null;
     public childId = null;
     public specialtyId = null;
+    public listTipoConsulta = [];
+    public rowData = [];
+    public tipoCard = [];
+    public isHorario = false;
+    public isConfAtendimento = false;
+    public dadosHorario = null;
+    public isDadosAtendimento = false
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
         private toastrService: NbToastrService,
         private service: AtendimentoService) {
+
+        this.listTipoConsulta = [{
+            id: 1,
+            descricao: "Consulta Presencial"
+        },
+        {
+            id: 2,
+            descricao: "Consulta por Video conferência"
+        },
+        {
+            id: 3,
+            descricao: "Consulta Emergencial"
+        }];
 
     }
     ngOnDestroy() { }
@@ -56,14 +78,16 @@ export class NovoAtendimentoComponent implements OnDestroy {
         this.formNovoAtendimento = this.formBuilder.group({
             medico: [null],
             cpf: [null],
-            dataConsulta: [null],
-            horaConsulta: [null],
+            dataInicio: [null],
             consultaParticular: [null],
             consultaDependente: [null],
             formaPagto: [null],
+            formaConvenio: [null],
             incluirDep: [null],
             consPagto: [null],
-            nomeResponsavel: [null]
+            nomeResponsavel: [null],
+            tipoConsulta: [null],
+            tipoEspecialidade: [null]
         })
 
     }
@@ -104,7 +128,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
     pagamento() {
         this.isActive = true
         this.service.buscaPagamentos(null, (response) => {
-            console.log(response)
+
             this.listPagto = response
             this.isActive = false
 
@@ -119,7 +143,6 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
         this.service.buscaConvenio(null, (response) => {
 
-            console.log(response)
             this.listConvenio = response
 
         }, (error) => {
@@ -139,10 +162,10 @@ export class NovoAtendimentoComponent implements OnDestroy {
             this.isActive = true;
 
             this.service.buscaDependente(params, (response) => {
-                console.log(response)
                 this.childId = response[0].idChild
                 this.listDependente = response
                 this.isActive = false;
+                this.isDadosAtendimento = true
             }, (error) => {
                 this.isActive = false;
                 this.toastrService.danger(error.error.message);
@@ -159,10 +182,17 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
         this.formNovoAtendimento = this.formBuilder.group({
             medico: [null],
-            dataConsulta: [null],
-            horaConsulta: [null],
-
-
+            cpf: [null],
+            dataInicio: [null],
+            consultaParticular: [null],
+            consultaDependente: [null],
+            formaPagto: [null],
+            formaConvenio: [null],
+            incluirDep: [null],
+            consPagto: [null],
+            nomeResponsavel: [null],
+            tipoConsulta: [null],
+            tipoEspecialidade: [null]
         })
 
     }
@@ -198,7 +228,6 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
             let valLenght = textArea.value.length;
             this.tamanho = caracteresRestantes - valLenght;
-
             valLenght < 30
                 ? inpuBox.classList.add("error")
                 : inpuBox.classList.remove("error");
@@ -244,8 +273,9 @@ export class NovoAtendimentoComponent implements OnDestroy {
     }
 
     salvar(data) {
-        console.log(data)
 
+        var startTime = this.dadosHorario.horario.slice(0, 5)
+        var endTime = this.dadosHorario.horario.slice(8)
         this.clinicId = localStorage.getItem('bway-entityId');
 
         let register = {
@@ -254,56 +284,131 @@ export class NovoAtendimentoComponent implements OnDestroy {
             clinicId: this.clinicId,
             userId: this.userId,
             childId: this.childId,
-            dateService: "2023-10-11",
-            startTime: "string",
-            endTime: "string",
-            healthPlanId: data,
-            typePaymentId: 0,
-            typeServiceId: 0,
-            meetingUrl: "string",
+            dateService: moment(this.dadosHorario.data, "DD/MM/YYYY").format("YYYY-MM-DD"),
+            startTime: startTime,
+            endTime: endTime,
+            healthPlanId: data.formaConvenio,
+            typePaymentId: data.formaPagto,
+            typeServiceId: data.tipoConsulta,
+            meetingUrl: this.dadosHorario.data.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId),
             specialtyId: this.specialtyId
 
         }
 
-        console.log(register)
-
         this.isActive = true;
 
-        /*this.service.salvarAgendamento(register, (response => {
+        this.service.salvarAgendamento(register, (response => {
 
             this.isActive = false;
             this.toastrService.success('Cadastrado com sucesso !!!');
-
+            this.limpaForm();
+            this.previousPage();
         }), (error) => {
             this.isActive = false;
             this.toastrService.danger(error.error.message);
 
-        });*/
-
+        });
 
     }
 
     verificaMedico(data) {
 
-        console.log(data)
-
         for (var i = 0; i < this.listMedico.length; i++) {
 
-
             if (data == this.listMedico[i].id) {
-                console.log(this.listMedico[i])
                 this.doctorId = this.listMedico[i].id
-                this.specialtyId = this.listMedico[i].specialty[0].id
             }
-
-
         }
 
+        this.verificaEspecialidade(this.doctorId)
+    }
 
+    especialidade(data) {
+
+        for (var i = 0; i < this.listTipoEspecialidade.length; i++) {
+
+            if (data == this.listTipoEspecialidade[i].id) {
+                this.specialtyId = this.listTipoEspecialidade[i].id
+            }
+        }
+    }
+
+    verificaEspecialidade(data) {
+
+        this.service.verificaEspecialidade(data, null, (response => {
+
+            this.listTipoEspecialidade = response
+
+        }), (error) => {
+            this.isActive = false;
+            this.toastrService.danger(error.error.message);
+
+        });
+
+    }
+
+    pesquisarConsulta(data) {
+
+        this.isConfAtendimento = false;
+
+        if (this.validaCampo(data)) {
+
+            this.isActive = true
+            let params = new HttpParams();
+            params = params.append('doctorId', data.medico)
+            params = params.append('startDate', data.dataInicio)
+            params = params.append('endDate', data.dataInicio)
+            params = params.append('typeServiceId', data.tipoConsulta)
+
+            this.service.buscaHorario(params, (response) => {
+
+                this.tipoCard = response.times,
+
+                    this.tipoCard = this.tipoCard.map(data => {
+                        return {
+                            data: moment(data.date).format('DD/MM/YYYY'),
+                            horario: data.startTime.concat(' - ', data.endTime)
+                        }
+
+                    })
+
+                this.isActive = false
+                this.isHorario = true;
+
+            }, (error) => {
+                this.isActive = false;
+                this.toastrService.danger(error.error.message);
+            });
+        }
+    }
+
+    validaCampo(data) {
+
+        if (data.medico == null) {
+            this.toastrService.danger('O campo médico é obrigatório!!!');
+            return false
+        }
+        if (data.tipoConsulta == null) {
+            this.toastrService.danger('O campo tipo consulta é obrigatório!!!');
+            return false
+        }
+        if (data.dataInicio == null) {
+            this.toastrService.danger('A data início do período é obrigatória!!!');
+            return false
+        }
+
+        return true
+    }
+
+    confHorario(data) {
+
+        this.dadosHorario = data;
+        this.isHorario = false;
+        this.isConfAtendimento = true;
     }
 
     previousPage() {
         this.router.navigate(['/pages/atendimento/buscar-atendimento'])
-      }
+    }
 
 }
