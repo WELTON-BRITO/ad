@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { NbCardModule, NbUserModule, NbButtonModule, NbTabsetModule, NbActionsModule, NbRadioModule, NbSelectModule, NbListModule, NbIconModule, NbDatepickerModule } from "@nebular/theme";
+import { NbCardModule, NbUserModule, NbButtonModule, NbTabsetModule, NbActionsModule, NbRadioModule, NbSelectModule, NbListModule, NbIconModule, NbDatepickerModule, NbDialogService } from "@nebular/theme";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { NgxEchartsModule } from "ngx-echarts";
@@ -13,6 +13,8 @@ import { BuscarAtendimentoComponent } from "./buscar-atendimento/buscar-atendime
 import { ToastrComponent } from "../shared/component/toastr/toastr.component";
 import { NovoAtendimentoComponent } from "./novo-atendimento/novo-atendimento.component";
 import { ConsultaPacienteComponent } from "./consulta-paciente/consulta-paciente.component";
+import { DetalheAtendimentoComponent } from "./detalhe-atendimento/detalhe-atendimento.component";
+import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancelamento/motivo-cancelamento.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +43,9 @@ import { ConsultaPacienteComponent } from "./consulta-paciente/consulta-paciente
     AtendimentoComponent,
     BuscarAtendimentoComponent,
     NovoAtendimentoComponent,
-    ConsultaPacienteComponent
+    ConsultaPacienteComponent,
+    DetalheAtendimentoComponent,
+    MotivoCancelamentoComponent
   ],
 })
 export class AtendimentoModule { }

@@ -51,5 +51,9 @@ export class AtendimentoService {
   verificaEspecialidade(id: any, data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/specialty/doctor/' + id, data, successHandle, erroHandle)
   }
+  
+  cancelarAtendimento(data: any, successHandle:Function, errorHandle:Function) {
+    this.httpService.doPut('/api/appointments',data, successHandle, errorHandle);
+  }
 
 }

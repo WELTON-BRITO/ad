@@ -5,6 +5,7 @@ import { BuscarAtendimentoComponent } from "./buscar-atendimento/buscar-atendime
 import { AtendimentoComponent } from "./atendimento.component";
 import { NovoAtendimentoComponent } from "./novo-atendimento/novo-atendimento.component";
 import { ConsultaPacienteComponent } from "./consulta-paciente/consulta-paciente.component";
+import { DetalheAtendimentoComponent } from "./detalhe-atendimento/detalhe-atendimento.component";
 
 const routes: Routes = [{
   path: '',
@@ -21,6 +22,10 @@ const routes: Routes = [{
     {
       path: 'consulta-paciente',
       component: ConsultaPacienteComponent,
+    },
+    {
+      path: 'detalhe-atendimento',
+      component: DetalheAtendimentoComponent,
     },
   ],
 
@@ -41,5 +46,6 @@ export class AtendimentoRoutingModule { }
 export const routedComponents = [
   BuscarAtendimentoComponent,
   NovoAtendimentoComponent,
-  ConsultaPacienteComponent
+  ConsultaPacienteComponent,
+  DetalheAtendimentoComponent
 ];
