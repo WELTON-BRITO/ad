@@ -24,4 +24,7 @@ export class AtendimentoService {
     this.httpService.doPut('/api/appointments',data, successHandle, errorHandle);
   }
 
+  aprovarPagamento(data,idAtendimento: any , successHandle:Function, errorHandle:Function) {
+    this.httpService.doPut('/api/appointments/' + idAtendimento + '/approvePayment',data, successHandle, errorHandle);
+  }
 }

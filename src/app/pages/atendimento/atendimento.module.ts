@@ -13,6 +13,7 @@ import { BuscarAtendimentoComponent } from "./buscar-atendimento/buscar-atendime
 import { ToastrComponent } from "../shared/component/toastr/toastr.component";
 import { DetalheAtendimentoComponent } from "./detalhe-atendimento/detalhe-atendimento.component";
 import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancelamento/motivo-cancelamento.component";
+import { VerComprovanteComponent } from "./detalhe-atendimento/ver-comprovante/ver-comprovante.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +42,8 @@ import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancel
     AtendimentoComponent,
     BuscarAtendimentoComponent,
     DetalheAtendimentoComponent,
-    MotivoCancelamentoComponent
+    MotivoCancelamentoComponent,
+    VerComprovanteComponent,
   ],
 })
 export class AtendimentoModule { }
