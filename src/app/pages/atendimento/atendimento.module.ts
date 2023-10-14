@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { NbCardModule, NbUserModule, NbButtonModule, NbTabsetModule, NbActionsModule, NbRadioModule, NbSelectModule, NbListModule, NbIconModule, NbDatepickerModule } from "@nebular/theme";
+import { NbCardModule, NbUserModule, NbButtonModule, NbTabsetModule, NbActionsModule, NbRadioModule, NbSelectModule, NbListModule, NbIconModule, NbDatepickerModule, NbDialogService } from "@nebular/theme";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { NgxEchartsModule } from "ngx-echarts";
@@ -11,6 +11,8 @@ import { AtendimentoRoutingModule } from "./atendimento-routing-module";
 import { AtendimentoComponent } from "./atendimento.component";
 import { BuscarAtendimentoComponent } from "./buscar-atendimento/buscar-atendimento.component";
 import { ToastrComponent } from "../shared/component/toastr/toastr.component";
+import { DetalheAtendimentoComponent } from "./detalhe-atendimento/detalhe-atendimento.component";
+import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancelamento/motivo-cancelamento.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +39,9 @@ import { ToastrComponent } from "../shared/component/toastr/toastr.component";
   ],
   declarations: [
     AtendimentoComponent,
-    BuscarAtendimentoComponent
+    BuscarAtendimentoComponent,
+    DetalheAtendimentoComponent,
+    MotivoCancelamentoComponent
   ],
 })
 export class AtendimentoModule { }

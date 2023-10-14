@@ -20,4 +20,8 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/appointments/all', data, successHandle, erroHandle)
   }
 
+  cancelarAtendimento(data: any, successHandle:Function, errorHandle:Function) {
+    this.httpService.doPut('/api/appointments',data, successHandle, errorHandle);
+  }
+
 }
