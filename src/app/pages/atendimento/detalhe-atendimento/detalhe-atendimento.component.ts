@@ -151,4 +151,7 @@ export class DetalheAtendimentoComponent implements OnInit {
       },
     });
   }
+  goToLink(url: string){
+    window.open(url, "_blank");
+}
 }
