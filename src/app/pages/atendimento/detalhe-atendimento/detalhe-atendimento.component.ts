@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Location } from '@angular/common';
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AtendimentoService } from "../atendimento.service";
@@ -6,20 +7,21 @@ import { EncriptyUtilService } from "../../shared/services/encripty-util.service
 import { NbDialogService, NbToastrService } from "@nebular/theme";
 import { MotivoCancelamentoComponent } from "./motivo-cancelamento/motivo-cancelamento.component";
 import { HttpParams } from "@angular/common/http";
+import { VerComprovanteComponent } from "./ver-comprovante/ver-comprovante.component";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 
 @Component({
   selector: 'ngx-detalhe-atendimento',
   styleUrls: ['./detalhe-atendimento.component.scss'],
   templateUrl: './detalhe-atendimento.component.html',
 })
-export class DetalheAtendimentoComponent implements OnInit
- {
+export class DetalheAtendimentoComponent implements OnInit {
 
   public isActive = false;
   public atendimento = {
     medico: null,
     paciente: null,
-    data:null,
+    data: null,
     horario: null,
     nomeResponsavel: null,
     formaPagamento: null,
@@ -69,43 +71,67 @@ export class DetalheAtendimentoComponent implements OnInit
     private service: AtendimentoService,
     private encriptyService: EncriptyUtilService,
     private toastrService: NbToastrService,
-    private dialogService: NbDialogService) {
-    }
+    private dialogService: NbDialogService,
+    private location: Location,
+    private sanitizer: DomSanitizer) {
+  }
 
   ngOnInit() {
-      let data = history.state
-      this.atendimento.medico = data.doctor.name
-      this.atendimento.paciente = data.child != null ? data.child.name : data.user.name
-      this.atendimento.nomeResponsavel = data.user.name
-      this.atendimento.data = data.dateService
-      this.atendimento.horario = data.startTime.concat(' - ', data.endTime)
-      this.atendimento.formaPagamento = data.typePayment
-      this.atendimento.modalidade = data.typeService
-      this.atendimento.urlCall = data.meetingUrl
-      this.atendimento.status = data.status
-      this.atendimento.especialidade = data.specialty.name
-      this.atendimento.convenio = data.plan.name
-      this.atendimento.id = data.id
+    let data = history.state
+    this.atendimento.medico = data.doctor.name
+    this.atendimento.paciente = data.child != null ? data.child.name : data.user.name
+    this.atendimento.nomeResponsavel = data.user.name
+    this.atendimento.data = data.dateService
+    this.atendimento.horario = data.startTime.concat(' - ', data.endTime)
+    this.atendimento.formaPagamento = data.typePayment
+    this.atendimento.modalidade = data.typeService
+    this.atendimento.urlCall = data.meetingUrl
+    this.atendimento.status = data.status
+    this.atendimento.especialidade = data.specialty.name
+    this.atendimento.convenio = data.plan != null ? data.plan.name : null
+    this.atendimento.id = data.id
+    this.atendimento.comprovante = data.paymentProof
   }
   abrirModalCancelamento() {
     this.dialogService.open(MotivoCancelamentoComponent)
       .onClose.subscribe(reason => this.cancelarAtendimento(reason));
   }
 
-  cancelarAtendimento(reason){
+  cancelarAtendimento(reason) {
+
+    if (reason != null) {
+      if (reason != '') {
+        this.isActive = true
+
+        let params = new HttpParams();
+        params = params.append('id', this.atendimento.id)
+        params = params.append('reasonCancellation', reason)
+
+        this.service.cancelarAtendimento(params, (response) => {
+
+          this.isActive = false
+          this.toastrService.success('Atendimento cancelado com sucesso !!!');
+          this.location.back()
+        }, (message) => {
+          this.isActive = false;
+          this.toastrService.danger(message);
+        });
+      } else {
+        this.toastrService.danger('Preencha o motivo de cancelamento.');
+      }
+
+    }
+  }
+
+  aprovarPagamento() {
 
     this.isActive = true
 
-    let params = new HttpParams();
-    params = params.append('id', this.atendimento.id)
-    params = params.append('reasonCancellation', reason)
-
-
-    this.service.cancelarAtendimento(params, (response) => {
+    this.service.aprovarPagamento(null, this.atendimento.id, (response) => {
 
       this.isActive = false
-      this.toastrService.success('Atendimento cancelado com sucesso !!!');
-
+      this.toastrService.success('Pagamento aprovado com sucesso !!!');
+      this.location.back()
     }, (message) => {
       this.isActive = false;
       this.toastrService.danger(message);
@@ -113,8 +139,24 @@ export class DetalheAtendimentoComponent implements OnInit
 
   }
 
-  abrirConsulta(){
+  abrirConsulta() {
     this.router.navigate(['/pages/atendimento/consulta-paciente']);
   }
 
- }
+  previousPage() {
+    this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+  }
+
+  abrirComprovante() {
+    const safeImageUrl: SafeUrl = this.sanitizer.bypassSecurityTrustUrl(`data:image/jpeg;base64,${this.atendimento.comprovante}`);
+    this.dialogService.open(VerComprovanteComponent, {
+      context: {
+        imageUrl: safeImageUrl,
+      },
+    });
+  }
+  
+  goToLink(url: string) {
+    window.open(url, "_blank");
+  }
+}

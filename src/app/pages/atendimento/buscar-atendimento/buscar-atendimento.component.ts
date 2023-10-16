@@ -67,29 +67,7 @@ export class BuscarAtendimentoComponent implements OnInit
       cpf: [null],
     })
 
-    var initData = [
-      {
-        nome: "paciente 1",
-        data: moment('2023-10-11').format('DD/MM/YYYY'),
-        horario: '15:00 - 16:00',
-        especialidade: 'Pediatra',
-        status: 'status'
-      },
-      {
-        nome: "paciente 2",
-        data: moment('2023-10-11').format('DD/MM/YYYY'),
-        horario: '16:00 - 17:00',
-        especialidade: 'Pediatra',
-        status: 'status'
-      },
-      {
-        nome: "paciente 3",
-        data: moment('2023-10-11').format('DD/MM/YYYY'),
-        horario: '17:00 - 18:00',
-        especialidade: 'Pediatra',
-        status: 'status'
-      }
-    ]
+    var initData = []
     this.rowData = initData;
     var name = localStorage.getItem('bway-domain');
     var id = localStorage.getItem('bway-entityId');
