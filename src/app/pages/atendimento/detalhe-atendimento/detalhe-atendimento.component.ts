@@ -113,4 +113,8 @@ export class DetalheAtendimentoComponent implements OnInit
 
   }
 
+  abrirConsulta(){
+    this.router.navigate(['/pages/atendimento/consulta-paciente']);
+  }
+
  }

@@ -45,7 +45,7 @@
                                         <div class="form-group">
                                             <label for="tipoEspecialidade">Tipo de especialidade*</label>
                                             <select class="form-control" formControlName="tipoEspecialidade"
-                                            (change)="especialidade($event.target.value)">
+                                                (change)="especialidade($event.target.value)">
                                                 <option value="null" selected>SELECIONE</option>
                                                 <option *ngFor="let tipoEspecialidade of listTipoEspecialidade"
                                                     value="{{ tipoEspecialidade.id }}">{{
@@ -69,7 +69,6 @@
                                         </button>
                                     </div>
                                 </div>
-
                                 <div *ngIf="isHorario">
                                     <div class="form-group col-md-6">
                                         <h6 class="pt-3">Horários disponíveis para consulta</h6>
@@ -140,12 +139,11 @@
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4" *ngIf="isDependente">
-                                                <label for="incluirDep">Incluir filho(a)*</label>
+                                                <label for="incluirDep">Incluir filho(a)</label>
                                                 <select class="form-control" formControlName="incluirDep">
                                                     <option value="null" selected>SELECIONE</option>
                                                     <option *ngFor="let pagto of listDependente" value="{{ pagto.id }}">
-                                                        {{
-                                                        pagto.name}}</option>
+                                                        {{pagto.name}}</option>
                                                 </select>
                                             </div>
                                         </div>

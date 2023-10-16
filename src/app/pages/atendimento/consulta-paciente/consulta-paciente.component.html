@@ -4,26 +4,187 @@
             <div class="dialog-body">
                 <nb-card>
                     <nb-card-body>
-                        <form id="form-novo-atendimento" [formGroup]="formConsultaPaciente">
-                            <div class="col-md-12 col-xs-12">
-                                <div class="form-row align-items-center">
-                                    <nb-card-header class="aditi-header">
-                                        <div class="back-link">
-                                            <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
-                                                <nb-icon icon="arrow-back" title="voltar"></nb-icon>
-                                            </a>
-                                        </div>
-                                    </nb-card-header>
-                                    <div class="form-group col-md-6">
-                                        <h5 class="pt-3">Consulta do Paciente</h5>
+                        <div class="form-row align-items-center">
+                            <nb-card-header class="aditi-header">
+                                <div class="back-link">
+                                    <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                                        <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                                    </a>
+                                </div>
+                            </nb-card-header>
+                            <div class="form-group col-md-6">
+                                <h5 class="pt-3">Consulta do Paciente</h5>
+                            </div>
+                        </div>
+                        <div class="form-row align-items-center">
+                            <div class="form-group col-md-6 ">
+                                <div class="form-group ">
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Nome: </label></div>
+                                        <label>{{null}} </label>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Idade: </label></div>
+                                        <label>{{null}} </label>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Sexo: </label></div>
+                                        <label>{{null}} </label>
                                     </div>
                                 </div>
                             </div>
-                              
-                               
-                        </form>
+                            <div class="form-group col-md-6 ">
+                                <div class="form-group ">
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Especialidade: </label></div>
+                                        <label>{{null}} </label>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Tipo de sangue: </label></div>
+                                        <label>{{null}} </label>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Última consulta: </label></div>
+                                        <label>{{null}} </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </nb-card-body>
                 </nb-card>
+                <nb-card *ngIf="isBnt">
+                    <nb-card-body>
+                        <nb-actions size="large" fullWidth>
+                            <nb-action>
+                                <nb-icon class="action-icon" icon="file-text-outline"></nb-icon>
+                                <span>Ver histórico</span>
+                            </nb-action>
+                            <nb-action>
+                                <nb-icon class="action-icon" icon="wifi-outline" (click)="detalhesConsulta()"></nb-icon>
+                                <span>Atendimento</span>
+                            </nb-action>
+                        </nb-actions>
+                    </nb-card-body>
+                </nb-card>
+                <div *ngIf="isDetalhes">
+                    <form id="form-novo-atendimento" [formGroup]="formConsultaPaciente">
+                        <nb-card>
+                            <nb-card-body>
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-2">
+                                        <label for="tempoRetorno">Tempo retorno</label>
+                                        <input class="form-control" name="tempoRetorno" id="tempoRetorno" type="text"
+                                            formControlName="tempoRetorno" />
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="altura">Altura</label>
+                                        <input class="form-control" name="altura" id="altura" type="text"
+                                            formControlName="altura" />
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="peso">Peso</label>
+                                        <input class="form-control" name="peso" id="peso" type="text"
+                                            formControlName="peso" />
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="circCabeca">Circ cabeça</label>
+                                        <input class="form-control" name="circCabeca" id="circCabeca" type="text"
+                                            formControlName="circCabeca" />
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="circAbdomen">Circ abdomen</label>
+                                        <input class="form-control" name="circAbdomen" id="circAbdomen" type="text"
+                                            formControlName="circAbdomen" />
+                                    </div>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                        <nb-card>
+                            <nb-card-body>
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-6">
+                                        <label for="urlReceita">URL receita</label>
+                                        <input class="form-control" name="urlReceita" id="urlReceita" type="text"
+                                            formControlName="urlReceita" />
+                                    </div>
+                                    <div class="form-group col-md-6">
+
+                                        <div mdbBtn rounded="true" outline="true" color="secondary" size="md"
+                                            mdbWavesEffect>
+                                            <label for="circAbdomen">Anexo receita</label>
+                                            <div class="custom-file">
+
+                                                <input class="custom-file-input" type="file" mdbFileSelect
+                                                    (change)="onUploadReceita($event)"
+                                                    accept="text/xml, application/pdf">
+                                                <label #inputFileReceita class="custom-file-label"
+                                                    for="validatedCustomFile">Selecione o
+                                                    arquivo...</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-6">
+                                        <label for="urlAtestado">URL atestado</label>
+                                        <input class="form-control" name="urlAtestado" id="urlAtestado" type="text"
+                                            formControlName="urlAtestado" />
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div mdbBtn rounded="true" outline="true" color="secondary" size="md"
+                                            mdbWavesEffect>
+                                            <label for="circAbdomen">Anexo atestado</label>
+                                            <div class="custom-file">
+                                                <input class="custom-file-input" type="file" mdbFileSelect
+                                                    (change)="onUploadAtestado($event)"
+                                                    accept="text/xml, application/pdf">
+                                                <label #inputFileAtestado class="custom-file-label"
+                                                    for="validatedCustomFile">Selecione o
+                                                    arquivo...</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                        <nb-card>
+                            <nb-card-body>
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-6">
+                                        <div class="input-box">
+                                            <label for="detalhesInterno">Detalhes(Interno):</label>
+                                            <textarea class="form-control" rows="3" formControlName="detalhesInterno"
+                                                id="detalhesInterno" [value]="null" (keypress)="caracteresInterno()"
+                                                maxlength="2000"></textarea>
+                                            <p class="text-muted"><small><span class="caracteres"
+                                                        name="txtArea">{{this.tamInterno}}</span></small>
+                                                quantidade máxima de caracteres</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="input">
+                                            <label for="detalhesCliente">Detalhes(cliente):</label>
+                                            <textarea class="form-control" rows="3" formControlName="detalhesCliente"
+                                                id="detalhesCliente" [value]="null" (keypress)="caracteresCliente()"
+                                                maxlength="2000"></textarea>
+                                            <p class="text-muted"><small><span class="caracteres"
+                                                        name="txtArea">{{this.tamCliente}}</span></small>
+                                                quantidade máxima de caracteres</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <button class="btn btn-primary m-2" (click)="voltar()">
+                                        Voltar
+                                    </button>
+                                    <button class="btn btn-success" (click)="salvar(formNovoAtendimento.value)">
+                                        Salvar
+                                    </button>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

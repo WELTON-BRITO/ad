@@ -101,10 +101,9 @@ export class BuscarAtendimentoComponent implements OnInit
     }
   }
 
-  buscarAtendimento(data){
-    console.log(data)
+  buscarAtendimento(data){   
 
-   /* let params = new HttpParams();
+    let params = new HttpParams();
     params =  params.append('doctorId', data.medico)
     params =  params.append('startDate', data.dataInicio)
     params =  params.append('endDate', data.dataFim)
@@ -147,8 +146,8 @@ export class BuscarAtendimentoComponent implements OnInit
       });
     }else {
       this.isActive = false
-    }*/
-    this.router.navigate(['/pages/atendimento/consulta-paciente']);
+    }
+    
   }
 
   pesquisaMedico(data) {

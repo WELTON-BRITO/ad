@@ -349,6 +349,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
     pesquisarConsulta(data) {
 
+        this.tipoCard = [];
         this.isConfAtendimento = false;
 
         if (this.validaCampo(data)) {
@@ -402,6 +403,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
     confHorario(data) {
 
+        this.tipoCard = [];
         this.dadosHorario = data;
         this.isHorario = false;
         this.isConfAtendimento = true;
