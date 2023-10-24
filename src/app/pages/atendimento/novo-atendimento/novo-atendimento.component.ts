@@ -8,8 +8,6 @@ import { deCamelCase } from '@swimlane/ngx-datatable';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import * as moment from 'moment';
 
-declare var $: any;
-
 @Component({
     selector: 'ngx-novo-atendimento',
     styleUrls: ['./novo-atendimento.component.scss'],
@@ -98,12 +96,14 @@ export class NovoAtendimentoComponent implements OnDestroy {
         this.isActive = true
 
         let params = new HttpParams();
-        params = params.append('doctorId', data)
+        if (data != null) {
+            params = params.append('doctorId', data)
+        }
 
         this.service.buscaDoctor(params, (response) => {
 
-            this.listMedico = response,
-                this.isActive = false
+            this.listMedico = response
+            this.isActive = false
 
         }, (error) => {
             this.isActive = false;
@@ -116,8 +116,8 @@ export class NovoAtendimentoComponent implements OnDestroy {
         this.isActive = true
         this.service.buscaClinica(data, null, (response) => {
 
-            this.listMedico = response,
-                this.isActive = false
+            this.listMedico = response
+            this.isActive = false
 
         }, (error) => {
             this.isActive = false;
@@ -164,10 +164,13 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
             this.service.buscaDependente(params, (response) => {
 
-                this.childId = response[0].idChild
-                this.listDependente = response
+                if (response.length > 0) {
+                    this.childId = response[0].idChild
+                    this.listDependente = response
+                } else {
+                    this.childId = null;
+                }
                 this.isActive = false;
-                this.isDadosAtendimento = true
             }, (error) => {
                 this.isActive = false;
                 this.toastrService.danger(error.error.message);
@@ -213,6 +216,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
             }
 
         }
+
     }
 
     consultaParticular(data) {
@@ -245,18 +249,16 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
     pesquisaPaciente(data) {
 
-        let params = new HttpParams();
-
         if (data.cpf != null) {
-            params = params.append('federalId', data.cpf)
 
             this.isActive = true;
 
-            this.service.buscaPaciente(params, (response) => {
+            this.service.buscaPaciente(null, data.cpf, (response) => {
                 this.isActive = false;
-                this.userId = response[0].user.id
-                this.formNovoAtendimento.controls['nomeResponsavel'].setValue(response[0].user.name);
+                this.userId = response.id
+                this.formNovoAtendimento.controls['nomeResponsavel'].setValue(response.name);
                 this.buscaDependente(this.userId)
+                this.isDadosAtendimento = true
             }, (error) => {
                 this.isActive = false;
                 this.toastrService.danger(error.error.message);
@@ -269,6 +271,9 @@ export class NovoAtendimentoComponent implements OnDestroy {
     }
 
     isValidCpf(data) {
+
+        this.listDependente = [];
+        this.isDependente = false;
 
         if (!CPFValidator.isValidCPF(data.cpf)) {
             this.showMsgErro = true;

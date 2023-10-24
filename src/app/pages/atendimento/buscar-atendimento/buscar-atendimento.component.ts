@@ -12,8 +12,7 @@ import { CPFValidator } from "../../shared/validators/CPFValidator";
   styleUrls: ['./buscar-atendimento.component.scss'],
   templateUrl: './buscar-atendimento.component.html',
 })
-export class BuscarAtendimentoComponent implements OnInit
- {
+export class BuscarAtendimentoComponent implements OnInit {
   public doctorId = null;
   public formBuscarAtendimento = null;
   public listMedico = null;
@@ -52,13 +51,13 @@ export class BuscarAtendimentoComponent implements OnInit
     private router: Router,
     private service: AtendimentoService,
     private toastrService: NbToastrService) {
-    }
+  }
 
   ngOnInit() {
 
     this.formBuscarAtendimento = this.formBuilder.group({
       dataInicio: [null, Validators.required],
-      dataFim:  [null, Validators.required],
+      dataFim: [null, Validators.required],
       nome: [null],
       medico: [null, Validators.required],
       cpf: [null],
@@ -69,35 +68,36 @@ export class BuscarAtendimentoComponent implements OnInit
     var name = localStorage.getItem('bway-domain');
     var id = localStorage.getItem('bway-entityId');
 
-    if(name == 'CLINIC'){
-      this.pesquisaMedico(null)
-    }else{
+    if (name == 'CLINIC') {
+      this.pesquisaClinica(id)
+    } else {
       this.pesquisaMedico(id);
     }
+
   }
 
-  buscarAtendimento(data){   
+  buscarAtendimento(data) {
 
     let params = new HttpParams();
-    params =  params.append('doctorId', data.medico)
-    params =  params.append('startDate', data.dataInicio)
-    params =  params.append('endDate', data.dataFim)
-    if(data.nome != null){
-      params =   params.append('name', data.nome)
+    params = params.append('doctorId', data.medico)
+    params = params.append('startDate', data.dataInicio)
+    params = params.append('endDate', data.dataFim)
+    if (data.nome != null) {
+      params = params.append('name', data.nome)
     }
-    if(data.cpf != null){
-      params =   params.append('federalId', data.cpf)
+    if (data.cpf != null) {
+      params = params.append('federalId', data.cpf)
     }
     this.isActive = true
 
-    if(this.validaCampo(data)){
+    if (this.validaCampo(data)) {
       this.service.buscaAtendimentos(params, (response) => {
         this.isActive = false
         this.rowData = response
         this.rowData = this.rowData.map(data => {
           return {
             nome: data.child == null ? data.user.name : data.child.name,
-            data:  moment(data.dateService).format('DD/MM/YYYY'),
+            data: moment(data.dateService).format('DD/MM/YYYY'),
             horario: data.startTime.concat(' - ', data.endTime),
             especialidade: data.specialty.name,
             status: data.status,
@@ -117,21 +117,19 @@ export class BuscarAtendimentoComponent implements OnInit
         this.toastrService.danger(error.error.message);
 
       });
-    }else {
+    } else {
       this.isActive = false
     }
-    
+
   }
 
   pesquisaMedico(data) {
 
     this.isActive = true
-
     let params = new HttpParams();
-    if(data != null){
+    if (data != null) {
       params = params.append('doctorId', data)
     }
-
 
     this.service.buscaDoctor(params, (response) => {
 
@@ -141,6 +139,20 @@ export class BuscarAtendimentoComponent implements OnInit
     }, (message) => {
       this.isActive = false;
       this.toastrService.danger(message);
+    });
+
+  }
+
+  pesquisaClinica(data) {
+    this.isActive = true
+    this.service.buscaClinica(data, null, (response) => {
+
+      this.listMedico = response
+      this.isActive = false
+
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -160,13 +172,13 @@ export class BuscarAtendimentoComponent implements OnInit
       return false
     }
 
-    if(data.dataInicio > data.dataFim){
+    if (data.dataInicio > data.dataFim) {
       this.toastrService.danger('A data início não pode ser maior que a data fim!!!');
       return false
     }
     var diff = Math.abs(new Date(data.dataFim).getTime() - new Date(data.dataInicio).getTime());
     var diffDays = Math.ceil(diff / (1000 * 3600 * 24))
-    if( diffDays > 15){
+    if (diffDays > 15) {
       this.toastrService.danger('O período de datas deve ser menor ou igual a 15 dias!!!');
       return false
     }
@@ -183,7 +195,7 @@ export class BuscarAtendimentoComponent implements OnInit
     return true;
   }
 
-  agendarAtendimento(){
+  agendarAtendimento() {
 
     this.router.navigate(['/pages/atendimento/novo-atendimento']);
 
@@ -192,5 +204,5 @@ export class BuscarAtendimentoComponent implements OnInit
   detalhes(data) {
     this.router.navigateByUrl('/pages/atendimento/detalhe-atendimento', { state: data.atendimento });
   }
- }
+}
 

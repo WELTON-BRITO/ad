@@ -36,10 +36,10 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/child/all', data, successHandle, erroHandle)
   }
 
-  buscaPaciente(data: any, successHandle: Function, erroHandle: Function) {
-    return this.httpService.doGet('/api/patient/all', data, successHandle, erroHandle)
+  buscaPaciente(data, cpf:any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doGet('/api/user/' + cpf + '/details', data, successHandle, erroHandle)
   }
-
+ 
   salvarAgendamento(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doPost('/api/appointments', data, successHandle, erroHandle)
   }
