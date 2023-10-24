@@ -84,8 +84,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   }
 
   configAtendimento(data) {
-  
-    this.router.navigate(['/pages/configurar-agenda/configurar-dia-atendimento/'], { queryParams: data });
+    this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data }); 
   }
 
   pesquisaMedico(data) {

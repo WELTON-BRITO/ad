@@ -4,7 +4,6 @@ import { AuthenticationService } from '../shared/services/authenticationService.
 import { Component, OnInit } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { LoaderService } from '../shared/component/spinner/loarder/loader.service';
-//import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'ngx-login',
@@ -36,8 +35,8 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('bway-entityId');
 
     this.formLogin = this.formBuilder.group({
-      login: ['', Validators.required],
-      password: ['', Validators.required],
+      login: [null, Validators.required],
+      password: [null, Validators.required],
       lembreMim: [null],
     });
 
@@ -84,11 +83,7 @@ export class LoginComponent implements OnInit {
 
     this.router.navigate(['/pages/dashboard']);
 
-  }
-
-  register() {
-    this.router.navigate(['/cadastro']);
-  }
+  } 
 
   toggle(checked: boolean) {
     this.checked = checked;

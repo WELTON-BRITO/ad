@@ -225,9 +225,7 @@ export class CadastroMedicoComponent implements OnInit {
 
       this.imagem = d.slice(d.indexOf(",") + 1);
       this.avatar = 'data:application/pdf;base64,' + this.imagem;
-    })
-
-    
+    })   
 
   }
 

@@ -101,9 +101,9 @@
           <nb-icon class="action-icon" icon="attach-outline"></nb-icon>
           <span>Ver comprovante</span>
         </nb-action>
-        <nb-action>
-          <nb-icon class="action-icon" icon="phone-call-outline" (click)="abrirConsulta()"></nb-icon>
-          <span>Registrar  atendimento</span>
+        <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'" >
+          <nb-icon class="action-icon" icon="file-outline" (click)="abrirConsulta()"></nb-icon>
+          <span>Atualizar prontuário</span>
         </nb-action>
       </nb-actions>
     </nb-card-body>

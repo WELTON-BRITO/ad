@@ -41,6 +41,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
     public isConfAtendimento = false;
     public dadosHorario = null;
     public isDadosAtendimento = false
+    public tipoPagto = null;
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
@@ -162,6 +163,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
             this.isActive = true;
 
             this.service.buscaDependente(params, (response) => {
+
                 this.childId = response[0].idChild
                 this.listDependente = response
                 this.isActive = false;
@@ -199,11 +201,17 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
     consultaDependente(data) {
 
-        if (data == 'S') {
-            this.isDependente = true;
-
-        } else {
+        if (this.childId == null) {
+            this.toastrService.danger('Não possui dependente!!!');
             this.isDependente = false;
+        } else {
+
+            if (data == 'S') {
+                this.isDependente = true;
+            } else {
+                this.isDependente = false;
+            }
+
         }
     }
 
@@ -245,7 +253,6 @@ export class NovoAtendimentoComponent implements OnDestroy {
             this.isActive = true;
 
             this.service.buscaPaciente(params, (response) => {
-
                 this.isActive = false;
                 this.userId = response[0].user.id
                 this.formNovoAtendimento.controls['nomeResponsavel'].setValue(response[0].user.name);
@@ -272,6 +279,15 @@ export class NovoAtendimentoComponent implements OnDestroy {
         return true;
     }
 
+    consultaPaga(data) {
+
+        if (data == "S") {
+            this.tipoPagto = true
+        } else {
+            this.tipoPagto = false
+        }
+    }
+
     salvar(data) {
 
         var startTime = this.dadosHorario.horario.slice(0, 5)
@@ -291,7 +307,8 @@ export class NovoAtendimentoComponent implements OnDestroy {
             typePaymentId: data.formaPagto,
             typeServiceId: data.tipoConsulta,
             meetingUrl: this.dadosHorario.data.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId),
-            specialtyId: this.specialtyId
+            specialtyId: this.specialtyId,
+            paymentInCreation: this.tipoPagto
 
         }
 

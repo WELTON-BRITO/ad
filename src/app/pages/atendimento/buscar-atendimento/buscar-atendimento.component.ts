@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AtendimentoService } from "../atendimento.service";
-import { EncriptyUtilService } from "../../shared/services/encripty-util.services";
 import { NbToastrService } from "@nebular/theme";
 import { HttpParams } from "@angular/common/http";
 import * as moment from 'moment';
@@ -51,9 +50,7 @@ export class BuscarAtendimentoComponent implements OnInit
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private activatedRouter: ActivatedRoute,
     private service: AtendimentoService,
-    private encriptyService: EncriptyUtilService,
     private toastrService: NbToastrService) {
     }
 
@@ -97,7 +94,6 @@ export class BuscarAtendimentoComponent implements OnInit
       this.service.buscaAtendimentos(params, (response) => {
         this.isActive = false
         this.rowData = response
-        console.log(this.rowData)
         this.rowData = this.rowData.map(data => {
           return {
             nome: data.child == null ? data.user.name : data.child.name,
@@ -110,7 +106,6 @@ export class BuscarAtendimentoComponent implements OnInit
         })
 
       }, (error) => {
-        console.log(error)
         this.isActive = false;
         if (error.error instanceof ErrorEvent) {
           console.error('An error occurred:', error.error.message);

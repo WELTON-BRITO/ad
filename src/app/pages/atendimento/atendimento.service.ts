@@ -59,4 +59,13 @@ export class AtendimentoService {
   aprovarPagamento(data,idAtendimento: any , successHandle:Function, errorHandle:Function) {
     this.httpService.doPut('/api/appointments/' + idAtendimento + '/approvePayment',data, successHandle, errorHandle);
   }
+
+  salvarDetalheAtendimento(data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doPost('/api/appointments/details', data, successHandle, erroHandle)
+  }
+
+  visualizarHistorico(data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doGet('/api/appointments/details', data, successHandle, erroHandle)
+  }
+
 }

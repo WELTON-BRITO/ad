@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { Location } from '@angular/common';
 import { FormBuilder } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { AtendimentoService } from "../atendimento.service";
-import { EncriptyUtilService } from "../../shared/services/encripty-util.services";
 import { NbDialogService, NbToastrService } from "@nebular/theme";
 import { MotivoCancelamentoComponent } from "./motivo-cancelamento/motivo-cancelamento.component";
 import { HttpParams } from "@angular/common/http";
 import { VerComprovanteComponent } from "./ver-comprovante/ver-comprovante.component";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-detalhe-atendimento',
@@ -38,6 +38,7 @@ export class DetalheAtendimentoComponent implements OnInit {
   };
   public showModal: boolean = false;
   public cancellationReason: string = '';
+  public paciente = null;
 
   settings = {
     //actions: false,
@@ -67,9 +68,7 @@ export class DetalheAtendimentoComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private activatedRouter: ActivatedRoute,
     private service: AtendimentoService,
-    private encriptyService: EncriptyUtilService,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
     private location: Location,
@@ -81,16 +80,19 @@ export class DetalheAtendimentoComponent implements OnInit {
     this.atendimento.medico = data.doctor.name
     this.atendimento.paciente = data.child != null ? data.child.name : data.user.name
     this.atendimento.nomeResponsavel = data.user.name
-    this.atendimento.data = data.dateService
+    this.atendimento.data =  moment(data.dateService).format('DD/MM/YYYY')
     this.atendimento.horario = data.startTime.concat(' - ', data.endTime)
     this.atendimento.formaPagamento = data.typePayment
-    this.atendimento.modalidade = data.typeService
+    this.atendimento.modalidade = moment(data.typeService).format('DD/MM/YYYY')
     this.atendimento.urlCall = data.meetingUrl
     this.atendimento.status = data.status
     this.atendimento.especialidade = data.specialty.name
     this.atendimento.convenio = data.plan != null ? data.plan.name : null
     this.atendimento.id = data.id
     this.atendimento.comprovante = data.paymentProof
+
+    this.paciente = data
+
   }
   abrirModalCancelamento() {
     this.dialogService.open(MotivoCancelamentoComponent)
@@ -140,7 +142,7 @@ export class DetalheAtendimentoComponent implements OnInit {
   }
 
   abrirConsulta() {
-    this.router.navigate(['/pages/atendimento/consulta-paciente']);
+    this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: this.paciente });
   }
 
   previousPage() {
@@ -155,7 +157,7 @@ export class DetalheAtendimentoComponent implements OnInit {
       },
     });
   }
-  
+
   goToLink(url: string) {
     window.open(url, "_blank");
   }

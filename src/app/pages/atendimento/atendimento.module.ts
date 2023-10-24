@@ -48,6 +48,6 @@ import { VerComprovanteComponent } from "./detalhe-atendimento/ver-comprovante/v
     DetalheAtendimentoComponent,
     MotivoCancelamentoComponent,
     VerComprovanteComponent,
-  ],
+  ],  
 })
 export class AtendimentoModule { }

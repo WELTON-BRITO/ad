@@ -40,7 +40,19 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-9">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label for="clinica">Escolha a clínica</label>
+                        <select class="form-control" formControlName="clinica" (change)="verificaClinica($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let clinica of listClinica" value="{{ clinica.id }}">{{
+                            clinica.socialName}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group pt-2">
                       <div class="text-right">
                         <button class="btn btn-primary mr-3" (click)="addHora()">
@@ -51,8 +63,10 @@
                         </button>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-group col-md-7">
+                  </div>                  
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-12">
                     <div class="title">
                       Informa a sua data de Início e Fim de Atendimento, caso atenda em mais de um horário adicione mais
                       de uma faixa de horários.

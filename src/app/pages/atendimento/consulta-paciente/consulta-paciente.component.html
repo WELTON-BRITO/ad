@@ -20,32 +20,39 @@
                             <div class="form-group col-md-6 ">
                                 <div class="form-group ">
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Nome: </label></div>
-                                        <label>{{null}} </label>
+                                        <div class="mr-2"><label>Nome:</label></div>
+                                        <label>{{atendimento.nome}} </label>
                                     </div>
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Idade: </label></div>
-                                        <label>{{null}} </label>
+                                        <div class="mr-2"><label>Data Nasc:</label></div>
+                                        <label>{{atendimento.dateNasc}} </label>
                                     </div>
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Sexo: </label></div>
-                                        <label>{{null}} </label>
+                                        <div class="mr-2"><label>Especialidade:</label></div>
+                                        <label>{{atendimento.especialidade}} </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 ">
                                 <div class="form-group ">
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Especialidade: </label></div>
-                                        <label>{{null}} </label>
+                                        <div class="mr-2"><label>Última consulta:</label></div>
+                                        <label>{{atendimento.ultimaConsulta}} </label>
                                     </div>
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Tipo de sangue: </label></div>
-                                        <label>{{null}} </label>
+                                        <div class="mr-2" *ngIf="atendimento.sexo !== null"><label>Sexo:</label>
+                                        </div>
+                                        <label>{{atendimento.sexo}} </label>
+                                        <div class="mr-2" *ngIf="atendimento.sexo == null"><label></label></div>
+                                        <!--<label>{{null}} </label>-->
                                     </div>
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Última consulta: </label></div>
-                                        <label>{{null}} </label>
+                                        <div class="mr-2" *ngIf="atendimento.tipoSanguineo !== null"><label>Tipo de
+                                                sangue:</label></div>
+                                        <label>{{atendimento.tipoSanguineo}} </label>
+                                        <div class="mr-2" *ngIf="atendimento.tipoSanguineo == null"><label></label>
+                                        </div>
+                                        <!--<label>{{null}} </label>-->
                                     </div>
                                 </div>
                             </div>
@@ -56,7 +63,8 @@
                     <nb-card-body>
                         <nb-actions size="large" fullWidth>
                             <nb-action>
-                                <nb-icon class="action-icon" icon="file-text-outline"></nb-icon>
+                                <nb-icon class="action-icon" icon="file-text-outline"
+                                    (click)="consultaHistorico()"></nb-icon>
                                 <span>Ver histórico</span>
                             </nb-action>
                             <nb-action>
@@ -67,34 +75,34 @@
                     </nb-card-body>
                 </nb-card>
                 <div *ngIf="isDetalhes">
-                    <form id="form-novo-atendimento" [formGroup]="formConsultaPaciente">
+                    <form id="form-consulta-paciente" [formGroup]="formConsultaPaciente">
                         <nb-card>
                             <nb-card-body>
                                 <div class="form-row align-items-center">
                                     <div class="form-group col-md-2">
                                         <label for="tempoRetorno">Tempo retorno</label>
                                         <input class="form-control" name="tempoRetorno" id="tempoRetorno" type="text"
-                                            formControlName="tempoRetorno" />
+                                            formControlName="tempoRetorno" (keypress)="number($event)" disabled/>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="altura">Altura</label>
                                         <input class="form-control" name="altura" id="altura" type="text"
-                                            formControlName="altura" />
+                                            formControlName="altura" disabled />
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="peso">Peso</label>
                                         <input class="form-control" name="peso" id="peso" type="text"
-                                            formControlName="peso" />
+                                            formControlName="peso" (keypress)="number($event)" disabled />
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="circCabeca">Circ cabeça</label>
                                         <input class="form-control" name="circCabeca" id="circCabeca" type="text"
-                                            formControlName="circCabeca" />
+                                            formControlName="circCabeca" (keypress)="number($event)" disabled />
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="circAbdomen">Circ abdomen</label>
                                         <input class="form-control" name="circAbdomen" id="circAbdomen" type="text"
-                                            formControlName="circAbdomen" />
+                                            formControlName="circAbdomen" (keypress)="number($event)" disabled />
                                     </div>
                                 </div>
                             </nb-card-body>
@@ -105,15 +113,13 @@
                                     <div class="form-group col-md-6">
                                         <label for="urlReceita">URL receita</label>
                                         <input class="form-control" name="urlReceita" id="urlReceita" type="text"
-                                            formControlName="urlReceita" />
+                                            formControlName="urlReceita" disabled />
                                     </div>
-                                    <div class="form-group col-md-6">
-
+                                    <div class="form-group col-md-6" *ngIf="isReceita">
                                         <div mdbBtn rounded="true" outline="true" color="secondary" size="md"
                                             mdbWavesEffect>
-                                            <label for="circAbdomen">Anexo receita</label>
+                                            <label for="anexoReceita">Anexo receita</label>
                                             <div class="custom-file">
-
                                                 <input class="custom-file-input" type="file" mdbFileSelect
                                                     (change)="onUploadReceita($event)"
                                                     accept="text/xml, application/pdf">
@@ -128,15 +134,15 @@
                                     <div class="form-group col-md-6">
                                         <label for="urlAtestado">URL atestado</label>
                                         <input class="form-control" name="urlAtestado" id="urlAtestado" type="text"
-                                            formControlName="urlAtestado" />
+                                            formControlName="urlAtestado" disabled />
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-6" *ngIf="isAtestado">
                                         <div mdbBtn rounded="true" outline="true" color="secondary" size="md"
                                             mdbWavesEffect>
-                                            <label for="circAbdomen">Anexo atestado</label>
+                                            <label for="anexoAtestado">Anexo atestado</label>
                                             <div class="custom-file">
                                                 <input class="custom-file-input" type="file" mdbFileSelect
-                                                    (change)="onUploadAtestado($event)"
+                                                    (change)="onUploadAtestado($event, $event.target)"
                                                     accept="text/xml, application/pdf">
                                                 <label #inputFileAtestado class="custom-file-label"
                                                     for="validatedCustomFile">Selecione o
@@ -149,13 +155,30 @@
                         </nb-card>
                         <nb-card>
                             <nb-card-body>
+                                <div class="form-row">
+                                    <div class="col-lg-12">
+                                        <div class="input-medica">
+                                            <div><label>Prescrição </label></div>
+                                            <textarea class="form-control" formControlName="prescricaoMedica" rows="3"
+                                                id="prescricaoMedica" placeholder="Prescrição médica" [value]=""
+                                                (keypress)="caracteresMedica()" maxlength="2000" disabled></textarea>
+                                            <p class="text-muted"><small><span class="caracteres"
+                                                        name="txtArea">{{this.tamMedica}}</span></small>
+                                                quantidade máxima de caracteres</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                        <nb-card>
+                            <nb-card-body>
                                 <div class="form-row align-items-center">
                                     <div class="form-group col-md-6">
                                         <div class="input-box">
                                             <label for="detalhesInterno">Detalhes(Interno):</label>
                                             <textarea class="form-control" rows="3" formControlName="detalhesInterno"
-                                                id="detalhesInterno" [value]="null" (keypress)="caracteresInterno()"
-                                                maxlength="2000"></textarea>
+                                                id="detalhesInterno" [value]="" (keypress)="caracteresInterno()"
+                                                maxlength="2000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
                                                         name="txtArea">{{this.tamInterno}}</span></small>
                                                 quantidade máxima de caracteres</p>
@@ -165,8 +188,8 @@
                                         <div class="input">
                                             <label for="detalhesCliente">Detalhes(cliente):</label>
                                             <textarea class="form-control" rows="3" formControlName="detalhesCliente"
-                                                id="detalhesCliente" [value]="null" (keypress)="caracteresCliente()"
-                                                maxlength="2000"></textarea>
+                                                id="detalhesCliente" [value]="" (keypress)="caracteresCliente()"
+                                                maxlength="2000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
                                                         name="txtArea">{{this.tamCliente}}</span></small>
                                                 quantidade máxima de caracteres</p>
@@ -177,7 +200,7 @@
                                     <button class="btn btn-primary m-2" (click)="voltar()">
                                         Voltar
                                     </button>
-                                    <button class="btn btn-success" (click)="salvar(formNovoAtendimento.value)">
+                                    <button class="btn btn-success" (click)="salvar(formConsultaPaciente.value)">
                                         Salvar
                                     </button>
                                 </div>
@@ -185,19 +208,82 @@
                         </nb-card>
                     </form>
                 </div>
+                <div *ngIf="isHistorico">
+                    <div class="form-row align-items-center">
+                        <div class="form-group col-md-12">
+                            <div class="app-box">
+                                <nb-card>
+                                    <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
+                                        [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
+                                        [messages]="{emptyMessage: 'Sem dados...'}" [limit]="10">
+
+                                        <ngx-datatable-column name="Nome" prop="nome">
+                                            <ng-template ngx-datatable-cell-template let-row="row">
+                                                <div class="text-left">
+                                                    {{ row.name }}
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column name="CPF" prop="cpf">
+                                            <ng-template ngx-datatable-cell-template let-row="row">
+                                                <div class="text-center">
+                                                    {{ row.cpf }}
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>                                      
+                                        <ngx-datatable-column name="Data" prop="dataNascimento">
+                                            <ng-template ngx-datatable-cell-template let-row="row">
+                                                <div class="text-center">
+                                                    {{ row.birthDate }}
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
+                                            <ng-template ngx-datatable-cell-template let-row="row">
+                                                <div class="text-center">
+                                                    <a class="home-icon" (click)="visualizar(row)" title="Visualizar">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-footer>
+                                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                                                let-pageSize="pageSize" let-selectedCount="selectedCount"
+                                                let-curPage="curPage" let-offset="offset">
+                                                <div>
+                                                    <div class="page-count">
+                                                        Total de Registros: {{rowCount}}
+                                                    </div>
+                                                </div>
+                                                <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
+                                                    [pagerRightArrowIcon]="'fa fa-angle-double-right '"
+                                                    [pagerPreviousIcon]="'fa fa-angle-left'"
+                                                    [pagerNextIcon]="'fa fa-angle-right '" [page]="curPage"
+                                                    [size]="pageSize" [count]="rowCount"
+                                                    [hidden]="!((rowCount / pageSize) > 1)"
+                                                    (change)="myTable.onFooterPage($event)">
+                                                </datatable-pager>
+                                            </ng-template>
+                                        </ngx-datatable-footer>
+                                    </ngx-datatable>
+                                </nb-card>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div #card>
-    <div class="col-md-12 col-xs-12">
-        <div class="row" *ngIf="isActive" class="loader">
-            <div class="text-center" style="margin-top: -200px;margin-right: 100px;">
-                <button class="btn btn-primary" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Carregando...
-                </button>
+    <div #card>
+        <div class="col-md-12 col-xs-12">
+            <div class="row" *ngIf="isActive" class="loader">
+                <div class="text-center" style="margin-top: -200px;margin-right: 100px;">
+                    <button class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Carregando...
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>

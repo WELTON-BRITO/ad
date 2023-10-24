@@ -1,9 +1,6 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { LocalDataSource } from 'ng2-smart-table';
-import { VisualizarDiaAtendimentoComponent } from '../visualizar-dia-atendimento/visualizar-dia-atendimento.component';
-import { EncriptyUtilService } from '../../shared/services/encripty-util.services';
+import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { ConfigurarDiaAtendimentoService } from './configurar-dia-atendimento.service';
 import { HttpParams } from '@angular/common/http';
@@ -28,6 +25,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   public isActive = true;
   public listMedico = null;
   public listSemana = null;
+  public listClinica = null;
   public tipoCard: any[] = [{
     id: '',
     horaInicio: '',
@@ -40,10 +38,10 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   public horaInicio = [];
   public horaFim = [];
   public timeRange = [];
+  public clinicaId = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private activatedRouter: ActivatedRoute,
     private service: ConfigurarDiaAtendimentoService,
     private toastrService: NbToastrService) {
 
@@ -85,15 +83,14 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
-    this.activatedRouter.queryParams.subscribe(register => {
-      this.doctorId = register.medico;
-      this.pesquisaMedico(this.doctorId)
-    })
-
+    let data = history.state
+    this.doctorId = data.medico
+    this.pesquisaMedico(this.doctorId)
     this.verificaHorario(this.doctorId)
-
+    this.pesquisaClinica(this.doctorId)
     this.formDiaAtendimento = this.formBuilder.group({
-      semana: [null]
+      semana: [null],
+      clinica: [null]
     })
 
   }
@@ -117,6 +114,24 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
 
   }
 
+  pesquisaClinica(data) {
+    
+    this.service.buscaClinica(data, null, (response) => {
+
+      this.listClinica = response
+      this.isActive = false
+
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+    });
+
+  }
+
+  verificaClinica(data){
+    this.clinicaId = data;
+  }
+
   addHora() {
 
     this.tipoCard.push({
@@ -137,7 +152,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
        
         this.timeRange.push(
           {
-            clinicId: null,
+            clinicId: this.clinicaId,
             startTime: this.tipoCard[i].horaInicio,
             endTime:this.tipoCard[i].horaFim
           }
@@ -174,7 +189,8 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
 
   limpaForm() {
     this.formDiaAtendimento = this.formBuilder.group({
-      semana: [null]
+      semana: [null],
+      clinica: [null]
     })
     this.tipoCard.splice(null);
   }

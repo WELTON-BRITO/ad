@@ -190,11 +190,11 @@
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radio"
-                                                                name="optCons" value="S" />
+                                                                name="optCons" value="S" (click)="consultaPaga($event.target.value)"/>
                                                             Sim</label>
                                                         <label class="radio-inline pl-2">
                                                             <input class="mat-button" type="radio" id="radio"
-                                                                name="optCons" value="N" />
+                                                                name="optCons" value="N" (click)="consultaPaga($event.target.value)" />
                                                             Não</label>
                                                     </div>
                                                 </div>
