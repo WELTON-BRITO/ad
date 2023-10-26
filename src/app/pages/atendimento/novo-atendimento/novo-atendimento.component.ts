@@ -30,7 +30,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
     public doctorId = null;
     public clinicId = null;
     public userId = null;
-    public childId = null;
+    public childId = [];
     public specialtyId = null;
     public listTipoConsulta = [];
     public rowData = [];
@@ -40,6 +40,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
     public dadosHorario = null;
     public isDadosAtendimento = false
     public tipoPagto = null;
+    public dependente = null;
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
@@ -86,7 +87,7 @@ export class NovoAtendimentoComponent implements OnDestroy {
             consPagto: [null],
             nomeResponsavel: [null],
             tipoConsulta: [null],
-            tipoEspecialidade: [null]
+            tipoEspecialidade: [null],
         })
 
     }
@@ -165,11 +166,12 @@ export class NovoAtendimentoComponent implements OnDestroy {
             this.service.buscaDependente(params, (response) => {
 
                 if (response.length > 0) {
-                    this.childId = response[0].idChild
                     this.listDependente = response
+                    this.childId = response[0].idChild
                 } else {
                     this.childId = null;
                 }
+
                 this.isActive = false;
             }, (error) => {
                 this.isActive = false;
@@ -197,13 +199,14 @@ export class NovoAtendimentoComponent implements OnDestroy {
             consPagto: [null],
             nomeResponsavel: [null],
             tipoConsulta: [null],
-            tipoEspecialidade: [null]
+            tipoEspecialidade: [null],
         })
 
     }
 
     consultaDependente(data) {
 
+        this.dependente = data
         if (this.childId == null) {
             this.toastrService.danger('Não possui dependente!!!');
             this.isDependente = false;
@@ -299,6 +302,10 @@ export class NovoAtendimentoComponent implements OnDestroy {
         var endTime = this.dadosHorario.horario.slice(8)
         this.clinicId = localStorage.getItem('bway-entityId');
 
+        if (this.dependente == 'N') {
+            this.childId = null
+        }
+
         let register = {
 
             doctorId: this.doctorId,
@@ -320,7 +327,6 @@ export class NovoAtendimentoComponent implements OnDestroy {
         this.isActive = true;
 
         this.service.salvarAgendamento(register, (response => {
-
             this.isActive = false;
             this.toastrService.success('Cadastrado com sucesso !!!');
             this.limpaForm();
@@ -343,6 +349,17 @@ export class NovoAtendimentoComponent implements OnDestroy {
         }
 
         this.verificaEspecialidade(this.doctorId)
+    }
+
+    verificaDependente(data) {
+
+        for (var i = 0; i < this.listDependente.length; i++) {
+
+            if (data == this.listDependente[i].idChild) {
+                this.childId = this.listDependente[i].idChild
+            }
+        }
+
     }
 
     especialidade(data) {
@@ -371,6 +388,9 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
     pesquisarConsulta(data) {
 
+        let date = new Date(data.dataInicio)
+        date.setDate(date.getDate() + 6)
+
         this.tipoCard = [];
         this.isConfAtendimento = false;
 
@@ -380,20 +400,28 @@ export class NovoAtendimentoComponent implements OnDestroy {
             let params = new HttpParams();
             params = params.append('doctorId', data.medico)
             params = params.append('startDate', data.dataInicio)
-            params = params.append('endDate', data.dataInicio)
+            params = params.append('endDate', moment(date).format('YYYY-MM-DD'))
             params = params.append('typeServiceId', data.tipoConsulta)
 
             this.service.buscaHorario(params, (response) => {
 
-                this.tipoCard = response.times,
+                this.tipoCard = response.times;
+                this.tipoCard = this.tipoCard.filter(function (item) {
+                    if (item.status === 'Disponível') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
 
-                    this.tipoCard = this.tipoCard.map(data => {
-                        return {
-                            data: moment(data.date).format('DD/MM/YYYY'),
-                            horario: data.startTime.concat(' - ', data.endTime)
-                        }
+                this.tipoCard = this.tipoCard.map(data => {
 
-                    })
+                    return {
+                        data: moment(data.date).format('DD/MM/YYYY'),
+                        horario: data.startTime.concat(' - ', data.endTime)
+                    }
+
+                })
 
                 this.isActive = false
                 this.isHorario = true;

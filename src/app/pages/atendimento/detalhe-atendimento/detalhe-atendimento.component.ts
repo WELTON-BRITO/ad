@@ -77,13 +77,14 @@ export class DetalheAtendimentoComponent implements OnInit {
 
   ngOnInit() {
     let data = history.state
+
     this.atendimento.medico = data.doctor.name
     this.atendimento.paciente = data.child != null ? data.child.name : data.user.name
     this.atendimento.nomeResponsavel = data.user.name
     this.atendimento.data =  moment(data.dateService).format('DD/MM/YYYY')
     this.atendimento.horario = data.startTime.concat(' - ', data.endTime)
     this.atendimento.formaPagamento = data.typePayment
-    this.atendimento.modalidade = moment(data.typeService).format('DD/MM/YYYY')
+    this.atendimento.modalidade = data.typeService
     this.atendimento.urlCall = data.meetingUrl
     this.atendimento.status = data.status
     this.atendimento.especialidade = data.specialty.name

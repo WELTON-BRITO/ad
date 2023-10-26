@@ -150,12 +150,15 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isAtestado = false;
         this.isReceita = false;
 
+        let date = new Date(this.endDate)
+        date.setDate(date.getDate() + 1)
+
         let params = new HttpParams();
         params = params.append('doctorId', this.atendimento.doctorId)
         params = params.append('userId', this.atendimento.userId)
         params = params.append('childId', this.atendimento.idChild)
         params = params.append('startDate', moment(this.startDate).format('YYYY/MM/DD'))
-        params = params.append('endDate', moment(this.endDate).format('YYYY/MM/DD'))
+        params = params.append('endDate', moment(date).format('YYYY/MM/DD'))
 
         this.isActive = true
 

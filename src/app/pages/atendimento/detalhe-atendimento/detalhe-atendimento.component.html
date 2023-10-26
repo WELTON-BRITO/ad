@@ -53,25 +53,23 @@
       </div>
     </nb-card-body>
   </nb-card>
-  <nb-card>
+  <!--<nb-card>
     <nb-card-header>
       <h5>Informações do atendimento</h5>
     </nb-card-header>
     <nb-card-body>
       <div class="form-row">
-        <div class="col-lg-6">
-          <div><label>Prescrição </label></div>
-          <textarea [disabled]="atendimento.status !== '03 - Consulta Confirmada'" rows="10" nbInput shape="round"
-            placeholder="Prescrição médica" [value]="atendimento.prescricao"></textarea>
-        </div>
-        <div class="col-lg-6">
-          <div><label>Atestado </label></div>
-          <textarea [disabled]="atendimento.status !== '03 - Consulta Confirmada'" rows="10" nbInput shape="round"
-            placeholder="Atestado médico" [value]="atendimento.atestado"></textarea>
-        </div>
+        <div class="col-lg-12">
+          <div class="input-medica">
+              <div><label>Prescrição </label></div>
+              <textarea class="form-control" rows="3"
+                  id="prescricaoMedica" placeholder="Prescrição médica" [value]="atendimento.prescricao" 
+                  [disabled]="atendimento.status !== '03 - Consulta Confirmada'" ></textarea>             
+          </div>
+      </div>            
       </div>
     </nb-card-body>
-  </nb-card>
+  </nb-card>-->
   <nb-card>
     <nb-card-body>
       <nb-actions size="large" fullWidth>
@@ -81,7 +79,7 @@
           <nb-icon class="action-icon" icon="trash-2-outline"></nb-icon>
           <span>Cancelar</span>
         </nb-action>
-        <nb-action *ngIf="atendimento.status ==='01 - Aguardando Aprovação'
+        <nb-action *ngIf="atendimento.status ==='02 - Aguardando Pagamento'
         && atendimento.comprovante !== null" (click)="aprovarPagamento()" >
           <nb-icon class="action-icon" icon="checkmark-circle-outline"></nb-icon>
           <span>Aprovar pagamento</span>
@@ -92,16 +90,16 @@
           <nb-icon class="action-icon" icon="wifi-outline"></nb-icon>
           <span>Iniciar atendimento</span>
         </nb-action>
-        <nb-action>
+        <!--<nb-action>
           <nb-icon class="action-icon" icon="archive-outline"></nb-icon>
           <span>Ver histórico</span>
-        </nb-action>
+        </nb-action>-->
         <nb-action *ngIf="(atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='03 - Consulta Confirmada')
         && atendimento.comprovante !== null" (click)="abrirComprovante()">
           <nb-icon class="action-icon" icon="attach-outline"></nb-icon>
           <span>Ver comprovante</span>
         </nb-action>
-        <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'" >
+        <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada' || atendimento.status === '04 - Consulta Finalizada'" >
           <nb-icon class="action-icon" icon="file-outline" (click)="abrirConsulta()"></nb-icon>
           <span>Atualizar prontuário</span>
         </nb-action>

@@ -127,12 +127,12 @@
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radio"
-                                                                name="optDep" value="S"
+                                                                name="optDep" value="S" 
                                                                 (click)="consultaDependente($event.target.value)" />
                                                             Sim</label>
                                                         <label class="radio-inline pl-2">
                                                             <input class="mat-button" type="radio" id="radio"
-                                                                name="optDep" value="N"
+                                                                name="optDep" value="N"  
                                                                 (click)="consultaDependente($event.target.value)" />
                                                             Não</label>
                                                     </div>
@@ -140,9 +140,10 @@
                                             </div>
                                             <div class="form-group col-md-4" *ngIf="isDependente">
                                                 <label for="incluirDep">Incluir filho(a)</label>
-                                                <select class="form-control" formControlName="incluirDep">
+                                                <select class="form-control" formControlName="incluirDep"
+                                                (change)="verificaDependente($event.target.value)">
                                                     <option value="null" selected>SELECIONE</option>
-                                                    <option *ngFor="let pagto of listDependente" value="{{ pagto.id }}">
+                                                    <option *ngFor="let pagto of listDependente" value="{{ pagto.idChild }}">
                                                         {{pagto.name}}</option>
                                                 </select>
                                             </div>

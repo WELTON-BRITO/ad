@@ -8,13 +8,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
     data:  ['USER','DOCTOR','CLINIC'],
     hidden: false,
   },
-  {
+ /*{
     title: 'Painel',
     icon: 'flip-2-outline',
     link: '/pages/iot-dashboard',
     data: ['USER','DOCTOR','CLINIC'],
     hidden: false,
-  },
+  },*/
   {
     title: 'Atendimento',
     icon: 'clock-outline',
@@ -28,7 +28,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       }
     ]
   },
-  {
+  /*{
     title: 'Visualizar Agenda',
     icon: 'monitor-outline',
     link: '/pages/visualizar-agenda',
@@ -40,7 +40,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/visualizar-agenda/agenda',
       }
     ]
-  },
+  },*/
   {
     title: 'Gestão de Pacientes',
     icon: 'people-outline',
