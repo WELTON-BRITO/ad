@@ -15,7 +15,6 @@ import { NovoAtendimentoComponent } from "./novo-atendimento/novo-atendimento.co
 import { ConsultaPacienteComponent } from "./consulta-paciente/consulta-paciente.component";
 import { DetalheAtendimentoComponent } from "./detalhe-atendimento/detalhe-atendimento.component";
 import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancelamento/motivo-cancelamento.component";
-import { VerComprovanteComponent } from "./detalhe-atendimento/ver-comprovante/ver-comprovante.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -47,7 +46,6 @@ import { VerComprovanteComponent } from "./detalhe-atendimento/ver-comprovante/v
     ConsultaPacienteComponent,
     DetalheAtendimentoComponent,
     MotivoCancelamentoComponent,
-    VerComprovanteComponent,
   ],  
 })
 export class AtendimentoModule { }

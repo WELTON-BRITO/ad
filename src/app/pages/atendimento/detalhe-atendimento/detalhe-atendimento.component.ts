@@ -6,8 +6,6 @@ import { AtendimentoService } from "../atendimento.service";
 import { NbDialogService, NbToastrService } from "@nebular/theme";
 import { MotivoCancelamentoComponent } from "./motivo-cancelamento/motivo-cancelamento.component";
 import { HttpParams } from "@angular/common/http";
-import { VerComprovanteComponent } from "./ver-comprovante/ver-comprovante.component";
-import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import * as moment from 'moment';
 
 @Component({
@@ -71,8 +69,7 @@ export class DetalheAtendimentoComponent implements OnInit {
     private service: AtendimentoService,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
-    private location: Location,
-    private sanitizer: DomSanitizer) {
+    private location: Location,) {
   }
 
   ngOnInit() {
@@ -81,7 +78,7 @@ export class DetalheAtendimentoComponent implements OnInit {
     this.atendimento.medico = data.doctor.name
     this.atendimento.paciente = data.child != null ? data.child.name : data.user.name
     this.atendimento.nomeResponsavel = data.user.name
-    this.atendimento.data =  moment(data.dateService).format('DD/MM/YYYY')
+    this.atendimento.data = moment(data.dateService).format('DD/MM/YYYY')
     this.atendimento.horario = data.startTime.concat(' - ', data.endTime)
     this.atendimento.formaPagamento = data.typePayment
     this.atendimento.modalidade = data.typeService
@@ -151,12 +148,44 @@ export class DetalheAtendimentoComponent implements OnInit {
   }
 
   abrirComprovante() {
-    const safeImageUrl: SafeUrl = this.sanitizer.bypassSecurityTrustUrl(`data:image/jpeg;base64,${this.atendimento.comprovante}`);
-    this.dialogService.open(VerComprovanteComponent, {
-      context: {
-        imageUrl: safeImageUrl,
-      },
-    });
+
+    const blobURL = URL.createObjectURL(this.pdfBlobConversion(this.atendimento.comprovante, 'image/jpeg;base64'));
+    const theWindow = window.open(blobURL);
+    const theDoc = theWindow.document;
+    const theScript = document.createElement('script');
+    function injectThis() {
+      window.print();
+    }
+    theScript.innerHTML = 'window.onload = ${injectThis.toString()};';
+    theDoc.body.appendChild(theScript);
+  }
+
+  pdfBlobConversion(b64Data, contentType) {
+
+    contentType = contentType || '';
+    var sliceSize = 512;
+    b64Data = b64Data.replace(/^[^,]+,/, '');
+    b64Data = b64Data.replace(/\s/g, '');
+    var byteCharacters = window.atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset = offset + sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, { type: contentType });
+
+    return blob;
+
   }
 
   goToLink(url: string) {
