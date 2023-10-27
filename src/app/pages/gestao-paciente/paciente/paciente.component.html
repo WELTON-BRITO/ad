@@ -10,7 +10,7 @@
               </div>
               <div class="form-row align-items-center">
                 <div class="form-group col-md-4">
-                  <label for="nome">Escolha o médico a ser consultado</label>
+                  <label for="nome">Escolha o médico*</label>
                   <select class="form-control" formControlName="medico">
                     <option value="null" selected>SELECIONE</option>
                     <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
@@ -69,18 +69,11 @@
                             {{ row.email }}
                           </div>
                         </ng-template>
-                      </ngx-datatable-column>
-                      <!--<ngx-datatable-column name="Última Consulta" prop="ultimaConsulta">
-                        <ng-template ngx-datatable-cell-template let-row="row">
-                          <div class="text-center">
-                            {{ row.idPatient }}
-                          </div>
-                        </ng-template>
-                      </ngx-datatable-column>-->
-                      <ngx-datatable-column name="Data de Nascimento" prop="dataNascimento">
+                      </ngx-datatable-column>                     
+                      <ngx-datatable-column name="CPF" prop="cpf">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center pt-4">
-                            {{ row.birthDate }}
+                            {{ row.federalId }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>                     

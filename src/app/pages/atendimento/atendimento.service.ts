@@ -6,15 +6,7 @@ import { HttpService } from '../shared/services/http/http-client.service';
 })
 export class AtendimentoService {
 
-  constructor(private httpService: HttpService) { }
-
-  buscaDoctor(data: any, successHandle: Function, erroHandle: Function) {
-    return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
-  }
-
-  buscaClinica(id: any, data: any, successHandle: Function, erroHandle: Function) {
-    return this.httpService.doGet('/api/doctor/clinic/' + id, data, successHandle, erroHandle)
-  }
+  constructor(private httpService: HttpService) { } 
 
   buscaSpecialty(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/specialty/all', data, successHandle, erroHandle)
@@ -28,10 +20,10 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/configuration/payment/all', data, successHandle, erroHandle)
   }
 
-  buscaConvenio(data: any, successHandle: Function, erroHandle: Function) {
-    return this.httpService.doGet('/api/healthPlan/all', data, successHandle, erroHandle)
-  }
-
+  buscaConvenio(id:any, data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/healthPlan/doctor/' + id, data, successHandle, erroHandle)
+  } 
+  
   buscaDependente(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/child/all', data, successHandle, erroHandle)
   }

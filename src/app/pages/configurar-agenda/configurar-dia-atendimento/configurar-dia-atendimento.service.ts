@@ -11,11 +11,7 @@ export class ConfigurarDiaAtendimentoService {
   buscaDiaAtendimento(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('', data, successHandle, erroHandle)
   }
-
-  buscaDoctor(data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
-  }
-
+   
   salveAtenHora(data: any, successHandle: Function, errorHandle: Function) {
     return this.httpService.doPost('/api/schedule', data, successHandle, errorHandle);
   }

@@ -93,16 +93,8 @@ export class NovoPacienteComponent implements OnDestroy {
   ngOnDestroy() { }
 
   ngOnInit() {
-
-    var name = localStorage.getItem('bway-domain');
-    var id = localStorage.getItem('bway-entityId');
-
-    if (name == 'CLINIC') {
-      this.pesquisaClinica(id)
-    } else {
-      this.pesquisaMedico(id);
-    }
-
+    
+    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.buscaEstado();
     this.buscaConvenio();
     this.formNovoPaciente = this.formBuilder.group({
@@ -350,37 +342,6 @@ export class NovoPacienteComponent implements OnDestroy {
 
   verificaMedico(data) {
     this.doctorId = data
-  }
-
-  pesquisaMedico(data) {
-
-    this.isActive = true
-
-    let params = new HttpParams();
-    params = params.append('doctorId', data)
-
-    this.service.buscaDoctor(params, (response) => {
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
-
-  }
-
-  pesquisaClinica(data) {
-    this.isActive = true
-    this.service.buscaClinica(data, null, (response) => {
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
-
   }
 
   viewdiv(data) {

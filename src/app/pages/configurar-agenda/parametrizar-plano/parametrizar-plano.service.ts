@@ -8,14 +8,6 @@ import { an } from '@fullcalendar/core/internal-common';
 export class ParametrizarPlanoService {
 
   constructor(private httpService:HttpService) { }
-
-  buscaDoctor(data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
-  }
-
-  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/doctor/clinic/' + id, data, successHandle, erroHandle)
-  } 
  
   convenioAssociado(id:any, data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/healthPlan/doctor/' + id, data, successHandle, erroHandle)

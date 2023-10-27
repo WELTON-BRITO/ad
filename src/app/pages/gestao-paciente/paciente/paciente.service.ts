@@ -8,14 +8,6 @@ export class PacienteService {
 
   constructor(private httpService:HttpService) { }
 
-  buscaDoctor(data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
-  }
-
-  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/doctor/clinic/' + id, data, successHandle, erroHandle)
-  } 
-
   buscaPaciente(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/patient/all', data, successHandle, erroHandle)
   }

@@ -12,7 +12,7 @@ import { HttpParams } from '@angular/common/http';
 })
 export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
-  public formVisualizarDiaAtendimento = null; 
+  public formVisualizarDiaAtendimento = null;
   public listMedico = null;
   public listSemana = null;
   public rowData: any = [];
@@ -24,7 +24,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   public sexta = null;
   public sabado = null;
   public domingo = null;
-  public isActive = true;
+  public isActive = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -68,14 +68,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
     document.getElementById('bntConfig').setAttribute('disabled', 'true');
 
-    var name = localStorage.getItem('bway-domain');
-    var id = localStorage.getItem('bway-entityId');   
-    
-    if(name == 'CLINIC'){
-      this.pesquisaClinica(id)
-    }else{
-      this.pesquisaMedico(id);
-    }
+    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
     this.formVisualizarDiaAtendimento = this.formBuilder.group({
       medico: [null],
@@ -83,60 +76,27 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
   }
 
-  configAtendimento(data) {
-    this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data }); 
-  }
-
-  pesquisaMedico(data) {
-
-    this.isActive = true
-
-    let params = new HttpParams();
-    params = params.append('doctorId', data)
-
-    this.service.buscaDoctor(params, (response) => {
-
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });    
-
-  }
- 
- pesquisaClinica(data) {
-    this.isActive = true   
-    this.service.buscaClinica(data, null, (response) => {
-
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
-
+  configAtendimento(data) {    
+    this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data });
   }
 
   verificaHorario(data) {
     this.isActive = true
     this.rowData = [];
-    
+
     let params = new HttpParams();
     params = params.append('doctorId', data)
 
     this.service.agendaDoctor(params, (response) => {
 
-      if(response.length != 0){        
-        
+      if (response.length != 0) {
+
         this.rowData = response;
 
         this.rowData = this.rowData.map(data => {
 
           if (data.weekday == 1) {
-            this.segunda = [data.startTime.concat(' - ', data.endTime)]   
+            this.segunda = [data.startTime.concat(' - ', data.endTime)]
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
@@ -144,56 +104,56 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 2) {
-            this.terca = [data.startTime.concat(' - ', data.endTime)]  
+            this.terca = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;          
+            this.domingo = null;
           } else if (data.weekday == 3) {
-            this.quarta = [data.startTime.concat(' - ', data.endTime)] 
+            this.quarta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quinta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;              
+            this.domingo = null;
           } else if (data.weekday == 4) {
-            this.quinta = [data.startTime.concat(' - ', data.endTime)]  
+            this.quinta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;             
+            this.domingo = null;
           } else if (data.weekday == 5) {
-            this.sexta = [data.startTime.concat(' - ', data.endTime)]    
+            this.sexta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sabado = null;
-            this.domingo = null;           
+            this.domingo = null;
           } else if (data.weekday == 6) {
-            this.sabado = [data.startTime.concat(' - ', data.endTime)]    
+            this.sabado = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
-            this.domingo = null;            
+            this.domingo = null;
           } else if (data.weekday == 7) {
-            this.domingo = [data.startTime.concat(' - ', data.endTime)]  
+            this.domingo = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
-            this.sabado = null;              
+            this.sabado = null;
           }
-  
-          return {           
+
+          return {
             segunda: this.segunda,
             terca: this.terca,
             quarta: this.quarta,
@@ -205,9 +165,8 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
         })
         this.isActive = false
         document.getElementById('bntConfig').removeAttribute('disabled');
-      }else{
+      } else {
         this.isActive = false
-        //this.toastrService.warning('Não possui hora marcada !!!');
         document.getElementById('bntConfig').removeAttribute('disabled');
       }
 
@@ -217,5 +176,5 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
     });
 
   }
- 
+
 }

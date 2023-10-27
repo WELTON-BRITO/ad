@@ -64,17 +64,8 @@ export class NovoAtendimentoComponent implements OnDestroy {
     ngOnDestroy() { }
     ngOnInit() {
 
-        var name = localStorage.getItem('bway-domain');
-        var id = localStorage.getItem('bway-entityId');
-
-        if (name == 'CLINIC') {
-            this.pesquisaClinica(id)
-        } else {
-            this.pesquisaMedico(id);
-        }
-
+        this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
         this.pagamento();
-        this.buscaConvenio();
         this.formNovoAtendimento = this.formBuilder.group({
             medico: [null],
             cpf: [null],
@@ -92,41 +83,6 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
     }
 
-    pesquisaMedico(data) {
-
-        this.isActive = true
-
-        let params = new HttpParams();
-        if (data != null) {
-            params = params.append('doctorId', data)
-        }
-
-        this.service.buscaDoctor(params, (response) => {
-
-            this.listMedico = response
-            this.isActive = false
-
-        }, (error) => {
-            this.isActive = false;
-            this.toastrService.danger(error.error.message);
-        });
-
-    }
-
-    pesquisaClinica(data) {
-        this.isActive = true
-        this.service.buscaClinica(data, null, (response) => {
-
-            this.listMedico = response
-            this.isActive = false
-
-        }, (error) => {
-            this.isActive = false;
-            this.toastrService.danger(error.error.message);
-        });
-
-    }
-
     pagamento() {
         this.isActive = true
         this.service.buscaPagamentos(null, (response) => {
@@ -141,9 +97,9 @@ export class NovoAtendimentoComponent implements OnDestroy {
 
     }
 
-    buscaConvenio() {
+    buscaConvenio(data) {
 
-        this.service.buscaConvenio(null, (response) => {
+        this.service.buscaConvenio(data, null, (response) => {
 
             this.listConvenio = response
 
@@ -348,7 +304,8 @@ export class NovoAtendimentoComponent implements OnDestroy {
             }
         }
 
-        this.verificaEspecialidade(this.doctorId)
+        this.verificaEspecialidade(this.doctorId);
+        this.buscaConvenio(this.doctorId);
     }
 
     verificaDependente(data) {

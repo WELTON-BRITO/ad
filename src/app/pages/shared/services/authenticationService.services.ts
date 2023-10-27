@@ -45,6 +45,11 @@ export class AuthenticationService {
     token = token.replace('"', '').replace('"', '');   
     localStorage.setItem('bway-enterprise-name', '');
     localStorage.setItem('bway-user', '');   
+    sessionStorage.removeItem('bway-medico');
+    localStorage.setItem('Authorization', '');    
+    localStorage.setItem('bway-logged-date', '');
+    localStorage.setItem('bway-domain', '');
+    localStorage.setItem('bway-entityId', '');
     this.router.navigate(['/login']);        
      
   } 

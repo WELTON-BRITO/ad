@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { HttpService } from '../shared/services/http/http-client.service';
 
 
 @Injectable({
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class LoginService {
 
-  constructor() { }
+  constructor(private httpService: HttpService) { }
 
   private toggle:boolean = true;
 
@@ -18,5 +19,13 @@ export class LoginService {
   setToggle(data:boolean){
     this.toggle = data;
   }
+
+  buscaDoctor(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
+  }
+
+  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/doctor/clinic/' + id, data, successHandle, erroHandle)
+  } 
   
 }

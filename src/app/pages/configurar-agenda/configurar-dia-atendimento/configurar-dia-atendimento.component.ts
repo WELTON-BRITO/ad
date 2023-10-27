@@ -83,34 +83,22 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
+    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     let data = history.state
-    this.doctorId = data.medico
-    this.pesquisaMedico(this.doctorId)
+
+    for (var i = 0; i < this.listMedico.length; i++) {
+      if(data.medico == this.listMedico[i].id){
+        this.doctorId = this.listMedico[i].id
+        this.doctor = this.listMedico[i].name
+      }    
+    }  
+        
     this.verificaHorario(this.doctorId)
     this.pesquisaClinica(this.doctorId)
     this.formDiaAtendimento = this.formBuilder.group({
       semana: [null],
       clinica: [null]
     })
-
-  }
-
-  pesquisaMedico(data) {
-
-    this.isActive = true
-    let params = new HttpParams();
-
-    params = params.append('doctorId', data)
-
-    this.service.buscaDoctor(params, (response) => {
-      this.listMedico = response[0].id
-      this.doctor = response[0].name
-      this.isActive = false;
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
 
   }
 

@@ -16,10 +16,10 @@ export class BuscarAtendimentoComponent implements OnInit {
   public doctorId = null;
   public formBuscarAtendimento = null;
   public listMedico = null;
-  public isActive = true;
+  public isActive = false;
   public rowData = null;
   public showMsgErro = false;
-
+  
 
   settings = {
     //actions: false,
@@ -54,6 +54,8 @@ export class BuscarAtendimentoComponent implements OnInit {
   }
 
   ngOnInit() {
+   
+    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
     this.formBuscarAtendimento = this.formBuilder.group({
       dataInicio: [null, Validators.required],
@@ -65,14 +67,6 @@ export class BuscarAtendimentoComponent implements OnInit {
 
     var initData = []
     this.rowData = initData;
-    var name = localStorage.getItem('bway-domain');
-    var id = localStorage.getItem('bway-entityId');
-
-    if (name == 'CLINIC') {
-      this.pesquisaClinica(id)
-    } else {
-      this.pesquisaMedico(id);
-    }
 
   }
 
@@ -120,40 +114,6 @@ export class BuscarAtendimentoComponent implements OnInit {
     } else {
       this.isActive = false
     }
-
-  }
-
-  pesquisaMedico(data) {
-
-    this.isActive = true
-    let params = new HttpParams();
-    if (data != null) {
-      params = params.append('doctorId', data)
-    }
-
-    this.service.buscaDoctor(params, (response) => {
-
-      this.listMedico = response
-      this.isActive = false
-
-    }, (message) => {
-      this.isActive = false;
-      this.toastrService.danger(message);
-    });
-
-  }
-
-  pesquisaClinica(data) {
-    this.isActive = true
-    this.service.buscaClinica(data, null, (response) => {
-
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
 
   }
 

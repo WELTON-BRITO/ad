@@ -4,9 +4,7 @@
       <div class="dialog-body">
         <nb-card>
           <nb-card-body>
-            <form
-              id="form-buscar-atendimento"
-              [formGroup]="formBuscarAtendimento">
+            <form id="form-buscar-atendimento" [formGroup]="formBuscarAtendimento">
               <div class="col-md-12 col-xs-12">
                 <div class="form-group col-md-4">
                   <h5 class="ml-lg-n3">Atendimento</h5>
@@ -15,12 +13,10 @@
                   <div class="form-group col-md-4 ">
                     <div class="form-group ">
                       <div class="div-medico mb-4">
-                        <label for="medico">Escolha o médico * </label>
+                        <label for="medico">Escolha o médico* </label>
                         <select class="form-control" formControlName="medico">
                           <option value="null" selected>SELECIONE</option>
-                          <option
-                            *ngFor="let medico of listMedico"
-                            value="{{ medico.id }}">
+                          <option *ngFor="let medico of listMedico" value="{{ medico.id }}">
                             {{ medico.name }}
                           </option>
                         </select>
@@ -37,46 +33,33 @@
                       <label for="nome">Buscar por periodo *</label>
                       <div class="form-row">
                         <div class="div-data-inicio col-md-6 px-1">
-                          <input
-                            class="form-control date"
-                            type="date"
-                            id="dataInicio"
-                            name="Data Início"
-                            formControlName="dataInicio"
-                            maxlength="10"/>
+                          <input class="form-control date" type="date" id="dataInicio" name="Data Início"
+                            formControlName="dataInicio" maxlength="10" value="" />
                         </div>
                         <div class="div-data-fim col-md-6">
-                          <input
-                            class="form-control date"
-                            type="date"
-                            id="dataFim"
-                            name="Data Fim"
-                            formControlName="dataFim"
-                            maxlength="10"/>
+                          <input class="form-control date" type="date" id="dataFim" name="Data Fim"
+                            formControlName="dataFim" maxlength="10" />
                         </div>
                       </div>
                     </div>
-                      <div class="form-row">
-                        <div class="div-cpf col-md-6"> <label for="cpf">Buscar por cpf</label>
-                          <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf" mask="000.000.000-00"
-                            maxlength="14" (change)="isValidCpf(formBuscarAtendimento.value)" placeholder="000.000.000-00"/>
-                          <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
-                            {{this.msgErro}} <br /><br />
-                          </div>
+                    <div class="form-row">
+                      <div class="div-cpf col-md-6"> <label for="cpf">Buscar por cpf</label>
+                        <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
+                          mask="000.000.000-00" maxlength="14" (change)="isValidCpf(formBuscarAtendimento.value)"
+                          placeholder="000.000.000-00" />
+                        <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
+                          {{this.msgErro}} <br /><br />
                         </div>
                       </div>
+                    </div>
                   </div>
                   <div class="col-md-12">
                     <div class="form-group">
                       <div class="text-right">
-                        <button
-                          class="btn btn-primary mr-2"
-                          (click)="buscarAtendimento(formBuscarAtendimento.value)" >
+                        <button class="btn btn-primary mr-2" (click)="buscarAtendimento(formBuscarAtendimento.value)">
                           BUSCAR ATENDIMENTOS
                         </button>
-                        <button
-                          class="btn btn-success ml-2"
-                          (click)="agendarAtendimento()">
+                        <button class="btn btn-success ml-2" (click)="agendarAtendimento()">
                           AGENDAR ATENDIMENTO
                         </button>
                       </div>
@@ -91,10 +74,9 @@
               <div class="form-row align-items-center">
                 <div class="form-group col-md-12">
                   <div class="app-box">
-                    <ngx-datatable
-                      #myTable class="bootstrap" [rows]="rowData"
-                      [columnMode]="'force'" [headerHeight]="35" [footerHeight]="50"
-                      [rowHeight]="'auto'" [messages]="{ emptyMessage: 'Sem dados...' }" [limit]="8">
+                    <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
+                      [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
+                      [messages]="{ emptyMessage: 'Sem dados...' }" [limit]="8">
                       <ngx-datatable-column name="Data" prop="data">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
@@ -116,33 +98,33 @@
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column
-                        name="Especialidade"
-                        prop="especialidade">
+                      <ngx-datatable-column name="Especialidade" prop="especialidade">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
                             {{ row.especialidade }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column
-                        name="Status"
-                        prop="status">
+                      <ngx-datatable-column name="Status" prop="status">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
                             {{ row.status }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column
-                        name="Ações"
-                        prop="acoes">
+                      <ngx-datatable-column name="Ações" prop="acoes">
                         <ng-template ngx-datatable-cell-template let-row="row">
-                          <div class="text-center"><a class="home-icon" (click)="detalhes(row)">
-                              <i class="fa fa-info-circle fa-2x" aria-hidden="true"> </i>
-                            </a>
+                          <div class="datatable-body-box-actions">
+                            <button class="btn home-icon" (click)="detalhes(row)" title="Detalhe">
+                              <i class="fa fa-info-circle"></i>
+                            </button>
+                            <button class="btn home-icon" title="Iniciar atendimento">
+                              <i class="fa fa-wifi"></i>
+                            </button>
+                            <button class="btn home-icon" title="Vídeo atendimento">
+                              <i class="fa fa-video"></i>
+                            </button>
                           </div>
-
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-footer>
@@ -154,10 +136,9 @@
                             </div>
                           </div>
                           <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
-                            [pagerRightArrowIcon]="'fa fa-angle-double-right '"[pagerPreviousIcon]="'fa fa-angle-left'"
-                            [pagerNextIcon]="'fa fa-angle-right '" [page]="curPage" [size]="pageSize"
-                            [count]="rowCount" [hidden]="!(rowCount / pageSize > 1)"
-                            (change)="myTable.onFooterPage($event)">
+                            [pagerRightArrowIcon]="'fa fa-angle-double-right '" [pagerPreviousIcon]="'fa fa-angle-left'"
+                            [pagerNextIcon]="'fa fa-angle-right '" [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!(rowCount / pageSize > 1)" (change)="myTable.onFooterPage($event)">
                           </datatable-pager>
                         </ng-template>
                       </ngx-datatable-footer>

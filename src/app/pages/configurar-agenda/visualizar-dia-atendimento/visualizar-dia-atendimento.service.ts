@@ -6,15 +6,7 @@ import { HttpService } from '../../shared/services/http/http-client.service';
 })
 export class VisualizarDiaAtendimentoService {
 
-  constructor(private httpService:HttpService) { }
-
-  buscaDoctor(data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/doctor/all', data, successHandle, erroHandle)
-  }
-
-  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/doctor/clinic/' + id, data, successHandle, erroHandle)
-  } 
+  constructor(private httpService:HttpService) { } 
 
   agendaDoctor(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/schedule/all', data, successHandle, erroHandle)

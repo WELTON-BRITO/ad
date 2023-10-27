@@ -34,55 +34,14 @@ export class GerarQrCodeComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
-    var name = localStorage.getItem('bway-domain');
-    var id = localStorage.getItem('bway-entityId');
-
-    if (name == 'CLINIC') {
-      this.pesquisaClinica(id)
-    } else {
-      this.pesquisaMedico(id);
-    }
+    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
     this.formQrCode = this.formBuilder.group({
       qrCode: [null],
       medico: [null]
     })
 
-  }
-
-  pesquisaMedico(data) {
-
-    this.isActive = true
-
-    let params = new HttpParams();
-    params = params.append('doctorId', data)
-
-    this.service.buscaDoctor(params, (response) => {
-
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
-
-  }
-
-  pesquisaClinica(data) {
-    this.isActive = true
-    this.service.buscaClinica(data, null, (response) => {
-
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
-
-  }
-
+  } 
 
   verificaValor(data) {
 

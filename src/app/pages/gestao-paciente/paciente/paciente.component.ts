@@ -17,7 +17,7 @@ export class PacienteComponent implements OnInit {
   public listPaciente = null;
   public rowData = null;
   public listMedico = null;
-  public isActive = true;
+  public isActive = false;
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: PacienteService,
@@ -26,14 +26,7 @@ export class PacienteComponent implements OnInit {
 
   ngOnInit() {
 
-    var name = localStorage.getItem('bway-domain');
-    var id = localStorage.getItem('bway-entityId');
-
-    if (name == 'CLINIC') {
-      this.pesquisaClinica(id)
-    } else {
-      this.pesquisaMedico(id);
-    }
+    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
     this.formPaciente = this.formBuilder.group({
       pesquisa: [null],
@@ -61,7 +54,6 @@ export class PacienteComponent implements OnInit {
 
         this.isActive = false;
         this.rowData = response
-
         this.rowData = this.rowData.map(data => {
 
           return {
@@ -69,7 +61,7 @@ export class PacienteComponent implements OnInit {
             name: data.user.name,
             cellPhone: data.user.cellPhone,
             email: data.user.emailUser,
-            birthDate: moment(data.user.birthDate).format('DD/MM/YYYY'),
+            federalId: data.user.federalId,
           }
         })
 
@@ -83,41 +75,7 @@ export class PacienteComponent implements OnInit {
     }
 
   }
-
-  pesquisaMedico(data) {
-
-    this.isActive = true
-
-    let params = new HttpParams();
-    params = params.append('doctorId', data)
-
-    this.service.buscaDoctor(params, (response) => {
-
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
-
-  }
-
-  pesquisaClinica(data) {
-    this.isActive = true
-    this.service.buscaClinica(data, null, (response) => {
-
-      this.listMedico = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-
-    });
-
-  }
-
+ 
   novoPaciente() {
     this.router.navigate(['/pages/gestao-paciente/novo-paciente']);
   }
