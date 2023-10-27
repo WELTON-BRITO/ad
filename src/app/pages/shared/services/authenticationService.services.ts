@@ -46,10 +46,10 @@ export class AuthenticationService {
     localStorage.setItem('bway-enterprise-name', '');
     localStorage.setItem('bway-user', '');   
     sessionStorage.removeItem('bway-medico');
-    localStorage.setItem('Authorization', '');    
-    localStorage.setItem('bway-logged-date', '');
-    localStorage.setItem('bway-domain', '');
-    localStorage.setItem('bway-entityId', '');
+    localStorage.removeItem('Authorization');    
+    localStorage.removeItem('bway-logged-date');
+    localStorage.removeItem('bway-domain');
+    localStorage.removeItem('bway-entityId');
     this.router.navigate(['/login']);        
      
   } 

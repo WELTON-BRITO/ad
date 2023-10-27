@@ -32,12 +32,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-    /*localStorage.removeItem('bway-token');
-    localStorage.removeItem('bway-logged-date');
-    localStorage.removeItem('bway-domain');
-    localStorage.removeItem('bway-entityId');*/
-
+   
     this.formLogin = this.formBuilder.group({
       login: [null, Validators.required],
       password: [null, Validators.required],
@@ -60,6 +55,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.isActive = true;
+    localStorage.setItem('Authorization', '1'); 
 
     this.service.loader
 
