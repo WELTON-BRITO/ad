@@ -1,5 +1,5 @@
 import { Component, ErrorHandler, OnInit } from '@angular/core';
-import { FormBuilder, Validators  } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PacienteService } from './paciente.service';
 import { HttpParams } from '@angular/common/http';
@@ -34,8 +34,7 @@ export class PacienteComponent implements OnInit {
       medico: [this.listMedico[0], Validators.required]
     })
 
-    this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
-
+    this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
 
   }
 
@@ -79,7 +78,7 @@ export class PacienteComponent implements OnInit {
     }
 
   }
- 
+
   novoPaciente() {
     this.router.navigate(['/pages/gestao-paciente/novo-paciente']);
   }

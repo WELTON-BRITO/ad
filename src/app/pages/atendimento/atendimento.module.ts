@@ -15,6 +15,8 @@ import { NovoAtendimentoComponent } from "./novo-atendimento/novo-atendimento.co
 import { ConsultaPacienteComponent } from "./consulta-paciente/consulta-paciente.component";
 import { DetalheAtendimentoComponent } from "./detalhe-atendimento/detalhe-atendimento.component";
 import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancelamento/motivo-cancelamento.component";
+import { AutosizeModule } from "@techiediaries/ngx-textarea-autosize";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancel
     Ng2SmartTableModule,
     NgxDatatableModule,
     NbDatepickerModule.forRoot(),
-    NbDatepickerModule,
+    NbDatepickerModule,   
+    AutosizeModule 
   ],
   declarations: [
     AtendimentoComponent,
@@ -45,7 +48,7 @@ import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancel
     NovoAtendimentoComponent,
     ConsultaPacienteComponent,
     DetalheAtendimentoComponent,
-    MotivoCancelamentoComponent,
+    MotivoCancelamentoComponent,    
   ],  
 })
 export class AtendimentoModule { }

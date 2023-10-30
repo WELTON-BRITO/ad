@@ -34,6 +34,7 @@ import { ConfigurarAgendaRoutingModule } from './pages/configurar-agenda/configu
 import { ErrorHandlerService } from './pages/shared/services/http/error-handler.service';
 import { AtendimentoModule } from './pages/atendimento/atendimento.module';
 import { AtendimentoRoutingModule } from './pages/atendimento/atendimento-routing-module';
+import { AutosizeModule } from '@techiediaries/ngx-textarea-autosize';
 
 
 @NgModule({
@@ -67,6 +68,7 @@ import { AtendimentoRoutingModule } from './pages/atendimento/atendimento-routin
     ConfigurarAgendaRoutingModule,
     AtendimentoRoutingModule,
     AtendimentoModule,
+    AutosizeModule
    ],
   providers:    [
     { provide: LOCALE_ID, useValue: 'pt' },

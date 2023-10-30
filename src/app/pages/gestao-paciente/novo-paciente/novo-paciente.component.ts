@@ -36,6 +36,8 @@ export class NovoPacienteComponent implements OnDestroy {
   public doctorId = null;
   public avatar = null;
   public avatarDep = null;
+  public msgErro = 'Data inválida!!!';
+  public showMsgErro = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -93,7 +95,7 @@ export class NovoPacienteComponent implements OnDestroy {
   ngOnDestroy() { }
 
   ngOnInit() {
-    
+
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.buscaEstado();
     this.buscaConvenio();
@@ -397,7 +399,7 @@ export class NovoPacienteComponent implements OnDestroy {
     })
 
     observable.subscribe((d: String) => {
-      
+
       if (element.id == 'imagem') {
         this.imagem = d.slice(d.indexOf(",") + 1);
         this.avatar = 'data:application/pdf;base64,' + this.imagem;
@@ -423,6 +425,51 @@ export class NovoPacienteComponent implements OnDestroy {
       subscribe.error()
       subscribe.complete()
     }
+  }
+
+  validaData(stringData) {
+
+    var regExpCaracter = /[^\d]/;     //Expressão regular para procurar caracter não-numérico.
+    var regExpEspaco = /^\s+|\s+$/g;  //Expressão regular para retirar espaços em branco.
+
+    if (stringData.length != 10) {
+      this.showMsgErro = true;
+      return false;
+    }
+
+    let splitData = stringData.split('-');
+
+    if (splitData.length != 3) {
+      return false;
+    }
+
+    splitData[0] = splitData[0].replace(regExpEspaco, '');
+    splitData[1] = splitData[1].replace(regExpEspaco, '');
+    splitData[2] = splitData[2].replace(regExpEspaco, '');
+
+    if ((splitData[0].length != 4) || (splitData[1].length != 2) || (splitData[2].length != 2)) {
+      return false;
+    }
+
+    let ano = parseInt(splitData[0], 10);
+    let mes = parseInt(splitData[1], 10) - 1;
+    let dia = parseInt(splitData[2], 10);
+    var novaData = new Date(ano, mes, dia);
+    var hoje = new Date();
+
+    if (novaData > hoje) {
+      return false;
+    }
+
+    if ((novaData.getDate() != dia) || (novaData.getMonth() != mes) || (novaData.getFullYear() != ano)) {
+      this.showMsgErro = true;
+      return false;
+    }
+    else {
+      this.showMsgErro = false;
+      return true;
+    }
+
   }
 
   previousPage() {

@@ -84,7 +84,10 @@
                       <label for="dateNasc">Data de nascimento*</label>
                       <div class="row pl-3">
                         <input class="date" type="date" id="dateNasc" name="mydate" formControlName="dateNasc"
-                          maxlength="10" />
+                          maxlength="10" (blur)="validaData($event.target.value)" />
+                      </div>
+                      <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
+                        {{this.msgErro}} <br/>
                       </div>
                     </div>
                   </div>
@@ -222,7 +225,10 @@
                       <label for="dateNascDep">Data de nascimento</label>
                       <div class="row pl-3">
                         <input class="date" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
-                          maxlength="10" />
+                          maxlength="10"  (blur)="validaData($event.target.value)" />
+                      </div>
+                      <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
+                        {{this.msgErro}} <br />
                       </div>
                     </div>
                   </div>

@@ -59,7 +59,7 @@
                         </div>
                     </nb-card-body>
                 </nb-card>
-                <nb-card *ngIf="isBnt">
+                <nb-card>
                     <nb-card-body>
                         <nb-actions size="large" fullWidth>
                             <nb-action>
@@ -159,7 +159,7 @@
                                     <div class="col-lg-12">
                                         <div class="input-medica">
                                             <div><label>Prescrição </label></div>
-                                            <textarea class="form-control" formControlName="prescricaoMedica" rows="3"
+                                            <textarea autosize class="form-control" formControlName="prescricaoMedica" rows="3"
                                                 id="prescricaoMedica" placeholder="Prescrição médica" [value]=""
                                                 (keypress)="caracteresMedica()" maxlength="2000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
@@ -172,7 +172,7 @@
                                     <div class="col-lg-12">
                                         <div class="input-box">
                                             <label for="detalhesInterno">Detalhes(Interno):</label>
-                                            <textarea class="form-control" rows="3" formControlName="detalhesInterno"
+                                            <textarea autosize class="form-control" rows="3" formControlName="detalhesInterno"
                                                 id="detalhesInterno" [value]="" (keypress)="caracteresInterno()"
                                                 maxlength="2000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
@@ -185,7 +185,7 @@
                                     <div class="col-lg-12">
                                         <div class="input">
                                             <label for="detalhesCliente">Detalhes(cliente):</label>
-                                            <textarea class="form-control" rows="3" formControlName="detalhesCliente"
+                                            <textarea autosize class="form-control" rows="3" formControlName="detalhesCliente"
                                                 id="detalhesCliente" [value]="" (keypress)="caracteresCliente()"
                                                 maxlength="2000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"

@@ -29,7 +29,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
     public formConsultaPaciente = null;
     public isActive = false;
-    public isBnt = true;
     public isDetalhes = false;
     public isHistorico = false;
     public isAtestado = false;
@@ -54,10 +53,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public anexoAtestado = null;
     public anexoReceita = null;
     public rowData = null;
-
     public endDate = new Date()
     public startDate = new Date((new Date().valueOf() - 1000 * 60 * 60 * 2200))
-
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
@@ -124,7 +121,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
     detalhesConsulta() {
         this.isDetalhes = true;
         this.isHistorico = false;
-        this.isBnt = false;
         this.isAtestado = true;
         this.isReceita = true;
 
@@ -146,7 +142,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
     consultaHistorico() {
         this.isDetalhes = false;
         this.isHistorico = true;
-        this.isBnt = false
         this.isAtestado = false;
         this.isReceita = false;
 
@@ -245,7 +240,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
     voltar() {
         this.isDetalhes = false;
         this.isHistorico = false;
-        this.isBnt = true
         this.limpaForm();
     }
 
@@ -310,7 +304,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         let register = {
             serviceId: this.atendimento.id,  // id da consulta da buscar-atendimento
-            description: data.detalhesInterno,
+            description: data.detalhesCliente,
             prescription: data.prescricaoMedica,  //Prescrição campo novo que vira da tela detalhes
             urlPrescription: data.urlReceita,
             timeReturn: data.tempoRetorno,
@@ -322,7 +316,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
             weight: data.peso,
             headSize: data.circCabeca,
             abdomenSize: data.circAbdomen,
-            descriptionClinic: data.detalhesCliente
+            descriptionClinic: data.detalhesInterno,
         }
 
         this.isActive = true;

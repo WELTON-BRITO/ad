@@ -19,7 +19,6 @@ export class BuscarAtendimentoComponent implements OnInit {
   public isActive = false;
   public rowData = null;
   public showMsgErro = false;
-  
 
   TodayDate = "2022-02-15";
   FinalDate = "2022-02-15";
@@ -27,12 +26,11 @@ export class BuscarAtendimentoComponent implements OnInit {
   date1 = new Date();
 
   currentYear = this.date1.getUTCFullYear();
-  currentMonth = this.date1.getUTCMonth()+1;
+  currentMonth = this.date1.getUTCMonth() + 1;
   currentDay = this.date1.getUTCDate();
-  currentDay2 = this.date1.getUTCDate()+7;
-  FinalMonth : any;
-  FinalDay : any;
-
+  currentDay2 = this.date1.getUTCDate() + 7;
+  FinalMonth: any;
+  FinalDay: any;
 
   settings = {
     //actions: false,
@@ -63,58 +61,62 @@ export class BuscarAtendimentoComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: AtendimentoService,
-    private toastrService: NbToastrService)  
-   {
+    private toastrService: NbToastrService) {
   }
-  
-  get selectedCountry(){
+
+  get selectedCountry() {
     let countryId = this.formBuscarAtendimento.controls.medico.value;
-    let selected = this.listMedico.find(medico=> medico.id == countryId);
+    let selected = this.listMedico.find(medico => medico.id == countryId);
     return selected;
   }
 
   ngOnInit() {
-   
+
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
-
-    
-    if(this.currentMonth<10){
+    if (this.currentMonth < 10) {
       this.FinalMonth = "0" + this.currentMonth;
 
-    }else{
+    } else {
       this.FinalMonth = this.currentMonth;
     }
 
-    if(this.currentDay<10){
+    if (this.currentDay < 10) {
       this.FinalDay = "0" + this.currentDay;
 
-    }else{
-      this.FinalDay = this.currentDay ;
+    } else {
+      this.FinalDay = this.currentDay;
     }
 
-    this.TodayDate = this.currentYear + "-" + this.FinalMonth  + "-" + this.FinalDay;
+    this.TodayDate = this.currentYear + "-" + this.FinalMonth + "-" + this.FinalDay;
 
 
-    if(this.currentDay2>31){
-    this.FinalDay = 31 ;
+    if (this.currentDay2 > 31) {
+      this.FinalDay = 31;
     }
 
-    this.FinalDate = this.currentYear + "-" + this.FinalMonth  + "-" + this.FinalDay;
+    this.FinalDate = this.currentYear + "-" + this.FinalMonth + "-" + this.FinalDay;
 
     this.formBuscarAtendimento = this.formBuilder.group({
       dataInicio: [this.TodayDate, Validators.required],
       dataFim: [this.FinalDate, Validators.required],
       nome: [null],
       medico: [this.listMedico[0], Validators.required],
-      cpf: [null]    })
+      cpf: [null]
+    });
 
+    this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
-      this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
-
-
-    var initData = []
+    var initData = [];
     this.rowData = initData;
+
+    let register = {
+      dataInicio: this.TodayDate,
+      dataFim: this.FinalDate,
+      medico: this.listMedico[0].id,
+    }
+
+    this.buscarAtendimento(register)
 
   }
 
@@ -211,6 +213,14 @@ export class BuscarAtendimentoComponent implements OnInit {
 
   detalhes(data) {
     this.router.navigateByUrl('/pages/atendimento/detalhe-atendimento', { state: data.atendimento });
+  }
+
+  iniciarAtendimento(data) {
+    this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: data.atendimento });
+  }
+
+  videoAtendimento(url) {
+    window.open(url.atendimento.meetingUrl, "_blank");
   }
 }
 
