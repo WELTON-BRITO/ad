@@ -4,23 +4,22 @@
       <div class="dialog-body">
         <nb-card>
           <nb-card-body>
-            <form id="form-buscar-atendimento" [formGroup]="formBuscarAtendimento">
-              <div class="col-md-12 col-xs-12">
-                <div class="form-group col-md-4">
-                  <h5 class="ml-lg-n3">Atendimento</h5>
-                </div>
-                <div class="form-row ">
-                  <div class="form-group col-md-4 ">
-                    <div class="form-group ">
-                      <div class="div-medico mb-4">
-                        <label for="medico">Escolha o médico* </label>
-                        <select class="form-control" formControlName="medico">
-                          <option value="null" selected>SELECIONE</option>
-                          <option *ngFor="let medico of listMedico" value="{{ medico.id }}">
-                            {{ medico.name }}
-                          </option>
-                        </select>
-                      </div>
+           
+                      <form id=“form-buscar-atendimento” [formGroup]="formBuscarAtendimento">
+                         <div class="col-md-12 col-xs-12">
+                           <div class="form-group col-md-4"> 
+                            <h5 class="ml-lg-n3">Atendimento</h5> </div>
+                             <div class="form-row"> 
+                              <div class="form-group col-md-4"> 
+                                <div class="form-group"> <div class="div-medico mb-4"> 
+                                  <label for="medico">Escolha o médico* </label>
+                                   <select class="form-control" id="medico" formControlName="medico"> 
+                                    <option value="{{ listMedico }}" selected>Selecione um Médico</option>
+                                     <option *ngFor="let medico of listMedico" [value]="medico.id"> 
+                                      <!-- use value instead of ngValue --> 
+                                      {{ medico.ID }} {{ medico.name }}
+                                     </option> </select> </div>
+
                       <div class="div-nome">
                         <label for="nome">Buscar por nome</label>
                         <input class="form-control" name="nome" id="nome" type="text" formControlName="nome"
@@ -28,17 +27,16 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-8">
+                  <div class="form-group col-md-8" >
+                    <label for="nome"  > Informe a Data Inicial e Final *</label>
                     <div class="div-bucar-periodo mb-4">
-                      <label for="nome">Buscar por periodo *</label>
                       <div class="form-row">
-                        <div class="div-data-inicio col-md-6 px-1">
-                          <input class="form-control date" type="date" id="dataInicio" name="Data Início"
-                            formControlName="dataInicio" maxlength="10" value="" />
+                        <div class="div-data-inicio col-md-4 px-1">
+                          <input class="form-control date" type="date" id="dataInicio" name="Data Início" [value]="TodayDate"
+                            maxlength="10"/>
                         </div>
-                        <div class="div-data-fim col-md-6">
-                          <input class="form-control date" type="date" id="dataFim" name="Data Fim"
-                            formControlName="dataFim" maxlength="10" />
+                        <div class="div-data-fim col-md-4">
+                          <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate" maxlength="10" />
                         </div>
                       </div>
                     </div>

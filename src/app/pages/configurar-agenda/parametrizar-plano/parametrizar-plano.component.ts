@@ -1,5 +1,6 @@
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder,Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParametrizarPlanoService } from './parametrizar-plano.service';
 import { NbToastrService } from '@nebular/theme';
@@ -41,7 +42,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
     this.formParametrizarPlano = this.formBuilder.group({
-      medico: [null],
+      medico: [this.listMedico[0], Validators.required],
       unimed: [null],
       bradescoSaude: [null],
       norteDame: [null],
@@ -52,6 +53,8 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       hpVida: [null],
       preventSenior: [null],
     })
+    this.formParametrizarPlano.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
+
 
   }
 

@@ -21,6 +21,19 @@ export class BuscarAtendimentoComponent implements OnInit {
   public showMsgErro = false;
   
 
+  TodayDate = "2022-02-15";
+  FinalDate = "2022-02-15";
+
+  date1 = new Date();
+
+  currentYear = this.date1.getUTCFullYear();
+  currentMonth = this.date1.getUTCMonth()+1;
+  currentDay = this.date1.getUTCDate();
+  currentDay2 = this.date1.getUTCDate()+7;
+  FinalMonth : any;
+  FinalDay : any;
+
+
   settings = {
     //actions: false,
     attr: {
@@ -50,20 +63,55 @@ export class BuscarAtendimentoComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: AtendimentoService,
-    private toastrService: NbToastrService) {
+    private toastrService: NbToastrService)  
+   {
+  }
+  
+  get selectedCountry(){
+    let countryId = this.formBuscarAtendimento.controls.medico.value;
+    let selected = this.listMedico.find(medico=> medico.id == countryId);
+    return selected;
   }
 
   ngOnInit() {
    
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
+
+    
+    if(this.currentMonth<10){
+      this.FinalMonth = "0" + this.currentMonth;
+
+    }else{
+      this.FinalMonth = this.currentMonth;
+    }
+
+    if(this.currentDay<10){
+      this.FinalDay = "0" + this.currentDay;
+
+    }else{
+      this.FinalDay = this.currentDay ;
+    }
+
+    this.TodayDate = this.currentYear + "-" + this.FinalMonth  + "-" + this.FinalDay;
+
+
+    if(this.currentDay2>31){
+    this.FinalDay = 31 ;
+    }
+
+    this.FinalDate = this.currentYear + "-" + this.FinalMonth  + "-" + this.FinalDay;
+
     this.formBuscarAtendimento = this.formBuilder.group({
-      dataInicio: [null, Validators.required],
-      dataFim: [null, Validators.required],
+      dataInicio: [this.TodayDate, Validators.required],
+      dataFim: [this.FinalDate, Validators.required],
       nome: [null],
-      medico: [null, Validators.required],
-      cpf: [null],
-    })
+      medico: [this.listMedico[0], Validators.required],
+      cpf: [null]    })
+
+
+      this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
+
 
     var initData = []
     this.rowData = initData;

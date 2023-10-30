@@ -1,9 +1,10 @@
 import { Component, ErrorHandler, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators  } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PacienteService } from './paciente.service';
 import { HttpParams } from '@angular/common/http';
 import { NbToastrService } from '@nebular/theme';
+
 import * as moment from 'moment';
 
 @Component({
@@ -30,8 +31,11 @@ export class PacienteComponent implements OnInit {
 
     this.formPaciente = this.formBuilder.group({
       pesquisa: [null],
-      medico: [null]
+      medico: [this.listMedico[0], Validators.required]
     })
+
+    this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
+
 
   }
 

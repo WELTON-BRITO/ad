@@ -1,5 +1,6 @@
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder,Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { VisualizarDiaAtendimentoService } from './visualizar-dia-atendimento.service';
 import { NbToastrService } from '@nebular/theme';
@@ -71,8 +72,11 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
     this.formVisualizarDiaAtendimento = this.formBuilder.group({
-      medico: [null],
+      medico: [this.listMedico[0], Validators.required],
     })
+
+    this.formVisualizarDiaAtendimento.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
+
 
   }
 

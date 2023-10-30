@@ -1,5 +1,6 @@
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder,Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ConfigurarExcecaoAtendimentoService } from './configurar-excecao-atendimento.service';
@@ -50,8 +51,10 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       horaInicio: [null],
       horaFim: [null],
       card: [null],
-      medico: [null]
+      mmedico: [this.listMedico[0], Validators.required]
     })
+    this.formExcecaoAtendimento.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
+
 
   }
 

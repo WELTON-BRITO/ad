@@ -1,5 +1,6 @@
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder,Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParametrizarConsultaService } from './parametrizar-consulta.service';
 import { NbToastrService } from '@nebular/theme';
@@ -47,8 +48,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       tempoPresencial: [null],
       tempoVideo: [null],
       tempoEmergencial: [null],
-      medico: [null],
+      medico: [this.listMedico[0], Validators.required],
     })
+    this.formParametrizarConsulta.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
 
   }
 
