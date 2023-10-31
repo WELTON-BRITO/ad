@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NovoPacienteService } from './novo-paciente.service';
 import { NbToastrService } from '@nebular/theme';
@@ -97,9 +97,11 @@ export class NovoPacienteComponent implements OnDestroy {
   ngOnInit() {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.verificaMedico(this.listMedico[0].id);
     this.buscaEstado();
     this.buscaConvenio();
     this.formNovoPaciente = this.formBuilder.group({
+      medico: [this.listMedico[0], Validators.required],
       codigo: [null],
       nome: [null],
       dateNasc: [null],
@@ -125,8 +127,9 @@ export class NovoPacienteComponent implements OnDestroy {
       cpfDep: [null],
       imagem: [null],
       imagemDep: [null],
-      medico: [null]
     })
+
+    this.formNovoPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
   }
 

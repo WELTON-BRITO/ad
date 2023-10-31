@@ -13,7 +13,7 @@ import * as moment from 'moment';
     styleUrls: ['./novo-atendimento.component.scss'],
     templateUrl: './novo-atendimento.component.html',
 })
-export class NovoAtendimentoComponent  {
+export class NovoAtendimentoComponent {
 
     public formNovoAtendimento = null;
     public listMedico = null;
@@ -61,11 +61,11 @@ export class NovoAtendimentoComponent  {
         }];
 
     }
-    
+
     ngOnInit() {
 
         this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
-
+        this.verificaMedico(this.listMedico[0].id);
         this.pagamento();
         this.formNovoAtendimento = this.formBuilder.group({
             medico: [this.listMedico[0]],
@@ -82,9 +82,7 @@ export class NovoAtendimentoComponent  {
             tipoEspecialidade: [null],
         })
 
-        this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
-
-
+        this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
     }
 
     pagamento() {

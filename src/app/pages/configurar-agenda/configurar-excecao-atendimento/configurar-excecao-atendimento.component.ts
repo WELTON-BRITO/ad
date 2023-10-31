@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder,Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ConfigurarExcecaoAtendimentoService } from './configurar-excecao-atendimento.service';
@@ -42,18 +42,20 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
   }
   ngOnDestroy() { }
+
   ngOnInit() {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
-
+    this.verificaMedico(this.listMedico[0].id);
     this.formExcecaoAtendimento = this.formBuilder.group({
       dataExcecao: [null],
       horaInicio: [null],
       horaFim: [null],
       card: [null],
-      mmedico: [this.listMedico[0], Validators.required]
+      medico: [this.listMedico[0], Validators.required]
     })
-    this.formExcecaoAtendimento.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
+
+    this.formExcecaoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
 
 
   }
@@ -78,7 +80,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
     } else {
       this.isCardHoras = false
     }
-  }  
+  }
 
   buscarExcecaoDoctor(data) {
 
@@ -109,17 +111,17 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
   }
 
-  salvar(data) {    
+  salvar(data) {
 
     for (var i = 0; i < this.tipoCard.length; i++) {
 
-      if(this.tipoCard[i].horaInicio != null){
+      if (this.tipoCard[i].horaInicio != null) {
         this.horaInicio.push(this.tipoCard[0].horaInicio)
       }
-      if(this.tipoCard[i].horaFim != null){
+      if (this.tipoCard[i].horaFim != null) {
         this.horaFim.push(this.tipoCard[i].horaFim)
-      }    
-      
+      }
+
     }
 
     let register = {
@@ -164,14 +166,14 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   }
 
   verificaMedico(data) {
-   
-    if(data != 'null'){    
+
+    if (data != 'null') {
       this.doctorId = data
       this.buscarExcecaoDoctor(data)
-    }else{
+    } else {
       this.toastrService.danger('Preencher o campo obrigatório!!!');
     }
-    
+
   }
 
 }

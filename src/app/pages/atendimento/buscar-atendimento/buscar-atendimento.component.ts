@@ -73,7 +73,7 @@ export class BuscarAtendimentoComponent implements OnInit {
   ngOnInit() {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
-    
+
     if (this.currentMonth < 10) {
       this.FinalMonth = "0" + this.currentMonth;
 
@@ -100,8 +100,8 @@ export class BuscarAtendimentoComponent implements OnInit {
 
     var time = new Date(this.FinalDate);
     var outraData = new Date();
-    outraData.setDate(time.getDate() + 7); 
-    this.FinalDate = moment(outraData).format('YYYY-MM-DD')    
+    outraData.setDate(time.getDate() + 7);
+    this.FinalDate = moment(outraData).format('YYYY-MM-DD')
 
     this.formBuscarAtendimento = this.formBuilder.group({
       dataInicio: [this.TodayDate, Validators.required],
