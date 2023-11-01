@@ -6,7 +6,6 @@ import { NbToastrService } from '@nebular/theme';
 import { AtendimentoService } from '../atendimento.service';
 import * as moment from 'moment';
 import { Observable, Subscriber } from 'rxjs';
-import { cH } from '@fullcalendar/core/internal-common';
 
 declare var $: any;
 @Component({
@@ -14,7 +13,6 @@ declare var $: any;
     styleUrls: ['./consulta-paciente.component.scss'],
     templateUrl: './consulta-paciente.component.html',
 })
-
 
 export class ConsultaPacienteComponent implements OnDestroy {
 
@@ -24,8 +22,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
     @ViewChild("inputFileAtestado",)
     private inputFileAtestado: ElementRef;
-
-    //@Input() data: string;
 
     public formConsultaPaciente = null;
     public isActive = false;
@@ -49,6 +45,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
         ultimaConsulta: null,
         userId: null,
         idChild: null,
+        status: null
     };
     public anexoAtestado = null;
     public anexoReceita = null;
@@ -76,6 +73,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.atendimento.especialidade = data.specialty.name;
         this.atendimento.tipoSanguineo = data.child != null ? data.child.bloodType : null;
         this.atendimento.ultimaConsulta = data.child != null ? moment(data.child.dateRegister).format('DD/MM/YYYY') : moment(data.user.dateRegister).format('DD/MM/YYYY');
+        this.atendimento.status = data.status
 
         this.formConsultaPaciente = this.formBuilder.group({
             detalhesCliente: [null],

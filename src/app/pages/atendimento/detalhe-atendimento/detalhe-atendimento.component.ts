@@ -101,14 +101,14 @@ export class DetalheAtendimentoComponent implements OnInit {
 
     if (reason != null) {
       if (reason != '') {
-        this.isActive = true
+        this.isActive = true       
 
-        let params = new HttpParams();
-        params = params.append('id', this.atendimento.id)
-        params = params.append('reasonCancellation', reason)
+        let register = {
+          'id': this.atendimento.id,
+          'reasonCancellation': reason
+        }
 
-        this.service.cancelarAtendimento(params, (response) => {
-
+        this.service.cancelarAtendimento(register, (response) => {
           this.isActive = false
           this.toastrService.success('Atendimento cancelado com sucesso !!!');
           this.location.back()

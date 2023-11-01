@@ -67,7 +67,7 @@
                                     (click)="consultaHistorico()"></nb-icon>
                                 <span>Ver histórico</span>
                             </nb-action>
-                            <nb-action>
+                            <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'" >
                                 <nb-icon class="action-icon" icon="wifi-outline" (click)="detalhesConsulta()"></nb-icon>
                                 <span>Atendimento</span>
                             </nb-action>

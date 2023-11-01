@@ -119,7 +119,7 @@
                               <i class="fa fa-info-circle"></i>
                             </button>
                             <button class="btn home-icon" (click)="iniciarAtendimento(row)" title="Iniciar atendimento"
-                            *ngIf="row.atendimento.status !=='01 - Aguardando Aprovação'">
+                            *ngIf="row.atendimento.status !=='01 - Aguardando Aprovação' && row.atendimento.status !=='05 - Consulta Cancelada'">
                               <i class="fa fa-wifi"></i>
                             </button>
                             <button class="btn home-icon" (click)="videoAtendimento(row)" title="Vídeo atendimento"
