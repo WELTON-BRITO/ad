@@ -161,7 +161,7 @@
                                             <div><label>Prescrição </label></div>
                                             <textarea autosize class="form-control" formControlName="prescricaoMedica" rows="3"
                                                 id="prescricaoMedica" placeholder="Prescrição médica" [value]=""
-                                                (keypress)="caracteresMedica()" maxlength="2000" disabled></textarea>
+                                                (keypress)="caracteresMedica()" maxlength="20000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
                                                         name="txtArea">{{this.tamMedica}}</span></small>
                                                 quantidade máxima de caracteres</p>
@@ -174,7 +174,7 @@
                                             <label for="detalhesInterno">Detalhes(Interno):</label>
                                             <textarea autosize class="form-control" rows="3" formControlName="detalhesInterno"
                                                 id="detalhesInterno" [value]="" (keypress)="caracteresInterno()"
-                                                maxlength="2000" disabled></textarea>
+                                                maxlength="20000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
                                                         name="txtArea">{{this.tamInterno}}</span></small>
                                                 quantidade máxima de caracteres</p>
@@ -187,7 +187,7 @@
                                             <label for="detalhesCliente">Detalhes(cliente):</label>
                                             <textarea autosize class="form-control" rows="3" formControlName="detalhesCliente"
                                                 id="detalhesCliente" [value]="" (keypress)="caracteresCliente()"
-                                                maxlength="2000" disabled></textarea>
+                                                maxlength="20000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
                                                         name="txtArea">{{this.tamCliente}}</span></small>
                                                 quantidade máxima de caracteres</p>

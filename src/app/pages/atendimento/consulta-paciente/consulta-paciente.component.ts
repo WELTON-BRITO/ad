@@ -29,9 +29,9 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public isHistorico = false;
     public isAtestado = false;
     public isReceita = false;
-    public tamInterno: number = 2000;
-    public tamCliente: number = 2000;
-    public tamMedica: number = 2000;
+    public tamInterno: number = 20000;
+    public tamCliente: number = 20000;
+    public tamMedica: number = 20000;
     public file: any;
     formData: FormData;
     public atendimento = {
@@ -111,9 +111,9 @@ export class ConsultaPacienteComponent implements OnDestroy {
             receita: [null],
             prescricaoMedica: [null],
         })
-        this.tamMedica = 2000;
-        this.tamInterno = 2000;
-        this.tamCliente = 2000;
+        this.tamMedica = 20000;
+        this.tamInterno = 20000;
+        this.tamCliente = 20000;
     }
 
     detalhesConsulta() {
