@@ -18,6 +18,7 @@ export class BuscarAtendimentoComponent implements OnInit {
   public listMedico = null;
   public isActive = false;
   public rowData = null;
+  public msgErro = 'CPF inválido!!!';
   public showMsgErro = false;
 
   TodayDate = "2022-02-15";

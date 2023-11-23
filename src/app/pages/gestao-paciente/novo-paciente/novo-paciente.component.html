@@ -94,8 +94,11 @@
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-3">
                       <label for="CPF">CPF*</label>
-                      <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
-                        mask="000.000.000-00" />
+                      <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf" value="cpf"
+                        mask="000.000.000-00" (change)="isValidCpf($event.target,formNovoPaciente.value)" />
+                        <div *ngIf="showMsgErroCpf" class="link-text pt-2" style="color: #dc3545;">
+                          {{this.msgErroCpf}} <br/>
+                        </div>
                     </div>
                     <div class="form-group col-md-3">
                       <label class="mat-button mb-3">Sexo biologico*</label>
@@ -247,8 +250,11 @@
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-3">
                       <label for="cpfDep">CPF</label>
-                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
-                        mask="000.000.000-00" />
+                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep" value="cpfDep"
+                        mask="000.000.000-00" (change)="isValidCpf($event.target,formNovoPaciente.value)" />
+                        <div *ngIf="showMsgErroCpfDep" class="link-text pt-2" style="color: #dc3545;">
+                          {{this.msgErroCpf}} <br/>
+                        </div>
                     </div>
                     <div class="form-group col-md-3">
                       <label for="rgDep">RG</label>

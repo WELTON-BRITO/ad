@@ -1,0 +1,73 @@
+<div class="text-center">
+  <div class="col-md-12 col-xs-12">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <nb-card>
+          <div class="d-flex col-md-12 col-xs-12 justify-content-center mt-4">
+            <div class="col-md-3 col-xs-6">
+              <div class="dialog-body sidebar-header">
+
+                <div class="text-center">
+                  <img class="ml-lg-n4" src="assets/images/login_aditi.png" id="icon" alt="User Icon" />
+                </div>
+                <div class="col-md-12 col-xs-12">
+                  <h5 class="card-title"><b>Alterar senha de acesso</b></h5>
+                </div>
+                <form class="form-nova-senha" method="post" name="form-nova-senha" id="form-nova-senha"
+                  [formGroup]="novaSenhaForm">
+                  <div class="text-center">
+                    <input class="form-control" type="password" formControlName="newPassword" id="newPassword"
+                      name="newPassword" placeholder="Nova senha" type="{{showPass ? 'text' : 'password' }}"/>
+                      <button type="button" class="btn-transparent" (click)="toggleShowPass()">
+                        <i class="fa" [ngStyle]="{'color': '#757474'}" [ngClass]="{'fa-eye': showPass, 'fa-eye-slash': !showPass}"
+                          aria-hidden="true"></i>
+                      </button>
+                  </div>
+                  <br>
+                  <div class="text-center">
+                    <input class="form-control" type="password" formControlName="repetirSenha" id="repetirSenha"
+                      name="repetirSenha" placeholder="Repetir nova senha" type="{{showRepeatPass ? 'text' : 'password' }}"/>
+                      <button type="button" class="btn-transparent" (click)="toggleShowRepeatPass()">
+                        <i class="fa" [ngStyle]="{'color': '#757474'}"
+                          [ngClass]="{'fa-eye': showRepeatPass, 'fa-eye-slash': !showRepeatPass}" aria-hidden="true"></i>
+                      </button>
+                  </div>
+                  <br>
+                  <div class="form-group col-md-12">
+                    <h6><b>Sua senha deve ter:</b></h6>
+                    <div class="row">
+                      <li><span style="font-size: 14px;">De 8 a 16 caracteres</span></li>
+                    </div>
+                    <div class="row">                      
+                      <li><span style="font-size: 14px;">Ao menos 1 carácter especial</span></li>
+                    </div>
+                    <div class="row">   
+                      <li><span style="font-size: 14px;">Utilizar letras maiúsculas e minúsculas</span></li>
+                    </div>
+                    <div class="row">   
+                      <li><span style="font-size: 14px;">Ao menos 1 número</span></li>                  
+                    </div>
+                    <div class="row">   
+                      <li><span style="font-size: 14px;">Não utilizar dados pessoais</span></li>                   
+                    </div>
+                    <div class="row">   
+                      <li><span style="font-size: 14px;">Não utilizar números e letras em sequência</span></li>                   
+                    </div>
+                  </div>                             
+                </form>
+                <div class="col-md-5 m-auto">
+                  <div class="text-center">
+                    <button class="btn btn-primary" (click)="alterarSenha(novaSenhaForm.value)">
+                      ALTERAR
+                    </button>                      
+                  </div>
+                </div>
+                <br>
+              </div>
+            </div>
+          </div>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

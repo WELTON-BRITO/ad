@@ -5,6 +5,7 @@ import { NovoPacienteService } from './novo-paciente.service';
 import { NbToastrService } from '@nebular/theme';
 import { Observable, Subscriber } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
+import { CPFValidator } from '../../shared/validators/CPFValidator';
 
 @Component({
   selector: 'ngx-novo-paciente',
@@ -38,6 +39,9 @@ export class NovoPacienteComponent implements OnDestroy {
   public avatarDep = null;
   public msgErro = 'Data inválida!!!';
   public showMsgErro = false;
+  public msgErroCpf = 'CPF inválido!!!';
+  public showMsgErroCpf = false;
+  public showMsgErroCpfDep = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -330,19 +334,62 @@ export class NovoPacienteComponent implements OnDestroy {
       }
     }
 
+    if (data.nome === null) {
+      this.toastrService.danger('O campo nome é obrigatório!!!');
+    } else if (data.dateNasc === null) {
+      this.toastrService.danger('O campo data nascimento é obrigatório!!!');
+    } else if (data.cpf === null) {
+      this.toastrService.danger('O campo CPF é obrigatório!!!');
+    } else if (data.bairro === null) {
+      this.toastrService.danger('O campo bairro é obrigatório!!!');
+    } else if (data.cep === null) {
+      this.toastrService.danger('O campo cep é obrigatório!!!');
+    } else if (data.cidade === null) {
+      this.toastrService.danger('O campo cidade é obrigatório!!!');
+    } else if (data.endereco === null) {
+      this.toastrService.danger('O campo endereco é obrigatório!!!');
+    } else if (data.numero === null) {
+      this.toastrService.danger('O campo numero é obrigatório!!!');
+    } else if (data.estado === null) {
+      this.toastrService.danger('O campo estado é obrigatório!!!');
+    } else if (data.celular === null) {
+      this.toastrService.danger('O campo celular é obrigatório!!!');
+    } else if (data.email === null) {
+      this.toastrService.danger('O campo email é obrigatório!!!');
+    } else if (this.sexo === null) {
+      this.toastrService.danger('O campo sexo biologico é obrigatório!!!');
+    } else if (data.nomeDep != null) {
 
-    this.isActive = true;
+      if (data.dateNascDep === null) {
+        this.toastrService.danger('O campo data nascimento do dependente é obrigatório!!!');
+      } else if (data.nomeResp01 === null) {
+        this.toastrService.danger('O campo nome da mãe é obrigatório!!!');
+      } else if (data.nomeResp02 === null) {
+        this.toastrService.danger('O campo do pai é obrigatório!!!');
+      } else if (data.cpfDep === null) {
+        this.toastrService.danger('O campo cpf dependente é obrigatório!!!');
+      } else if (this.sexo === null) {
+        this.toastrService.danger('O campo sexo biologico é obrigatório!!!');
+      }
 
-    this.service.salvarPaciente(this.register, (response => {
-      this.isActive = false;
-      this.toastrService.success('Registro cadastrado com sucesso !!!');
-      this.limparForm()
-      this.previousPage()
-    }), (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
+    } else if (this.showMsgErroCpf === true || this.showMsgErroCpfDep === true) {
+      this.toastrService.danger('O campo cpf inválido!!!');
+    } else {
 
+      this.isActive = true;
+
+      this.service.salvarPaciente(this.register, (response => {
+        this.isActive = false;
+        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.limparForm()
+        this.previousPage()
+      }), (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+
+
+    }
   }
 
   verificaMedico(data) {
@@ -470,6 +517,26 @@ export class NovoPacienteComponent implements OnDestroy {
     }
     else {
       this.showMsgErro = false;
+      return true;
+    }
+
+  }
+
+  isValidCpf(element, data) {
+
+    if (element.id === 'cpf') {
+      if (!CPFValidator.isValidCPF(data.cpf)) {
+        this.showMsgErroCpf = true;
+        return false;
+      }
+      this.showMsgErroCpf = false;
+      return true;
+    } else if (element.id === 'cpfDep') {
+      if (!CPFValidator.isValidCPF(data.cpfDep)) {
+        this.showMsgErroCpfDep = true;
+        return false;
+      }
+      this.showMsgErroCpfDep = false;
       return true;
     }
 

@@ -60,4 +60,7 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/appointments/details', data, successHandle, erroHandle)
   }
 
+  resetPassword(data: any, successHandle: Function, errorHandle: Function) {
+    return this.httpService.doPost('/api/user/resetPassword', data, successHandle, errorHandle)
+  }
 }

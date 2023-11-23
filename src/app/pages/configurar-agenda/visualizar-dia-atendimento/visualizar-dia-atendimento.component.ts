@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder,Validators} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { VisualizarDiaAtendimentoService } from './visualizar-dia-atendimento.service';
 import { NbToastrService } from '@nebular/theme';
@@ -75,12 +75,12 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       medico: [this.listMedico[0], Validators.required],
     })
 
-    this.formVisualizarDiaAtendimento.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
-
+    this.formVisualizarDiaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    this.verificaHorario(this.listMedico[0].id)
 
   }
 
-  configAtendimento(data) {    
+  configAtendimento(data) {
     this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data });
   }
 
@@ -172,6 +172,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       } else {
         this.isActive = false
         document.getElementById('bntConfig').removeAttribute('disabled');
+        this.toastrService.warning('Não possui nenhum atendimento agendado.');
       }
 
     }, (error) => {

@@ -47,12 +47,17 @@
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <label for="nome">
-                        <span style="font-weight: bold">Valor do Atendimento*</span></label>
+                        <span style="font-weight: bold">Valor*</span></label>
                     </div>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-2">
                     <div class="form-group">
-                      <label for="nome"><span style="font-weight: bold">Duração de Atendimento(Minutos)*</span></label>
+                      <label for="nome"><span style="font-weight: bold">Duração(Minutos)*</span></label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <label for="nome"><span style="font-weight: bold">QR Code*</span></label>
                     </div>
                   </div>
                 </div>
@@ -73,7 +78,7 @@
                         placeholder="R$ 0,00" />
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-2">
                     <div class="form-group" style="margin-left: 70px;">
                       <div class="text-right">
                         <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoPresencial"
@@ -99,7 +104,7 @@
                         placeholder="R$ 0,00" />
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-2">
                     <div class="form-group" style="margin-left: 70px;">
                       <div class="text-right">
                         <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoVideo"
@@ -125,11 +130,45 @@
                         formControlName="valorEmergencial" placeholder="R$ 0,00">
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-2">
                     <div class="form-group" style="margin-left: 70px;">
                       <div class="text-right">
                         <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoEmergencial"
                           formControlName="tempoEmergencial" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center pl-4 mt-lg-n4">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="casa" name="optcheckbox" value="C"
+                          (click)="funcValor($event.target.value, $event.target)"/>
+                        Atendimento em Casa</label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <input class="div-casa" autocomplete="off" currencyMask
+                        [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                        class="form-control m-lg-n3" name="valorCasa" id="valorCasa"
+                        formControlName="valorCasa" placeholder="R$ 0,00">
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group" style="margin-left: 70px;">
+                      <div class="text-right">
+                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoCasa"
+                          formControlName="tempoCasa" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <div class="form-group" style="margin-left: 70px;">
+                      <div class="text-right">
+                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoCasa"
+                          formControlName="tempoCasa" />
                       </div>
                     </div>
                   </div>

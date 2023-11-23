@@ -12,11 +12,15 @@
                   </div>
                 </div>
                 <div class="col-md-10 mb-auto">
-                  <div class="text-center m-5">
-                    <button nbButton outline status="primary" type="button" class="btn btn-outline-primary col-md-5 m-3"
+                  <div class="text-center m-4">
+                    <button nbButton outline status="primary" type="button" class="btn btn-outline-primary col-md-3 m-3"
                       (click)="dadosPessoais($event.target.value)" value="informacao"><nb-icon
                         icon="person-outline"></nb-icon>Dados Gerais</button>
-                    <button nbButton outline status="primary" type="button" class="btn btn-outline-primary col-md-5 m-3"
+                    <button nbButton outline status="primary" type="button" class="btn btn-outline-primary col-md-3 m-3"
+                      (click)="dadosPessoais($event.target.value)" value="clinica"><nb-icon
+                        icon="home-outline"></nb-icon>
+                      Clínica</button>
+                    <button nbButton outline status="primary" type="button" class="btn btn-outline-primary col-md-3 m-3"
                       (click)="dadosPessoais($event.target.value)" value="contato"><nb-icon
                         icon="email-outline"></nb-icon>
                       Contato</button>
@@ -30,11 +34,11 @@
                         <label for="nome">Nome completo*</label>
                         <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" />
                       </div>
-                    
                       <div class="col-md-3">
                         <label for="cpf">CPF*</label>
                         <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
-                          mask="000.000.000-00" maxlength="14" (change)="isValidCpf(formCadastroMedico.value)" />
+                          mask="000.000.000-00" maxlength="14"
+                          (change)="isValidCpf($event.target, formCadastroMedico.value)" />
                         <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
                           {{this.msgErro}} <br /><br />
                         </div>
@@ -51,7 +55,7 @@
                           <input class="form-control date" class="form-control" type="date" id="dateNasc" name="mydate"
                             formControlName="dataNascimento" maxlength="10" />
                         </div>
-                      </div>                      
+                      </div>
                       <div class="col-md-3">
                         <label for="nome">Especialidade*</label>
                         <nb-select class="multiple" multiple placeholder="SELECIONE" formControlName="especialidade">
@@ -73,14 +77,14 @@
                         </div>
                       </div>
                     </div>
-                    <div class="form-group row pl-3 mt-lg-n4">                     
-                      <div class="col-md-5">                        
+                    <div class="form-group row pl-3 mt-lg-n4">
+                      <div class="col-md-5">
                         <div class="align-self-start">
-                          <img src="{{this.avatar }}" style="height: 80px;"/>
+                          <img src="{{this.avatar }}" style="height: 80px;" />
                         </div>
                       </div>
                     </div>
-                    <div class="form-group row pl-3">                     
+                    <div class="form-group row pl-3">
                       <div class="col-md-5">
                         <label for="imgem">Adicione sua foto</label>
                         <input class="form-control-file media-body" name="imgem" id="imgem" type="file"
@@ -173,21 +177,32 @@
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="senha">Criei uma senha</label>
-                        <input class="form-control" name="senha" id="senha" type="password" formControlName="senha" />
+                        <input class="form-control" name="senha" id="senha" formControlName="senha"
+                          type="{{showPass ? 'text' : 'password' }}" />
+                        <button type="button" class="btn-transparent" (click)="toggleShowPass()">
+                          <i class="fa" [ngStyle]="{'color': '#757474'}"
+                            [ngClass]="{'fa-eye': showPass, 'fa-eye-slash': !showPass}" aria-hidden="true"></i>
+                        </button>
                       </div>
                       <div class="col-md-4">
                         <label for="confirmaSenha">Confirma a senha</label>
-                        <input class="form-control" name="confirmaSenha" id="confirmaSenha" type="password"
+                        <input class="form-control" name="confirmaSenha" id="confirmaSenha"
                           formControlName="confirmaSenha" maxlength="50"
-                          (change)="verificarPassWord(formCadastroMedico.value)" />
+                          (change)="verificarPassWord(formCadastroMedico.value)"
+                          type="{{showPassw ? 'text' : 'password' }}" />
+                        <button type="button" class="btn-transparent" (click)="toggleShow()">
+                          <i class="fa" [ngStyle]="{'color': '#757474'}"
+                            [ngClass]="{'fa-eye': showPassw, 'fa-eye-slash': !showPassw}" aria-hidden="true"></i>
+                        </button>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-4">
                         <div class="form-check-inline">
                           <input type="checkbox" class="form-check-input" id="aceitoTermo" name="grupo"
-                            formControlName="aceitoTermo" value=""/> Li e aceito
-                          <a class="a-termo p-1" href="http://aditi.care.saude.ws/termo_medico.pdf" target="_blank"> os Termos e condições* </a>                          
+                            formControlName="aceitoTermo" value="" /> Li e aceito
+                          <a class="a-termo p-1" href="http://aditi.care.saude.ws/termo_medico.pdf" target="_blank"> os
+                            Termos e condições* </a>
                         </div>
                       </div>
                     </div>
@@ -197,6 +212,133 @@
                       </button>
                       <button class="btn btn-success m-2" (click)="cadastro(formCadastroMedico.value)">
                         CADASTRAR
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="isClinica">
+                    <div class="form-group">
+                      <h6>Clínica</h6>
+                    </div>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-6">
+                        <label for="name">Nome*</label>
+                        <input class="form-control" name="name" id="name" type="text" formControlName="name" />
+                      </div>
+                      <div class="col-md-6">
+                        <label for="socialName">Razão Social*</label>
+                        <input class="form-control" name="socialName" id="socialName" type="text"
+                          formControlName="socialName" />
+                      </div>
+                    </div>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-3">
+                        <label for="cpf">CNPJ*</label>
+                        <input class="form-control" name="federalId" id="federalId" type="text"
+                          formControlName="federalId" mask="00.000.000/0000-00" maxlength="18" />
+                      </div>
+                      <div class="col-md-2">
+                        <label for="cellPhone">Celular*</label>
+                        <input class="form-control" name="cellPhone" id="cellPhone" type="text"
+                          formControlName="cellPhone" [dropSpecialCharacters]="true"
+                          mask="(00) 0 0000-0000 || (00) 0000-0000" maxlength="16" />
+                      </div>
+                      <div class="col-md-3">
+                        <label for="estado">Estado*</label>
+                        <select class="form-control" formControlName="ufId" (change)="buscaCidade($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let estado of listEstado" value="{{ estado.id }}">{{
+                            estado.description}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="cidade">Cidade*</label>
+                        <select class="form-control" formControlName="cityId">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{
+                            cidade.description}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-2">
+                        <label for="cep">Cep*</label>
+                        <input class="form-control" name="zipCode" id="zipCode" type="text" formControlName="zipCode"
+                          mask="00000-000" [dropSpecialCharacters]="true" />
+                      </div>
+                      <div class="col-md-3">
+                        <label for="rua">Rua*</label>
+                        <input class="form-control" name="street" id="street" type="text" formControlName="street"
+                          [dropSpecialCharacters]="true" />
+                      </div>
+                      <div class="col-md-3">
+                        <label for="bairro">Bairro*</label>
+                        <input class="form-control" name="neighborhood" id="neighborhood" type="text"
+                          formControlName="neighborhood" [dropSpecialCharacters]="true" />
+                      </div>
+                      <div class="col-md-2">
+                        <label for="numero">Número*</label>
+                        <input class="form-control" name="numeroClinica" id="numeroClinica" type="number"
+                          formControlName="numeroClinica" [dropSpecialCharacters]="true" />
+                      </div>
+                      <div class="col-md-2">
+                        <label for="complemento">Complemento</label>
+                        <input class="form-control" name="complementoClinica" id="complementoClinica" type="text"
+                          formControlName="complementoClinica" [dropSpecialCharacters]="true" />
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <button class="btn btn-primary m-2" (click)="adicionar(formCadastroMedico.value)">
+                        ADICIONAR
+                      </button>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <div class="app-box">
+                        <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
+                          [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
+                          [messages]="{emptyMessage: 'Sem dados...'}" [limit]="8">
+                          <ngx-datatable-column name="Nome" prop="name">
+                            <ng-template ngx-datatable-cell-template let-row="row">
+                              <div class="text-center">
+                                {{ row.name }}
+                              </div>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Razão Social" prop="socialName">
+                            <ng-template ngx-datatable-cell-template let-row="row">
+                              <div class="text-center">
+                                {{ row.socialName }}
+                              </div>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="CNPJ" prop="federalId">
+                            <ng-template ngx-datatable-cell-template let-row="row">
+                              <div class="text-center">
+                                {{ row.federalId }}
+                              </div>
+                            </ng-template>
+                          </ngx-datatable-column>                         
+                          <ngx-datatable-footer>
+                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                              let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                              <div>
+                                <div class="page-count">
+                                  Total de Registros: {{rowCount}}
+                                </div>
+                              </div>
+                              <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
+                                [pagerRightArrowIcon]="'fa fa-angle-double-right '"
+                                [pagerPreviousIcon]="'fa fa-angle-left'" [pagerNextIcon]="'fa fa-angle-right '"
+                                [page]="curPage" [size]="pageSize" [count]="rowCount"
+                                [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                              </datatable-pager>
+                            </ng-template>
+                          </ngx-datatable-footer>
+                        </ngx-datatable>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <button class="btn btn-primary m-2" (click)="proximo(this)">
+                        PRÓXIMO
                       </button>
                     </div>
                   </div>

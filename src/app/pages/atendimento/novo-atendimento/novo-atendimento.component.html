@@ -103,13 +103,15 @@
                                             <div class="form-group">
                                                 <label for="nomeResponsavel">Buscar por cpf*</label>
                                                 <input class="form-control" name="cpf" id="cpf" type="text"
-                                                    formControlName="cpf" mask="000.000.000-00" maxlength="14"
-                                                    (change)="isValidCpf(formNovoAtendimento.value)"
-                                                    placeholder="000.000.000-00" />
-                                                <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
-                                                    {{this.msgErro}} <br /><br />
-                                                </div>
-                                            </div>
+                                                    formControlName="cpf" mask="000.000.000-00" maxlength="14"                                                    
+                                                    placeholder="000.000.000-00" />                                                
+                                            </div>                                          
+                                        </div>                                      
+                                        <div class="form-group col-md-2">
+                                            <button class="btn btn-primary mb-lg-n2"
+                                            (click)="isValidCpf(formNovoAtendimento.value)">
+                                            Pesquisar
+                                        </button>
                                         </div>
                                         <div class="form-group col-md-5">
                                             <div class="form-group">
@@ -117,6 +119,11 @@
                                                 <input class="form-control" name="nomeResponsavel" id="nomeResponsavel"
                                                     type="text" formControlName="nomeResponsavel" disabled />
                                             </div>
+                                        </div>                                       
+                                    </div>
+                                    <div class="form-group mt-lg-n4">
+                                        <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
+                                            {{this.msgErro}} <br /><br />
                                         </div>
                                     </div>
                                     <div *ngIf="isDadosAtendimento">
@@ -148,7 +155,26 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-row align-items-center">
+                                        <!--<div class="form-row align-items-center">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="consultaParticular">Consulta de retorno?</label>
+                                                    <div class="p-1 row">
+                                                        <label class="radio-inline pl-2 pl-3">
+                                                            <input class="mat-button" type="radio" id="radio"
+                                                                name="optPart" value="S"
+                                                                (click)="consultaParticular($event.target.value)" />
+                                                            Sim</label>
+                                                        <label class="radio-inline pl-2">
+                                                            <input class="mat-button" type="radio" id="radio"
+                                                                name="optPart" value="N"
+                                                                (click)="consultaParticular($event.target.value)" />
+                                                            Não</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>-->
+                                        <div class="form-row align-items-center">                                           
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label class="consultaParticular">Consulta particula?</label>

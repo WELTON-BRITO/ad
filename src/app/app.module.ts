@@ -35,6 +35,8 @@ import { ErrorHandlerService } from './pages/shared/services/http/error-handler.
 import { AtendimentoModule } from './pages/atendimento/atendimento.module';
 import { AtendimentoRoutingModule } from './pages/atendimento/atendimento-routing-module';
 import { AutosizeModule } from '@techiediaries/ngx-textarea-autosize';
+import { SolicitarSenhaModule } from './pages/solicitar-senha/solicitar-senha.module';
+import { SolicitarSenhaRoutingModule } from './pages/solicitar-senha/solicitar-senha-routing.module';
 
 
 @NgModule({
@@ -68,7 +70,9 @@ import { AutosizeModule } from '@techiediaries/ngx-textarea-autosize';
     ConfigurarAgendaRoutingModule,
     AtendimentoRoutingModule,
     AtendimentoModule,
-    AutosizeModule
+    AutosizeModule,
+    SolicitarSenhaModule,
+    SolicitarSenhaRoutingModule
    ],
   providers:    [
     { provide: LOCALE_ID, useValue: 'pt' },

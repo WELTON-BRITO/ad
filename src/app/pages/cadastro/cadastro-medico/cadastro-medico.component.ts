@@ -18,6 +18,7 @@ export class CadastroMedicoComponent implements OnInit {
   public formCadastroMedico = null;
   public isInfoGerais = true;
   public isContato = false;
+  public isClinica = false;
   checked = false;
   public sexo = false;
   public listEstado = null;
@@ -27,7 +28,11 @@ export class CadastroMedicoComponent implements OnInit {
   public isActive = false;
   public msgErro = 'CPF inválido!!!';
   public showMsgErro = false;
+  public showMsgErroClinica = false;
   public avatar = null;
+  public rowData = [];
+  showPass = false;
+  showPassw = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -38,6 +43,7 @@ export class CadastroMedicoComponent implements OnInit {
 
   ngOnInit() {
 
+    localStorage.setItem('Authorization', '1');
     this.buscaEstado();
     this.buscaEspecialidade();
     this.formCadastroMedico = this.formBuilder.group({
@@ -60,7 +66,18 @@ export class CadastroMedicoComponent implements OnInit {
       bairro: [null],
       numero: [null],
       complemento: [null],
-      imgem: [null]
+      imgem: [null],
+      name: [null],
+      socialName: [null],
+      federalId: [null],
+      ufId: [null],
+      cityId: [null],
+      numeroClinica: [null],
+      neighborhood: [null],
+      street: [null],
+      zipCode: [null],
+      complementoClinica: [null],
+      cellPhone: [null]
     });
 
   }
@@ -70,12 +87,19 @@ export class CadastroMedicoComponent implements OnInit {
   }
 
   dadosPessoais(data) {
+
     if (data === 'informacao') {
       this.isInfoGerais = true;
       this.isContato = false;
-    } else {
+      this.isClinica = false;
+    } else if (data === 'contato') {
       this.isInfoGerais = false;
       this.isContato = true;
+      this.isClinica = false;
+    } else if (data === 'clinica') {
+      this.isClinica = true;
+      this.isInfoGerais = false;
+      this.isContato = false;
     }
   }
 
@@ -104,12 +128,13 @@ export class CadastroMedicoComponent implements OnInit {
       number: data.numero,
       complement: data.complemento,
       specialties: data.especialidade,
+      clinics: this.rowData
 
     }
 
     if ((data.nome != null) && (data.cpf != null) && (data.crm != null) && (data.dataNascimento != null) && (data.especialidade != null)
       && (this.sexo != false) && (data.telefoneCelular != null) && (data.bairro != null) && (data.rua != null)
-      && (data.cep != null) && (data.numero != null) && (data.aceitoTermo != null)) {
+      && (data.cep != null) && (data.numero != null) && (data.aceitoTermo != null) && (this.showMsgErro === false)) {
 
       this.isActive = true;
 
@@ -129,12 +154,13 @@ export class CadastroMedicoComponent implements OnInit {
     } else {
       this.toastrService.danger('Preencher os campos obrigatórios !!!');
     }
+
   }
 
   limparForm() {
 
     this.formCadastroMedico = this.formBuilder.group({
-      cpf: [null],
+      cpf: [null, Validators.required],
       nome: [null],
       dataNascimento: [null],
       crm: [null],
@@ -153,7 +179,18 @@ export class CadastroMedicoComponent implements OnInit {
       bairro: [null],
       numero: [null],
       complemento: [null],
-      imgem: [null]
+      imgem: [null],
+      name: [null],
+      socialName: [null],
+      federalId: [null],
+      ufId: [null],
+      cityId: [null],
+      numeroClinica: [null],
+      neighborhood: [null],
+      street: [null],
+      zipCode: [null],
+      complementoClinica: [null],
+      cellPhone: [null]
     });
 
     this.avatar = null;
@@ -167,7 +204,7 @@ export class CadastroMedicoComponent implements OnInit {
       this.listEstado = response
 
     }, (error) => {
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(error.message);
     });
 
   }
@@ -190,7 +227,7 @@ export class CadastroMedicoComponent implements OnInit {
       this.listEspecialidade = response
 
     }, (error) => {
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(error.message);
     });
 
   }
@@ -207,7 +244,7 @@ export class CadastroMedicoComponent implements OnInit {
       this.toastrService.danger('Por gentileza verificar o email, não confere!!!');
     }
   }
-  
+
   public converterImagem = ($event: Event, element) => {
 
     const target = $event.target as HTMLInputElement;
@@ -225,7 +262,7 @@ export class CadastroMedicoComponent implements OnInit {
 
       this.imagem = d.slice(d.indexOf(",") + 1);
       this.avatar = 'data:application/pdf;base64,' + this.imagem;
-    })   
+    })
 
   }
 
@@ -291,22 +328,78 @@ export class CadastroMedicoComponent implements OnInit {
 
   }
 
-  isValidCpf(data) {
-
-    if (!CPFValidator.isValidCPF(data.cpf)) {
-      this.showMsgErro = true;
-      return false;
+  isValidCpf(element, data) {
+    if (element.id === 'cpf') {
+      if (!CPFValidator.isValidCPF(data.cpf)) {
+        this.showMsgErro = true;
+        return false;
+      }
+      this.showMsgErro = false;
+      return true;
+    } else if (element.id === 'federalId') {
+      if (!CPFValidator.isValidCPF(data.federalId)) {
+        this.showMsgErroClinica = true;
+        return false;
+      }
+      this.showMsgErroClinica = false;
+      return true;
     }
-    this.showMsgErro = false;
-    return true;
   }
 
-  proximo() {
+  proximo(data) {
 
-    this.isInfoGerais = false;
-    this.isContato = true;
-
+    if (data.isInfoGerais == true) {
+      this.isInfoGerais = false;
+      this.isContato = false;
+      this.isClinica = true
+    } else if (data.isClinica == true) {
+      this.isInfoGerais = false;
+      this.isClinica = false;
+      this.isContato = true;
+    }
   }
+
+  adicionar(data) {
+
+    this.formCadastroMedico.controls['name'].setValue(null);
+    this.formCadastroMedico.controls['socialName'].setValue(null);
+    this.formCadastroMedico.controls['federalId'].setValue(null);
+    this.formCadastroMedico.controls['ufId'].setValue(null);
+    this.formCadastroMedico.controls['cityId'].setValue(null);
+    this.formCadastroMedico.controls['cellPhone'].setValue(null);
+    this.formCadastroMedico.controls['zipCode'].setValue(null);
+    this.formCadastroMedico.controls['street'].setValue(null);
+    this.formCadastroMedico.controls['neighborhood'].setValue(null);
+    this.formCadastroMedico.controls['numeroClinica'].setValue(null);
+    this.formCadastroMedico.controls['complementoClinica'].setValue(null);
+
+    this.rowData.push(data)
+
+    this.rowData = this.rowData.map(data => {
+      return {
+        name: data.name,
+        socialName: data.socialName,
+        federalId: data.federalId,
+        ufId: data.ufId,
+        cityId: data.cityId,
+        cellPhone: data.cellPhone,
+        zipCode: data.zipCode,
+        street: data.street,
+        neighborhood: data.neighborhood,
+        number: data.numeroClinica,
+        complement: data.complementoClinica,
+      }
+    })
+  }
+
+  toggleShowPass() {
+    this.showPass = !this.showPass;
+  }
+
+  toggleShow() {
+    this.showPassw = !this.showPassw;
+  }
+
 
   voltar() {
     this.router.navigate(['/login']);

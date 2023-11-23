@@ -1,0 +1,52 @@
+<div class="text-center">
+    <div class="col-md-12 col-xs-12">
+      <div class="row">
+        <div class="col-md-12 col-xs-12">
+          <div class="dialog-body sidebar-header">
+            <form class="solicitar-senha" method="post" name="solicitarSenha" id="solicitarSenha"
+              [formGroup]="formSolicitarSenha">
+              <nb-card *ngIf="isSolicitarSenha">
+                <div class="m-lg-n4 text-center">
+                  <img class="p-4" style="height: 255px; width: 450px;" src="assets/images/login_aditi.png" id="icon"
+                    alt="User Icon" />
+                </div>
+                <div class="text-center m-5">
+                  <button class="col-md-4 m-3" nbButton outline status="primary" type="button"
+                    (click)="resetSenha($event.target.value)" value="5"><nb-icon icon="people-outline"></nb-icon>
+                    MÉDICO</button>
+                  <button class="col-md-4 m-3" nbButton outline status="primary" type="button"
+                    (click)="resetSenha($event.target.value)" value="7"><nb-icon icon="home-outline"></nb-icon>
+                    CLÍNICA</button>
+                </div>
+                <p>Por favor, insira seu e-mail e cpf/cnpj para dar continuidade ao processo de reset senha.</p>
+                <div class="text-center">
+                  <input class="form-control col-md-3 border" name="cpfCnpj" id="cpfCnpj" type="text" formControlName="cpfCnpj"
+                    placeholder="cpfCnpj" maxlength="80" autocomplete="off" />
+                </div>
+                <div class="text-center">
+                  <input class="form-control col-md-3 border" name="email" id="email" type="text" formControlName="email"
+                    placeholder="email" maxlength="80" autocomplete="off" />
+                </div>
+                <div class="text-center">
+                  <input type="submit" class="fade_8S" style="width: 250px;" name="login" value="Enviar"
+                    (click)="enviar(formSolicitarSenha.value)">
+                </div>
+              </nb-card>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div #card>
+    <div class="col-md-12 col-xs-12">
+      <div class="row" *ngIf="isActive" class="loader">
+        <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
+          <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Carregando...
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

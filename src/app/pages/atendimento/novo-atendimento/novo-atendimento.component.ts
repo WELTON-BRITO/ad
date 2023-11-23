@@ -26,6 +26,7 @@ export class NovoAtendimentoComponent {
     public isPagto = false;
     public isDependente = false;
     public tamanho: number = 2000;
+    public msgErro = 'CPF inválido!!!';
     public showMsgErro = false;
     public doctorId = null;
     public clinicId = null;
@@ -238,6 +239,8 @@ export class NovoAtendimentoComponent {
 
         if (!CPFValidator.isValidCPF(data.cpf)) {
             this.showMsgErro = true;
+            this.isDadosAtendimento = false;
+            this.formNovoAtendimento.controls['nomeResponsavel'].setValue(null);
             return false;
         }
         this.showMsgErro = false;

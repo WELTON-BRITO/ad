@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   public isActive = false;
   public domain = null;
   public listMedico = null;
+  showPass = false;
 
   constructor(
     private router: Router,
@@ -131,6 +132,10 @@ export class LoginComponent implements OnInit {
 
     }
 
+  }
+
+  toggleShowPass() {
+    this.showPass = !this.showPass;
   }
 
 }

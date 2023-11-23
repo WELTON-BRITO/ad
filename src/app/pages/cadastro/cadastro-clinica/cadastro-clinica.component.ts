@@ -24,7 +24,9 @@ export class CadastroClinicaComponent implements OnDestroy {
   public msgErro = 'CPF inválido!!!';
   public showMsgErro = false;
   public avatar = null;
-  
+  showPass = false;
+  showPassw = false;
+
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: CadastroClinicaService,
@@ -33,6 +35,7 @@ export class CadastroClinicaComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
+    localStorage.setItem('Authorization', '1'); 
     this.buscaEstado();
     this.formCadastroClinica = this.formBuilder.group({
       nomeEmpresa: [null],
@@ -99,7 +102,7 @@ export class CadastroClinicaComponent implements OnDestroy {
 
     if ((data.nomeEmpresa != null) && (data.cpf != null) && (data.nomeResponsavel != null) && (data.cnpj != null)
       && (data.telefoneCelular != null) && (data.bairro != null) && (data.rua != null) && (data.cep != null) && (data.numero != null)
-      && (data.estado != null) && (data.cidade != null) && (data.aceitoTermo != null)) {
+      && (data.estado != null) && (data.cidade != null) && (data.aceitoTermo != null) && (this.showMsgErro === false)) {
 
       this.isActive = true;
 
@@ -111,7 +114,7 @@ export class CadastroClinicaComponent implements OnDestroy {
         this.isContato = false;
         this.limparForm();
         this.voltar();
-      }),(error) => {
+      }), (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
 
@@ -278,6 +281,13 @@ export class CadastroClinicaComponent implements OnDestroy {
     return true;
   }
 
+  toggleShowPass() {
+    this.showPass = !this.showPass;
+  }
+
+  toggleShow() {
+    this.showPassw = !this.showPassw;
+  }
 
   voltar() {
     this.router.navigate(['/login']);

@@ -1,9 +1,4 @@
-@import '../../@theme/styles/themes';
-@import '../../../../node_modules/@swimlane/ngx-datatable/index.scss';
-@import '../../../../node_modules/@swimlane/ngx-datatable/themes/bootstrap.scss';
-@import '../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
-@import "../../../../node_modules/bootstrap/scss/bootstrap";
-
+/* BASIC */
 
 html {
     background-color: #56baed;
@@ -81,6 +76,8 @@ html {
     border-bottom: 2px solid #5fbae9;
   }
   
+  
+  
   /* FORM TYPOGRAPHY*/
   
   input[type=button], input[type=submit], input[type=reset]  {
@@ -146,7 +143,7 @@ html {
   input[type=text]:placeholder {
     color: #cccccc;
   } 
-  /*
+  
   input[type=password]:focus {
     background-color: #fff;
     border-bottom: 2px solid #5fbae9;
@@ -155,7 +152,7 @@ html {
   input[type=password]:placeholder {
     color: #cccccc;
   } 
-  */
+  
   /* ANIMATIONS */
   
   /* Simple CSS3 Fade-in-down Animation */
@@ -322,30 +319,3 @@ html {
     padding-right:0px;
   }
  
-  
-.btn-transparent {
-  background-color: transparent;
-  border: none;
-  color: #0d0d0d;
-  text-align: center;
-  text-decoration: none;
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -ms-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  //left: calc(95% - 550px);
-  padding-top: 20px;
-  position: absolute;
-  outline: none;
-}
-
-.btn-transparent:hover {
-  border: none;
-  outline: none;
-}
-
-.btn-transparent:focus {
-  border: none;
-  outline: none;
-}

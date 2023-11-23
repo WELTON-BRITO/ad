@@ -13,6 +13,9 @@ import { AuthCustomComponent } from './pages/auth/auth-custom.component';
 import { CadastroClinicaComponent } from './pages/cadastro/cadastro-clinica/cadastro-clinica.component';
 import { CadastroMedicoComponent } from './pages/cadastro/cadastro-medico/cadastro-medico.component';
 import { CadastroComponent } from './pages/cadastro/cadastro.component';
+import { SolicitarSenhaComponent } from './pages/solicitar-senha/solicitar-senha.component';
+import { AlterarSenhaComponent } from './pages/solicitar-senha/alterar-senha/alterar-senha.component';
+import { EnviarSenhaEmailComponent } from './pages/solicitar-senha/enviar-senha-email/enviar-senha-email.component';
 
 export const routes: Routes = [
   {
@@ -51,13 +54,43 @@ export const routes: Routes = [
       }
     ]
   },
- {
+  {
     path: 'cadastro-clinica',    
     component: AuthCustomComponent,
     children: [
       {
         path: '',
         component: CadastroClinicaComponent,
+      }
+    ]
+  },
+  {
+    path: 'solicitar-senha',    
+    component: AuthCustomComponent,
+    children: [
+      {
+        path: '',
+        component: SolicitarSenhaComponent,
+      }
+    ]
+  }, 
+  {
+    path: 'enviar-senha-email',    
+    component: AuthCustomComponent,
+    children: [
+      {
+        path: '',
+        component: EnviarSenhaEmailComponent,
+      }
+    ]
+  }, 
+  {
+    path: 'alterar-senha',    
+    component: AuthCustomComponent,
+    children: [
+      {
+        path: '',
+        component: AlterarSenhaComponent,
       }
     ]
   },

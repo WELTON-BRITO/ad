@@ -30,5 +30,37 @@ nb-checkbox {
   height: 670px;
 }
 
+input[type=text],
+input[type=password] {  
+  color: #757474;
+  display: inline-block;   
+}
+
+.btn-transparent {
+  background-color: transparent;
+  border: none;
+  color: #0d0d0d;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  left: calc(95% - 42px);
+  padding-top: 13px;
+  position: absolute;
+  outline: none;
+}
+
+.btn-transparent:hover {
+  border: none;
+  outline: none;
+}
+
+.btn-transparent:focus {
+  border: none;
+  outline: none;
+}
 
 

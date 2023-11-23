@@ -20,6 +20,7 @@ import { CadastroClinicaComponent } from './cadastro-clinica/cadastro-clinica.co
 import { CadastroMedicoComponent } from './cadastro-medico/cadastro-medico.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { ToastrComponent } from '../shared/component/toastr/toastr.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { ToastrComponent } from '../shared/component/toastr/toastr.component';
     NgxEchartsModule,
     NbCheckboxModule, 
     NgxMaskModule.forRoot(),  
+    NgxDatatableModule
   ],
   exports: [
   ],

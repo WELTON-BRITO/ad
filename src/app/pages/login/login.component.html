@@ -11,16 +11,20 @@
               </div>
               <p>Digite login e senha para acessar conta.</p>
               <div class="text-center">
-                <input type="text" formControlName="login" id="login" class="fadeIn second" name="login"
+                <input type="text" formControlName="login" id="login" class="fadeIn second border" name="login"
                   placeholder="Login" maxlength="80" autocomplete="off" />
-              </div>
+              </div>            
               <div class="text-center">
-                <input type="password" formControlName="password" id="password" class="fadeIn third" name="password"
-                  placeholder="Senha" maxlength="100" autocomplete="off" />
+                <input type="password" formControlName="password" id="password" class="fadeIn third border" name="password"
+                  placeholder="Senha" maxlength="100" autocomplete="off" type="{{showPass ? 'text' : 'password' }}" />
+                  <button type="button" class="btn-transparent" (click)="toggleShowPass()">
+                    <i class="fa" [ngStyle]="{'color': '#757474'}" [ngClass]="{'fa-eye': showPass, 'fa-eye-slash': !showPass}"
+                      aria-hidden="true"></i>
+                  </button>
               </div>
               <input type="submit" class="fade_8S" style="width: 250px;" name="login" value="Entrar" (click)="login()">
               <div class="linksForm">
-                <a href="#" class="fade_4S" title="Resgatar Senha"><nb-icon class="fade_4S"
+                <a href="#/" class="fade_4S" title="Resgatar Senha"><nb-icon class="fade_4S"
                     icon="refresh-outline"></nb-icon>Resgatar Senha</a>
                 <a href="#/cadastro" class="fade_4S" title="Cadastrar-se"><nb-icon class="fade_4S"
                     icon="file-add-outline"></nb-icon>Cadastro</a>

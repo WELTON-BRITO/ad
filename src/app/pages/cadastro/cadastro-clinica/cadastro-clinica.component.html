@@ -154,13 +154,21 @@
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="senha">Criei uma senha</label>
-                        <input class="form-control" name="senha" id="senha" type="password" formControlName="senha" />
+                        <input class="form-control" name="senha" id="senha" type="password" formControlName="senha"  type="{{showPass ? 'text' : 'password' }}"/>
+                        <button type="button" class="btn-transparent" (click)="toggleShowPass()">
+                          <i class="fa" [ngStyle]="{'color': '#757474'}"
+                            [ngClass]="{'fa-eye': showPass, 'fa-eye-slash': !showPass}" aria-hidden="true"></i>
+                        </button>
                       </div>
                       <div class="col-md-4">
                         <label for="confirmaSenha">Confirma a senha</label>
                         <input class="form-control" name="confirmaSenha" id="confirmaSenha" type="password"
                           formControlName="confirmaSenha" maxlength="50"
-                          (change)="verificarPassWord(formCadastroClinica.value)" />
+                          (change)="verificarPassWord(formCadastroClinica.value)"  type="{{showPassw ? 'text' : 'password' }}"/>
+                          <button type="button" class="btn-transparent" (click)="toggleShow()">
+                            <i class="fa" [ngStyle]="{'color': '#757474'}"
+                              [ngClass]="{'fa-eye': showPassw, 'fa-eye-slash': !showPassw}" aria-hidden="true"></i>
+                          </button>
                       </div>
                     </div>
                     <div class="form-group">

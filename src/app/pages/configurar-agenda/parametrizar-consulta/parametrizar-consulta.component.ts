@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder,Validators} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ParametrizarConsultaService } from './parametrizar-consulta.service';
 import { NbToastrService } from '@nebular/theme';
@@ -18,6 +18,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public checkPresencial = null;
   public checkVideo = null;
   public checkEmergencial = null;
+  public checkCasa = null;
   public isActive = false;
   public durationAtHome = null;
   public durationEmergency = null;
@@ -45,13 +46,16 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       valorPresencial: [null],
       valorEmergencial: [null],
       valorVideo: [null],
+      valorCasa: [null],
       tempoPresencial: [null],
       tempoVideo: [null],
       tempoEmergencial: [null],
+      tempoCasa: [null],
       medico: [this.listMedico[0], Validators.required],
     })
-    this.formParametrizarConsulta.controls['medico'].setValue(this.listMedico[0].id, {onlySelf: true}); // use the id of the first medico
+    this.formParametrizarConsulta.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
 
+    this.verificaValor(this.listMedico[0].id)
   }
 
   funcValor(event, element) {
@@ -63,6 +67,8 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.checkVideo = event;
       } else if (event == "E") {
         this.checkEmergencial = event
+      } else if (event == "C") {
+        this.checkCasa = event
       }
     } else if (element.checked == false) {
       if (event == "P") {
@@ -71,11 +77,13 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.checkVideo = null;
       } else if (event == "E") {
         this.checkEmergencial = null;
+      } else if (event == "C") {
+        this.checkCasa = null
       }
 
     }
 
-  }  
+  }
 
   salvar(data) {
 
@@ -96,7 +104,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
     }
 
     if ((data.medico == null) || ((data.valorPresencial == null) && (data.valorEmergencial == null) &&
-      (data.valorVideo == null)) || ((data.tempoEmergencial == null) && (data.tempoPresencial == null) && (data.tempoVideo == null))) {
+      (data.valorVideo == null) && (data.valorCasa == null)) || ((data.tempoEmergencial == null) && (data.tempoPresencial == null) && (data.tempoVideo == null) && (data.tempoCasa == null))) {
 
       this.toastrService.danger('Preencher os campos obrigatórios!!!');
 
@@ -137,9 +145,11 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       valorPresencial: [null],
       valorEmergencial: [null],
       valorVideo: [null],
+      valorCasa: [null],
       tempoPresencial: [null],
       tempoVideo: [null],
       tempoEmergencial: [null],
+      tempoCasa: [null],
       medico: [null],
     })
 
@@ -161,6 +171,14 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
     var checkbox = document.querySelector("#emergencial");
     if (checkbox.id == 'emergencial') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+
+    var checkbox = document.querySelector("#casa");
+    if (checkbox.id == 'casa') {
       function ativarCheckbox(el) {
         el.checked = false;
       }
@@ -247,6 +265,30 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
       }
 
+      if (response.valueInPerson && response.durationInPerson != null) {
+
+        this.formParametrizarConsulta.controls['tempoCasa'].setValue(response.durationInPerson);
+        this.formParametrizarConsulta.controls['valorCasa'].setValue(response.valueInPerson);
+
+        var checkbox = document.querySelector("#casa");
+        function ativarCheckbox(el) {
+          el.checked = true;
+        }
+        ativarCheckbox(checkbox);
+
+      } else {
+
+        this.formParametrizarConsulta.controls['tempoCasa'].setValue(null);
+        this.formParametrizarConsulta.controls['valorCasa'].setValue(null);
+
+        var checkbox = document.querySelector("#casa");
+        function ativarCheckbox(el) {
+          el.checked = false;
+        }
+        ativarCheckbox(checkbox);
+
+      }
+
     }, (error) => {
       this.isActive = false;
       if (error == undefined) {
@@ -271,6 +313,15 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.formParametrizarConsulta.controls['tempoPresencial'].setValue(null);
         this.formParametrizarConsulta.controls['valorPresencial'].setValue(null);
         var checkbox = document.querySelector("#presencial");
+        function ativarCheckbox(el) {
+          el.checked = false;
+        }
+        ativarCheckbox(checkbox);
+      }
+      if (error == undefined) {
+        this.formParametrizarConsulta.controls['tempoCasa'].setValue(null);
+        this.formParametrizarConsulta.controls['valorCasa'].setValue(null);
+        var checkbox = document.querySelector("#casa");
         function ativarCheckbox(el) {
           el.checked = false;
         }
