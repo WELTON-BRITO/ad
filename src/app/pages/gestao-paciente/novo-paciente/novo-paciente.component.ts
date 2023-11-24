@@ -358,7 +358,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.toastrService.danger('O campo email é obrigatório!!!');
     } else if (this.sexo === null) {
       this.toastrService.danger('O campo sexo biologico é obrigatório!!!');
-    } else if (data.nomeDep != null) {
+   /* } else if (data.nomeDep != null) {
 
       if (data.dateNascDep === null) {
         this.toastrService.danger('O campo data nascimento do dependente é obrigatório!!!');
@@ -370,7 +370,7 @@ export class NovoPacienteComponent implements OnDestroy {
         this.toastrService.danger('O campo cpf dependente é obrigatório!!!');
       } else if (this.sexo === null) {
         this.toastrService.danger('O campo sexo biologico é obrigatório!!!');
-      }
+      }*/
 
     } else if (this.showMsgErroCpf === true || this.showMsgErroCpfDep === true) {
       this.toastrService.danger('O campo cpf inválido!!!');
