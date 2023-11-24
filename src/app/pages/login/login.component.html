@@ -12,7 +12,7 @@
               <p>Digite login e senha para acessar conta.</p>
               <div class="text-center">
                 <input type="text" formControlName="login" id="login" class="fadeIn second border" name="login"
-                  placeholder="Login" maxlength="80" autocomplete="off" />
+                  placeholder="Login" maxlength="80" autocomplete="off" [(ngModel)]="cnpjCpf" [mask]="getCpfCnpjMask()"/>
               </div>            
               <div class="text-center">
                 <input type="password" formControlName="password" id="password" class="fadeIn third border" name="password"
@@ -24,7 +24,7 @@
               </div>
               <input type="submit" class="fade_8S" style="width: 250px;" name="login" value="Entrar" (click)="login()">
               <div class="linksForm">
-                <a href="#/" class="fade_4S" title="Resgatar Senha"><nb-icon class="fade_4S"
+                <a href="#/enviar-senha-email" class="fade_4S" title="Resgatar Senha"><nb-icon class="fade_4S"
                     icon="refresh-outline"></nb-icon>Resgatar Senha</a>
                 <a href="#/cadastro" class="fade_4S" title="Cadastrar-se"><nb-icon class="fade_4S"
                     icon="file-add-outline"></nb-icon>Cadastro</a>

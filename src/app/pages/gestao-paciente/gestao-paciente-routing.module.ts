@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { GestaoPacienteComponent } from './gestao-paciente.component';
 import { NovoPacienteComponent } from './novo-paciente/novo-paciente.component';
 import { PacienteComponent } from './paciente/paciente.component';
+import { DependenteComponent } from './dependente/dependente.component';
 
 const routes: Routes = [{
   path: '',
@@ -16,6 +17,10 @@ const routes: Routes = [{
     {
       path: 'novo-paciente',
       component: NovoPacienteComponent,
+    },   
+    {
+      path: 'dependente',
+      component: DependenteComponent,
     },   
   ],
 
@@ -36,5 +41,6 @@ export class GestaoPacienteRoutingModule { }
 export const routedComponents = [
   GestaoPacienteComponent,
   PacienteComponent,
-  NovoPacienteComponent
+  NovoPacienteComponent,
+  DependenteComponent
 ];

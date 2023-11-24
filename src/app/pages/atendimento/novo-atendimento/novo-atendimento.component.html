@@ -155,25 +155,25 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <!--<div class="form-row align-items-center">
+                                        <div class="form-row align-items-center">
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label class="consultaParticular">Consulta de retorno?</label>
+                                                    <label class="consultaRetorno">Consulta de retorno?</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
-                                                            <input class="mat-button" type="radio" id="radio"
-                                                                name="optPart" value="S"
-                                                                (click)="consultaParticular($event.target.value)" />
+                                                            <input class="mat-button" type="radio" id="radioRetorno"
+                                                                name="optRetorno" value="S"
+                                                                (click)="consultaRetorno($event.target.value)" />
                                                             Sim</label>
                                                         <label class="radio-inline pl-2">
-                                                            <input class="mat-button" type="radio" id="radio"
-                                                                name="optPart" value="N"
-                                                                (click)="consultaParticular($event.target.value)" />
+                                                            <input class="mat-button" type="radio" id="radioRetorno"
+                                                                name="optRetorno" value="N"
+                                                                (click)="consultaRetorno($event.target.value)" />
                                                             Não</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>-->
+                                        </div>
                                         <div class="form-row align-items-center">                                           
                                             <div class="col-md-3">
                                                 <div class="form-group">
@@ -213,15 +213,15 @@
                                         <div class="form-row align-items-center">
                                             <div class="form-group col-md-4">
                                                 <div class="form-group">
-                                                    <label class="consultaDependente">Consulta paga?</label>
+                                                    <label class="consultaPaga">Consulta paga?</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
-                                                            <input class="mat-button" type="radio" id="radio"
-                                                                name="optCons" value="S" (click)="consultaPaga($event.target.value)"/>
+                                                            <input class="mat-button" type="radio" id="radioSim"
+                                                                name="radio" value="S" (click)="consultaPaga($event.target.value)"/>
                                                             Sim</label>
                                                         <label class="radio-inline pl-2">
-                                                            <input class="mat-button" type="radio" id="radio"
-                                                                name="optCons" value="N" (click)="consultaPaga($event.target.value)" />
+                                                            <input class="mat-button" type="radio" id="radioNao"
+                                                                name="radio" value="N" (click)="consultaPaga($event.target.value)" />
                                                             Não</label>
                                                     </div>
                                                 </div>
@@ -231,7 +231,7 @@
                                                     <label for="detalhes">Detalhes:</label>
                                                     <textarea class="form-control" rows="3" formControlName="consPagto"
                                                         id="consPagto" [value]="null" (keypress)="qdadeCaracteres()"
-                                                        maxlength="2000"></textarea>
+                                                        maxlength="2000" disabled></textarea>
                                                     <p class="text-muted"><small><span class="caracteres"
                                                                 name="txtArea">{{this.tamanho}}</span></small>
                                                         quantidade máxima de caracteres</p>

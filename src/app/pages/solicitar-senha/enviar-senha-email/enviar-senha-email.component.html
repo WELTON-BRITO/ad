@@ -9,19 +9,11 @@
                 <div class="m-lg-n4 text-center">
                   <img class="p-4" style="height: 255px; width: 450px;" src="assets/images/login_aditi.png" id="icon"
                     alt="User Icon" />
-                </div>
-                <div class="text-center m-5">
-                  <button class="col-md-4 m-3" nbButton outline status="primary" type="button"
-                    (click)="resetSenha($event.target.value)" value="5"><nb-icon icon="people-outline"></nb-icon>
-                    MÉDICO</button>
-                  <button class="col-md-4 m-3" nbButton outline status="primary" type="button"
-                    (click)="resetSenha($event.target.value)" value="7"><nb-icon icon="home-outline"></nb-icon>
-                    CLÍNICA</button>
-                </div>
-                <p>Por favor, insira seu e-mail e cpf/cnpj para dar continuidade ao processo de reset senha.</p>
+                </div>               
+                <p>Por favor, insira seu e-mail e cpf ou cnpj para dar continuidade ao processo de reset senha.</p>
                 <div class="text-center">
                   <input class="form-control col-md-3 border" name="cpfCnpj" id="cpfCnpj" type="text" formControlName="cpfCnpj"
-                    placeholder="cpfCnpj" maxlength="80" autocomplete="off" />
+                    placeholder="cpfCnpj" maxlength="80" autocomplete="off" [(ngModel)]="cnpjCpf" [mask]="getCpfCnpjMask()"/>
                 </div>
                 <div class="text-center">
                   <input class="form-control col-md-3 border" name="email" id="email" type="text" formControlName="email"

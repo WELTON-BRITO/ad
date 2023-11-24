@@ -30,26 +30,34 @@ export class PacienteComponent implements OnInit {
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
     this.formPaciente = this.formBuilder.group({
-      pesquisa: [null],
+      cpf: [null],
       medico: [this.listMedico[0], Validators.required]
     })
 
-    this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
+    this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    console.log(this.listMedico[0].id)
+    let registe = {
+      cpf: null,
+      medico: this.listMedico[0].id
+    }
+    this.pesquisaGeral(registe)
 
   }
 
   pesquisaGeral(data) {
+
+    console.log(data)
 
     let params = new HttpParams();
 
     if (data.medico != null) {
       params = params.append('doctorId', data.medico)
     }
-    if (data.pesquisa != null) {
-      params = params.append('federalId', data.pesquisa)
+    if (data.cpf != null) {
+      params = params.append('federalId', data.cpf)
     }
 
-    if ((data.pesquisa != null) || (data.medico != 'null')) {
+    if ((data.cpf != null) || (data.medico != 'null')) {
 
       this.isActive = true;
 
@@ -57,10 +65,43 @@ export class PacienteComponent implements OnInit {
 
         this.isActive = false;
         this.rowData = response
+
+        console.log(this.rowData)
+
+       /* for (var i = 0; i < this.rowData.length; i++) {
+          
+          let params = new HttpParams();
+          console.log(this.rowData[i].user.id)
+
+          params = params.append('id', this.rowData[i].user.id)       
+          params = params.append('domain', 'USER')
+
+         this.service.buscaPhoto(params, (response) => {             
+    
+           console.log(response)
+
+           this.rowData = this.rowData.map(data => {
+
+            return {
+              avatar: 'data:application/pdf;base64,' + response,
+              name: data.user.name,
+              cellPhone: data.user.cellPhone,
+              email: data.user.emailUser,
+              federalId: data.user.federalId,
+            }
+          })
+    
+          }, (error) => {
+            this.isActive = false;
+            this.toastrService.danger(error.message);
+          });
+
+        }     */  
+
         this.rowData = this.rowData.map(data => {
 
           return {
-            avatar: 'data:application/pdf;base64,' + data.user.avatar,
+            avatar: 'data:application/pdf;base64,' + response,
             name: data.user.name,
             cellPhone: data.user.cellPhone,
             email: data.user.emailUser,
@@ -77,6 +118,11 @@ export class PacienteComponent implements OnInit {
       this.toastrService.danger('O campos médico ou CPF são obrigatórios!!!');
     }
 
+  }
+
+  cadastrar(data){
+    console.log(data)
+    this.router.navigateByUrl('/pages/gestao-paciente/dependente', { state: data});
   }
 
   novoPaciente() {

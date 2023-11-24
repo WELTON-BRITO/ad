@@ -42,6 +42,8 @@ export class NovoAtendimentoComponent {
     public isDadosAtendimento = false
     public tipoPagto = null;
     public dependente = null;
+    public detalhes = 'Consulta de retorno';
+    public retorno = null;
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
@@ -83,7 +85,7 @@ export class NovoAtendimentoComponent {
             tipoEspecialidade: [null],
         })
 
-        this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
+        this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
     }
 
     pagamento() {
@@ -281,7 +283,8 @@ export class NovoAtendimentoComponent {
             typeServiceId: data.tipoConsulta,
             meetingUrl: this.dadosHorario.data.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId),
             specialtyId: this.specialtyId,
-            paymentInCreation: this.tipoPagto
+            paymentInCreation: this.tipoPagto,
+            isReturn: this.retorno
 
         }
 
@@ -419,6 +422,23 @@ export class NovoAtendimentoComponent {
         this.dadosHorario = data;
         this.isHorario = false;
         this.isConfAtendimento = true;
+    }
+
+    consultaRetorno(data) {
+
+        if (data === 'S') {
+            document.getElementById('consPagto').setAttribute('disabled', 'true');
+            document.getElementById('radioSim').setAttribute('checked', 'true');
+            document.getElementById('radioNao').setAttribute('disabled', 'true');
+            this.formNovoAtendimento.controls['consPagto'].setValue(this.detalhes);
+            this.retorno = true
+        } else {
+            document.getElementById('consPagto').removeAttribute('disabled');
+            document.getElementById('radioNao').removeAttribute('disabled');
+            document.getElementById('radioSim').removeAttribute('checked');
+            this.formNovoAtendimento.controls['consPagto'].setValue(null);
+            this.retorno = false
+        }
     }
 
     previousPage() {

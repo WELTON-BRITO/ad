@@ -18,8 +18,8 @@
                   </select>
                 </div>
                 <div class="form-group col-md-3">
-                  <label for="pesquisa">Pesquisar</label>
-                  <input class="form-control" name="pesquisa" id="pesquisa" type="text" formControlName="pesquisa"
+                  <label for="cpf">CPF</label>
+                  <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
                     placeholder="Digite o CPF..." />
                 </div>
                 <div class="col-md-5 pl-5">
@@ -76,7 +76,16 @@
                             {{ row.federalId }}
                           </div>
                         </ng-template>
-                      </ngx-datatable-column>                     
+                      </ngx-datatable-column>    
+                      <ngx-datatable-column name="Ações" prop="acoes">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="datatable-body-box-actions">
+                            <button class="btn home-icon" (click)="cadastrar(row)" title="Cadastrar">
+                              <i class="fa fa-user"></i>
+                            </button>                           
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>                 
                       <ngx-datatable-footer>
                         <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                           let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">

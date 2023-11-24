@@ -11,5 +11,9 @@ export class PacienteService {
   buscaPaciente(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/patient/all', data, successHandle, erroHandle)
   }
+
+  buscaPhoto(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/user/photo', data, successHandle, erroHandle)
+  }
   
 }
