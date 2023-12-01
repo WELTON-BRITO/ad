@@ -15,7 +15,7 @@ import { DependenteService } from './dependente.service';
 export class DependenteComponent implements OnDestroy {
 
   public formDependente = null;
- 
+
   public listEstado = null;
   public listCidade = null;
   public isActive = false;
@@ -31,6 +31,7 @@ export class DependenteComponent implements OnDestroy {
   public showMsgErro = false;
   public msgErroCpf = 'CPF inválido!!!';
   public showMsgErroCpf = false;
+  public history = null
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -88,14 +89,17 @@ export class DependenteComponent implements OnDestroy {
   ngOnDestroy() { }
 
   ngOnInit() {
-  
-    this.formDependente = this.formBuilder.group({   
+
+    this.history = history.state;
+
+    this.formDependente = this.formBuilder.group({
       nomeDep: [null],
       dateNascDep: [null],
-      tipoSanguineo: [null],
-      rgDep: [null],
+      nomeMae: [null],
+      nomePai: [null],
       cpfDep: [null],
-      imagem: [null],
+      rgDep: [null],
+      tipoSanguineo: [null],
       imagemDep: [null],
     })
 
@@ -123,26 +127,10 @@ export class DependenteComponent implements OnDestroy {
     });
   }
 
-  
+
 
   viewdiv(data) {
     this.sexo = data;
-  }
-
-  limparForm() {
-
-    this.formDependente = this.formBuilder.group({    
-      nomeDep: [null],
-      dateNascDep: [null],
-      tipoSanguineo: [null],
-      rgDep: [null],
-      cpfDep: [null],
-      imagem: [null],
-      imagemDep: [null]
-    })
-
-    this.avatar = null;
-
   }
 
   public converterImagem = ($event: Event, element) => {
@@ -159,9 +147,9 @@ export class DependenteComponent implements OnDestroy {
     })
 
     observable.subscribe((d: String) => {
-    
-        this.imagem = d.slice(d.indexOf(",") + 1);
-        this.avatar = 'data:application/pdf;base64,' + this.imagem;     
+
+      this.imagem = d.slice(d.indexOf(",") + 1);
+      this.avatar = 'data:application/pdf;base64,' + this.imagem;
 
 
     })
@@ -247,8 +235,62 @@ export class DependenteComponent implements OnDestroy {
 
   }
 
-  cadastrarPaciente(data){
-    console.log(data)
+  cadastrarPaciente(data) {
+
+    let register = {
+      name: data.nomeDep,
+      nameMother: data.nomeMae,
+      nameFather: data.nomePai,
+      cpf: data.cpfDep,
+      rg: data.rgDep,
+      biologicalSex: this.sexo,
+      birthCountry: null,
+      birthDate: data.dateNascDep,
+      ufId: this.history.uf,
+      cityId: this.history.city,
+      bloodType: data.tipoSanguineo,
+      avatar: this.avatar,
+      userId: this.history.id
+    }
+
+    if ((data.nomeDep != null) && (data.nomeMae != null) && (data.dateNascDep != null) && (this.sexo != null)) {
+
+      this.isActive = true;
+
+      this.service.cadastrarDependente(register, (response => {
+        this.isActive = false;
+        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.limpaForm()
+      }), (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+    } else {
+      this.isActive = false;
+      this.toastrService.danger('Preencher os campos obrigatório!!!');
+    }
+
+
+  }
+
+  limpaForm() {
+
+    this.formDependente = this.formBuilder.group({
+      nomeDep: [null],
+      dateNascDep: [null],
+      nomeMae: [null],
+      nomePai: [null],
+      cpfDep: [null],
+      rgDep: [null],
+      tipoSanguineo: [null],
+      imagemDep: [null],
+    })
+
+    this.sexo = null;
+    this.history.uf = null;
+    this.history.city = null;
+    this.avatar = null;
+    this.history.id = null;
   }
 
   previousPage() {

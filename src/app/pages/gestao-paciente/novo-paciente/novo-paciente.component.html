@@ -277,7 +277,7 @@
                       <label for="tipoSanguineo">Tipo sanguineo</label>
                       <select class="form-control" formControlName="tipoSanguineo">
                         <option value="null" selected>SELECIONE</option>
-                        <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.id }}">{{
+                        <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.descricao }}">{{
                           tipoSanguineo.descricao}}</option>
                       </select>
                     </div>

@@ -32,6 +32,28 @@
                       </div>
                     </div>
                   </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label for="clinica">Escolha a clínica*</label>
+                        <select class="form-control" formControlName="clinica"
+                          (change)="verificaClinica($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let clinica of listClinica" value="{{ clinica.id }}">{{
+                            clinica.socialName}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-5">
+                    <div class="form-group pt-4">
+                      <div class="text-right">
+                        <button class="btn btn-primary mr-2" (click)="buscarAtendimento(formParametrizarConsulta.value)">
+                          BUSCAR
+                        </button>                       
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="form-row align-items-center">
                   <div class="form-group">
@@ -44,12 +66,6 @@
                       <label for="nome"><span style="font-weight: bold">Tipo de Atendimento*</span></label>
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group">
-                      <label for="nome">
-                        <span style="font-weight: bold">Valor*</span></label>
-                    </div>
-                  </div>
                   <div class="form-group col-md-2">
                     <div class="form-group">
                       <label for="nome"><span style="font-weight: bold">Duração(Minutos)*</span></label>
@@ -57,7 +73,20 @@
                   </div>
                   <div class="form-group col-md-2">
                     <div class="form-group">
-                      <label for="nome"><span style="font-weight: bold">QR Code*</span></label>
+                      <label for="nome">
+                        <span style="font-weight: bold">Valor*</span></label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <label for="nome">
+                        <span style="font-weight: bold">QR Code*</span></label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-1" *ngIf="isBloqueio">
+                    <div class="form-group">
+                      <label for="nome">
+                        <span style="font-weight: bold">Bloqueio</span></label>
                     </div>
                   </div>
                 </div>
@@ -65,9 +94,15 @@
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="P"
-                          (click)="funcValor($event.target.value, $event.target)"/>
+                        <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="1"
+                          (click)="funcValor($event.target.value, $event.target)" />
                         Atendimento Presencial</label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoPresencial"
+                        formControlName="tempoPresencial" />
                     </div>
                   </div>
                   <div class="form-group col-md-2">
@@ -78,11 +113,23 @@
                         placeholder="R$ 0,00" />
                     </div>
                   </div>
-                  <div class="form-group col-md-2">
-                    <div class="form-group" style="margin-left: 70px;">
-                      <div class="text-right">
-                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoPresencial"
-                          formControlName="tempoPresencial" />
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control ml-lg-n3" id="qrPresencial"
+                        formControlName="qrPresencial" />
+                    </div>
+                  </div>
+                  <div class="col-md-2" *ngIf="isBloqueio">
+                    <div class="form-group">
+                      <div class="pb-2 row">
+                        <label class="radio-inline pl-3">
+                          <input class="mat-button" type="radio" id="radio" name="optPresencial" value="true"
+                            formControlName="optPresencial" />
+                          Sim</label>
+                        <label class="radio-inline pl-2">
+                          <input class="mat-button" type="radio" id="radio" name="optPresencial" value="false"
+                            formControlName="optPresencial" />
+                          Não</label>
                       </div>
                     </div>
                   </div>
@@ -91,9 +138,15 @@
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="video" name="optcheckbox" value="V"
-                          (click)="funcValor($event.target.value, $event.target)"/>
+                        <input class="form-check-input" type="checkbox" id="video" name="optcheckbox" value="2"
+                          (click)="funcValor($event.target.value, $event.target)" />
                         Atendimento por Video</label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoVideo"
+                        formControlName="tempoVideo" />
                     </div>
                   </div>
                   <div class="form-group col-md-2">
@@ -104,11 +157,22 @@
                         placeholder="R$ 0,00" />
                     </div>
                   </div>
-                  <div class="form-group col-md-2">
-                    <div class="form-group" style="margin-left: 70px;">
-                      <div class="text-right">
-                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoVideo"
-                          formControlName="tempoVideo" />
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control ml-lg-n3" id="qrVideo" formControlName="qrVideo" />
+                    </div>
+                  </div>
+                  <div class="col-md-2" *ngIf="isBloqueio">
+                    <div class="form-group">
+                      <div class="pb-2 row">
+                        <label class="radio-inline pl-3">
+                          <input class="mat-button" type="radio" id="radio" name="optVideo" value="true"
+                            formControlName="optVideo" />
+                          Sim</label>
+                        <label class="radio-inline pl-2">
+                          <input class="mat-button" type="radio" id="radio" name="optVideo" value="false"
+                            formControlName="optVideo" />
+                          Não</label>
                       </div>
                     </div>
                   </div>
@@ -117,9 +181,17 @@
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="emergencial" name="optcheckbox" value="E"
-                          (click)="funcValor($event.target.value, $event.target)"/>
+                        <input class="form-check-input" type="checkbox" id="emergencial" name="optcheckbox" value="3"
+                          (click)="funcValor($event.target.value, $event.target)" />
                         Atendimento Emergencial</label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <div class="text-right">
+                        <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoEmergencial"
+                          formControlName="tempoEmergencial" />
+                      </div>
                     </div>
                   </div>
                   <div class="form-group col-md-2">
@@ -130,11 +202,23 @@
                         formControlName="valorEmergencial" placeholder="R$ 0,00">
                     </div>
                   </div>
-                  <div class="form-group col-md-2">
-                    <div class="form-group" style="margin-left: 70px;">
-                      <div class="text-right">
-                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoEmergencial"
-                          formControlName="tempoEmergencial" />
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control ml-lg-n3" id="qrEmergencial"
+                        formControlName="qrEmergencial" />
+                    </div>
+                  </div>
+                  <div class="col-md-2" *ngIf="isBloqueio">
+                    <div class="form-group">
+                      <div class="pb-2 row">
+                        <label class="radio-inline pl-3">
+                          <input class="mat-button" type="radio" id="radio" name="optEmergencial" value="true"
+                            formControlName="optEmergencial" />
+                          Sim</label>
+                        <label class="radio-inline pl-2">
+                          <input class="mat-button" type="radio" id="radio" name="optEmergencial" value="false"
+                            formControlName="optEmergencial" />
+                          Não</label>
                       </div>
                     </div>
                   </div>
@@ -143,32 +227,41 @@
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="casa" name="optcheckbox" value="C"
-                          (click)="funcValor($event.target.value, $event.target)"/>
+                        <input class="form-check-input" type="checkbox" id="casa" name="optcheckbox" value="4"
+                          (click)="funcValor($event.target.value, $event.target)" />
                         Atendimento em Casa</label>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoCasa"
+                        formControlName="tempoCasa" />
                     </div>
                   </div>
                   <div class="form-group col-md-2">
                     <div class="form-group">
                       <input class="div-casa" autocomplete="off" currencyMask
                         [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                        class="form-control m-lg-n3" name="valorCasa" id="valorCasa"
-                        formControlName="valorCasa" placeholder="R$ 0,00">
+                        class="form-control m-lg-n3" name="valorCasa" id="valorCasa" formControlName="valorCasa"
+                        placeholder="R$ 0,00">
                     </div>
                   </div>
-                  <div class="form-group col-md-2">
-                    <div class="form-group" style="margin-left: 70px;">
-                      <div class="text-right">
-                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoCasa"
-                          formControlName="tempoCasa" />
-                      </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control ml-lg-n3" id="qrCasa" formControlName="qrCasa" />
                     </div>
                   </div>
-                  <div class="form-group col-md-4">
-                    <div class="form-group" style="margin-left: 70px;">
-                      <div class="text-right">
-                        <input type="number" min="0" max="60" class="form-control mx-md-5" id="tempoCasa"
-                          formControlName="tempoCasa" />
+                  <div class="col-md-2" *ngIf="isBloqueio">
+                    <div class="form-group">
+                      <div class="pb-2 row">
+                        <label class="radio-inline pl-3">
+                          <input class="mat-button" type="radio" id="radio" name="optCasa" value="true"
+                            formControlName="optCasa" />
+                          Sim</label>
+                        <label class="radio-inline pl-2">
+                          <input class="mat-button" type="radio" id="radio" name="optCasa" value="false"
+                            formControlName="optCasa" />
+                          Não</label>
                       </div>
                     </div>
                   </div>

@@ -24,4 +24,8 @@ export class ConfigurarDiaAtendimentoService {
     return this.httpService.doGet('/api/clinic/doctor/' + id, data, successHandle, erroHandle)
   } 
 
+  buscaModalidade(doctorId: any, data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/configuration/service/doctor/'+ doctorId +'/typePrice', data, successHandle, erroHandle)
+  } 
+
 }

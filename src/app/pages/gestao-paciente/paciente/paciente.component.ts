@@ -35,7 +35,7 @@ export class PacienteComponent implements OnInit {
     })
 
     this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
-    console.log(this.listMedico[0].id)
+
     let registe = {
       cpf: null,
       medico: this.listMedico[0].id
@@ -45,8 +45,6 @@ export class PacienteComponent implements OnInit {
   }
 
   pesquisaGeral(data) {
-
-    console.log(data)
 
     let params = new HttpParams();
 
@@ -66,38 +64,6 @@ export class PacienteComponent implements OnInit {
         this.isActive = false;
         this.rowData = response
 
-        console.log(this.rowData)
-
-       /* for (var i = 0; i < this.rowData.length; i++) {
-          
-          let params = new HttpParams();
-          console.log(this.rowData[i].user.id)
-
-          params = params.append('id', this.rowData[i].user.id)       
-          params = params.append('domain', 'USER')
-
-         this.service.buscaPhoto(params, (response) => {             
-    
-           console.log(response)
-
-           this.rowData = this.rowData.map(data => {
-
-            return {
-              avatar: 'data:application/pdf;base64,' + response,
-              name: data.user.name,
-              cellPhone: data.user.cellPhone,
-              email: data.user.emailUser,
-              federalId: data.user.federalId,
-            }
-          })
-    
-          }, (error) => {
-            this.isActive = false;
-            this.toastrService.danger(error.message);
-          });
-
-        }     */  
-
         this.rowData = this.rowData.map(data => {
 
           return {
@@ -106,6 +72,9 @@ export class PacienteComponent implements OnInit {
             cellPhone: data.user.cellPhone,
             email: data.user.emailUser,
             federalId: data.user.federalId,
+            id: data.user.id,
+            city: data.user.city.id,
+            uf: data.user.uf.id,
           }
         })
 
@@ -120,9 +89,8 @@ export class PacienteComponent implements OnInit {
 
   }
 
-  cadastrar(data){
-    console.log(data)
-    this.router.navigateByUrl('/pages/gestao-paciente/dependente', { state: data});
+  cadastrar(data) {
+    this.router.navigateByUrl('/pages/gestao-paciente/dependente', { state: data });
   }
 
   novoPaciente() {

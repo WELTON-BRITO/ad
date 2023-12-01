@@ -39,6 +39,8 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   public horaFim = [];
   public timeRange = [];
   public clinicaId = null;
+  public listModalidade = null;
+  public modalidadeId = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -87,23 +89,25 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     let data = history.state
 
     for (var i = 0; i < this.listMedico.length; i++) {
-      if(data.medico == this.listMedico[i].id){
+      if (data.medico == this.listMedico[i].id) {
         this.doctorId = this.listMedico[i].id
         this.doctor = this.listMedico[i].name
-      }    
-    }  
-        
+      }
+    }
+
     this.verificaHorario(this.doctorId)
     this.pesquisaClinica(this.doctorId)
+    this.buscaModalidade(this.doctorId)
     this.formDiaAtendimento = this.formBuilder.group({
       semana: [null],
-      clinica: [null]
+      clinica: [null],
+      tipoModalidade: [null]
     })
 
   }
 
   pesquisaClinica(data) {
-    
+
     this.service.buscaClinica(data, null, (response) => {
 
       this.listClinica = response
@@ -116,7 +120,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
 
   }
 
-  verificaClinica(data){
+  verificaClinica(data) {
     this.clinicaId = data;
   }
 
@@ -133,26 +137,27 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     this.tipoCard.splice(this.tipoCard.indexOf(3), 1);
 
   }
- 
-  salvar(event) {   
 
-      for (var i = 0; i < this.tipoCard.length; i++) {
-       
-        this.timeRange.push(
-          {
-            clinicId: this.clinicaId,
-            startTime: this.tipoCard[i].horaInicio,
-            endTime:this.tipoCard[i].horaFim
-          }
-        ) 
-      }    
+  salvar(event) {
 
-    if (this.tipoCard.length <= 0)  {      
+    for (var i = 0; i < this.tipoCard.length; i++) {
+
+      this.timeRange.push(
+        {
+          clinicId: this.clinicaId,
+          startTime: this.tipoCard[i].horaInicio,
+          endTime: this.tipoCard[i].horaFim,
+          typeServiceId: this.modalidadeId
+        }
+      )
+    }
+
+    if (this.tipoCard.length <= 0) {
       this.toastrService.warning('Não é possível salvar horário de atendimento sem marcar a hora!!!');
     } else {
 
       let register = {
-        doctorId: this.listMedico,
+        doctorId: this.doctorId,
         items: [
           {
             weekday: event.semana != null ? event.semana : this.semana,
@@ -160,13 +165,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
           }
         ]
       }
-      
+
       this.isActive = true;
       this.service.salveAtenHora(register, (response => {
         this.isActive = false;
         this.toastrService.success('Registro cadastrado com sucesso !!!');
         this.limpaForm()
-        this.verificaHorario(this.listMedico)
+        this.verificaHorario(this.doctorId)
       }), (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
@@ -184,6 +189,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   }
 
   verificaHorario(data) {
+
     this.isActive = true
     this.rowData = [];
 
@@ -199,7 +205,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
         this.rowData = this.rowData.map(data => {
 
           if (data.weekday == 1) {
-            this.segunda = [data.startTime.concat(' - ', data.endTime)]   
+            this.segunda = [data.startTime.concat(' - ', data.endTime)]
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
@@ -207,53 +213,53 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 2) {
-            this.terca = [data.startTime.concat(' - ', data.endTime)]  
+            this.terca = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;          
+            this.domingo = null;
           } else if (data.weekday == 3) {
-            this.quarta = [data.startTime.concat(' - ', data.endTime)] 
+            this.quarta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quinta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;              
+            this.domingo = null;
           } else if (data.weekday == 4) {
-            this.quinta = [data.startTime.concat(' - ', data.endTime)]  
+            this.quinta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.sexta = null;
             this.sabado = null;
-            this.domingo = null;             
+            this.domingo = null;
           } else if (data.weekday == 5) {
-            this.sexta = [data.startTime.concat(' - ', data.endTime)]    
+            this.sexta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sabado = null;
-            this.domingo = null;           
+            this.domingo = null;
           } else if (data.weekday == 6) {
-            this.sabado = [data.startTime.concat(' - ', data.endTime)]    
+            this.sabado = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
-            this.domingo = null;            
+            this.domingo = null;
           } else if (data.weekday == 7) {
-            this.domingo = [data.startTime.concat(' - ', data.endTime)]  
+            this.domingo = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
             this.sexta = null;
-            this.sabado = null;              
+            this.sabado = null;
           }
 
           return {
@@ -266,7 +272,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             sabado: this.sabado,
             domingo: this.domingo,
           }
-        })        
+        })
         this.isActive = false
       } else {
         this.isActive = false
@@ -277,23 +283,23 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
       this.toastrService.danger(error.error.message);
     });
 
-  }  
+  }
 
-  excluir(event){
+  excluir(event) {
 
-    for (var i = 0; i < this.tipoCard.length; i++) {
-       
-      this.timeRange.push(
-        {
-          clinicId: null,
-          startTime: null,
-          endTime: null
-        }
-      ) 
-    }    
+    /*for (var i = 0; i < this.tipoCard.length; i++) {*/
+
+    this.timeRange.push(
+      {
+        clinicId: null,
+        startTime: null,
+        endTime: null
+      }
+    )
+    /*}    */
 
     let register = {
-      doctorId: this.listMedico,
+      doctorId: this.doctorId,
       items: [
         {
           weekday: event.id,
@@ -301,25 +307,37 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
         }
       ]
     }
-    
+
     this.isActive = true;
     this.service.salveAtenHora(register, (response => {
 
       this.isActive = false;
       this.toastrService.success('Registro removido com sucesso !!!');
       this.limpaForm()
-      this.verificaHorario(this.listMedico)
+      this.verificaHorario(this.doctorId)
     }), (error) => {
       this.isActive = false;
       this.toastrService.danger(error.error.message);
     });
 
-  
-
   }
 
   previousPage() {
     this.router.navigate(['/pages/configurar-agenda/visualizar-dia-atendimento'])
+  }
+
+  buscaModalidade(data) {
+
+    this.service.buscaModalidade(data, null, (response => {
+      this.listModalidade = response
+    }), (error) => {
+      this.toastrService.danger(error.message);
+    });
+
+  }
+
+  verificaModalidade(data) {
+    this.modalidadeId = data
   }
 
 }

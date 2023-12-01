@@ -54,16 +54,11 @@ export class EnviarSenhaEmailComponent implements OnInit {
     this.isActive = true;
 
     this.service.resetPassword(register, (response => {
-      console.log('entrei aqui no response')
-      console.log(response)
-
+   
       this.isActive = false;      
       var str1 = data.email;
       var str2 = str1.slice(0, 4);
-      var str3 = data.email.substr(data.email.indexOf('@') + 1);
-  
-      console.log(str2)
-      console.log(str3)
+      var str3 = data.email.substr(data.email.indexOf('@') + 1);     
   
       this.dialogService.open(ValidaTokenComponent, {
         context: {
@@ -77,30 +72,8 @@ export class EnviarSenhaEmailComponent implements OnInit {
       this.isSolicitarSenha = false
       
     }), (error) => {
-      this.isActive = false;
-      console.log('entrei aqui no erro')
-
-     /* this.isActive = false;      
-      var str1 = data.email;
-      var str2 = str1.slice(0, 4);
-      var str3 = data.email.substr(data.email.indexOf('@') + 1);
-  
-      console.log(str2)
-      console.log(str3)
-  
-      this.dialogService.open(ValidaTokenComponent, {
-        context: {
-          descricao: 'Sua solicitação de reset de senha foi feita com sucesso. Você receberá um e-mail com token em instantes com as instruções. Caso não receba este e-mail na caixa principal, verifique se o e-mail encontra-se na caixa de spam.',
-          email: str2 + '*****' + str3,
-          federalId: data.cpfCnpj,
-          domainId: this.domainId
-        },
-      });
-
-      this.isSolicitarSenha = false*/
-
-      console.log(error)
-      this.toastrService.danger(error.error.message);
+      this.isActive = false;     
+      this.toastrService.danger(error);
     });
 
   }

@@ -15,4 +15,8 @@ export class DependenteService {
   buscaCidade(data, ufId:any,successHandle: Function, errorHandle: Function){
     return this.httpService.doGet('/api/city/uf/' + ufId + '/all',  data, successHandle, errorHandle)
   }
+
+  cadastrarDependente(data: any, successHandle: Function, errorHandle: Function) {
+    return this.httpService.doPost('/api/child', data, successHandle, errorHandle);
+  }
 }

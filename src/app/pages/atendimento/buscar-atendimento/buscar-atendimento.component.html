@@ -6,22 +6,45 @@
           <nb-card-body>
             <form id=“form-buscar-atendimento” [formGroup]="formBuscarAtendimento">
               <div class="col-md-12 col-xs-12">
-                <div class="form-group col-md-4">
-                  <h5 class="ml-lg-n3">Atendimento</h5>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4">
+                    <h5 class="ml-lg-n3">Atendimento</h5>
+                  </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row align-items-center">
                   <div class="form-group col-md-4">
                     <div class="form-group">
-                      <div class="div-medico mb-4">
-                        <label for="medico">Escolha o médico* </label>
-                        <select class="form-control" id="medico" formControlName="medico">
-                          <option value="{{ listMedico }}" selected>Selecione um Médico</option>
-                          <option *ngFor="let medico of listMedico" [value]="medico.id">
-                            <!-- use value instead of ngValue -->
-                            {{ medico.ID }} {{ medico.name }}
-                          </option>
-                        </select>
+                      <label for="medico">Escolha o médico* </label>
+                      <select class="form-control" id="medico" formControlName="medico">
+                        <option value="{{ listMedico }}" selected>Selecione um Médico</option>
+                        <option *ngFor="let medico of listMedico" [value]="medico.id">
+                          <!-- use value instead of ngValue -->
+                          {{ medico.ID }} {{ medico.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-8">
+                    <div class="form-group">
+                      <label for="nome"> Informe a Data Inicial e Final *</label>
+                      <div class="div-bucar-periodo">
+                        <div class="form-row">
+                          <div class="div-data-inicio col-md-4 px-1">
+                            <input class="form-control date" type="date" id="dataInicio" name="Data Início"
+                              [value]="TodayDate" maxlength="10" formControlName="dataInicio" />
+                          </div>
+                          <div class="div-data-fim col-md-4">
+                            <input class="form-control date" type="date" id="dataFim" name="Data Fim"
+                              [value]="FinalDate" maxlength="10" formControlName="dataFim" />
+                          </div>
+                        </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
                       <div class="div-nome">
                         <label for="nome">Buscar por nome</label>
                         <input class="form-control" name="nome" id="nome" type="text" formControlName="nome"
@@ -29,22 +52,10 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-8">
-                    <label for="nome"> Informe a Data Inicial e Final *</label>
-                    <div class="div-bucar-periodo mb-4">
-                      <div class="form-row">
-                        <div class="div-data-inicio col-md-4 px-1">
-                          <input class="form-control date" type="date" id="dataInicio" name="Data Início"
-                            [value]="TodayDate" maxlength="10" formControlName="dataInicio"/>
-                        </div>
-                        <div class="div-data-fim col-md-4">
-                          <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate"
-                            maxlength="10" formControlName="dataFim"/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row">
-                      <div class="div-cpf col-md-6"> <label for="cpf">Buscar por cpf</label>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="div-cpf">
+                        <label for="cpf">Buscar por cpf</label>
                         <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
                           mask="000.000.000-00" maxlength="14" (change)="isValidCpf(formBuscarAtendimento.value)"
                           placeholder="000.000.000-00" />
@@ -54,29 +65,27 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
+                  <div class="form-group col-md-5">
+                    <div class="form-group pt-4">
                       <div class="text-right">
                         <button class="btn btn-primary mr-2" (click)="buscarAtendimento(formBuscarAtendimento.value)">
-                          BUSCAR ATENDIMENTOS
+                          BUSCAR
                         </button>
                         <button class="btn btn-success ml-2" (click)="agendarAtendimento()">
-                          AGENDAR ATENDIMENTO
+                          AGENDAR
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="form-row align-items-center">
-                  <div class="form-group col-md-12"></div>
-                </div>
+
               </div>
               <div class="form-row align-items-center">
                 <div class="form-group col-md-12">
                   <div class="app-box">
                     <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
                       [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
-                      [messages]="{ emptyMessage: 'Sem dados...' }" [limit]="8">
+                      [messages]="{ emptyMessage: 'Sem dados...' }" [limit]="40">
                       <ngx-datatable-column name="Data" prop="data">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
@@ -119,11 +128,11 @@
                               <i class="fa fa-info-circle"></i>
                             </button>
                             <button class="btn home-icon" (click)="iniciarAtendimento(row)" title="Iniciar atendimento"
-                            *ngIf="row.atendimento.status !=='01 - Aguardando Aprovação' && row.atendimento.status !=='05 - Consulta Cancelada'">
+                              *ngIf="row.atendimento.status !=='01 - Aguardando Aprovação' && row.atendimento.status !=='05 - Consulta Cancelada'">
                               <i class="fa fa-wifi"></i>
                             </button>
                             <button class="btn home-icon" (click)="videoAtendimento(row)" title="Vídeo atendimento"
-                            *ngIf="row.atendimento.meetingUrl != null">
+                              *ngIf="row.atendimento.meetingUrl != null">
                               <i class="fa fa-video"></i>
                             </button>
                           </div>

@@ -79,7 +79,7 @@
           <nb-icon class="action-icon" icon="trash-2-outline"></nb-icon>
           <span>Cancelar</span>
         </nb-action>
-        <nb-action *ngIf="atendimento.status ==='01 - Aguardando Aprovação'" (click)="aprovarPagamento()" >
+        <nb-action *ngIf="atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='02 - Aguardando Pagamento'" (click)="aprovarPagamento()" >
           <nb-icon class="action-icon" icon="checkmark-circle-outline"></nb-icon>
           <span>Aprovar pagamento</span>
         </nb-action>
