@@ -26,6 +26,8 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   public sabado = null;
   public domingo = null;
   public isActive = false;
+  public listClinica: any = [];
+  public clinicaId = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -70,14 +72,13 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
     document.getElementById('bntConfig').setAttribute('disabled', 'true');
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
-
     this.formVisualizarDiaAtendimento = this.formBuilder.group({
       medico: [this.listMedico[0], Validators.required],
+      clinica: [this.listMedico[0], Validators.required],
     })
 
     this.formVisualizarDiaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
-    this.verificaHorario(this.listMedico[0].id)
-
+    this.pesquisaClinica(this.listMedico[0].id)
   }
 
   configAtendimento(data) {
@@ -89,8 +90,10 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
     this.rowData = [];
 
     let params = new HttpParams();
-    params = params.append('doctorId', data)
-
+    params = params.append('doctorId', data.medico)
+    if (this.clinicaId != null) {
+      params = params.append('clinicId', this.clinicaId)
+    }
     this.service.agendaDoctor(params, (response) => {
 
       if (response.length != 0) {
@@ -180,6 +183,28 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       document.getElementById('bntConfig').removeAttribute('disabled');
     });
 
+  }
+
+  pesquisaClinica(data) {
+
+    this.service.buscaClinica(data, null, (response) => {
+
+      this.listClinica = response
+      this.isActive = false
+
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.message);
+    });
+
+  }
+
+  verificaClinica(data) {
+    this.clinicaId = data;
+  }
+
+  buscarAtendimento(data) {
+    this.verificaHorario(data)
   }
 
 }

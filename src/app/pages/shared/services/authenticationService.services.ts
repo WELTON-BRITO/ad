@@ -18,7 +18,8 @@ export class AuthenticationService {
       const loginForm = {
         login: login,
         password: password,
-        domain: domain
+        domain: domain,
+        firebaseToken: ''
       };
 
       const httpOptions = {

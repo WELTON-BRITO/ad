@@ -23,7 +23,30 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-8">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label for="clinica">Escolha a clínica</label>
+                        <select class="form-control" formControlName="clinica"
+                          (change)="verificaClinica($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let clinica of listClinica" value="{{ clinica.id }}">{{
+                            clinica.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group pt-4">
+                      <div class="text-right">
+                        <button class="btn btn-primary"
+                          (click)="buscarAtendimento(formVisualizarDiaAtendimento.value)">
+                          BUSCAR
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
                     <div class="form-group pt-2">
                       <div class="text-right">
                         <button class="btn btn-success mr-3" id="bntConfig"

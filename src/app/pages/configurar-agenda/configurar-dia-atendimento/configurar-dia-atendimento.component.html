@@ -52,7 +52,19 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label for="modalidade">Tipo modalidade</label>
+                        <select class="form-control" formControlName="tipoModalidade" (change)="verificaModalidade($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let modalidade of listModalidade" value="{{ modalidade.id }}">{{
+                            modalidade.description}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
                     <div class="form-group pt-2">
                       <div class="text-right">
                         <button class="btn btn-primary mr-3" (click)="addHora()">
@@ -162,13 +174,13 @@
                             </div>
                           </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
+                        <!--<ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
                           <ng-template ngx-datatable-cell-template let-row="row">                           
                             <a class="home-icon" (click)="excluir(row)" title="Excluir">
                               <i class="fas fa-solid fa-ban p-2"></i>
                             </a>
                           </ng-template>
-                        </ngx-datatable-column>
+                        </ngx-datatable-column>-->
                         <ngx-datatable-footer>
                           <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                             let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">

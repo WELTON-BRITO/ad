@@ -26,7 +26,8 @@
                   <br>
                   <div class="text-center">
                     <input class="form-control" type="password" formControlName="repetirSenha" id="repetirSenha"
-                      name="repetirSenha" placeholder="Repetir nova senha" type="{{showRepeatPass ? 'text' : 'password' }}"/>
+                      name="repetirSenha" placeholder="Repetir nova senha" type="{{showRepeatPass ? 'text' : 'password' }}"
+                      (blur)="validarSenhas(novaSenhaForm.value)"/>
                       <button type="button" class="btn-transparent" (click)="toggleShowRepeatPass()">
                         <i class="fa" [ngStyle]="{'color': '#757474'}"
                           [ngClass]="{'fa-eye': showRepeatPass, 'fa-eye-slash': !showRepeatPass}" aria-hidden="true"></i>
@@ -57,7 +58,7 @@
                 </form>
                 <div class="col-md-5 m-auto">
                   <div class="text-center">
-                    <button class="btn btn-primary" (click)="alterarSenha(novaSenhaForm.value)">
+                    <button class="btn btn-primary" (click)="alterarSenha(novaSenhaForm.value)" id="bnt-alterar" disabled>
                       ALTERAR
                     </button>                      
                   </div>

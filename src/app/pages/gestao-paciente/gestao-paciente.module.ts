@@ -21,6 +21,7 @@ import { PacienteComponent } from './paciente/paciente.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { DependenteComponent } from './dependente/dependente.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
   declarations: [
     GestaoPacienteComponent, 
     PacienteComponent,
-    NovoPacienteComponent
+    NovoPacienteComponent,
+    DependenteComponent
   ],
 })
 export class GestaoPacienteModule { }

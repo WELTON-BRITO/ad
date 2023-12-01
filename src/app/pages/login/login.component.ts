@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   public domain = null;
   public listMedico = null;
   showPass = false;
+  public cnpjCpf = null;
 
   constructor(
     private router: Router,
@@ -138,5 +139,12 @@ export class LoginComponent implements OnInit {
     this.showPass = !this.showPass;
   }
 
+  isCPF(): boolean {
+    return this.cnpjCpf == null ? true : this.cnpjCpf.length < 12 ? true : false;
+  }
+
+  getCpfCnpjMask(): string {
+    return this.isCPF() ? '000.000.000-009' : '00.000.000/0000-00';
+  }
 }
 

@@ -30,9 +30,9 @@ export class HttpService {
         },
         (err) => {
 
-          errorHandle(err)
+          errorHandle(err)        
           
-          if (errorHandle != null) {
+          if ((errorHandle != null) && ((parseInt(err.status) != 200)) ){
             errorHandle(this.getErrorMessage(err));
             this.loadingBarService.complete();
           } else {
@@ -70,7 +70,9 @@ export class HttpService {
         }
         return { message: errMessage, status: err.status };
       }
-    } else if (parseInt(err.status) >= 500) {
+    }else if(parseInt(err.status) == 200) {
+      return { message: "Realizar a operação. ", status: err.status };
+    }else if (parseInt(err.status) >= 500) {
       return { message: "Não foi possível realizar a operação. ", status: err.status };
     } else {
       return { message: 'Erro não verificado.', status: err.status };

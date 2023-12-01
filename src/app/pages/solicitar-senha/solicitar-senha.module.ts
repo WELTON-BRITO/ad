@@ -33,8 +33,8 @@ import { EnviarSenhaEmailComponent } from './enviar-senha-email/enviar-senha-ema
     NgxEchartsModule,
     NgxMaskModule.forRoot(),
     Ng2SmartTableModule,
-    NgxDatatableModule, 
-    NbCheckboxModule,   
+    NgxDatatableModule,
+    NbCheckboxModule,
     NbAlertModule
   ],
   declarations: [
@@ -42,8 +42,10 @@ import { EnviarSenhaEmailComponent } from './enviar-senha-email/enviar-senha-ema
     ValidaTokenComponent,
     AlterarSenhaComponent,
     EnviarSenhaEmailComponent
-
-      ],
+  ],
+  entryComponents: [
+    ValidaTokenComponent
+  ],
 })
 export class SolicitarSenhaModule {
 }

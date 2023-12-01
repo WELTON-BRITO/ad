@@ -1,24 +1,26 @@
 <div class="text-center offset-3">
-    <div class="col-md-7">       
+    <div class="col-md-7">
+        <form class="valida-token" method="post" name="valida-token" id="valida-token" [formGroup]="formValidaToken">
             <nb-card>
                 <nb-card-header>Valida Token</nb-card-header>
-                <nb-card-body>                    
-                        <div class="text-center">
-                            {{this.descricao}}
-                        </div>  
-                        <div class="text-center">
-                            {{this.email}}
-                        </div>
-                        <br>   
-                        <div class="text-center">
-                            <input class="form-control col-md-12 border" name="token" id="token" type="text" 
-                              placeholder="token"/>
-                          </div>                 
+                <nb-card-body>
+                    <div class="text-center">
+                        {{this.descricao}}
+                    </div>
+                    <div class="text-center">
+                        {{this.email}}
+                    </div>
+                    <br>
+                    <div class="text-center">
+                        <input class="form-control col-md-12 border" name="token" id="token" type="text"
+                            placeholder="token" formControlName="token" />
+                    </div>
                 </nb-card-body>
                 <nb-card-footer>
                     <button class="cancel m-1" nbButton status="danger" (click)="cancel()">Cancelar</button>
-                    <button nbButton status="success" (click)="submit()">Confirmar</button>
+                    <button nbButton status="success" (click)="submit(formValidaToken.value)">Confirmar</button>
                 </nb-card-footer>
-            </nb-card>       
+            </nb-card>
+        </form>
     </div>
 </div>

@@ -11,5 +11,9 @@ export class VisualizarDiaAtendimentoService {
   agendaDoctor(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/schedule/all', data, successHandle, erroHandle)
   }
+
+  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/clinic/doctor/' + id, data, successHandle, erroHandle)
+  } 
  
 }

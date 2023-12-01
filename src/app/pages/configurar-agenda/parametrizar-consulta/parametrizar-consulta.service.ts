@@ -9,15 +9,19 @@ export class ParametrizarConsultaService {
   constructor(private httpService:HttpService) { } 
 
   cadastrarPriceDoctor(data: any, successHandle: Function, errorHandle: Function) {
-    return this.httpService.doPost('/api/doctor/price', data, successHandle, errorHandle);
+    return this.httpService.doPost('/api/doctor/typePrice', data, successHandle, errorHandle);
   }
 
-  buscaValor(data:any, doctorId, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/doctor/' + doctorId + '/price', data, successHandle, erroHandle)
+  buscaValor(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/doctor/typePrice', data, successHandle, erroHandle)
   }
 
   atualizarValor(data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doPut('/api/doctor/price', data, successHandle, erroHandle)
+    return this.httpService.doPut('/api/doctor/typePrice', data, successHandle, erroHandle)
   }
+
+  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/clinic/doctor/' + id, data, successHandle, erroHandle)
+  } 
 
 }
