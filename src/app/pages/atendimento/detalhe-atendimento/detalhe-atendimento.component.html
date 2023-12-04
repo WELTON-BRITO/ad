@@ -94,7 +94,7 @@
           <span>Ver histórico</span>
         </nb-action>-->
         <nb-action *ngIf="(atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='03 - Consulta Confirmada')
-        && atendimento.comprovante !== null" (click)="abrirComprovante()">
+        && atendimento.formaPagamento == 'PIX'" (click)="abrirComprovante()">
           <nb-icon class="action-icon" icon="attach-outline"></nb-icon>
           <span>Ver comprovante</span>
         </nb-action>

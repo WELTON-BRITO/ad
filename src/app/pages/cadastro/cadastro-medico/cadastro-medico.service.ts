@@ -7,7 +7,8 @@ import { Observable } from 'rxjs-compat';
 })
 export class CadastroMedicoService {
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService,
+    private http:HttpService) { }
 
   cadastrarMedico(data: any, successHandle: Function, errorHandle: Function) {
     return this.httpService.doPost('/api/doctor', data, successHandle, errorHandle);

@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';

@@ -41,6 +41,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   public clinicaId = null;
   public listModalidade = null;
   public modalidadeId = null;
+  public segundaId = null;
+  public tercaId = null;
+  public quartaId = null;
+  public quintaId = null;
+  public sextaId = null;
+  public sabadoId = null;
+  public domingoId = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -95,7 +102,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
       }
     }
 
-    this.verificaHorario(this.doctorId)
+    this.verificaHorario(this.doctorId, data.clinica)
     this.pesquisaClinica(this.doctorId)
     this.buscaModalidade(this.doctorId)
     this.formDiaAtendimento = this.formBuilder.group({
@@ -140,8 +147,8 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
 
   salvar(event) {
 
+    this.timeRange = []
     for (var i = 0; i < this.tipoCard.length; i++) {
-
       this.timeRange.push(
         {
           clinicId: this.clinicaId,
@@ -171,7 +178,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
         this.isActive = false;
         this.toastrService.success('Registro cadastrado com sucesso !!!');
         this.limpaForm()
-        this.verificaHorario(this.doctorId)
+        this.verificaHorario(this.doctorId, this.clinicaId)
       }), (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
@@ -188,13 +195,14 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     this.tipoCard.splice(null);
   }
 
-  verificaHorario(data) {
+  verificaHorario(data, element) {
 
     this.isActive = true
     this.rowData = [];
 
     let params = new HttpParams();
     params = params.append('doctorId', data)
+    params = params.append('clinicId', element)
 
     this.service.agendaDoctor(params, (response) => {
 
@@ -212,6 +220,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sexta = null;
             this.sabado = null;
             this.domingo = null;
+            this.segundaId = data.id;
+            this.tercaId = null;
+            this.quartaId = null;
+            this.quintaId = null;
+            this.sextaId = null;
+            this.sabadoId = null;
+            this.domingoId = null;
           } else if (data.weekday == 2) {
             this.terca = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
@@ -220,6 +235,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sexta = null;
             this.sabado = null;
             this.domingo = null;
+            this.tercaId = data.id;
+            this.segundaId = null;
+            this.quartaId = null;
+            this.quintaId = null;
+            this.sextaId = null;
+            this.sabadoId = null;
+            this.domingoId = null;
           } else if (data.weekday == 3) {
             this.quarta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
@@ -228,6 +250,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sexta = null;
             this.sabado = null;
             this.domingo = null;
+            this.quartaId = data.id;
+            this.segundaId = null;
+            this.tercaId = null;
+            this.quintaId = null;
+            this.sextaId = null;
+            this.sabadoId = null;
+            this.domingoId = null;
           } else if (data.weekday == 4) {
             this.quinta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
@@ -236,6 +265,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sexta = null;
             this.sabado = null;
             this.domingo = null;
+            this.quintaId = data.id;
+            this.segundaId = null;
+            this.tercaId = null;
+            this.quartaId = null;
+            this.sextaId = null;
+            this.sabadoId = null;
+            this.domingoId = null;
           } else if (data.weekday == 5) {
             this.sexta = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
@@ -244,6 +280,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.quinta = null;
             this.sabado = null;
             this.domingo = null;
+            this.sextaId = data.id;
+            this.segundaId = null;
+            this.tercaId = null;
+            this.quartaId = null;
+            this.quintaId = null;
+            this.sabadoId = null;
+            this.domingoId = null;
           } else if (data.weekday == 6) {
             this.sabado = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
@@ -252,6 +295,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.quinta = null;
             this.sexta = null;
             this.domingo = null;
+            this.sabadoId = data.id;
+            this.segundaId = null;
+            this.tercaId = null;
+            this.quartaId = null;
+            this.quintaId = null;
+            this.sextaId = null;
+            this.domingoId = null;
           } else if (data.weekday == 7) {
             this.domingo = [data.startTime.concat(' - ', data.endTime)]
             this.segunda = null;
@@ -260,6 +310,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.quinta = null;
             this.sexta = null;
             this.sabado = null;
+            this.domingoId = data.id;
+            this.segundaId = null;
+            this.tercaId = null;
+            this.quartaId = null;
+            this.quintaId = null;
+            this.sextaId = null;
+            this.sabadoId = null;
           }
 
           return {
@@ -271,6 +328,13 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             sexta: this.sexta,
             sabado: this.sabado,
             domingo: this.domingo,
+            segundaId: this.segundaId,
+            tercaId: this.tercaId,
+            quartaId: this.quartaId,
+            quintaId: this.quintaId,
+            sextaId: this.sextaId,
+            sabadoId: this.sabadoId,
+            domingoId: this.domingoId,
           }
         })
         this.isActive = false
@@ -287,37 +351,31 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
 
   excluir(event) {
 
-    /*for (var i = 0; i < this.tipoCard.length; i++) {*/
-
-    this.timeRange.push(
-      {
-        clinicId: null,
-        startTime: null,
-        endTime: null
-      }
-    )
-    /*}    */
-
-    let register = {
-      doctorId: this.doctorId,
-      items: [
-        {
-          weekday: event.id,
-          timeRangeList: this.timeRange
-        }
-      ]
+    if (event.segundaId != null) {
+      var id = event.segundaId;
+    } else if (event.tercaId != null) {
+      var id = event.tercaId;
+    } else if (event.quartaId != null) {
+      var id = event.quartaId;
+    } else if (event.quintaId != null) {
+      var id = event.quintaId;
+    } else if (event.sextaId != null) {
+      var id = event.sextaId;
+    } else if (event.sabadoId != null) {
+      var id = event.sabadoId;
+    } else if (event.domingoId != null) {
+      var id = event.domingoId;
     }
 
     this.isActive = true;
-    this.service.salveAtenHora(register, (response => {
-
+    this.service.delete(id, (response => {
       this.isActive = false;
       this.toastrService.success('Registro removido com sucesso !!!');
-      this.limpaForm()
-      this.verificaHorario(this.doctorId)
+      this.verificaHorario(this.doctorId, this.clinicaId)
     }), (error) => {
+      this.verificaHorario(this.doctorId, this.clinicaId)
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(error.message);
     });
 
   }

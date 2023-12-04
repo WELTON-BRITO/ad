@@ -101,7 +101,7 @@ export class DetalheAtendimentoComponent implements OnInit {
 
     if (reason != null) {
       if (reason != '') {
-        this.isActive = true       
+        this.isActive = true
 
         let register = {
           'id': this.atendimento.id,
@@ -149,15 +149,29 @@ export class DetalheAtendimentoComponent implements OnInit {
 
   abrirComprovante() {
 
-    const blobURL = URL.createObjectURL(this.pdfBlobConversion(this.atendimento.comprovante, 'image/jpeg;base64'));
-    const theWindow = window.open(blobURL);
-    const theDoc = theWindow.document;
-    const theScript = document.createElement('script');
-    function injectThis() {
-      window.print();
-    }
-    theScript.innerHTML = 'window.onload = ${injectThis.toString()};';
-    theDoc.body.appendChild(theScript);
+    this.service.visualizarAnexo(this.atendimento.id, null, (response => {
+
+      if (response != null) {
+        const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'image/jpeg;base64'));
+        const theWindow = window.open(blobURL);
+        const theDoc = theWindow.document;
+        const theScript = document.createElement('script');
+        function injectThis() {
+          window.print();
+        }
+        theScript.innerHTML = 'window.onload = ${injectThis.toString()};';
+        theDoc.body.appendChild(theScript);
+      } else {
+        this.toastrService.danger('Não existe comprovante em anexo!!!');
+      }
+
+
+    }), (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.message);
+
+    });
+
   }
 
   pdfBlobConversion(b64Data, contentType) {

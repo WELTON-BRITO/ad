@@ -28,4 +28,8 @@ export class ConfigurarDiaAtendimentoService {
     return this.httpService.doGet('/api/configuration/service/doctor/'+ doctorId +'/typePrice', data, successHandle, erroHandle)
   } 
 
+  delete(id: any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doDelete('/api/schedule/' + id, successHandle, erroHandle)
+  } 
+
 }

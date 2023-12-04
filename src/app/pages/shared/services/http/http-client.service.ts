@@ -9,6 +9,7 @@ import { environment } from "../../../../../environments/environment";
 @Injectable()
 export class HttpService {
   protected urlBase = environment.url_server;
+  protected urlCep = 'https://viacep.com.br';
 
   constructor(
     private http: HttpClient,
@@ -20,7 +21,7 @@ export class HttpService {
     observable: Observable<HttpResponse<Object>>,
     successHandle: Function,
     errorHandle?: Function
-    
+
   ) {
     try {
       observable.subscribe(
@@ -29,10 +30,8 @@ export class HttpService {
           this.loadingBarService.complete();
         },
         (err) => {
-
-          errorHandle(err)        
-          
-          if ((errorHandle != null) && ((parseInt(err.status) != 200)) ){
+          errorHandle(err)
+          if ((errorHandle != null) && ((parseInt(err.status) != 200))) {
             errorHandle(this.getErrorMessage(err));
             this.loadingBarService.complete();
           } else {
@@ -70,9 +69,9 @@ export class HttpService {
         }
         return { message: errMessage, status: err.status };
       }
-    }else if(parseInt(err.status) == 200) {
+    } else if (parseInt(err.status) == 200) {
       return { message: "Realizar a operação. ", status: err.status };
-    }else if (parseInt(err.status) >= 500) {
+    } else if (parseInt(err.status) >= 500) {
       return { message: "Não foi possível realizar a operação. ", status: err.status };
     } else {
       return { message: 'Erro não verificado.', status: err.status };
@@ -117,6 +116,7 @@ export class HttpService {
 
   public doDelete(
     path: string,
+    params: any,
     successHandle: Function,
     errorHandle?: Function
   ) {
@@ -125,13 +125,13 @@ export class HttpService {
 
     let url = this.urlBase + path;
     return this.responsecallback(
-      this.http.delete(url,{ observe: "response" }),
+      this.http.delete(url, { params, observe: "response" }),
       successHandle,
       errorHandle
     );
 
-  }  
-  
+  }
+
   public doGet(
     path: string,
     params: any,
@@ -142,6 +142,26 @@ export class HttpService {
     this.loadingBarService.start();
 
     let url = this.urlBase + path;
+    let message: string = null;
+    if (params == null) params = {};
+
+    return this.responsecallback(
+      this.http.get(url, { params, observe: "response" }),
+      successHandle,
+      errorHandle
+    );
+  }
+
+  public doGetCep(
+    path: string,
+    params: any,
+    successHandle: Function,
+    errorHandle?: Function
+  ) {
+    this.loadingBarService.reset();
+    this.loadingBarService.start();
+
+    let url = this.urlCep + path;
     let message: string = null;
     if (params == null) params = {};
 

@@ -6,6 +6,7 @@ import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { Observable, Subscriber } from 'rxjs';
 import { co } from '@fullcalendar/core/internal-common';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
+import { SearchZipCodeService } from '../../shared/services/searchZipCode.services';
 
 @Component({
   selector: 'ngx-cadastro-medico',
@@ -37,6 +38,7 @@ export class CadastroMedicoComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: CadastroMedicoService,
+    private serviceCep: SearchZipCodeService,
     private toastrService: NbToastrService) {
   }
   ngOnDestroy() { }
@@ -214,6 +216,32 @@ export class CadastroMedicoComponent implements OnInit {
     this.service.buscaCidade(null, data, (response) => {
 
       this.listCidade = response
+
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
+    });
+  }
+
+  buscaCep(data, element) {
+
+    if (data.cep != null) {
+      var cepId = data.cep
+    } else if (data.zipCode != null) {
+      var cepId = data.zipCode;
+    }
+
+
+    this.serviceCep.buscaCep(cepId, null, (response) => {
+
+      if (element == 'cep') {
+        this.formCadastroMedico.controls['rua'].setValue(response.logradouro.replace('Rua', '').replace('Avenida', '').trim());
+        this.formCadastroMedico.controls['bairro'].setValue(response.bairro.trim());
+      }
+      if (element == 'zipCode') {
+        this.formCadastroMedico.controls['street'].setValue(response.logradouro.replace('Rua', '').replace('Avenida', '').trim());
+        this.formCadastroMedico.controls['neighborhood'].setValue(response.bairro.trim());
+      }
+
 
     }, (error) => {
       this.toastrService.danger(error.error.message);
