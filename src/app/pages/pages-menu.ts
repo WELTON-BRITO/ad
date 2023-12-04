@@ -81,10 +81,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Configurar Plano',
         link: '/pages/configurar-agenda/parametrizar-plano',
       },
-      {
+     /* {
         title: 'Configurar QR Code',
         link: '/pages/configurar-agenda/gerar-qr-code',
-      }
+      }*/
     ]
   },
   {

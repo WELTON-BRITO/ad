@@ -6,6 +6,7 @@ import { CadastroClinicaService } from './cadastro-clinica.service';
 import { NbToastrService } from '@nebular/theme';
 import { Observable, Subscriber } from 'rxjs';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
+import { SearchZipCodeService } from '../../shared/services/searchZipCode.services';
 
 @Component({
   selector: 'ngx-cadastro-clinica',
@@ -30,6 +31,7 @@ export class CadastroClinicaComponent implements OnDestroy {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: CadastroClinicaService,
+    private serviceCep: SearchZipCodeService,
     private toastrService: NbToastrService) { }
 
   ngOnDestroy() { }
@@ -165,6 +167,18 @@ export class CadastroClinicaComponent implements OnDestroy {
       this.toastrService.danger(error.error.message);
     });
 
+  }
+
+  buscaCep(data) {
+
+    this.serviceCep.buscaCep(data.cep, null, (response) => {
+
+      this.formCadastroClinica.controls['rua'].setValue(response.logradouro.replace('Rua', '').replace('Avenida', '').trim());
+      this.formCadastroClinica.controls['bairro'].setValue(response.bairro.trim());
+
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
+    });
   }
 
   buscaCidade(data) {

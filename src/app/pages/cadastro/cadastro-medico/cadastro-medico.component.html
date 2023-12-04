@@ -136,7 +136,7 @@
                       <div class="col-md-3">
                         <label for="cep">Cep*</label>
                         <input class="form-control" name="cep" id="cep" type="text" formControlName="cep"
-                          mask="00000-000" [dropSpecialCharacters]="true" />
+                          mask="00000-000" [dropSpecialCharacters]="true" (blur)="buscaCep(formCadastroMedico.value, $event.target.id)"/>
                       </div>
                       <div class="col-md-4">
                         <label for="rua">Rua*</label>
@@ -263,7 +263,7 @@
                       <div class="col-md-2">
                         <label for="cep">Cep*</label>
                         <input class="form-control" name="zipCode" id="zipCode" type="text" formControlName="zipCode"
-                          mask="00000-000" [dropSpecialCharacters]="true" />
+                          mask="00000-000" [dropSpecialCharacters]="true" (blur)="buscaCep(formCadastroMedico.value, $event.target.id)"/>
                       </div>
                       <div class="col-md-3">
                         <label for="rua">Rua*</label>

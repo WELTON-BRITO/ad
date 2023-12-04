@@ -91,15 +91,13 @@ export class BuscarAtendimentoComponent implements OnInit {
 
     this.TodayDate = this.currentYear + "-" + this.FinalMonth + "-" + this.FinalDay;
 
-
     if (this.currentDay2 > 31) {
       this.FinalDay = 31;
     }
 
     this.FinalDate = this.currentYear + "-" + this.FinalMonth + "-" + this.FinalDay;
 
-
-    var time = new Date(this.FinalDate);
+    var time = new Date();
     var outraData = new Date();
     outraData.setDate(time.getDate() + 7);
     this.FinalDate = moment(outraData).format('YYYY-MM-DD')

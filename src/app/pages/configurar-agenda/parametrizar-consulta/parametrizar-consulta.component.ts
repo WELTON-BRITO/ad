@@ -35,6 +35,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public listConsulta = [];
   public modalidade = [];
   public isBloqueio = false;
+  public clinic = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -46,9 +47,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   ngOnInit() {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
-    var name = localStorage.getItem('bway-domain');
+    this.clinic = localStorage.getItem('bway-domain');
 
-    if (name == 'CLINIC') {
+    if (this.clinic == 'CLINIC') {
       this.isBloqueio = true;
     } else {
       this.isBloqueio = false;
@@ -297,6 +298,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
+
           } else if (response[i].typeService.id == 2) {
 
             this.formParametrizarConsulta.controls['tempoVideo'].setValue(response[i].duration);
@@ -332,7 +334,30 @@ export class ParametrizarConsultaComponent implements OnDestroy {
               el.checked = true;
             }
             ativarCheckbox(checkbox);
+
           }
+
+          if (this.clinic == 'CLINIC') {
+            document.getElementById('qrPresencial').removeAttribute('disabled');
+            document.getElementById('qrVideo').removeAttribute('disabled');
+            document.getElementById('qrEmergencial').removeAttribute('disabled');
+            document.getElementById('qrCasa').removeAttribute('disabled');
+
+          } else {
+            if (response[i].qrCodeBlocked == false && response[i].typeService.id == 1) {
+              document.getElementById('qrPresencial').removeAttribute('disabled');
+            }
+            if (response[i].qrCodeBlocked == false && response[i].typeService.id == 2) {
+              document.getElementById('qrVideo').removeAttribute('disabled');
+            }
+            if (response[i].qrCodeBlocked == false && response[i].typeService.id == 3) {
+              document.getElementById('qrEmergencial').removeAttribute('disabled');
+            }
+            if (response[i].qrCodeBlocked == false && response[i].typeService.id == 4) {
+              document.getElementById('qrCasa').removeAttribute('disabled');
+            }
+          }
+
         }
 
       }

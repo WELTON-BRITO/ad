@@ -6,6 +6,7 @@ import { NbToastrService } from '@nebular/theme';
 import { Observable, Subscriber } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
+import { SearchZipCodeService } from '../../shared/services/searchZipCode.services';
 
 @Component({
   selector: 'ngx-novo-paciente',
@@ -46,6 +47,7 @@ export class NovoPacienteComponent implements OnDestroy {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: NovoPacienteService,
+    private serviceCep: SearchZipCodeService,
     private toastrService: NbToastrService) {
 
     this.listSanguino = [
@@ -246,6 +248,18 @@ export class NovoPacienteComponent implements OnDestroy {
       this.toastrService.danger(error.error.message);
     });
 
+  }
+
+  buscaCep(data) {
+
+    this.serviceCep.buscaCep(data.cep, null, (response) => {
+
+      this.formNovoPaciente.controls['endereco'].setValue(response.logradouro.replace('Rua', '').replace('Avenida', '').trim());
+      this.formNovoPaciente.controls['bairro'].setValue(response.bairro.trim());
+
+    }, (error) => {
+      this.toastrService.danger(error.error.message);
+    });
   }
 
   buscaCidade(data) {
