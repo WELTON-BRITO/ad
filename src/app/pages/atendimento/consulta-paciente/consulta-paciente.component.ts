@@ -328,7 +328,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         let register = {
             serviceId: this.atendimento.id,  // id da consulta da buscar-atendimento
-            description: null,
+            description: data.detalhesCliente,
             prescription: data.prescricaoMedica,  //Prescrição campo novo que vira da tela detalhes
             urlPrescription: data.urlReceita,
             timeReturn: data.tempoRetorno,
