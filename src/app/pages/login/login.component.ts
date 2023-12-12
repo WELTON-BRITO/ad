@@ -6,6 +6,7 @@ import { NbToastrService } from '@nebular/theme';
 import { LoaderService } from '../shared/component/spinner/loarder/loader.service';
 import { HttpParams } from '@angular/common/http';
 import { LoginService } from './login.service';
+import { CPFValidator } from '../shared/validators/CPFValidator';
 
 @Component({
   selector: 'ngx-login',
@@ -22,6 +23,8 @@ export class LoginComponent implements OnInit {
   public listMedico = null;
   showPass = false;
   public cnpjCpf = null;
+  public msgErroCpf = 'CPF inválido!!!';
+  public showMsgErroCpf = false;
 
   constructor(
     private router: Router,
@@ -145,6 +148,28 @@ export class LoginComponent implements OnInit {
 
   getCpfCnpjMask(): string {
     return this.isCPF() ? '000.000.000-009' : '00.000.000/0000-00';
+  }
+
+  isValidCpf(data) {
+   
+    if (data.login.length === 11) {
+      if (!CPFValidator.isValidCPF(data.login)) {
+        this.showMsgErroCpf = true;
+        return false;
+      }
+      this.showMsgErroCpf = false;
+      return true;
+    }
+    
+    if (data.login.length === 14) {      
+      if (!CPFValidator.isValidCNPJ(data.login)) {
+        this.showMsgErroCpf = true;
+        return false;
+      }
+      this.showMsgErroCpf = false;
+      return true;
+    }
+
   }
 }
 

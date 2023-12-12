@@ -69,23 +69,29 @@
                             {{ row.email }}
                           </div>
                         </ng-template>
-                      </ngx-datatable-column>                     
+                      </ngx-datatable-column>
                       <ngx-datatable-column name="CPF" prop="cpf">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center pt-4">
                             {{ row.federalId }}
                           </div>
                         </ng-template>
-                      </ngx-datatable-column>    
+                      </ngx-datatable-column>
                       <ngx-datatable-column name="Ações" prop="acoes">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="datatable-body-box-actions">
-                            <button class="btn home-icon" (click)="cadastrar(row)" title="Cadastrar">
+                            <button class="btn home-icon" (click)="cadastrar(row)" title="Cadastrar dependente">
                               <i class="fa fa-user"></i>
-                            </button>                           
+                            </button>
+                            <button class="btn home-icon" (click)="visualizar(row)" title="Visualizar dependente">
+                              <i class="fa fa-eye"></i>
+                            </button>
+                            <button class="btn home-icon" (click)="precoEspecial(row)" title="Desconto especial">
+                              <i class="far fa-money-bill-alt"></i>
+                            </button>
                           </div>
                         </ng-template>
-                      </ngx-datatable-column>                 
+                      </ngx-datatable-column>                     
                       <ngx-datatable-footer>
                         <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
                           let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">

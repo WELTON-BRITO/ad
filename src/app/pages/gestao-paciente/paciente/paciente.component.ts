@@ -31,7 +31,7 @@ export class PacienteComponent implements OnInit {
 
     this.formPaciente = this.formBuilder.group({
       cpf: [null],
-      medico: [this.listMedico[0], Validators.required]
+      medico: [this.listMedico[0], Validators.required],
     })
 
     this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
@@ -62,7 +62,7 @@ export class PacienteComponent implements OnInit {
       this.service.buscaPaciente(params, (response) => {
 
         this.isActive = false;
-        this.rowData = response
+        this.rowData = response       
 
         this.rowData = this.rowData.map(data => {
 
@@ -75,6 +75,7 @@ export class PacienteComponent implements OnInit {
             id: data.user.id,
             city: data.user.city.id,
             uf: data.user.uf.id,
+            userChildren: data.userChildren
           }
         })
 
@@ -90,10 +91,27 @@ export class PacienteComponent implements OnInit {
   }
 
   cadastrar(data) {
-    this.router.navigateByUrl('/pages/gestao-paciente/dependente', { state: data });
+    let register = {
+      data: data,
+      tipo: 'cadastrar'
+    }
+
+    this.router.navigateByUrl('/pages/gestao-paciente/dependente', { state: register });
+  }
+
+  visualizar(data) {
+    let register = {
+      data: data,
+      tipo: 'visualizar'
+    }
+    this.router.navigateByUrl('/pages/gestao-paciente/dependente', { state: register });
   }
 
   novoPaciente() {
     this.router.navigate(['/pages/gestao-paciente/novo-paciente']);
+  }
+
+  precoEspecial(data){
+    this.router.navigateByUrl('/pages/gestao-paciente/preco-especial', { state: data });
   }
 }

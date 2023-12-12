@@ -22,6 +22,8 @@ import { NgxMaskModule } from 'ngx-mask';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { DependenteComponent } from './dependente/dependente.component';
+import { PrecoEspecialComponent } from './preco-especial/preco-especial.component';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 @NgModule({
   imports: [
@@ -44,13 +46,14 @@ import { DependenteComponent } from './dependente/dependente.component';
     NgxMaskModule.forRoot(),
     Ng2SmartTableModule,
     NgxDatatableModule,
-
+    CurrencyMaskModule,
   ],
   declarations: [
     GestaoPacienteComponent, 
     PacienteComponent,
     NovoPacienteComponent,
-    DependenteComponent
+    DependenteComponent,
+    PrecoEspecialComponent
   ],
 })
 export class GestaoPacienteModule { }

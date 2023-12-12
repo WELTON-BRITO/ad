@@ -6,6 +6,7 @@ import { Observable, Subscriber } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import { DependenteService } from './dependente.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-dependente',
@@ -31,7 +32,11 @@ export class DependenteComponent implements OnDestroy {
   public showMsgErro = false;
   public msgErroCpf = 'CPF inválido!!!';
   public showMsgErroCpf = false;
-  public history = null
+  public history = null;
+  public isCadastro = false;
+  public isVisualizar = false;
+  public rowData = [];
+  public nameMae = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -92,6 +97,42 @@ export class DependenteComponent implements OnDestroy {
 
     this.history = history.state;
 
+    if (this.history.tipo == "cadastrar") {
+      this.isCadastro = true;
+      this.isVisualizar = false;
+    } else {
+      this.isCadastro = false;
+      this.isVisualizar = true;
+
+      this.nameMae = this.history.data.name
+
+      let params = new HttpParams();
+
+      params = params.append('userId', this.history.data.id)
+
+      this.isActive = true;
+
+      this.service.visualizarDependente(params, (response) => {
+
+        this.isActive = false;
+        this.rowData = response
+
+        this.rowData = this.rowData.map(data => {
+          return {
+            name: data.name,
+            birthDate: moment(data.birthDate).format('DD/MM/YYYY'),
+            federalId: data.cpf,
+            status: data.status
+          }
+        })
+
+      }, (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+
+    }
+
     this.formDependente = this.formBuilder.group({
       nomeDep: [null],
       dateNascDep: [null],
@@ -151,7 +192,6 @@ export class DependenteComponent implements OnDestroy {
       this.imagem = d.slice(d.indexOf(",") + 1);
       this.avatar = 'data:application/pdf;base64,' + this.imagem;
 
-
     })
 
   }
@@ -160,14 +200,34 @@ export class DependenteComponent implements OnDestroy {
     const filereader = new FileReader();
 
     filereader.readAsDataURL(file)
-    filereader.onload = () => {
-      subscribe.next(filereader.result);
-      subscribe.complete()
-    }
+    filereader.onload = async () => {
+      await this.resizeImage(filereader.result as string).then((resolve: any) => {
+        subscribe.next(resolve);
+        subscribe.complete()
+      });
+    };
     filereader.onerror = () => {
       subscribe.error()
       subscribe.complete()
     }
+  }
+
+  resizeImage(imageURL: any): Promise<any> {
+    return new Promise((resolve) => {
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = 200;
+        canvas.height = 200;
+        const ctx = canvas.getContext('2d');
+        if (ctx != null) {
+          ctx.drawImage(image, 0, 0, 200, 200);
+        }
+        var data = canvas.toDataURL('image/jpeg', 1);
+        resolve(data);
+      };
+      image.src = imageURL;
+    });
   }
 
   validaData(stringData) {
@@ -239,18 +299,18 @@ export class DependenteComponent implements OnDestroy {
 
     let register = {
       name: data.nomeDep,
-      nameMother: data.nomeMae,
-      nameFather: data.nomePai,
+      nameMother: this.history.data.name,
+      nameFather: null,
       cpf: data.cpfDep,
       rg: data.rgDep,
       biologicalSex: this.sexo,
       birthCountry: null,
       birthDate: data.dateNascDep,
-      ufId: this.history.uf,
-      cityId: this.history.city,
+      ufId: this.history.data.uf,
+      cityId: this.history.data.city,
       bloodType: data.tipoSanguineo,
       avatar: this.avatar,
-      userId: this.history.id
+      userId: this.history.data.id
     }
 
     if ((data.nomeDep != null) && (data.nomeMae != null) && (data.dateNascDep != null) && (this.sexo != null)) {
@@ -287,10 +347,10 @@ export class DependenteComponent implements OnDestroy {
     })
 
     this.sexo = null;
-    this.history.uf = null;
-    this.history.city = null;
+    this.history.data.uf = null;
+    this.history.data.city = null;
     this.avatar = null;
-    this.history.id = null;
+    this.history.data.id = null;
   }
 
   previousPage() {
