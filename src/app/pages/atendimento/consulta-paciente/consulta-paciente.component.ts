@@ -32,6 +32,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public tamInterno: number = 20000;
     public tamCliente: number = 20000;
     public tamMedica: number = 20000;
+    public tamExame: number = 20000;
     public file: any;
     formData: FormData;
     public atendimento = {
@@ -61,8 +62,9 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
     ngOnDestroy() { }
     ngOnInit() {
-       
+
         let data = history.state;
+
         this.atendimento.id = data.id;
         this.atendimento.doctorId = data.doctor.id;
         this.atendimento.idChild = data.child != null ? data.child.idChild : '';
@@ -89,6 +91,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
             atestado: [null],
             receita: [null],
             prescricaoMedica: [null],
+            pedidoExame: [null],
+            urlExame: [null]
         })
 
     }
@@ -110,10 +114,13 @@ export class ConsultaPacienteComponent implements OnDestroy {
             atestado: [null],
             receita: [null],
             prescricaoMedica: [null],
+            pedidoExame: [null],
+            urlExame: [null]
         })
         this.tamMedica = 20000;
         this.tamInterno = 20000;
         this.tamCliente = 20000;
+        this.tamExame = 20000;
     }
 
     detalhesConsulta() {
@@ -133,6 +140,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
             document.getElementById('prescricaoMedica').removeAttribute('disabled');
             document.getElementById('detalhesInterno').removeAttribute('disabled');
             document.getElementById('detalhesCliente').removeAttribute('disabled');
+            document.getElementById('urlExame').removeAttribute('disabled');
+            document.getElementById('pedidoExame').removeAttribute('disabled');
         }, 10)
 
     }
@@ -162,7 +171,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.rowData = this.rowData.map(data => {
                 return {
                     name: data.doctor.name,
-                    cpf: data.user.federalId,                    
+                    cpf: data.user.federalId,
                     birthDate: moment(data.dateService).format('DD/MM/YYYY'),
                     id: data.id
                 }
@@ -227,6 +236,23 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
             let valLenght = textArea.value.length;
             this.tamMedica = caracteresRestantes - valLenght;
+            valLenght < 30
+                ? inpuBox.classList.add("error")
+                : inpuBox.classList.remove("error");
+
+        });
+    }
+
+    caracteresExame() {
+
+        let inpuBox = document.querySelector(".input-exame"),
+            textArea = inpuBox.querySelector("textarea");
+        var caracteresRestantes = this.tamExame;
+
+        textArea.addEventListener("keyup", () => {
+
+            let valLenght = textArea.value.length;
+            this.tamExame = caracteresRestantes - valLenght;
             valLenght < 30
                 ? inpuBox.classList.add("error")
                 : inpuBox.classList.remove("error");
@@ -302,7 +328,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         let register = {
             serviceId: this.atendimento.id,  // id da consulta da buscar-atendimento
-            description: data.detalhesCliente,
+            description: null,
             prescription: data.prescricaoMedica,  //Prescrição campo novo que vira da tela detalhes
             urlPrescription: data.urlReceita,
             timeReturn: data.tempoRetorno,
@@ -315,6 +341,9 @@ export class ConsultaPacienteComponent implements OnDestroy {
             headSize: data.circCabeca,
             abdomenSize: data.circAbdomen,
             descriptionClinic: data.detalhesInterno,
+            descriptionUser: data.detalhesCliente,
+            urlMedicalOrder: data.urlExame,
+            descriptionMedicalOrder: data.pedidoExame,
         }
 
         this.isActive = true;
@@ -351,6 +380,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.formConsultaPaciente.controls['urlReceita'].setValue(response.urlPrescription);
             this.formConsultaPaciente.controls['urlAtestado'].setValue(response.urlRemovalReport);
             this.formConsultaPaciente.controls['prescricaoMedica'].setValue(response.prescription);
+            this.formConsultaPaciente.controls['pedidoExame'].setValue(response.descriptionMedicalOrder);
+            this.formConsultaPaciente.controls['urlExame'].setValue(response.urlMedicalOrder);
 
         }, (error) => {
             this.isActive = false;

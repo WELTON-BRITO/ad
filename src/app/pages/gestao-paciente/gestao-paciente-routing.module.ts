@@ -5,6 +5,7 @@ import { GestaoPacienteComponent } from './gestao-paciente.component';
 import { NovoPacienteComponent } from './novo-paciente/novo-paciente.component';
 import { PacienteComponent } from './paciente/paciente.component';
 import { DependenteComponent } from './dependente/dependente.component';
+import { PrecoEspecialComponent } from './preco-especial/preco-especial.component';
 
 const routes: Routes = [{
   path: '',
@@ -21,6 +22,10 @@ const routes: Routes = [{
     {
       path: 'dependente',
       component: DependenteComponent,
+    },   
+    {
+      path: 'preco-especial',
+      component: PrecoEspecialComponent,
     },   
   ],
 
@@ -42,5 +47,6 @@ export const routedComponents = [
   GestaoPacienteComponent,
   PacienteComponent,
   NovoPacienteComponent,
-  DependenteComponent
+  DependenteComponent,
+  PrecoEspecialComponent
 ];

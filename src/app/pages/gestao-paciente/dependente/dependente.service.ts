@@ -19,4 +19,8 @@ export class DependenteService {
   cadastrarDependente(data: any, successHandle: Function, errorHandle: Function) {
     return this.httpService.doPost('/api/child', data, successHandle, errorHandle);
   }
+
+  visualizarDependente(data: any, successHandle: Function, errorHandle: Function) {
+    return this.httpService.doGet('/api/child/all', data, successHandle, errorHandle);
+  }
 }

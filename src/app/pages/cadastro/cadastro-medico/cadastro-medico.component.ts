@@ -298,14 +298,34 @@ export class CadastroMedicoComponent implements OnInit {
     const filereader = new FileReader();
 
     filereader.readAsDataURL(file)
-    filereader.onload = () => {
-      subscribe.next(filereader.result);
-      subscribe.complete()
-    }
+    filereader.onload = async () => {
+      await this.resizeImage(filereader.result as string).then((resolve: any) => {
+        subscribe.next(resolve);
+        subscribe.complete()
+      });
+    };
     filereader.onerror = () => {
       subscribe.error()
       subscribe.complete()
     }
+  }
+
+  resizeImage(imageURL: any): Promise<any> {
+    return new Promise((resolve) => {
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = 200;
+        canvas.height = 200;
+        const ctx = canvas.getContext('2d');
+        if (ctx != null) {
+          ctx.drawImage(image, 0, 0, 200, 200);
+        }
+        var data = canvas.toDataURL('image/jpeg', 1);
+        resolve(data);
+      };
+      image.src = imageURL;
+    });
   }
 
   toggle(checked: boolean) {

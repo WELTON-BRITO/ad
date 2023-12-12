@@ -3,7 +3,7 @@
     <div class="col-md-12 col-xs-12">
       <div class="dialog-body">
         <nb-card>
-          <nb-card-body>
+          <nb-card-body *ngIf="isCadastro">
             <form id="form-novo-paciente" [formGroup]="formDependente">
               <div class="col-md-12 col-xs-12">
                 <div class="form-row align-items-center">
@@ -15,7 +15,7 @@
                     </div>
                   </nb-card-header>
                   <div class="form-group col-md-3">
-                    <h5 class="pt-3">Novo Paciente</h5>
+                    <h5 class="pt-3">Cadastrar Dependente</h5>
                   </div>
                 </div>
                 <div class="form-row align-items-center">
@@ -54,7 +54,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-row align-items-center">
+                <!--<div class="form-row align-items-center">
                   <div class="form-group col-md-6">
                     <label for="nome">Nome da Mãe*</label>
                     <input class="form-control" name="nomeMae" id="nomeMae" type="text" formControlName="nomeMae" />
@@ -63,7 +63,7 @@
                     <label for="nome">Nome do Pai</label>
                     <input class="form-control" name="nomePai" id="nomePai" type="text" formControlName="nomePai" />
                   </div>
-                </div>
+                </div>-->
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-3">
                     <label for="cpfDep">CPF</label>
@@ -111,6 +111,84 @@
                 </div>
               </div>
             </form>
+          </nb-card-body>
+          <nb-card-body *ngIf="isVisualizar">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-row align-items-center">
+                <nb-card-header class="aditi-header">
+                  <div class="back-link">
+                    <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                      <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                    </a>
+                  </div>
+                </nb-card-header>
+                <div class="form-group col-md-3">
+                  <h5 class="pt-3">Visualizar Dependente</h5>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-6">
+                  <label for="tipoSanguineo">Nome: {{ this.nameMae }}</label>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+
+                <div class="form-group col-md-12">
+                  <div class="app-box">
+                    <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
+                      [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
+                      [messages]="{emptyMessage: 'Sem dados...'}" [limit]="10">
+
+                      <ngx-datatable-column name="Nome" prop="name">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-left">
+                            {{ row.name }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Data nascimento" prop="birthDate">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center">
+                            {{ row.birthDate }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="CPF" prop="cpf">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center">
+                            {{ row.federalId }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Status" prop="status">
+                        <ng-template ngx-datatable-cell-template let-row="row">
+                          <div class="text-center">
+                            {{ row.status }}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-footer>
+                        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                          let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
+                          <div>
+                            <div class="page-count">
+                              Total de Registros: {{rowCount}}
+                            </div>
+                          </div>
+                          <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
+                            [pagerRightArrowIcon]="'fa fa-angle-double-right '" [pagerPreviousIcon]="'fa fa-angle-left'"
+                            [pagerNextIcon]="'fa fa-angle-right '" [page]="curPage" [size]="pageSize" [count]="rowCount"
+                            [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
+                          </datatable-pager>
+                        </ng-template>
+                      </ngx-datatable-footer>
+                    </ngx-datatable>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
           </nb-card-body>
         </nb-card>
       </div>

@@ -67,7 +67,7 @@
                                     (click)="consultaHistorico()"></nb-icon>
                                 <span>Ver histórico</span>
                             </nb-action>
-                            <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'" >
+                            <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'">
                                 <nb-icon class="action-icon" icon="wifi-outline" (click)="detalhesConsulta()"></nb-icon>
                                 <span>Atendimento</span>
                             </nb-action>
@@ -151,6 +151,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-6">
+                                        <label for="urlExame">URL exame</label>
+                                        <input class="form-control" name="urlExame" id="urlExame" type="text"
+                                            formControlName="urlExame" disabled />
+                                    </div>
+                                </div>
                             </nb-card-body>
                         </nb-card>
                         <nb-card>
@@ -159,9 +166,10 @@
                                     <div class="col-lg-12">
                                         <div class="input-medica">
                                             <div><label>Prescrição </label></div>
-                                            <textarea autosize class="form-control" formControlName="prescricaoMedica" rows="3"
-                                                id="prescricaoMedica" placeholder="Prescrição médica" [value]=""
-                                                (keypress)="caracteresMedica()" maxlength="20000" disabled></textarea>
+                                            <textarea autosize class="form-control" formControlName="prescricaoMedica"
+                                                rows="3" id="prescricaoMedica" placeholder="Prescrição médica"
+                                                [value]="" (keypress)="caracteresMedica()" maxlength="20000"
+                                                disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
                                                         name="txtArea">{{this.tamMedica}}</span></small>
                                                 quantidade máxima de caracteres</p>
@@ -172,9 +180,9 @@
                                     <div class="col-lg-12">
                                         <div class="input-box">
                                             <label for="detalhesInterno">Detalhes(Interno):</label>
-                                            <textarea autosize class="form-control" rows="3" formControlName="detalhesInterno"
-                                                id="detalhesInterno" [value]="" (keypress)="caracteresInterno()"
-                                                maxlength="20000" disabled></textarea>
+                                            <textarea autosize class="form-control" rows="3"
+                                                formControlName="detalhesInterno" id="detalhesInterno" [value]=""
+                                                (keypress)="caracteresInterno()" maxlength="20000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
                                                         name="txtArea">{{this.tamInterno}}</span></small>
                                                 quantidade máxima de caracteres</p>
@@ -185,11 +193,24 @@
                                     <div class="col-lg-12">
                                         <div class="input">
                                             <label for="detalhesCliente">Detalhes(cliente):</label>
-                                            <textarea autosize class="form-control" rows="3" formControlName="detalhesCliente"
-                                                id="detalhesCliente" [value]="" (keypress)="caracteresCliente()"
-                                                maxlength="20000" disabled></textarea>
+                                            <textarea autosize class="form-control" rows="3"
+                                                formControlName="detalhesCliente" id="detalhesCliente" [value]=""
+                                                (keypress)="caracteresCliente()" maxlength="20000" disabled></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
                                                         name="txtArea">{{this.tamCliente}}</span></small>
+                                                quantidade máxima de caracteres</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row align-items-center">
+                                    <div class="col-lg-12">
+                                        <div class="input-exame">
+                                            <label for="pedidoExame">Pedido exame:</label>
+                                            <textarea autosize class="form-control" rows="3"
+                                                formControlName="pedidoExame" id="pedidoExame" [value]=""
+                                                (keypress)="caracteresExame()" maxlength="20000" disabled></textarea>
+                                            <p class="text-muted"><small><span class="caracteres"
+                                                        name="txtArea">{{this.tamExame}}</span></small>
                                                 quantidade máxima de caracteres</p>
                                         </div>
                                     </div>

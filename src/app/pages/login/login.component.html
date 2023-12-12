@@ -12,7 +12,11 @@
               <p>Digite login e senha para acessar conta.</p>
               <div class="text-center">
                 <input type="text" formControlName="login" id="login" class="fadeIn second border" name="login"
-                  placeholder="Login" maxlength="80" autocomplete="off" [(ngModel)]="cnpjCpf" [mask]="getCpfCnpjMask()"/>
+                  placeholder="Login" maxlength="80" autocomplete="off" [(ngModel)]="cnpjCpf" [mask]="getCpfCnpjMask()"
+                  (change)="isValidCpf(formLogin.value)"/>
+                  <div *ngIf="showMsgErroCpf" class="link-text pt-2" style="color: #dc3545;">
+                    {{this.msgErroCpf}} <br />
+                  </div>
               </div>            
               <div class="text-center">
                 <input type="password" formControlName="password" id="password" class="fadeIn third border" name="password"
@@ -22,7 +26,7 @@
                       aria-hidden="true"></i>
                   </button>
               </div>
-              <input type="submit" class="fade_8S" style="width: 250px;" name="login" value="Entrar" (click)="login()">
+              <input type="submit" class="fade_8S" style="width: 250px;" name="login" id="login" value="Entrar" (click)="login()"/>
               <div class="linksForm">
                 <a href="#/enviar-senha-email" class="fade_4S" title="Resgatar Senha"><nb-icon class="fade_4S"
                     icon="refresh-outline"></nb-icon>Resgatar Senha</a>
