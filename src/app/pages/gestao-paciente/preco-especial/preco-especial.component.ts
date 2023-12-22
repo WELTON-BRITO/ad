@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { HttpParams } from '@angular/common/http';
 import { PrecoEspecialService } from './preco.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-preco-especial',
@@ -95,7 +96,7 @@ export class PrecoEspecialComponent implements OnDestroy {
   salvar(data) {
 
     if ((data.medico == null) || ((data.valorPresencial == null) && (data.valorEmergencial == null) &&
-      (data.valorVideo == null) && (data.valorCasa == null) && (data.clinica == null) && (this.atendimento.cpf == null) && (data.dataExpiracao == null))) {
+      (data.valorVideo == null) && (data.valorCasa == null) && (data.clinica == null) && (this.atendimento.cpf == null))) {
 
       this.toastrService.danger('Preencher os campos obrigatórios!!!');
 
@@ -105,7 +106,7 @@ export class PrecoEspecialComponent implements OnDestroy {
 
         this.listConsulta.push(
           {
-            expirationDate: data.dataExpiracao,
+            expirationDate: data.dataExpiracao == null ? "2053-12-22" : data.dataExpiracao,
             typeServiceId: 1,
             value: data.valorPresencial,
           }
@@ -115,7 +116,7 @@ export class PrecoEspecialComponent implements OnDestroy {
 
         this.listConsulta.push(
           {
-            expirationDate: data.dataExpiracao,
+            expirationDate: data.dataExpiracao == null ? "2053-12-22" : data.dataExpiracao,
             typeServiceId: 2,
             value: data.valorVideo,
           }
@@ -125,7 +126,7 @@ export class PrecoEspecialComponent implements OnDestroy {
 
         this.listConsulta.push(
           {
-            expirationDate: data.dataExpiracao,
+            expirationDate: data.dataExpiracao == null ? "2053-12-22" : data.dataExpiracao,
             typeServiceId: 3,
             value: data.valorEmergencial,
           }
@@ -135,7 +136,7 @@ export class PrecoEspecialComponent implements OnDestroy {
 
         this.listConsulta.push(
           {
-            expirationDate: data.dataExpiracao,
+            expirationDate: data.dataExpiracao == null ? "2053-12-22" : data.dataExpiracao,
             typeServiceId: 4,
             value: data.valorCasa,
           }
@@ -149,30 +150,16 @@ export class PrecoEspecialComponent implements OnDestroy {
         items: this.listConsulta
       }
 
-      if (this.atualizar == 0) {
-
-        this.isActive = true;
-        this.service.cadastrarPriceExclusive(register, (response => {
-          this.isActive = false;
-          this.toastrService.success('Registro cadastrado com sucesso !!!');
-          this.limpaForm()
-        }), (error) => {
-          this.isActive = false;
-          this.toastrService.danger(error.error.message);
-        });
-
-      } else {
-
-        this.isActive = true;
-        this.service.atualizarValor(register, (response => {
-          this.isActive = false;
-          this.toastrService.success('Registro atualizado com sucesso !!!');
-          this.limpaForm()
-        }), (error) => {
-          this.isActive = false;
-          this.toastrService.danger(error.error.message);
-        });
-      }
+      this.isActive = true;
+      this.service.cadastrarPriceExclusive(register, (response => {
+        this.isActive = false;
+        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.limpaForm()
+        this.previousPage()
+      }), (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
 
     }
 
@@ -241,6 +228,11 @@ export class PrecoEspecialComponent implements OnDestroy {
         } else {
 
           this.atualizar = response;
+
+          let dataExpiracao = moment(response[0].expirationDate).format('YYYY-MM-DD')
+
+          this.formPrecoEspecial.controls['dataExpiracao'].setValue(dataExpiracao);
+
           for (var i = 0; i < response.length; i++) {
 
             if (response[i].typeService.id == 1) {
@@ -353,7 +345,7 @@ export class PrecoEspecialComponent implements OnDestroy {
   pesquisaClinica(data) {
 
     this.service.buscaClinica(data, null, (response) => {
-      
+
       this.listClinica = response
       this.isActive = false
 

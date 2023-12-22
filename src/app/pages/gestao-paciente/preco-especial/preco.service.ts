@@ -16,10 +16,6 @@ export class PrecoEspecialService {
     return this.httpService.doGet('/api/doctor/price/exclusive', data, successHandle, erroHandle)
   }
 
-  atualizarValor(data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doPut('/api/doctor/typePrice', data, successHandle, erroHandle)
-  }
-
   buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/clinic/doctor/' + id, data, successHandle, erroHandle)
   } 

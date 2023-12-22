@@ -25,6 +25,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Buscar atendimentos',
         link: '/pages/atendimento/buscar-atendimento',
+      },
+      {
+        title: 'Fila de espera',
+        link: '/pages/atendimento/fila-espera',
       }
     ]
   },
