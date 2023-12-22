@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="dialog-body">
+                <nb-card>
+                    <nb-card-body>
+                        <div class="form-row align-items-center">
+                            <nb-card-header class="aditi-header">
+                                <div class="back-link">
+                                    <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                                        <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                                    </a>
+                                </div>
+                            </nb-card-header>
+                            <div class="form-group col-md-6">
+                                <h5 class="pt-3">Consulta do Histórico</h5>
+                            </div>
+                        </div>
+                        <nb-actions size="large" fullWidth>
+                            <nb-action>
+                                <nb-icon class="action-icon" icon="file-text-outline"
+                                    (click)="consultaHistorico()"></nb-icon>
+                                <span>Ver histórico</span>
+                            </nb-action>
+                            <nb-action>
+                                <nb-icon class="action-icon" icon="upload-outline"
+                                    (click)="importarHistorico()"></nb-icon>
+                                <span>Importar histórico</span>
+                            </nb-action>
+                        </nb-actions>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

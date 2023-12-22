@@ -45,11 +45,11 @@
                       <ngx-datatable-column name="Foto" prop="avatar">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
-                            <img src="{{row.avatar}}" style="height: 80px;">
+                            <img src="{{row.avatar}}" style="height:55px; border-radius:50%;">
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column name="Nome" prop="nome">
+                      <ngx-datatable-column name="Nome" prop="nome" [width]="190">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-left pt-4">
                             {{ row.name }}
@@ -63,7 +63,7 @@
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column name="Email" prop="email">
+                      <ngx-datatable-column name="Email" prop="email" [width]="180">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center pt-4">
                             {{ row.email }}
@@ -77,17 +77,20 @@
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
-                      <ngx-datatable-column name="Ações" prop="acoes">
+                      <ngx-datatable-column name="Ações" prop="acoes" [width]="200">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="datatable-body-box-actions">
-                            <button class="btn home-icon" (click)="cadastrar(row)" title="Cadastrar dependente">
+                            <button class="btn home-icon pt-4" (click)="cadastrar(row)" title="Cadastrar dependente">
                               <i class="fa fa-user"></i>
                             </button>
-                            <button class="btn home-icon" (click)="visualizar(row)" title="Visualizar dependente">
+                            <button class="btn home-icon pt-4" (click)="visualizar(row)" title="Visualizar dependente">
                               <i class="fa fa-eye"></i>
                             </button>
-                            <button class="btn home-icon" (click)="precoEspecial(row)" title="Desconto especial">
+                            <button class="btn home-icon pt-4" (click)="precoEspecial(row)" title="Desconto especial">
                               <i class="far fa-money-bill-alt"></i>
+                            </button>
+                            <button class="btn home-icon pt-4" (click)="buscaHistorico(row)" title="Visualizar histórico">
+                              <i class="fa fa-eye"></i>
                             </button>
                           </div>
                         </ng-template>

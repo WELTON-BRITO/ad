@@ -67,4 +67,9 @@ export class AtendimentoService {
   visualizarAnexo(id: any, data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/appointments/paymentProof/' + id, data, successHandle, erroHandle)
   }
+
+  waitingService(data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doGet('/api/waitingService', data, successHandle, erroHandle)
+  }
+  
 }

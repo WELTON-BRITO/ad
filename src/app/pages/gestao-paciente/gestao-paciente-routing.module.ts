@@ -6,6 +6,8 @@ import { NovoPacienteComponent } from './novo-paciente/novo-paciente.component';
 import { PacienteComponent } from './paciente/paciente.component';
 import { DependenteComponent } from './dependente/dependente.component';
 import { PrecoEspecialComponent } from './preco-especial/preco-especial.component';
+import { HistoricoComponent } from './historico/historico.component';
+import { ImportarHistoricoComponent } from './historico/importar-historico/importar-historico.component';
 
 const routes: Routes = [{
   path: '',
@@ -26,6 +28,14 @@ const routes: Routes = [{
     {
       path: 'preco-especial',
       component: PrecoEspecialComponent,
+    }, 
+    {
+      path: 'historico',
+      component: HistoricoComponent,
+    },  
+    {
+      path: 'importar-historico',
+      component: ImportarHistoricoComponent,
     },   
   ],
 
@@ -48,5 +58,7 @@ export const routedComponents = [
   PacienteComponent,
   NovoPacienteComponent,
   DependenteComponent,
-  PrecoEspecialComponent
+  PrecoEspecialComponent,
+  HistoricoComponent,
+  ImportarHistoricoComponent
 ];

@@ -34,6 +34,8 @@ export class CadastroMedicoComponent implements OnInit {
   public rowData = [];
   showPass = false;
   showPassw = false;
+  public title = 'Por favor insira os seus dados para darmos inicio ao seu cadastro.';
+  public titleClinica = 'Por favor informe a baixo todas as clinicas em que você trabalha para que possa gerenciar os seus horários de atendimento em cada uma delas. Ao informar os dados clique no botão adicionar, caso trabalhe em mais de uma, repita o processo até informar todas as que desejar.'
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -122,21 +124,21 @@ export class CadastroMedicoComponent implements OnInit {
       avatar: this.imagem,
       email: data.email,
       cellPhone: data.telefoneCelular,
-      cityId: data.cidade,
-      ufId: data.estado,
-      zipCode: data.cep,
-      street: data.rua,
-      neighborhood: data.bairro,
-      number: data.numero,
-      complement: data.complemento,
+      cityId: data.cityId,
+      ufId: data.ufId,
+      zipCode: data.zipCode,
+      street: data.street,
+      neighborhood: data.neighborhood,
+      number: data.numeroClinica,
+      complement: data.complementoClinica,
       specialties: data.especialidade,
       clinics: this.rowData
 
     }
 
     if ((data.nome != null) && (data.cpf != null) && (data.crm != null) && (data.dataNascimento != null) && (data.especialidade != null)
-      && (this.sexo != false) && (data.telefoneCelular != null) && (data.bairro != null) && (data.rua != null)
-      && (data.cep != null) && (data.numero != null) && (data.aceitoTermo != null) && (this.showMsgErro === false)) {
+      && (this.sexo != false) && (data.telefoneCelular != null) && (data.aceitoTermo != null) && (data.ufId != null) && (data.cityId != null)
+      && (data.zipCode != null) && (data.street != null) && (data.neighborhood != null) && (data.numeroClinica != null) && (this.showMsgErro === false)) {
 
       this.isActive = true;
 
@@ -355,22 +357,22 @@ export class CadastroMedicoComponent implements OnInit {
     if (data.telefoneCelular == null) {
       this.toastrService.danger('O campo celular é obrigatório!!!');
     }
-    if (data.bairro == null) {
+    if (data.neighborhood == null) {
       this.toastrService.danger('O campo bairro é obrigatório!!!');
     }
-    if (data.rua == null) {
+    if (data.street == null) {
       this.toastrService.danger('O campo rua é obrigatório!!!');
     }
-    if (data.cep == null) {
+    if (data.zipCode == null) {
       this.toastrService.danger('O campo cep é obrigatório!!!');
     }
-    if (data.numero == null) {
+    if (data.numeroClinica == null) {
       this.toastrService.danger('O campo numéro é obrigatório!!!');
     }
-    if (data.estado == null) {
+    if (data.ufId == null) {
       this.toastrService.danger('O campo estado é obrigatório!!!');
     }
-    if (data.cidade == null) {
+    if (data.cityId == null) {
       this.toastrService.danger('O campo cidade é obrigatório!!!');
     }
 

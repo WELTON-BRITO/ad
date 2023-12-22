@@ -24,6 +24,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { DependenteComponent } from './dependente/dependente.component';
 import { PrecoEspecialComponent } from './preco-especial/preco-especial.component';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { HistoricoComponent } from './historico/historico.component';
+import { ImportarHistoricoComponent } from './historico/importar-historico/importar-historico.component';
 
 @NgModule({
   imports: [
@@ -53,7 +55,9 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     PacienteComponent,
     NovoPacienteComponent,
     DependenteComponent,
-    PrecoEspecialComponent
+    PrecoEspecialComponent,
+    HistoricoComponent,
+    ImportarHistoricoComponent
   ],
 })
 export class GestaoPacienteModule { }

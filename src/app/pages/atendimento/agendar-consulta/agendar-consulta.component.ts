@@ -4,18 +4,17 @@ import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { NbToastrService } from '@nebular/theme';
 import { AtendimentoService } from '../atendimento.service';
-import { deCamelCase } from '@swimlane/ngx-datatable';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import * as moment from 'moment';
 
 @Component({
-    selector: 'ngx-novo-atendimento',
-    styleUrls: ['./novo-atendimento.component.scss'],
-    templateUrl: './novo-atendimento.component.html',
+    selector: 'ngx-agendar-consulta',
+    styleUrls: ['./agendar-consulta.component.scss'],
+    templateUrl: './agendar-consulta.component.html',
 })
-export class NovoAtendimentoComponent {
+export class AgendarConsultaComponent {
 
-    public formNovoAtendimento = null;
+    public formAgendarConsulta = null;
     public listMedico = null;
     public isActive = false;
     public listPagto = null;
@@ -24,10 +23,7 @@ export class NovoAtendimentoComponent {
     public listConvenio = null;
     public isConvenio = false;
     public isPagto = false;
-    public isDependente = false;
     public tamanho: number = 2000;
-    public msgErro = 'CPF inválido!!!';
-    public showMsgErro = false;
     public doctorId = null;
     public clinicId = null;
     public userId = null;
@@ -37,13 +33,19 @@ export class NovoAtendimentoComponent {
     public rowData = [];
     public tipoCard = [];
     public isHorario = false;
-    public isConfAtendimento = false;
     public dadosHorario = null;
     public isDadosAtendimento = false
     public tipoPagto = null;
     public dependente = null;
     public detalhes = 'Consulta de retorno';
     public retorno = null;
+    public agendaConsulta = {
+        nomeResponsavel: null,
+        cpfResponsavel: null,
+        nomeDependente: null,
+        cpfDependente: null,
+    };
+    public isDependente = false;
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
@@ -71,25 +73,35 @@ export class NovoAtendimentoComponent {
 
     ngOnInit() {
 
+        let data = history.state
+
+        this.agendaConsulta.nomeResponsavel = data.nameMae
+        this.agendaConsulta.cpfResponsavel = data.cpfMae
+        if (data.cpfDependente != null) {
+            this.isDependente = true
+            this.agendaConsulta.nomeDependente = data.name
+            this.agendaConsulta.cpfDependente = data.cpfDependente
+        } else {
+            this.isDependente = false
+        }
+
         this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
         this.verificaMedico(this.listMedico[0].id);
         this.pagamento();
-        this.formNovoAtendimento = this.formBuilder.group({
+        this.formAgendarConsulta = this.formBuilder.group({
             medico: [this.listMedico[0]],
             cpf: [null],
             dataInicio: [null],
             consultaParticular: [null],
-            consultaDependente: [null],
             formaPagto: [null],
             formaConvenio: [null],
-            incluirDep: [null],
             consPagto: [null],
             nomeResponsavel: [null],
             tipoConsulta: [null],
             tipoEspecialidade: [null],
         })
 
-        this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+        this.formAgendarConsulta.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
     }
 
     pagamento() {
@@ -152,38 +164,18 @@ export class NovoAtendimentoComponent {
 
     limpaForm() {
 
-        this.formNovoAtendimento = this.formBuilder.group({
+        this.formAgendarConsulta = this.formBuilder.group({
             medico: [null],
             cpf: [null],
             dataInicio: [null],
             consultaParticular: [null],
-            consultaDependente: [null],
             formaPagto: [null],
             formaConvenio: [null],
-            incluirDep: [null],
             consPagto: [null],
             nomeResponsavel: [null],
             tipoConsulta: [null],
             tipoEspecialidade: [null],
         })
-
-    }
-
-    consultaDependente(data) {
-
-        this.dependente = data
-        if (this.childId == null) {
-            this.toastrService.danger('Não possui dependente!!!');
-            this.isDependente = false;
-        } else {
-
-            if (data == 'S') {
-                this.isDependente = true;
-            } else {
-                this.isDependente = false;
-            }
-
-        }
 
     }
 
@@ -224,7 +216,7 @@ export class NovoAtendimentoComponent {
             this.service.buscaPaciente(null, data.cpf, (response) => {
                 this.isActive = false;
                 this.userId = response.id
-                this.formNovoAtendimento.controls['nomeResponsavel'].setValue(response.name);
+                this.formAgendarConsulta.controls['nomeResponsavel'].setValue(response.name);
                 this.buscaDependente(this.userId)
                 this.isDadosAtendimento = true
             }, (error) => {
@@ -236,31 +228,6 @@ export class NovoAtendimentoComponent {
             this.toastrService.danger('O campos CPF é obrigatórios!!!');
         }
 
-    }
-
-    isValidCpf(data) {
-
-        this.listDependente = [];
-        this.isDependente = false;
-
-        if (!CPFValidator.isValidCPF(data.cpf)) {
-            this.showMsgErro = true;
-            this.isDadosAtendimento = false;
-            this.formNovoAtendimento.controls['nomeResponsavel'].setValue(null);
-            return false;
-        }
-        this.showMsgErro = false;
-        this.pesquisaPaciente(data)
-        return true;
-    }
-
-    consultaPaga(data) {
-
-        if (data == "S") {
-            this.tipoPagto = true
-        } else {
-            this.tipoPagto = false
-        }
     }
 
     salvar(data) {
@@ -320,17 +287,6 @@ export class NovoAtendimentoComponent {
         this.buscaConvenio(this.doctorId);
     }
 
-    verificaDependente(data) {
-
-        for (var i = 0; i < this.listDependente.length; i++) {
-
-            if (data == this.listDependente[i].idChild) {
-                this.childId = this.listDependente[i].idChild
-            }
-        }
-
-    }
-
     especialidade(data) {
 
         for (var i = 0; i < this.listTipoEspecialidade.length; i++) {
@@ -361,7 +317,6 @@ export class NovoAtendimentoComponent {
         date.setDate(date.getDate() + 6)
 
         this.tipoCard = [];
-        this.isConfAtendimento = false;
 
         if (this.validaCampo(data)) {
 
@@ -425,28 +380,12 @@ export class NovoAtendimentoComponent {
         this.tipoCard = [];
         this.dadosHorario = data;
         this.isHorario = false;
-        this.isConfAtendimento = true;
+        this.isDadosAtendimento = true;
     }
 
-    consultaRetorno(data) {
-
-        if (data === 'S') {
-            document.getElementById('consPagto').setAttribute('disabled', 'true');
-            document.getElementById('radioSim').setAttribute('checked', 'true');
-            document.getElementById('radioNao').setAttribute('disabled', 'true');
-            this.formNovoAtendimento.controls['consPagto'].setValue(this.detalhes);
-            this.retorno = true
-        } else {
-            document.getElementById('consPagto').removeAttribute('disabled');
-            document.getElementById('radioNao').removeAttribute('disabled');
-            document.getElementById('radioSim').removeAttribute('checked');
-            this.formNovoAtendimento.controls['consPagto'].setValue(null);
-            this.retorno = false
-        }
-    }
 
     previousPage() {
-        this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+        this.router.navigate(['/pages/atendimento/fila-espera'])
     }
 
 }

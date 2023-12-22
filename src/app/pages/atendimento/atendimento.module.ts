@@ -16,6 +16,8 @@ import { ConsultaPacienteComponent } from "./consulta-paciente/consulta-paciente
 import { DetalheAtendimentoComponent } from "./detalhe-atendimento/detalhe-atendimento.component";
 import { MotivoCancelamentoComponent } from "./detalhe-atendimento/motivo-cancelamento/motivo-cancelamento.component";
 import { AutosizeModule } from "@techiediaries/ngx-textarea-autosize";
+import { FilaEsperaComponent } from "./fila-espera/fila-espera.component";
+import { AgendarConsultaComponent } from "./agendar-consulta/agendar-consulta.component";
 
 @NgModule({
   imports: [
@@ -49,6 +51,8 @@ import { AutosizeModule } from "@techiediaries/ngx-textarea-autosize";
     ConsultaPacienteComponent,
     DetalheAtendimentoComponent,
     MotivoCancelamentoComponent,    
+    FilaEsperaComponent,
+    AgendarConsultaComponent,
   ],  
 })
 export class AtendimentoModule { }

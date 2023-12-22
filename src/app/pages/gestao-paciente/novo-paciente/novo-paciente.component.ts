@@ -45,7 +45,7 @@ export class NovoPacienteComponent implements OnDestroy {
   public showMsgErroCpfDep = false;
   public imgFile = null;
   public uploadForm = null;
-
+  
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: NovoPacienteService,
@@ -137,8 +137,7 @@ export class NovoPacienteComponent implements OnDestroy {
       imagemDep: [null],
     })
 
-    this.formNovoPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
-
+    this.formNovoPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });    
   }
 
   tipoFormulario(data) {

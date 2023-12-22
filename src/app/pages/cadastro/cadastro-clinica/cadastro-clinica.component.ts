@@ -27,6 +27,7 @@ export class CadastroClinicaComponent implements OnDestroy {
   public avatar = null;
   showPass = false;
   showPassw = false;
+  public title = 'Por favor insira os seus dados para darmos inicio ao seu cadastro.';
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,

@@ -19,6 +19,8 @@ export class PacienteComponent implements OnInit {
   public rowData = null;
   public listMedico = null;
   public isActive = false;
+  public avatar = "assets/images/avatar.png";
+
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: PacienteService,
@@ -62,12 +64,11 @@ export class PacienteComponent implements OnInit {
       this.service.buscaPaciente(params, (response) => {
 
         this.isActive = false;
-        this.rowData = response       
+        this.rowData = response
 
         this.rowData = this.rowData.map(data => {
-
           return {
-            avatar: 'data:application/pdf;base64,' + response,
+            avatar: data.user.avatar == null || data.user.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.user.avatar,
             name: data.user.name,
             cellPhone: data.user.cellPhone,
             email: data.user.emailUser,
@@ -75,7 +76,8 @@ export class PacienteComponent implements OnInit {
             id: data.user.id,
             city: data.user.city.id,
             uf: data.user.uf.id,
-            userChildren: data.userChildren
+            userChildren: data.userChildren,
+            doctorId: data.doctor.id
           }
         })
 
@@ -111,7 +113,11 @@ export class PacienteComponent implements OnInit {
     this.router.navigate(['/pages/gestao-paciente/novo-paciente']);
   }
 
-  precoEspecial(data){
+  precoEspecial(data) {
     this.router.navigateByUrl('/pages/gestao-paciente/preco-especial', { state: data });
+  }
+
+  buscaHistorico(data) {
+    this.router.navigateByUrl('/pages/gestao-paciente/historico', { state: data });
   }
 }
