@@ -19,43 +19,54 @@
                   </div>
                 </div>
                 <div class="form-row align-items-center">
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-2">
                     <div class="form-group">
                       <div class="btn_clinica">
                         <button nbButton outline status="primary" type="button" id="informacao"
                           class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="informacao"
-                          (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
-                            icon="home-outline"></nb-icon> Informações Gerais</button>
+                          (click)="tipoFormulario($event.target.value)"><nb-icon class="action-icon"
+                            icon="home-outline"></nb-icon> Dados Gerais</button>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-2">
                     <div class="form-group">
                       <div class="btn_clinica">
                         <button nbButton outline status="primary" type="button" id="localizacao"
                           class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="localizacao"
-                          (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
-                            icon="car-outline"></nb-icon> Localização</button>
+                          (click)="tipoFormulario($event.target.value)"><nb-icon class="action-icon"
+                            icon="car-outline"></nb-icon> Endereço</button>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-2">
                     <div class="form-group">
                       <div class="btn_clinica">
                         <button nbButton outline status="primary" type="button" id="contato"
                           class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="contato"
-                          (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
+                          (click)="tipoFormulario($event.target.value)"><nb-icon class="action-icon"
                             icon="email-outline"></nb-icon> Contato</button>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-2">
                     <div class="form-group">
                       <div class="btn_clinica">
                         <button nbButton outline status="primary" type="button" id="addFotos"
                           class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="addFotos"
-                          (click)="tipoFormulario($event.target.value)"><nb-icon class="icon-medico"
-                            icon="plus-circle-outline"></nb-icon> Dados do dependente</button>
+                          (click)="tipoFormulario($event.target.value)"><nb-icon class="action-icon"
+                            icon="plus-circle-outline"></nb-icon> Dependente</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <div class="btn_clinica">
+                        <button nbButton outline status="primary" type="button" id="precoExclusivo"
+                          class="btn btn-outline-primary nb-custom-message-full-width btn-lg" value="precoExclusivo"
+                          (click)="tipoFormulario($event.target.value)">
+                          <nb-icon class="action-icon"
+                            icon="credit-card-outline"></nb-icon> Preço</button>
                       </div>
                     </div>
                   </div>
@@ -67,14 +78,14 @@
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-4">
                       <label for="nome">Escolha o médico*</label>
-                      <select class="form-control" formControlName="medico" 
-                      (change)="verificaMedico($event.target.value)">
+                      <select class="form-control" formControlName="medico"
+                        (change)="verificaMedico($event.target.value)">
                         <option value="null" selected>SELECIONE</option>
                         <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
                           medico.name}}</option>
                       </select>
                     </div>
-                  </div>  
+                  </div>
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-6">
                       <label for="nome">Nome*</label>
@@ -87,7 +98,7 @@
                           maxlength="10" (blur)="validaData($event.target.value)" />
                       </div>
                       <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
-                        {{this.msgErro}} <br/>
+                        {{this.msgErro}} <br />
                       </div>
                     </div>
                   </div>
@@ -96,9 +107,9 @@
                       <label for="CPF">CPF*</label>
                       <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf" value="cpf"
                         mask="000.000.000-00" (change)="isValidCpf($event.target,formNovoPaciente.value)" />
-                        <div *ngIf="showMsgErroCpf" class="link-text pt-2" style="color: #dc3545;">
-                          {{this.msgErroCpf}} <br/>
-                        </div>
+                      <div *ngIf="showMsgErroCpf" class="link-text pt-2" style="color: #dc3545;">
+                        {{this.msgErroCpf}} <br />
+                      </div>
                     </div>
                     <div class="form-group col-md-3">
                       <label class="mat-button mb-3">Sexo biologico*</label>
@@ -113,13 +124,13 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group row pl-3">                     
-                    <div class="col-md-5">                        
+                  <div class="form-group row pl-3">
+                    <div class="col-md-5">
                       <div class="align-self-start">
-                        <img src="{{this.avatar }}" style="height: 80px;"/>
+                        <img src="{{this.avatar }}" style="height: 80px;" />
                       </div>
                     </div>
-                  </div>             
+                  </div>
                   <div class="form-row align-items-center">
                     <div class="form-group row">
                       <div class="col-md-12">
@@ -137,8 +148,8 @@
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-3">
                       <label for="CEP">CEP*</label>
-                      <input class="form-control" name="cep" id="cep" type="text" formControlName="cep"
-                        mask="00000-000" (blur)="buscaCep(formNovoPaciente.value)"/>
+                      <input class="form-control" name="cep" id="cep" type="text" formControlName="cep" mask="00000-000"
+                        (blur)="buscaCep(formNovoPaciente.value)" />
                     </div>
                     <div class="form-group col-md-1">
                       <label for="numero">N°*</label>
@@ -202,13 +213,13 @@
                   <div class="form-row align-items-center">
                     <h6 class="p-1">Informações Gerais</h6>
                   </div>
-                  <div class="form-group row pl-3">                     
-                    <div class="col-md-5">                        
+                  <div class="form-group row pl-3">
+                    <div class="col-md-5">
                       <div class="align-self-start">
-                        <img src="{{this.avatarDep }}" style="height: 80px;"/>
+                        <img src="{{this.avatarDep }}" style="height: 80px;" />
                       </div>
                     </div>
-                  </div>  
+                  </div>
                   <div class="form-row align-items-center">
                     <div class="form-group row">
                       <div class="col-md-12">
@@ -228,7 +239,7 @@
                       <label for="dateNascDep">Data de nascimento</label>
                       <div class="row pl-3">
                         <input class="date" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
-                          maxlength="10"  (blur)="validaData($event.target.value)" />
+                          maxlength="10" (blur)="validaData($event.target.value)" />
                       </div>
                       <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
                         {{this.msgErro}} <br />
@@ -250,11 +261,12 @@
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-3">
                       <label for="cpfDep">CPF</label>
-                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep" value="cpfDep"
-                        mask="000.000.000-00" (change)="isValidCpf($event.target,formNovoPaciente.value)" />
-                        <div *ngIf="showMsgErroCpfDep" class="link-text pt-2" style="color: #dc3545;">
-                          {{this.msgErroCpf}} <br/>
-                        </div>
+                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
+                        value="cpfDep" mask="000.000.000-00"
+                        (change)="isValidCpf($event.target,formNovoPaciente.value)" />
+                      <div *ngIf="showMsgErroCpfDep" class="link-text pt-2" style="color: #dc3545;">
+                        {{this.msgErroCpf}} <br />
+                      </div>
                     </div>
                     <div class="form-group col-md-3">
                       <label for="rgDep">RG</label>
@@ -280,6 +292,123 @@
                         <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.descricao }}">{{
                           tipoSanguineo.descricao}}</option>
                       </select>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isPrecoEspecial">
+                  <div class="form-row align-items-center">
+                    <div class="form-group">
+                      <label class="pl-1">Selecione abaixo quais as modalidades de consultas o médico atende.</label>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
+                    <div class="form-group col-md-3">
+                      <div class="form-group">
+                        <label for="nome"><span style="font-weight: bold">Tipo de Atendimento*</span></label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <div class="form-group">
+                        <label for="nome">
+                          <span style="font-weight: bold">Valor*</span></label>
+                      </div>
+                    </div>
+                    <div class="col-md-2 mb-lg-n1">
+                      <label for="dataExpiracao" style="font-weight: bold">Data expiração</label>
+                      <div class="row pl-3">
+                        <input class="form-control date" type="date" id="dataExpiracao" name="mydate"
+                          formControlName="dataExpiracao" maxlength="10" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center pl-4 mt-lg-n4">
+                    <div class="form-group col-md-3">
+                      <div class="form-group">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="1"
+                            (click)="funcValor($event.target.value, $event.target)" />
+                          Presencial</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <div class="form-group">
+                        <input class="div-presencial" autocomplete="off" currencyMask
+                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                          class="form-control m-lg-n3" id="valorPresencial" formControlName="valorPresencial"
+                          placeholder="R$ 0,00" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center pl-4 ">
+                    <div class="form-group col-md-3">
+                      <div class="form-group">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" id="video" name="optcheckbox" value="2"
+                            (click)="funcValor($event.target.value, $event.target)" />
+                          Video Chamada</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <div class="form-group">
+                        <input class="div-video" autocomplete="off" currencyMask
+                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                          class="form-control m-lg-n3" id="valorVideo" formControlName="valorVideo"
+                          placeholder="R$ 0,00" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center pl-4 ">
+                    <div class="form-group col-md-3">
+                      <div class="form-group">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" id="emergencial" name="optcheckbox" value="3"
+                            (click)="funcValor($event.target.value, $event.target)" />
+                          Emergencial Presencial</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <div class="form-group">
+                        <input class="div-emergencial" autocomplete="off" currencyMask
+                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                          class="form-control m-lg-n3" name="valorEmergencial" id="valorEmergencial"
+                          formControlName="valorEmergencial" placeholder="R$ 0,00">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center pl-4 ">
+                    <div class="form-group col-md-3">
+                      <div class="form-group">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" id="casa" name="optcheckbox" value="4"
+                            (click)="funcValor($event.target.value, $event.target)" />
+                          Em Casa</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <div class="form-group">
+                        <input class="div-casa" autocomplete="off" currencyMask
+                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                          class="form-control m-lg-n3" name="valorCasa" id="valorCasa" formControlName="valorCasa"
+                          placeholder="R$ 0,00">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center pl-4 ">
+                    <div class="form-group col-md-3">
+                      <div class="form-group">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" id="videoChamada" name="optcheckbox" value="5"
+                            (click)="funcValor($event.target.value, $event.target)" />
+                          Video Chamada Emergencial</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <div class="form-group">
+                        <input class="div-videoChamada" autocomplete="off" currencyMask
+                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                          class="form-control m-lg-n3" name="valorVideoChamada" id="valorVideoChamada"
+                          formControlName="valorVideoChamada" placeholder="R$ 0,00">
+                      </div>
                     </div>
                   </div>
                 </div>

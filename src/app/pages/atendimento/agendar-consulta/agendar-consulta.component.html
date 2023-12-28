@@ -49,7 +49,7 @@
                                         <div class="form-group">
                                             <label for="nome">Escolha o médico*</label>
                                             <select class="form-control" formControlName="medico"
-                                                (change)="verificaMedico($event.target.value)">
+                                                (change)="verificaMedico($event.target.value)" id="idMedico" disabled>
                                                 <option value="null" selected>SELECIONE</option>
                                                 <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
                                                     medico.name}}</option>
@@ -59,7 +59,7 @@
                                     <div class="form-group col-md-4">
                                         <div class="form-group">
                                             <label for="tipoConsulta">Tipo de consulta*</label>
-                                            <select class="form-control" formControlName="tipoConsulta">
+                                            <select class="form-control" formControlName="tipoConsulta" id="idTipoConsulta">
                                                 <option value="null" selected>SELECIONE</option>
                                                 <option *ngFor="let tipoConsulta of listTipoConsulta"
                                                     value="{{ tipoConsulta.id }}">{{
@@ -71,7 +71,7 @@
                                         <div class="form-group">
                                             <label for="tipoEspecialidade">Tipo de especialidade*</label>
                                             <select class="form-control" formControlName="tipoEspecialidade"
-                                                (change)="especialidade($event.target.value)">
+                                                (change)="especialidade($event.target.value)" id="idEspecialidade" disabled>
                                                 <option value="null" selected>SELECIONE</option>
                                                 <option *ngFor="let tipoEspecialidade of listTipoEspecialidade"
                                                     value="{{ tipoEspecialidade.id }}">{{

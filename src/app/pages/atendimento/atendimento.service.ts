@@ -72,4 +72,7 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/waitingService', data, successHandle, erroHandle)
   }
   
+  waiting(data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doPost('/api/waitingService', data, successHandle, erroHandle)
+  }
 }

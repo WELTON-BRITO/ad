@@ -29,6 +29,7 @@ export class NovoPacienteComponent implements OnDestroy {
   public isProximo = true;
   public isCadastrar = false;
   public isActive = false;
+  public isPrecoEspecial = false;
   public sexo = null;
   public listSanguino = null;
   public imagem = null;
@@ -45,7 +46,7 @@ export class NovoPacienteComponent implements OnDestroy {
   public showMsgErroCpfDep = false;
   public imgFile = null;
   public uploadForm = null;
-  
+
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: NovoPacienteService,
@@ -135,9 +136,15 @@ export class NovoPacienteComponent implements OnDestroy {
       cpfDep: [null],
       imagem: [null],
       imagemDep: [null],
+      valorVideoChamada: [null],
+      valorCasa: [null],
+      valorEmergencial: [null],
+      valorVideo: [null],
+      valorPresencial: [null],
+      dataExpiracao: [null],
     })
 
-    this.formNovoPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });    
+    this.formNovoPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
   }
 
   tipoFormulario(data) {
@@ -175,6 +182,17 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isLocalizacao = false;
       this.isContato = false;
       this.isAddDependente = true;
+      this.isProximo = true;
+      this.isCadastrar = false;
+      this.isVoltar = true;
+      this.isPrecoEspecial = false;
+    } else if (data === 'precoExclusivo') {
+
+      this.isPrecoEspecial = true;
+      this.isInformacao = false;
+      this.isLocalizacao = false;
+      this.isContato = false;
+      this.isAddDependente = false;
       this.isProximo = false;
       this.isCadastrar = true;
       this.isVoltar = true;
@@ -208,6 +226,18 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isLocalizacao = false;
       this.isContato = false;
       this.isAddDependente = true;
+      this.isProximo = true;
+      this.isCadastrar = false;
+      this.isVoltar = true;
+      this.isPrecoEspecial = false;
+
+    } else if (data.isAddDependente == true) {
+
+      this.isPrecoEspecial = true;
+      this.isInformacao = false;
+      this.isLocalizacao = false;
+      this.isContato = false;
+      this.isAddDependente = false;
       this.isProximo = false;
       this.isCadastrar = true;
       this.isVoltar = true;
@@ -233,6 +263,13 @@ export class NovoPacienteComponent implements OnDestroy {
     } else if (data.isAddDependente == true) {
       this.isAddDependente = false;
       this.isContato = true;
+      this.isProximo = true;
+      this.isVoltar = true;
+      this.isCadastrar = false;
+    } else if (data.isPrecoEspecial == true) {
+      this.isPrecoEspecial = false;
+      this.isAddDependente = true;
+      this.isContato = false;
       this.isProximo = true;
       this.isVoltar = true;
       this.isCadastrar = false;
@@ -430,7 +467,13 @@ export class NovoPacienteComponent implements OnDestroy {
       rgDep: [null],
       cpfDep: [null],
       imagem: [null],
-      imagemDep: [null]
+      imagemDep: [null],
+      valorVideoChamada: [null],
+      valorCasa: [null],
+      valorEmergencial: [null],
+      valorVideo: [null],
+      valorPresencial: [null],
+      dataExpiracao: [null],
     })
 
     this.avatar = null;

@@ -30,19 +30,23 @@ export class FilaEsperaComponent {
 
         this.listTipoConsulta = [{
             id: 1,
-            descricao: "Consulta Presencial"
+            descricao: "Presencial"
         },
         {
             id: 2,
-            descricao: "Consulta por Video conferência"
+            descricao: "Video Chamada"
         },
         {
             id: 3,
-            descricao: "Consulta Emergencial"
+            descricao: "Emergencial Presencial"
         },
         {
             id: 4,
-            descricao: "Consulta Casa"
+            descricao: "Em Casa"
+        },
+        {
+            id: 5,
+            descricao: "Video Chamada Emergencial"
         }];
 
     }
@@ -152,7 +156,9 @@ export class FilaEsperaComponent {
                             observacao: data.description,
                             nameMae: data.user.name,
                             cpfMae: data.user.federalId,
+                            idMae: data.user.id,
                             cpfDependente: data.child == null ? null : data.child.cpf,
+                            idDependente: data.child == null ? null : data.child.idChild,
                         }
                     })
                 } else {

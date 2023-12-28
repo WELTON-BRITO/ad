@@ -193,7 +193,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
     }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(error.error.message);
     });
 
   }

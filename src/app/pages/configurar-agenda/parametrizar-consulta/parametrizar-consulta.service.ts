@@ -17,7 +17,7 @@ export class ParametrizarConsultaService {
   }
 
   atualizarValor(data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doPut('/api/doctor/typePrice', data, successHandle, erroHandle)
+    return this.httpService.doPost('/api/doctor/typePrice', data, successHandle, erroHandle)
   }
 
   buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){

@@ -79,7 +79,9 @@
           <nb-icon class="action-icon" icon="trash-2-outline"></nb-icon>
           <span>Cancelar</span>
         </nb-action>
-        <nb-action *ngIf="atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='02 - Aguardando Pagamento'" (click)="aprovarPagamento()" >
+        <nb-action
+          *ngIf="atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='02 - Aguardando Pagamento'"
+          (click)="aprovarPagamento()">
           <nb-icon class="action-icon" icon="checkmark-circle-outline"></nb-icon>
           <span>Aprovar pagamento</span>
         </nb-action>
@@ -94,13 +96,19 @@
           <span>Ver histórico</span>
         </nb-action>-->
         <nb-action *ngIf="(atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='03 - Consulta Confirmada'
-        || atendimento.status ==='02 - Aguardando Pagamento') && atendimento.formaPagamento == 'PIX'" (click)="abrirComprovante()">
+        || atendimento.status ==='02 - Aguardando Pagamento') && atendimento.formaPagamento == 'PIX'"
+          (click)="abrirComprovante()">
           <nb-icon class="action-icon" icon="attach-outline"></nb-icon>
           <span>Ver comprovante</span>
         </nb-action>
-        <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada' || atendimento.status === '04 - Consulta Finalizada'" >
+        <nb-action
+          *ngIf="atendimento.status ==='03 - Consulta Confirmada' || atendimento.status === '04 - Consulta Finalizada'">
           <nb-icon class="action-icon" icon="file-outline" (click)="abrirConsulta()"></nb-icon>
           <span>Atualizar prontuário</span>
+        </nb-action>
+        <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'">
+          <nb-icon class="action-icon" icon="edit-outline" (click)="editarConsulta()"></nb-icon>
+          <span>Editar</span>
         </nb-action>
       </nb-actions>
     </nb-card-body>
@@ -119,4 +127,3 @@
     </div>
   </div>
 </div>
-

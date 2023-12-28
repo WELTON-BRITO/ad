@@ -375,7 +375,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     }), (error) => {
       this.verificaHorario(this.doctorId, this.clinicaId)
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -389,7 +389,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     this.service.buscaModalidade(data, null, (response => {
       this.listModalidade = response
     }), (error) => {
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(error.error.message);
     });
 
   }

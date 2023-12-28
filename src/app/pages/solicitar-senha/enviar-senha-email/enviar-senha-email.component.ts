@@ -38,13 +38,13 @@ export class EnviarSenhaEmailComponent implements OnInit {
   }
 
   enviar(data) {   
-
+    
     if(data.cpfCnpj.length == '11'){
       this.domainId = 4
     }else{
       this.domainId = 2
     }
-
+   
     let register = {
       federalId: data.cpfCnpj,
       email: data.email,
@@ -73,7 +73,7 @@ export class EnviarSenhaEmailComponent implements OnInit {
       
     }), (error) => {
       this.isActive = false;     
-      this.toastrService.danger(error);
+      this.toastrService.danger(error.error.message);
     });
 
   }

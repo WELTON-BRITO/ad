@@ -208,7 +208,7 @@ export class CadastroMedicoComponent implements OnInit {
       this.listEstado = response
 
     }, (error) => {
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
@@ -257,7 +257,7 @@ export class CadastroMedicoComponent implements OnInit {
       this.listEspecialidade = response
 
     }, (error) => {
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(error.error.message);
     });
 
   }

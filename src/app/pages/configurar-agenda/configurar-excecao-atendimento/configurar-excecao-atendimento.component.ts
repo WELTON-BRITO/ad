@@ -31,6 +31,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   public doctorId = null;
   public horaInicio = [];
   public horaFim = [];
+  public clinicaId = null;
+  public listClinica = [];
+  public listTipoConsulta = [];
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -40,6 +43,27 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
     this.tipoCard = [];
     this.grupoCard = [];
 
+    this.listTipoConsulta = [{
+      id: 1,
+      descricao: "Presencial"
+    },
+    {
+      id: 2,
+      descricao: "Video Chamada"
+    },
+    {
+      id: 3,
+      descricao: "Emergencial Presencial"
+    },
+    {
+      id: 4,
+      descricao: "Em Casa"
+    },
+    {
+      id: 5,
+      descricao: "Video Chamada Emergencial"
+    }];
+
   }
   ngOnDestroy() { }
 
@@ -47,12 +71,15 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.verificaMedico(this.listMedico[0].id);
+    this.pesquisaClinica(this.listMedico[0].id)
     this.formExcecaoAtendimento = this.formBuilder.group({
       dataExcecao: [null],
       horaInicio: [null],
       horaFim: [null],
       card: [null],
-      medico: [this.listMedico[0], Validators.required]
+      medico: [this.listMedico[0], Validators.required],
+      clinica: [null],
+      tipoConsulta: [null]
     })
 
     this.formExcecaoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
@@ -116,7 +143,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
     for (var i = 0; i < this.tipoCard.length; i++) {
 
       if (this.tipoCard[i].horaInicio != null) {
-        this.horaInicio.push(this.tipoCard[0].horaInicio)
+        this.horaInicio.push(this.tipoCard[i].horaInicio)
       }
       if (this.tipoCard[i].horaFim != null) {
         this.horaFim.push(this.tipoCard[i].horaFim)
@@ -126,7 +153,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
     let register = {
       doctorId: this.doctorId,
-      clinicId: null,
+      clinicId: this.clinicaId,
       startTime: this.horaInicio,
       endTime: this.horaFim,
       dateException: data.dataExcecao,
@@ -150,6 +177,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.toastrService.danger('Preencher os campos obrigatório!!!');
     }
 
+    this.horaInicio = [];
+    this.horaFim = [];
+
   }
 
   limpaForm() {
@@ -159,7 +189,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       horaInicio: [null],
       horaFim: [null],
       card: [null],
-      medico: [null]
+      medico: [null],
+      clinica: [null],
+      tipoConsulta: [null]
     })
 
     this.removerCard()
@@ -174,6 +206,24 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.toastrService.danger('Preencher o campo obrigatório!!!');
     }
 
+  }
+
+  pesquisaClinica(data) {
+
+    this.service.buscaClinica(data, null, (response) => {
+
+      this.listClinica = response
+      this.isActive = false
+
+    }, (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+    });
+
+  }
+
+  verificaClinica(data) {
+    this.clinicaId = data;
   }
 
 }

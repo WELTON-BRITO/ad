@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,6 +18,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public checkVideo = null;
   public checkEmergencial = null;
   public checkCasa = null;
+  public checkVideoChamada = null;
   public isActive = false;
   public durationAtHome = null;
   public durationEmergency = null;
@@ -74,6 +74,11 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       optVideo: [null],
       optEmergencial: [null],
       optCasa: [null],
+      videoChamada: [null],
+      tempoVideoChamada: [null],
+      VideoChamada: [null],
+      qrVideoChamada: [null],
+      optVideoChamada: [null],
     })
     this.formParametrizarConsulta.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
@@ -93,6 +98,8 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.checkEmergencial = event
       } else if (event == "4") {
         this.checkCasa = event
+      } else if (event == "5") {
+        this.checkVideoChamada = event
       }
     } else if (element.checked == false) {
       if (event == "1") {
@@ -103,6 +110,8 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.checkEmergencial = null;
       } else if (event == "4") {
         this.checkCasa = null
+      } else if (event == "5") {
+        this.checkVideoChamada = null
       }
 
     }
@@ -114,7 +123,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
     if ((data.medico == null) || ((data.valorPresencial == null) && (data.valorEmergencial == null) &&
       (data.valorVideo == null) && (data.valorCasa == null)) || ((data.tempoEmergencial == null) &&
         (data.tempoPresencial == null) && (data.tempoVideo == null) && (data.tempoCasa == null))
-      || ((this.isBloqueio == true) && (data.optPresencial == null || data.optVideo == null || data.optEmergencial == null || data.optCasa == null))) {
+      || ((this.isBloqueio == true) && (data.optPresencial == null || data.optVideo == null || data.optEmergencial == null || data.optCasa == null || data.optVideoChamada == null))) {
 
       this.toastrService.danger('Preencher os campos obrigatórios!!!');
 
@@ -176,6 +185,20 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         )
       }
 
+      if (data.tempoVideoChamada != null) {
+
+        this.listConsulta.push(
+          {
+            typeServiceId: 5,
+            duration: data.tempoVideoChamada,
+            value: data.valorVideoChamada,
+            qrCode: data.qrVideoChamada,
+            qrCodeBlocked: data.optVideoChamada == null ? true : data.optVideoChamada,
+            clinicId: this.clinicaId
+          }
+        )
+      }
+
       let register = {
         doctorId: data.medico,
         items: this.listConsulta
@@ -231,6 +254,11 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       optVideo: [null],
       optEmergencial: [null],
       optCasa: [null],
+      videoChamada: [null],
+      tempoVideoChamada: [null],
+      VideoChamada: [null],
+      qrVideoChamada: [null],
+      optVideoChamada: [null],
     })
 
     var checkbox = document.querySelector("#presencial");
@@ -265,6 +293,14 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       ativarCheckbox(checkbox);
     }
 
+    var checkbox = document.querySelector("#videoChamada");
+    if (checkbox.id == 'videoChamada') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+
   }
 
   verificaValor(data) {
@@ -276,7 +312,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
     this.service.buscaValor(params, (response) => {
       this.isActive = false;
-      //this.atualizar = response;
 
       if (response.length == 0) {
         this.atualizar = 0;
@@ -335,6 +370,18 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
+          } else if (response[i].typeService.id == 5) {
+
+            this.formParametrizarConsulta.controls['tempoVideoChamada'].setValue(response[i].duration);
+            this.formParametrizarConsulta.controls['valorVideoChamada'].setValue(response[i].value);
+            this.formParametrizarConsulta.controls['qrVideoChamada'].setValue(response[i].qrCode);
+
+            var checkbox = document.querySelector("#videoChamada");
+            function ativarCheckbox(el) {
+              el.checked = true;
+            }
+            ativarCheckbox(checkbox);
+
           }
 
           if (this.clinic == 'CLINIC') {
@@ -355,6 +402,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             if (response[i].qrCodeBlocked == false && response[i].typeService.id == 4) {
               document.getElementById('qrCasa').removeAttribute('disabled');
+            }
+            if (response[i].qrCodeBlocked == false && response[i].typeService.id == 5) {
+              document.getElementById('qrVideoChamada').removeAttribute('disabled');
             }
           }
 
@@ -404,7 +454,16 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         }
         ativarCheckbox(checkbox);
       }
-
+      if (error == undefined) {
+        this.formParametrizarConsulta.controls['tempoVideoChamada'].setValue(null);
+        this.formParametrizarConsulta.controls['valorVideoChamada'].setValue(null);
+        this.formParametrizarConsulta.controls['qrVideoChamada'].setValue(null);
+        var checkbox = document.querySelector("#videoChamada");
+        function ativarCheckbox(el) {
+          el.checked = false;
+        }
+        ativarCheckbox(checkbox);
+      }
     });
 
   }
@@ -418,7 +477,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
     }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(error.error.message);
     });
 
   }
