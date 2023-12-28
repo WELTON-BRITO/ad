@@ -168,7 +168,7 @@ export class DetalheAtendimentoComponent implements OnInit {
 
     }), (error) => {
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(error.error.message);
 
     });
 
@@ -204,5 +204,9 @@ export class DetalheAtendimentoComponent implements OnInit {
 
   goToLink(url: string) {
     window.open(url, "_blank");
+  }
+
+  editarConsulta(){  
+    this.router.navigateByUrl('/pages/atendimento/agendar-consulta', { state: this.paciente });
   }
 }

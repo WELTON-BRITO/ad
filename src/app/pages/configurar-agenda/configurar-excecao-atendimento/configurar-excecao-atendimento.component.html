@@ -21,12 +21,35 @@
                       </select>
                     </div>
                   </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label for="clinica">Escolha a clínica*</label>
+                        <select class="form-control" formControlName="clinica"
+                          (change)="verificaClinica($event.target.value)">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let clinica of listClinica" value="{{ clinica.id }}">{{
+                            clinica.socialName}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <label for="tipoConsulta">Tipo de consulta*</label>
+                      <select class="form-control" formControlName="tipoConsulta">
+                        <option value="null" selected>SELECIONE</option>
+                        <option *ngFor="let tipoConsulta of listTipoConsulta" value="{{ tipoConsulta.id }}">{{
+                          tipoConsulta.descricao}}</option>
+                      </select>
+                    </div>
+                  </div>
                   <div class="form-group col-md-2">
                     <div class="form-group">
                       <label for="dataExcecao">Escolha a data*</label>
                       <div class="row pl-3">
-                        <input class="form-control date" type="date" id="dataExcecao" name="mydate" formControlName="dataExcecao"
-                          maxlength="10" />
+                        <input class="form-control date" type="date" id="dataExcecao" name="mydate"
+                          formControlName="dataExcecao" maxlength="10" />
                       </div>
                     </div>
                   </div>
@@ -36,7 +59,7 @@
                       <div class="row pl-3">
                         <label class="radio-inline mr-3">
                           <input class="mat-button" type="radio" id="radio" name="optradio" value="S"
-                            (click)="expediente($event.target.value)" (click)="addHora()" >
+                            (click)="expediente($event.target.value)" (click)="addHora()">
                           Sim</label>
                         <label class="radio-inline">
                           <input class="mat-button" type="radio" id="radio" name="optradio" value="N"
@@ -44,9 +67,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="form-row align-items-center">
-                  <div class="col-md-12">
+                  <div class="form-group col-md-6">
                     <div class="text-right">
                       <button class="btn btn-primary mr-3" id="addHoras" (click)="addHora()" *ngIf="isCardHoras">
                         Informar horário

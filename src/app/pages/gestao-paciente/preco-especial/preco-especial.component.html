@@ -19,6 +19,11 @@
                   </div>
                 </div>
                 <div class="form-row align-items-center">
+                  <div class="form-group col-md-6">
+                    <label for="tipoSanguineo">Nome: {{ atendimento.name }}</label>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
                   <div class="form-group">
                     <label class="pl-1">Por favor escolha o médico abaixo para realizar a configuração:</label>
                   </div>
@@ -65,6 +70,9 @@
                     <div class="form-group">
                       <label class="pl-1">Selecione abaixo quais as modalidades de consultas o médico atende.</label>
                     </div>
+                    <div class="form-group">
+                      <label class="pl-1">Para invalidar os valores exclusivo, informe uma data expiração menor que a data de hoje.</label>
+                    </div>
                   </div>
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-3">
@@ -92,7 +100,7 @@
                         <label class="form-check-label">
                           <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="1"
                             (click)="funcValor($event.target.value, $event.target)" />
-                          Atendimento Presencial</label>
+                          Presencial</label>
                       </div>
                     </div>
                     <div class="form-group col-md-2">
@@ -110,7 +118,7 @@
                         <label class="form-check-label">
                           <input class="form-check-input" type="checkbox" id="video" name="optcheckbox" value="2"
                             (click)="funcValor($event.target.value, $event.target)" />
-                          Atendimento por Video</label>
+                          Video Chamada</label>
                       </div>
                     </div>
                     <div class="form-group col-md-2">
@@ -128,7 +136,7 @@
                         <label class="form-check-label">
                           <input class="form-check-input" type="checkbox" id="emergencial" name="optcheckbox" value="3"
                             (click)="funcValor($event.target.value, $event.target)" />
-                          Atendimento Emergencial</label>
+                          Emergencial Presencial</label>
                       </div>
                     </div>
                     <div class="form-group col-md-2">
@@ -146,7 +154,7 @@
                         <label class="form-check-label">
                           <input class="form-check-input" type="checkbox" id="casa" name="optcheckbox" value="4"
                             (click)="funcValor($event.target.value, $event.target)" />
-                          Atendimento em Casa</label>
+                          Em Casa</label>
                       </div>
                     </div>
                     <div class="form-group col-md-2">
@@ -155,6 +163,24 @@
                           [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
                           class="form-control m-lg-n3" name="valorCasa" id="valorCasa" formControlName="valorCasa"
                           placeholder="R$ 0,00">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center pl-4 ">
+                    <div class="form-group col-md-3">
+                      <div class="form-group">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" id="videoChamada" name="optcheckbox" value="5"
+                            (click)="funcValor($event.target.value, $event.target)" />
+                          Video Chamada Emergencial</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <div class="form-group">
+                        <input class="div-videoChamada" autocomplete="off" currencyMask
+                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                          class="form-control m-lg-n3" name="valorVideoChamada" id="valorVideoChamada"
+                          formControlName="valorVideoChamada" placeholder="R$ 0,00">
                       </div>
                     </div>
                   </div>

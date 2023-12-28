@@ -44,6 +44,8 @@ export class AgendarConsultaComponent {
         cpfResponsavel: null,
         nomeDependente: null,
         cpfDependente: null,
+        idDependente: null,
+        idMae: null
     };
     public isDependente = false;
 
@@ -54,19 +56,23 @@ export class AgendarConsultaComponent {
 
         this.listTipoConsulta = [{
             id: 1,
-            descricao: "Consulta Presencial"
+            descricao: "Presencial"
         },
         {
             id: 2,
-            descricao: "Consulta por Video conferência"
+            descricao: "Video Chamada"
         },
         {
             id: 3,
-            descricao: "Consulta Emergencial"
+            descricao: "Emergencial Presencial"
         },
         {
             id: 4,
-            descricao: "Consulta Casa"
+            descricao: "Em Casa"
+        },
+        {
+            id: 5,
+            descricao: "Video Chamada Emergencial"
         }];
 
     }
@@ -74,20 +80,10 @@ export class AgendarConsultaComponent {
     ngOnInit() {
 
         let data = history.state
-
-        this.agendaConsulta.nomeResponsavel = data.nameMae
-        this.agendaConsulta.cpfResponsavel = data.cpfMae
-        if (data.cpfDependente != null) {
-            this.isDependente = true
-            this.agendaConsulta.nomeDependente = data.name
-            this.agendaConsulta.cpfDependente = data.cpfDependente
-        } else {
-            this.isDependente = false
-        }
-
         this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
         this.verificaMedico(this.listMedico[0].id);
         this.pagamento();
+
         this.formAgendarConsulta = this.formBuilder.group({
             medico: [this.listMedico[0]],
             cpf: [null],
@@ -101,7 +97,34 @@ export class AgendarConsultaComponent {
             tipoEspecialidade: [null],
         })
 
+        this.agendaConsulta.nomeResponsavel = data.nameMae != null ? data.nameMae : data.user.name;
+        this.agendaConsulta.cpfResponsavel = data.cpfMae != null ? data.cpfMae : data.user.federalId;
+        this.agendaConsulta.idMae = data.idMae != null ? data.idMae : data.user.id
+        if (data.cpfDependente != null) {
+            this.isDependente = true
+            this.agendaConsulta.nomeDependente = data.name
+            this.agendaConsulta.cpfDependente = data.cpfDependente
+            this.agendaConsulta.idDependente = data.idDependente
+        } else {
+            this.isDependente = false
+        }
+
+        if (data.cpfMae != null) {
+            document.getElementById('idMedico').removeAttribute('disabled');
+            document.getElementById('idEspecialidade').removeAttribute('disabled');
+        } else {
+            this.formAgendarConsulta.controls['tipoEspecialidade'].setValue(data.specialty.id, { onlySelf: true });
+            this.formAgendarConsulta.controls['medico'].setValue(data.doctor.id, { onlySelf: true });
+            this.formAgendarConsulta.controls['tipoConsulta'].setValue(data.typeServiceEntity.id, { onlySelf: true });
+        }
+
+        if (data.dateService != null) {
+            this.isDadosAtendimento = true;
+            this.formAgendarConsulta.controls['dataInicio'].setValue(data.dateService);
+        }
+
         this.formAgendarConsulta.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+
     }
 
     pagamento() {
@@ -232,36 +255,24 @@ export class AgendarConsultaComponent {
 
     salvar(data) {
 
-        var startTime = this.dadosHorario.horario.slice(0, 5)
-        var endTime = this.dadosHorario.horario.slice(8)
         this.clinicId = localStorage.getItem('bway-entityId');
-
-        if (this.dependente == 'N') {
-            this.childId = null
-        }
 
         let register = {
 
-            doctorId: this.doctorId,
-            clinicId: this.clinicId,
-            userId: this.userId,
-            childId: this.childId,
-            dateService: moment(this.dadosHorario.data, "DD/MM/YYYY").format("YYYY-MM-DD"),
-            startTime: startTime,
-            endTime: endTime,
-            healthPlanId: data.formaConvenio,
-            typePaymentId: data.formaPagto,
+            userId: this.agendaConsulta.idMae,
+            childId: this.agendaConsulta.idDependente,
+            dateDesired: data.dataInicio,
             typeServiceId: data.tipoConsulta,
-            meetingUrl: this.dadosHorario.data.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId),
-            specialtyId: this.specialtyId,
-            paymentInCreation: this.tipoPagto,
-            isReturn: this.retorno
-
+            description: data.consPagto,
+            specialtyId: data.tipoEspecialidade,
+            typePaymentId: data.formaPagto,
+            clinicId: this.clinicId,
+            doctorId: this.doctorId
         }
 
         this.isActive = true;
 
-        this.service.salvarAgendamento(register, (response => {
+        this.service.waiting(register, (response => {
             this.isActive = false;
             this.toastrService.success('Cadastrado com sucesso !!!');
             this.limpaForm();
@@ -269,7 +280,6 @@ export class AgendarConsultaComponent {
         }), (error) => {
             this.isActive = false;
             this.toastrService.danger(error.error.message);
-
         });
 
     }

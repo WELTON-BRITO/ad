@@ -26,7 +26,7 @@ export class HistoricoComponent implements OnInit {
     ngOnInit() {
 
         this.history = history.state;
-        console.log(this.history)
+
     }
 
     consultaHistorico() {
@@ -38,12 +38,14 @@ export class HistoricoComponent implements OnInit {
 
         this.service.appointments(params, (response) => {
 
-            console.log(response)
-            this.rowData = response;
+            this.rowData = [{
+                tela: 'historico',
+                rowData: response
+            }]
             this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: this.rowData });
-            
+
         }, (error) => {
-            this.toastrService.danger(error.message);
+            this.toastrService.danger(error.error.message);
         });
 
 

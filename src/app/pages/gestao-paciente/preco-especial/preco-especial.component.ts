@@ -20,6 +20,7 @@ export class PrecoEspecialComponent implements OnDestroy {
   public checkVideo = null;
   public checkEmergencial = null;
   public checkCasa = null;
+  public checkValorVideo = null;
   public isActive = false;
   public checked = false;
   public atualizar = null;
@@ -31,6 +32,7 @@ export class PrecoEspecialComponent implements OnDestroy {
   public history = null;
   public isBloqueio = false;
   public atendimento = {
+    name: null,
     id: null,
     cpf: null
   }
@@ -46,6 +48,7 @@ export class PrecoEspecialComponent implements OnDestroy {
 
     this.history = history.state;
     this.atendimento.cpf = this.history.federalId;
+    this.atendimento.name = this.history.name;
     this.atendimento.id = this.history.id;
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.clinic = localStorage.getItem('bway-domain');
@@ -57,7 +60,8 @@ export class PrecoEspecialComponent implements OnDestroy {
       valorCasa: [null],
       medico: [this.listMedico[0], Validators.required],
       clinica: [null],
-      dataExpiracao: [null]
+      dataExpiracao: [null],
+      valorVideoChamada: [null],
     })
     this.formPrecoEspecial.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
@@ -77,6 +81,8 @@ export class PrecoEspecialComponent implements OnDestroy {
         this.checkEmergencial = event
       } else if (event == "4") {
         this.checkCasa = event
+      } else if (event == "5") {
+        this.checkValorVideo = event
       }
     } else if (element.checked == false) {
       if (event == "1") {
@@ -87,6 +93,8 @@ export class PrecoEspecialComponent implements OnDestroy {
         this.checkEmergencial = null;
       } else if (event == "4") {
         this.checkCasa = null
+      } else if (event == "5") {
+        this.checkValorVideo = null
       }
 
     }
@@ -96,7 +104,7 @@ export class PrecoEspecialComponent implements OnDestroy {
   salvar(data) {
 
     if ((data.medico == null) || ((data.valorPresencial == null) && (data.valorEmergencial == null) &&
-      (data.valorVideo == null) && (data.valorCasa == null) && (data.clinica == null) && (this.atendimento.cpf == null))) {
+      (data.valorVideo == null) && (data.valorCasa == null) && (data.valorVideoChamada) && (data.clinica == null) && (this.atendimento.cpf == null))) {
 
       this.toastrService.danger('Preencher os campos obrigatórios!!!');
 
@@ -142,6 +150,16 @@ export class PrecoEspecialComponent implements OnDestroy {
           }
         )
       }
+      if (data.valorVideoChamada != null) {
+
+        this.listConsulta.push(
+          {
+            expirationDate: data.dataExpiracao == null ? "2053-12-22" : data.dataExpiracao,
+            typeServiceId: 5,
+            value: data.valorVideoChamada,
+          }
+        )
+      }
 
       let register = {
         doctorId: data.medico,
@@ -174,6 +192,7 @@ export class PrecoEspecialComponent implements OnDestroy {
       valorCasa: [null],
       medico: [null],
       clinica: [null],
+      valorVideoChamada: [null]
     })
 
     var checkbox = document.querySelector("#presencial");
@@ -202,6 +221,14 @@ export class PrecoEspecialComponent implements OnDestroy {
 
     var checkbox = document.querySelector("#casa");
     if (checkbox.id == 'casa') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+
+    var checkbox = document.querySelector("#videoChamada");
+    if (checkbox.id == 'videoChamada') {
       function ativarCheckbox(el) {
         el.checked = false;
       }
@@ -275,6 +302,16 @@ export class PrecoEspecialComponent implements OnDestroy {
               }
               ativarCheckbox(checkbox);
 
+            } else if (response[i].typeService.id == 5) {
+
+              this.formPrecoEspecial.controls['valorVideoChamada'].setValue(response[i].value);
+
+              var checkbox = document.querySelector("#videoChamada");
+              function ativarCheckbox(el) {
+                el.checked = true;
+              }
+              ativarCheckbox(checkbox);
+
             }
 
           }
@@ -317,6 +354,14 @@ export class PrecoEspecialComponent implements OnDestroy {
           }
           ativarCheckbox(checkbox);
         }
+        if (error == undefined) {
+          this.formPrecoEspecial.controls['valorVideoChamada'].setValue(null);
+          var checkbox = document.querySelector("#videoChamada");
+          function ativarCheckbox(el) {
+            el.checked = false;
+          }
+          ativarCheckbox(checkbox);
+        }
 
       });
     } else {
@@ -351,7 +396,7 @@ export class PrecoEspecialComponent implements OnDestroy {
 
     }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(error.message);
+      this.toastrService.danger(error.error.message);
     });
 
   }

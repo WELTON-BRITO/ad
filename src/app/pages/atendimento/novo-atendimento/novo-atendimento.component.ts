@@ -52,19 +52,23 @@ export class NovoAtendimentoComponent {
 
         this.listTipoConsulta = [{
             id: 1,
-            descricao: "Consulta Presencial"
+            descricao: "Presencial"
         },
         {
             id: 2,
-            descricao: "Consulta por Video conferência"
+            descricao: "Video Chamada"
         },
         {
             id: 3,
-            descricao: "Consulta Emergencial"
+            descricao: "Emergencial Presencial"
         },
         {
             id: 4,
-            descricao: "Consulta Casa"
+            descricao: "Em Casa"
+        },
+        {
+            id: 5,
+            descricao: "Video Chamada Emergencial"
         }];
 
     }

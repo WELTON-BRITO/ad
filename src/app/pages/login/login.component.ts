@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
         re => this.saveLogin(re),
         (error) => {
           this.isActive = false;
-          this.toastrService.danger(error.message);
+          this.toastrService.danger(error.error.message);
         });
   }
 

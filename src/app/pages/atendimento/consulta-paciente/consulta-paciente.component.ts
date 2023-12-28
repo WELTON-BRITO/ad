@@ -65,17 +65,29 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         let data = history.state;
 
-        this.atendimento.id = data.id;
-        this.atendimento.doctorId = data.doctor.id;
-        this.atendimento.idChild = data.child != null ? data.child.idChild : '';
-        this.atendimento.userId = data.user != null ? data.user.id : '';
-        this.atendimento.nome = data.child != null ? data.child.name : data.user.name;
-        this.atendimento.dateNasc = data.child != null ? moment(data.child.birthDate).format('DD/MM/YYYY') : moment(data.user.birthDate).format('DD/MM/YYYY');
-        this.atendimento.sexo = data.child != null ? data.child.biologicalSex == 'M' ? "Masculino" : "Feminino" : null;
-        this.atendimento.especialidade = data.specialty.name;
-        this.atendimento.tipoSanguineo = data.child != null ? data.child.bloodType : null;
-        this.atendimento.ultimaConsulta = data.child != null ? moment(data.child.dateRegister).format('DD/MM/YYYY') : moment(data.user.dateRegister).format('DD/MM/YYYY');
-        this.atendimento.status = data.status
+        if(data[0].tela == 'historico'){
+            this.atendimento.nome = data[0].rowData[0].user.name;
+            this.atendimento.especialidade = data[0].rowData[0].specialty.name;
+            this.atendimento.dateNasc = moment(data[0].rowData[0].user.birthDate).format('DD/MM/YYYY');
+            this.atendimento.ultimaConsulta = moment(data[0].rowData[0].user.dateRegister).format('DD/MM/YYYY');
+            this.atendimento.doctorId = data[0].rowData[0].doctor.id;
+            this.atendimento.userId = data[0].rowData[0].user.id
+            this.atendimento.idChild = data[0].rowData[0].child != null ? data[0].rowData[0].idChild : '';
+            this.consultaHistorico();
+        }else{
+            this.atendimento.id = data.id;
+            this.atendimento.doctorId = data.doctor.id;
+            this.atendimento.idChild = data.child != null ? data.child.idChild : '';
+            this.atendimento.userId = data.user != null ? data.user.id : '';
+            this.atendimento.nome = data.child != null ? data.child.name : data.user.name;
+            this.atendimento.dateNasc = data.child != null ? moment(data.child.birthDate).format('DD/MM/YYYY') : moment(data.user.birthDate).format('DD/MM/YYYY');
+            this.atendimento.sexo = data.child != null ? data.child.biologicalSex == 'M' ? "Masculino" : "Feminino" : null;
+            this.atendimento.especialidade = data.specialty.name;
+            this.atendimento.tipoSanguineo = data.child != null ? data.child.bloodType : null;
+            this.atendimento.ultimaConsulta = data.child != null ? moment(data.child.dateRegister).format('DD/MM/YYYY') : moment(data.user.dateRegister).format('DD/MM/YYYY');
+            this.atendimento.status = data.status
+        }
+       
 
         this.formConsultaPaciente = this.formBuilder.group({
             detalhesCliente: [null],
