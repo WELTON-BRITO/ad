@@ -76,9 +76,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       optCasa: [null],
       videoChamada: [null],
       tempoVideoChamada: [null],
-      VideoChamada: [null],
       qrVideoChamada: [null],
       optVideoChamada: [null],
+      valorVideoChamada: [null]
     })
     this.formParametrizarConsulta.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
@@ -226,6 +226,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         }), (error) => {
           this.isActive = false;
           this.toastrService.danger(error.error.message);
+          this.limpaForm()
         });
       }
 
@@ -256,9 +257,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       optCasa: [null],
       videoChamada: [null],
       tempoVideoChamada: [null],
-      VideoChamada: [null],
       qrVideoChamada: [null],
       optVideoChamada: [null],
+      valorVideoChamada: [null]
     })
 
     var checkbox = document.querySelector("#presencial");
@@ -334,7 +335,13 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             ativarCheckbox(checkbox);
 
 
-          } else if (response[i].typeService.id == 2) {
+          } else{
+
+            document.getElementById('qrPresencial').removeAttribute('disabled');
+
+          }          
+          
+          if (response[i].typeService.id == 2) {
 
             this.formParametrizarConsulta.controls['tempoVideo'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorVideo'].setValue(response[i].value);
@@ -346,7 +353,11 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
-          } else if (response[i].typeService.id == 3) {
+          } else {
+            document.getElementById('qrVideo').removeAttribute('disabled');
+          }
+          
+          if (response[i].typeService.id == 3) {
 
             this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorEmergencial'].setValue(response[i].value);
@@ -358,7 +369,12 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
-          } else if (response[i].typeService.id == 4) {
+          } else{
+            document.getElementById('qrEmergencial').removeAttribute('disabled');
+
+          } 
+          
+          if (response[i].typeService.id == 4) {
 
             this.formParametrizarConsulta.controls['tempoCasa'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorCasa'].setValue(response[i].value);
@@ -370,7 +386,11 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
-          } else if (response[i].typeService.id == 5) {
+          } else {
+            document.getElementById('qrCasa').removeAttribute('disabled');
+          }
+          
+          if (response[i].typeService.id == 5) {
 
             this.formParametrizarConsulta.controls['tempoVideoChamada'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorVideoChamada'].setValue(response[i].value);
@@ -381,6 +401,10 @@ export class ParametrizarConsultaComponent implements OnDestroy {
               el.checked = true;
             }
             ativarCheckbox(checkbox);
+
+          }else{
+
+            document.getElementById('qrVideoChamada').removeAttribute('disabled');
 
           }
 

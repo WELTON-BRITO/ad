@@ -16,7 +16,8 @@ export class AssociarMedicoComponent implements OnDestroy {
   public formAssociarMedico = null;
   public rowData: any[];
   public isActive = false;
-
+  public avatar = "assets/images/avatar.png";
+  
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: AssociarMedicoService,
@@ -50,7 +51,7 @@ export class AssociarMedicoComponent implements OnDestroy {
         this.isActive = false;
         this.rowData = this.rowData.map(data => {
           return {
-            avatar: 'data:application/pdf;base64,' + data.avatar,
+            avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
             id: data.id,
             name: data.name,
             specialty: data.specialty == null ? null : data.specialty[0].name,

@@ -19,7 +19,7 @@ export class ListMedicoComponent implements OnDestroy {
   public listEstado = null;
   public isActive = false;
   public clinicId = null;
-  public avatar = null;
+  public avatar = "assets/images/avatar.png";
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -42,7 +42,7 @@ export class ListMedicoComponent implements OnDestroy {
       this.rowData = this.rowData.map(data => {
        
         return {
-          avatar: 'data:application/pdf;base64,' + data.avatar,
+          avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
           id: data.id,
           name: data.name,
           specialty: data.specialty == null ? null : data.specialty[0].name,
@@ -70,7 +70,7 @@ export class ListMedicoComponent implements OnDestroy {
         this.isActive = false;
         this.rowData = this.rowData.map(data => {
           return {
-            avatar: 'data:application/pdf;base64,' + data.avatar,
+            avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
             id: data.id,
             name: data.name,
             specialty: data.specialty == null ? null : data.specialty[0].name,

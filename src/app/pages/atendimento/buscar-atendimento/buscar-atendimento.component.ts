@@ -221,7 +221,11 @@ export class BuscarAtendimentoComponent implements OnInit {
   }
 
   iniciarAtendimento(data) {
-    this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: data.atendimento });
+    this.rowData = [{
+      tela: 'atendimento',
+      rowData: data.atendimento
+  }]
+    this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: this.rowData });
   }
 
   videoAtendimento(url) {

@@ -257,31 +257,63 @@ export class AgendarConsultaComponent {
 
         this.clinicId = localStorage.getItem('bway-entityId');
 
-        let register = {
+        if (this.validaCampos(data)) {
 
-            userId: this.agendaConsulta.idMae,
-            childId: this.agendaConsulta.idDependente,
-            dateDesired: data.dataInicio,
-            typeServiceId: data.tipoConsulta,
-            description: data.consPagto,
-            specialtyId: data.tipoEspecialidade,
-            typePaymentId: data.formaPagto,
-            clinicId: this.clinicId,
-            doctorId: this.doctorId
+            let register = {
+
+                userId: this.agendaConsulta.idMae,
+                childId: this.agendaConsulta.idDependente,
+                dateDesired: data.dataInicio,
+                typeServiceId: data.tipoConsulta,
+                description: data.consPagto,
+                specialtyId: data.tipoEspecialidade,
+                typePaymentId: data.formaPagto,
+                clinicId: this.clinicId,
+                doctorId: this.doctorId
+            }
+
+            this.isActive = true;
+
+            this.service.waiting(register, (response => {
+                this.isActive = false;
+                this.toastrService.success('Cadastrado com sucesso !!!');
+                this.limpaForm();
+                this.previousPage();
+            }), (error) => {
+                this.isActive = false;
+                this.toastrService.danger(error.error.message);
+            });
+        }
+    }
+
+    validaCampos(data) {
+
+        if (data.medico == null) {
+            this.toastrService.danger('O campo médico é obrigatório!!!');
+            return false
+        }
+        if (data.tipoConsulta == null) {
+            this.toastrService.danger('O campo tipo consulta é obrigatório!!!');
+            return false
+        }
+        if (data.tipoEspecialidade == null) {
+            this.toastrService.danger('O campo tipo especialidade é obrigatório!!!');
+            return false
+        }
+        if (data.dataInicio == null) {
+            this.toastrService.danger('A data início do período é obrigatória!!!');
+            return false
+        }
+        if (data.consPagto == null) {
+            this.toastrService.danger('O campo detalhes é obrigatória!!!');
+            return false
+        }
+        if (data.formaPagto == null) {
+            this.toastrService.danger('O tipo de pagamento é obrigatória!!!');
+            return false
         }
 
-        this.isActive = true;
-
-        this.service.waiting(register, (response => {
-            this.isActive = false;
-            this.toastrService.success('Cadastrado com sucesso !!!');
-            this.limpaForm();
-            this.previousPage();
-        }), (error) => {
-            this.isActive = false;
-            this.toastrService.danger(error.error.message);
-        });
-
+        return true
     }
 
     verificaMedico(data) {
