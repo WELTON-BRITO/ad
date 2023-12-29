@@ -106,7 +106,7 @@
           <nb-icon class="action-icon" icon="file-outline" (click)="abrirConsulta()"></nb-icon>
           <span>Atualizar prontuário</span>
         </nb-action>
-        <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'">
+        <nb-action *ngIf="atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='02 - Aguardando Pagamento' || atendimento.status ==='03 - Consulta Confirmada'">
           <nb-icon class="action-icon" icon="edit-outline" (click)="editarConsulta()"></nb-icon>
           <span>Editar</span>
         </nb-action>

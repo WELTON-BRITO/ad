@@ -140,7 +140,11 @@ export class DetalheAtendimentoComponent implements OnInit {
   }
 
   abrirConsulta() {
-    this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: this.paciente });
+    let rowData = [{
+      tela: 'atendimento',
+      rowData: this.paciente
+    }]
+    this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: rowData });
   }
 
   previousPage() {
@@ -152,7 +156,7 @@ export class DetalheAtendimentoComponent implements OnInit {
     this.service.visualizarAnexo(this.atendimento.id, null, (response => {
 
       if (response != null) {
-        const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'image/jpeg;base64'));
+        const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'application/pdf'));
         const theWindow = window.open(blobURL);
         const theDoc = theWindow.document;
         const theScript = document.createElement('script');
@@ -206,7 +210,7 @@ export class DetalheAtendimentoComponent implements OnInit {
     window.open(url, "_blank");
   }
 
-  editarConsulta(){  
+  editarConsulta() {
     this.router.navigateByUrl('/pages/atendimento/agendar-consulta', { state: this.paciente });
   }
 }
