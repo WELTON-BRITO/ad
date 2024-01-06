@@ -32,7 +32,7 @@
                     <div class="form-group">
                       <div class="div-medico">
                         <label for="semana">Escolha o dia da semana</label>
-                        <select class="form-control" formControlName="semana" (change)="addHora()">
+                        <select class="form-control" formControlName="semana">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let semana of listSemana" value="{{ semana.semana }}">{{
                             semana.descricao}}</option>
@@ -44,7 +44,8 @@
                     <div class="form-group">
                       <div class="div-medico">
                         <label for="clinica">Escolha a clínica</label>
-                        <select class="form-control" formControlName="clinica" (change)="verificaClinica($event.target.value)">
+                        <select class="form-control" formControlName="clinica"
+                          (change)="verificaClinica($event.target.value)">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let clinica of listClinica" value="{{ clinica.id }}">{{
                             clinica.socialName}}</option>
@@ -52,19 +53,73 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-6">
+                    <div class="form-group">
+                      <label for="tipo-modalidade">Tipo modalidade</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center pl-4 mt-lg-n4">
+                  <div class="form-group col-md-2">
                     <div class="form-group">
                       <div class="div-medico">
-                        <label for="modalidade">Tipo modalidade</label>
-                        <select class="form-control" formControlName="tipoModalidade" (change)="verificaModalidade($event.target.value)">
-                          <option value="null" selected>SELECIONE</option>
-                          <option *ngFor="let modalidade of listModalidade" value="{{ modalidade.id }}">{{
-                            modalidade.description}}</option>
-                        </select>
+                        <label class="tipo-modalidade">
+                          <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="1"
+                            (click)="tipoModalidade($event.target.value, $event.target)" />
+                          Presencial
+                        </label>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label class="tipo-modalidade">
+                          <input class="form-check-input" type="checkbox" id="videoChamada" name="optcheckbox" value="2"
+                            (click)="tipoModalidade($event.target.value, $event.target)" />
+                          Video Chamada
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label class="tipo-modalidade">
+                          <input class="form-check-input" type="checkbox" id="emergencialPresencial" name="optcheckbox"
+                            value="3" (click)="tipoModalidade($event.target.value, $event.target)" />
+                          Emergencial Presencial
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label class="tipo-modalidade">
+                          <input class="form-check-input" type="checkbox" id="emCasa" name="optcheckbox" value="4"
+                            (click)="tipoModalidade($event.target.value, $event.target)" />
+                          Em Casa
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <div class="div-medico">
+                        <label class="tipo-modalidade">
+                          <input class="form-check-input" type="checkbox" id="videoEmergencial" name="optcheckbox"
+                            value="5" (click)="tipoModalidade($event.target.value, $event.target)" />
+                          Video Chamada Emergencial
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="col-md-12">
                     <div class="form-group pt-2">
                       <div class="text-right">
                         <button class="btn btn-primary mr-3" (click)="addHora()">
@@ -75,7 +130,7 @@
                         </button>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-12">
@@ -175,7 +230,7 @@
                           </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
-                          <ng-template ngx-datatable-cell-template let-row="row">                           
+                          <ng-template ngx-datatable-cell-template let-row="row">
                             <a class="home-icon" (click)="excluir(row)" title="Excluir">
                               <i class="fas fa-solid fa-ban p-2"></i>
                             </a>
@@ -200,7 +255,7 @@
                       </ngx-datatable>
                     </div>
                   </div>
-                </div>               
+                </div>
               </div>
             </form>
           </nb-card-body>
