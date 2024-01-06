@@ -39,8 +39,8 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   public horaFim = [];
   public timeRange = [];
   public clinicaId = null;
-  public listModalidade = null;
-  public modalidadeId = null;
+  public listModalidade: Array<number> = [];
+  public modalidadeId = [];
   public segundaId = null;
   public tercaId = null;
   public quartaId = null;
@@ -148,15 +148,22 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
   salvar(event) {
 
     this.timeRange = []
-    for (var i = 0; i < this.tipoCard.length; i++) {
-      this.timeRange.push(
-        {
-          clinicId: this.clinicaId,
-          startTime: this.tipoCard[i].horaInicio,
-          endTime: this.tipoCard[i].horaFim,
-          typeServiceId: this.modalidadeId
-        }
-      )
+
+    for (var j = 0; j < this.modalidadeId.length; j++) {
+
+      for (var i = 0; i < this.tipoCard.length; i++) {
+
+        this.timeRange.push(
+          {
+            clinicId: this.clinicaId,
+            startTime: this.tipoCard[i].horaInicio,
+            endTime: this.tipoCard[i].horaFim,
+            typeServiceId: this.modalidadeId[j]
+          }
+        )
+
+
+      }
     }
 
     if (this.tipoCard.length <= 0) {
@@ -394,8 +401,19 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
 
   }
 
-  verificaModalidade(data) {
-    this.modalidadeId = data
+  tipoModalidade(data, element) {
+
+    if (element.checked == true) {
+      for (var i = 0; i < data; i++) {
+        if (data[i] != undefined) {
+          this.modalidadeId.push(data)
+        }
+      }
+    } else {
+      let DX = this.modalidadeId.findIndex(el => el === data)
+      this.modalidadeId.splice(DX, 1)
+    }
+
   }
 
 }

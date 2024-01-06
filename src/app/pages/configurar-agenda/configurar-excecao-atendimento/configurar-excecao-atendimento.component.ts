@@ -140,7 +140,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
   salvar(data) {
 
-    /*for (var i = 0; i < this.tipoCard.length; i++) {
+    for (var i = 0; i < this.tipoCard.length; i++) {
 
       if (this.tipoCard[i].horaInicio != null) {
         this.horaInicio.push(this.tipoCard[i].horaInicio)
@@ -149,15 +149,13 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
         this.horaFim.push(this.tipoCard[i].horaFim)
       }
 
-    }*/
+    }
 
     let register = {
       doctorId: this.doctorId,
       clinicId: this.clinicaId,
-      /*startTime: this.horaInicio,
-      endTime: this.horaFim,*/
-      startTime: this.tipoCard[0].horaInicio,
-      endTime: this.tipoCard[0].horaFim,
+      startTime: this.horaInicio,
+      endTime: this.horaFim,     
       dateException: data.dataExcecao,
       away: this.isCardHoras
     }
