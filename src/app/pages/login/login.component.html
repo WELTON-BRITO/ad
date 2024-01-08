@@ -12,7 +12,7 @@
               <p>Digite login e senha para acessar conta.</p>
               <div class="text-center">
                 <input type="text" formControlName="login" id="login" class="fadeIn second border" name="login"
-                  placeholder="Login" maxlength="80" autocomplete="off" [(ngModel)]="cnpjCpf" [mask]="getCpfCnpjMask()"
+                  placeholder="Login" maxlength="80" autocomplete="off" [(ngModel)]="cnpjCpf" 
                   (change)="isValidCpf(formLogin.value)"/>
                   <div *ngIf="showMsgErroCpf" class="link-text pt-2" style="color: #dc3545;">
                     {{this.msgErroCpf}} <br />

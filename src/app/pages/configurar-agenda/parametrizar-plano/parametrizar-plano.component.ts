@@ -25,12 +25,13 @@ export class ParametrizarPlanoComponent implements OnDestroy {
   public checkAssimSaude = null;
   public checkPreventSenior = null;
   public checkHpVida = null;
-  public isCardPlano = true;
+  public isCardPlano = false;
   public isActive = false;
   public doctorId = false;
   public convenioId = null;
   public convenio = [];
   public plano = null;
+  public isBtnPlano = false
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -171,8 +172,10 @@ export class ParametrizarPlanoComponent implements OnDestroy {
 
     if (data === 'S') {
       this.isCardPlano = true
+      this.isBtnPlano = true
     } else {
       this.isCardPlano = false
+      this.isBtnPlano = true
       this.formParametrizarPlano = this.formBuilder.group({
         unimed: [null],
         bradescoSaude: [null],

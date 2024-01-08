@@ -34,6 +34,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   public clinicaId = null;
   public listClinica = [];
   public listTipoConsulta = [];
+  public timeList = [];
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -142,23 +143,24 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
     for (var i = 0; i < this.tipoCard.length; i++) {
 
-      if (this.tipoCard[i].horaInicio != null) {
-        this.horaInicio.push(this.tipoCard[i].horaInicio)
-      }
-      if (this.tipoCard[i].horaFim != null) {
-        this.horaFim.push(this.tipoCard[i].horaFim)
-      }
+      this.timeList.push({
+        startTime: this.tipoCard[i].horaInicio,
+        endTime: this.tipoCard[i].horaFim,
+        dateException: data.dataExcecao,
+        away: this.isCardHoras,
+        typeServiceId: data.tipoConsulta
+      })
 
     }
 
-    let register = {
+    let register =
+    {
       doctorId: this.doctorId,
       clinicId: this.clinicaId,
-      startTime: this.horaInicio,
-      endTime: this.horaFim,     
-      dateException: data.dataExcecao,
-      away: this.isCardHoras
+      timeList: this.timeList
+
     }
+
 
     if ((this.doctorId != null) && (data.dataExcecao != null) && ((this.isCardHoras == true) || (this.isCardHoras == false))) {
 
@@ -167,7 +169,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.service.salvarExcecaoDoctor(register, (response => {
         this.isActive = false;
         this.toastrService.success('Registro cadastrado com sucesso !!!');
-        this.buscarExcecaoDoctor(response.doctor.id)
+        this.buscarExcecaoDoctor(response[0].doctor.id)
         this.limpaForm()
       }), (error) => {
         this.isActive = false;

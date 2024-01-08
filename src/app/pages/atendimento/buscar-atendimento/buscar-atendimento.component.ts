@@ -111,6 +111,10 @@ export class BuscarAtendimentoComponent implements OnInit {
     });
 
     this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    this.listMedico.push({
+      id: '9999999',
+      name: 'Todos'
+    })
 
     var initData = [];
     this.rowData = initData;
@@ -128,7 +132,7 @@ export class BuscarAtendimentoComponent implements OnInit {
   buscarAtendimento(data) {
 
     let params = new HttpParams();
-    params = params.append('doctorId', data.medico)
+
     params = params.append('startDate', data.dataInicio)
     params = params.append('endDate', data.dataFim)
     if (data.nome != null) {
@@ -140,32 +144,75 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.isActive = true
 
     if (this.validaCampo(data)) {
-      this.service.buscaAtendimentos(params, (response) => {
-        this.isActive = false
-        this.rowData = response
-        this.rowData = this.rowData.map(data => {
-          return {
-            nome: data.child == null ? data.user.name : data.child.name,
-            data: moment(data.dateService).format('DD/MM/YYYY'),
-            horario: data.startTime.concat(' - ', data.endTime),
-            especialidade: data.specialty.name,
-            status: data.status,
-            atendimento: data,
+
+      if (data.medico == '9999999') {
+
+        let clinica = localStorage.getItem('bway-entityId');
+
+        params = params.append('clinicId', clinica)
+
+        this.service.buscaAtendimentos(params, (response) => {
+          this.isActive = false
+          this.rowData = response
+          this.rowData = this.rowData.map(data => {
+            return {
+              medico: data.doctor.name,
+              nome: data.child == null ? data.user.name : data.child.name,
+              data: moment(data.dateService).format('DD/MM/YYYY'),
+              horario: data.startTime.concat(' - ', data.endTime),
+              especialidade: data.specialty.name,
+              status: data.status,
+              atendimento: data,
+            }
+          })
+
+        }, (error) => {
+          this.isActive = false;
+          if (error.error instanceof ErrorEvent) {
+            console.error('An error occurred:', error.error.message);
+          } else {
+            console.error(
+              `Backend returned code ${error.status}, ` +
+              `body was: ${error.error}`);
           }
-        })
+          this.toastrService.danger(error.error.message);
 
-      }, (error) => {
-        this.isActive = false;
-        if (error.error instanceof ErrorEvent) {
-          console.error('An error occurred:', error.error.message);
-        } else {
-          console.error(
-            `Backend returned code ${error.status}, ` +
-            `body was: ${error.error}`);
-        }
-        this.toastrService.danger(error.error.message);
+        });
 
-      });
+      } else {
+
+        params = params.append('doctorId', data.medico)
+
+        this.service.buscaAtendimentos(params, (response) => {
+          this.isActive = false
+          this.rowData = response
+          this.rowData = this.rowData.map(data => {
+            return {
+              medico: data.doctor.name,
+              nome: data.child == null ? data.user.name : data.child.name,
+              data: moment(data.dateService).format('DD/MM/YYYY'),
+              horario: data.startTime.concat(' - ', data.endTime),
+              especialidade: data.specialty.name,
+              status: data.status,
+              atendimento: data,
+            }
+          })
+
+        }, (error) => {
+          this.isActive = false;
+          if (error.error instanceof ErrorEvent) {
+            console.error('An error occurred:', error.error.message);
+          } else {
+            console.error(
+              `Backend returned code ${error.status}, ` +
+              `body was: ${error.error}`);
+          }
+          this.toastrService.danger(error.error.message);
+
+        });
+
+      }
+
     } else {
       this.isActive = false
     }
@@ -224,7 +271,7 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.rowData = [{
       tela: 'atendimento',
       rowData: data.atendimento
-  }]
+    }]
     this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: this.rowData });
   }
 

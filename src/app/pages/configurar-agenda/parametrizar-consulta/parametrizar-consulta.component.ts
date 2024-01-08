@@ -36,6 +36,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public modalidade = [];
   public isBloqueio = false;
   public clinic = null;
+  public ismodalidadeConsulta = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -511,6 +512,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   }
 
   buscarAtendimento(data) {
+    this.ismodalidadeConsulta = true;
     this.verificaValor(data)
   }
 

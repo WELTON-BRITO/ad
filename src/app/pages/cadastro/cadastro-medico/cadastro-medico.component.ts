@@ -411,18 +411,6 @@ export class CadastroMedicoComponent implements OnInit {
 
   adicionar(data) {
 
-    this.formCadastroMedico.controls['name'].setValue(null);
-    this.formCadastroMedico.controls['socialName'].setValue(null);
-    this.formCadastroMedico.controls['federalId'].setValue(null);
-    this.formCadastroMedico.controls['ufId'].setValue(null);
-    this.formCadastroMedico.controls['cityId'].setValue(null);
-    this.formCadastroMedico.controls['cellPhone'].setValue(null);
-    this.formCadastroMedico.controls['zipCode'].setValue(null);
-    this.formCadastroMedico.controls['street'].setValue(null);
-    this.formCadastroMedico.controls['neighborhood'].setValue(null);
-    this.formCadastroMedico.controls['numeroClinica'].setValue(null);
-    this.formCadastroMedico.controls['complementoClinica'].setValue(null);
-
     this.rowData.push(data)
 
     this.rowData = this.rowData.map(data => {
@@ -440,6 +428,21 @@ export class CadastroMedicoComponent implements OnInit {
         complement: data.complementoClinica,
       }
     })
+  }
+
+  limpaFormEnd() {
+    this.formCadastroMedico.controls['name'].setValue(null);
+    this.formCadastroMedico.controls['socialName'].setValue(null);
+    this.formCadastroMedico.controls['federalId'].setValue(null);
+    this.formCadastroMedico.controls['ufId'].setValue(null);
+    this.formCadastroMedico.controls['cityId'].setValue(null);
+    this.formCadastroMedico.controls['cellPhone'].setValue(null);
+    this.formCadastroMedico.controls['zipCode'].setValue(null);
+    this.formCadastroMedico.controls['street'].setValue(null);
+    this.formCadastroMedico.controls['neighborhood'].setValue(null);
+    this.formCadastroMedico.controls['numeroClinica'].setValue(null);
+    this.formCadastroMedico.controls['complementoClinica'].setValue(null);
+
   }
 
   toggleShowPass() {
