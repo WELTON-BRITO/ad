@@ -82,7 +82,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   }
 
   configAtendimento(data) {
-    this.verificaEspecialidade(data.medico)
+    this.verificaEspecialidade(data)
   }
 
   verificaHorario(data) {
@@ -104,7 +104,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
         this.rowData = this.rowData.map(data => {
 
           if (data.weekday == 1) {
-            this.segunda = [data.startTime.concat(' - ', data.endTime,' - ', data.typeService.description,' - ', data.clinic.name)]
+            this.segunda = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
@@ -112,7 +112,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 2) {
-            this.terca = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
+            this.terca = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.quarta = null;
             this.quinta = null;
@@ -120,7 +120,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 3) {
-            this.quarta = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
+            this.quarta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quinta = null;
@@ -128,7 +128,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 4) {
-            this.quinta = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
+            this.quinta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -136,7 +136,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 5) {
-            this.sexta = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
+            this.sexta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -144,7 +144,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 6) {
-            this.sabado = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
+            this.sabado = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -152,7 +152,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sexta = null;
             this.domingo = null;
           } else if (data.weekday == 7) {
-            this.domingo = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
+            this.domingo = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -220,8 +220,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
   verificaEspecialidade(data) {
 
-    this.service.verificaEspecialidade(data, null, (response => {
-
+    this.service.verificaEspecialidade(data.medico, null, (response => {
       if (response != null) {
         this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data });
       } else {

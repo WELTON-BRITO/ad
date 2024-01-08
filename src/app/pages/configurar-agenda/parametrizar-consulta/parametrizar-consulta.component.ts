@@ -318,6 +318,12 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       if (response.length == 0) {
         this.atualizar = 0;
         this.toastrService.warning('Configurar qual tipo de atendimento para o médico.');
+        document.getElementById('qrPresencial').removeAttribute('disabled');
+        document.getElementById('qrVideo').removeAttribute('disabled');
+        document.getElementById('qrEmergencial').removeAttribute('disabled');
+        document.getElementById('qrCasa').removeAttribute('disabled');
+        document.getElementById('qrVideoChamada').removeAttribute('disabled');
+
       } else {
 
         this.atualizar = response;
@@ -335,13 +341,10 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
-
-          } else{
-
+          } else {
             document.getElementById('qrPresencial').removeAttribute('disabled');
+          }
 
-          }          
-          
           if (response[i].typeService.id == 2) {
 
             this.formParametrizarConsulta.controls['tempoVideo'].setValue(response[i].duration);
@@ -357,7 +360,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
           } else {
             document.getElementById('qrVideo').removeAttribute('disabled');
           }
-          
+
           if (response[i].typeService.id == 3) {
 
             this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(response[i].duration);
@@ -370,11 +373,10 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
-          } else{
+          } else {
             document.getElementById('qrEmergencial').removeAttribute('disabled');
+          }
 
-          } 
-          
           if (response[i].typeService.id == 4) {
 
             this.formParametrizarConsulta.controls['tempoCasa'].setValue(response[i].duration);
@@ -390,7 +392,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
           } else {
             document.getElementById('qrCasa').removeAttribute('disabled');
           }
-          
+
           if (response[i].typeService.id == 5) {
 
             this.formParametrizarConsulta.controls['tempoVideoChamada'].setValue(response[i].duration);
@@ -403,7 +405,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
-          }else{
+          } else {
 
             document.getElementById('qrVideoChamada').removeAttribute('disabled');
 
@@ -512,8 +514,14 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   }
 
   buscarAtendimento(data) {
-    this.ismodalidadeConsulta = true;
-    this.verificaValor(data)
+
+    if(data.clinica != null){
+      this.ismodalidadeConsulta = true;
+      this.verificaValor(data)
+    }else{
+      this.toastrService.danger('O campo clínica é obrigatório.');
+    }
+    
   }
 
 
