@@ -102,7 +102,6 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
       }
     }
 
-    this.verificaHorario(this.doctorId, data.clinica)
     this.pesquisaClinica(this.doctorId)
     this.buscaModalidade(this.doctorId)
     this.formDiaAtendimento = this.formBuilder.group({
@@ -129,6 +128,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
 
   verificaClinica(data) {
     this.clinicaId = data;
+    this.verificaHorario(this.doctorId, this.clinicaId)
   }
 
   addHora() {
