@@ -27,6 +27,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   public isActive = false;
   public listClinica: any = [];
   public clinicaId = null;
+  public doctorId = null;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -73,7 +74,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.formVisualizarDiaAtendimento = this.formBuilder.group({
       medico: [this.listMedico[0], Validators.required],
-      clinica: [this.listMedico[0], Validators.required],
+      clinica: [null, Validators.required],
     })
 
     this.formVisualizarDiaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
@@ -81,17 +82,18 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   }
 
   configAtendimento(data) {
-    this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data });
+    this.verificaEspecialidade(data.medico)
   }
 
   verificaHorario(data) {
+
     this.isActive = true
     this.rowData = [];
-
     let params = new HttpParams();
+
     params = params.append('doctorId', data.medico)
     if (this.clinicaId != null) {
-      params = params.append('clinicId', this.clinicaId)
+      params = params.append('clinicId', data.clinica)
     }
     this.service.agendaDoctor(params, (response) => {
 
@@ -102,7 +104,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
         this.rowData = this.rowData.map(data => {
 
           if (data.weekday == 1) {
-            this.segunda = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = [data.startTime.concat(' - ', data.endTime,' - ', data.typeService.description,' - ', data.clinic.name)]
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
@@ -110,7 +112,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 2) {
-            this.terca = [data.startTime.concat(' - ', data.endTime)]
+            this.terca = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
             this.segunda = null;
             this.quarta = null;
             this.quinta = null;
@@ -118,7 +120,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 3) {
-            this.quarta = [data.startTime.concat(' - ', data.endTime)]
+            this.quarta = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quinta = null;
@@ -126,7 +128,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 4) {
-            this.quinta = [data.startTime.concat(' - ', data.endTime)]
+            this.quinta = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -134,7 +136,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 5) {
-            this.sexta = [data.startTime.concat(' - ', data.endTime)]
+            this.sexta = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -142,7 +144,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sabado = null;
             this.domingo = null;
           } else if (data.weekday == 6) {
-            this.sabado = [data.startTime.concat(' - ', data.endTime)]
+            this.sabado = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -150,7 +152,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.sexta = null;
             this.domingo = null;
           } else if (data.weekday == 7) {
-            this.domingo = [data.startTime.concat(' - ', data.endTime)]
+            this.domingo = [data.startTime.concat(' - ', data.endTime,' - ',data.typeService.description,' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -204,6 +206,34 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
   buscarAtendimento(data) {
     this.verificaHorario(data)
+  }
+
+  verificaMedico(data) {
+
+    for (var i = 0; i < this.listMedico.length; i++) {
+
+      if (data == this.listMedico[i].id) {
+        this.doctorId = this.listMedico[i].id
+      }
+    }
+  }
+
+  verificaEspecialidade(data) {
+
+    this.service.verificaEspecialidade(data, null, (response => {
+
+      if (response != null) {
+        this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data });
+      } else {
+        this.toastrService.danger('Médico não possi especialidade cadastrada por gentileza cadastrar.');
+      }
+
+    }), (error) => {
+      this.isActive = false;
+      this.toastrService.danger(error.error.message);
+
+    });
+
   }
 
 }

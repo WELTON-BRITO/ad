@@ -59,7 +59,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Configurar Agenda',
+    title: 'Configurações do sistema',
     icon: 'calendar-outline',
     link: '/pages/configurar-agenda',
     data: ['USER','DOCTOR','CLINIC'],
@@ -68,14 +68,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
       /*{
         title: 'Configurar dia de Atendimento',
         link: '/pages/configurar-agenda/configurar-dia-atendimento',
-      },*/
-      {
-        title: 'Consultar Agenda',
-        link: '/pages/configurar-agenda/visualizar-dia-atendimento',
-      },
+      },*/     
       {
         title: 'Configurar Exceção',
         link: '/pages/configurar-agenda/configurar-excecao-atendimento',
+      },
+      {
+        title: 'Configurar horários',
+        link: '/pages/configurar-agenda/visualizar-dia-atendimento',
       },
       {
         title: 'Configurar Valores e Modalidades',

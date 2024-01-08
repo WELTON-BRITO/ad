@@ -7,7 +7,7 @@
             <form id="form-visualizar-dia-atendimento" [formGroup]="formVisualizarDiaAtendimento">
               <div class="col-md-12 col-xs-12">
                 <div class="form-group col-md-4">
-                  <h5 class="ml-lg-n3">Atendimento</h5>
+                  <h5 class="ml-lg-n3">Horários de atendimento</h5>
                 </div>
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-4">
@@ -15,7 +15,7 @@
                       <div class="div-medico">
                         <label for="nome">Escolha o médico*</label>
                         <select class="form-control" formControlName="medico"
-                          (change)="verificaHorario($event.target.value)">
+                        (change)="verificaMedico($event.target.value)">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let medico of listMedico" value="{{ medico.id}}">{{
                             medico.name}}</option>
@@ -39,7 +39,7 @@
                   <div class="form-group col-md-2">
                     <div class="form-group pt-4">
                       <div class="text-right">
-                        <button class="btn btn-primary"
+                        <button class="btn btn-primary m-lg-n5"
                           (click)="buscarAtendimento(formVisualizarDiaAtendimento.value)">
                           BUSCAR
                         </button>
@@ -51,7 +51,7 @@
                       <div class="text-right">
                         <button class="btn btn-success mr-3" id="bntConfig"
                           (click)="configAtendimento(formVisualizarDiaAtendimento.value)">
-                          Configurar atendimento
+                          Definir horários
                         </button>
                       </div>
                     </div>

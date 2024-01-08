@@ -15,5 +15,9 @@ export class VisualizarDiaAtendimentoService {
   buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/clinic/doctor/' + id, data, successHandle, erroHandle)
   } 
+
+  verificaEspecialidade(id: any, data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doGet('/api/specialty/doctor/' + id, data, successHandle, erroHandle)
+  }
  
 }

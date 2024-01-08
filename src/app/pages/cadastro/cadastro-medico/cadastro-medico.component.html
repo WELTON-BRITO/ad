@@ -245,10 +245,19 @@
                           formControlName="complementoClinica" [dropSpecialCharacters]="true" />
                       </div>
                     </div>
-                    <div class="text-right">
-                      <button class="btn btn-primary m-2" (click)="adicionar(formCadastroMedico.value)">
-                        ADICIONAR
-                      </button>
+                    <div class="form-row align-items-center">
+                      <div class="form-group col-md-12">
+                      <div class="col-md-12">
+                        <div class="text-right">
+                          <button class="btn btn-primary m-2" (click)="limpaFormEnd()">
+                            Limpar
+                          </button>                       
+                          <button class="btn btn-success m-2" (click)="adicionar(formCadastroMedico.value)">
+                            ADICIONAR
+                          </button>
+                        </div>
+                      </div>
+                      </div>
                     </div>
                     <div class="form-group col-md-12">
                       <div class="app-box">

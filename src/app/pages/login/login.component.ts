@@ -147,7 +147,7 @@ export class LoginComponent implements OnInit {
   }
 
   getCpfCnpjMask(): string {
-    return this.isCPF() ? '000.000.000-009' : '00.000.000/0000-00';
+    return this.isCPF() ?  '00.000.000/0000-00' :  '000.000.000-009';
   }
 
   isValidCpf(data) {
