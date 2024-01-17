@@ -167,29 +167,39 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     }
 
     if (this.tipoCard.length <= 0) {
+
       this.toastrService.warning('Não é possível salvar horário de atendimento sem marcar a hora!!!');
+
     } else {
 
-      let register = {
-        doctorId: this.doctorId,
-        items: [
-          {
-            weekday: event.semana != null ? event.semana : this.semana,
-            timeRangeList: this.timeRange
-          }
-        ]
-      }
+      if ((event.semana == null || event.semana == 'null') || (event.clinica == null || event.clinica == 'null')) {
 
-      this.isActive = true;
-      this.service.salveAtenHora(register, (response => {
-        this.isActive = false;
-        this.toastrService.success('Registro cadastrado com sucesso !!!');
-        this.limpaForm()
-        this.verificaHorario(this.doctorId, this.clinicaId)
-      }), (error) => {
-        this.isActive = false;
-        this.toastrService.danger(error.error.message);
-      });
+        this.toastrService.warning('Não é possível salvar horário de atendimento preencher os campos obrigatórios!!!');
+
+      } else {
+
+        let register = {
+          doctorId: this.doctorId,
+          items: [
+            {
+              weekday: event.semana != null ? event.semana : this.semana,
+              timeRangeList: this.timeRange
+            }
+          ]
+        }
+
+        this.isActive = true;
+        this.service.salveAtenHora(register, (response => {
+          this.isActive = false;
+          this.toastrService.success('Registro cadastrado com sucesso !!!');
+          this.limpaForm()
+          this.verificaHorario(this.doctorId, this.clinicaId)
+        }), (error) => {
+          this.isActive = false;
+          this.toastrService.danger(error.error.message);
+        });
+
+      }
 
     }
   }
@@ -220,7 +230,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
         this.rowData = this.rowData.map(data => {
 
           if (data.weekday == 1) {
-            this.segunda = [data.startTime.concat(' - ', data.endTime)]
+            this.segunda = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.terca = null;
             this.quarta = null;
             this.quinta = null;
@@ -235,7 +245,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sabadoId = null;
             this.domingoId = null;
           } else if (data.weekday == 2) {
-            this.terca = [data.startTime.concat(' - ', data.endTime)]
+            this.terca = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.quarta = null;
             this.quinta = null;
@@ -250,7 +260,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sabadoId = null;
             this.domingoId = null;
           } else if (data.weekday == 3) {
-            this.quarta = [data.startTime.concat(' - ', data.endTime)]
+            this.quarta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quinta = null;
@@ -265,7 +275,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sabadoId = null;
             this.domingoId = null;
           } else if (data.weekday == 4) {
-            this.quinta = [data.startTime.concat(' - ', data.endTime)]
+            this.quinta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -280,7 +290,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sabadoId = null;
             this.domingoId = null;
           } else if (data.weekday == 5) {
-            this.sexta = [data.startTime.concat(' - ', data.endTime)]
+            this.sexta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -295,7 +305,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sabadoId = null;
             this.domingoId = null;
           } else if (data.weekday == 6) {
-            this.sabado = [data.startTime.concat(' - ', data.endTime)]
+            this.sabado = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;
@@ -310,7 +320,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
             this.sextaId = null;
             this.domingoId = null;
           } else if (data.weekday == 7) {
-            this.domingo = [data.startTime.concat(' - ', data.endTime)]
+            this.domingo = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
             this.segunda = null;
             this.terca = null;
             this.quarta = null;

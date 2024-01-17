@@ -5,6 +5,8 @@ import { ParametrizarConsultaService } from './parametrizar-consulta.service';
 import { NbToastrService } from '@nebular/theme';
 import { HttpParams } from '@angular/common/http';
 
+declare var $: any;
+
 @Component({
   selector: 'ngx-parametrizar-consulta',
   styleUrls: ['./parametrizar-consulta.component.scss'],
@@ -34,7 +36,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public clinicaId = null;
   public listConsulta = [];
   public modalidade = [];
-  public isBloqueio = false;
+  public isBloqueio = true;
   public clinic = null;
   public ismodalidadeConsulta = false;
 
@@ -373,6 +375,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             }
             ativarCheckbox(checkbox);
 
+
           } else {
             document.getElementById('qrEmergencial').removeAttribute('disabled');
           }
@@ -515,14 +518,12 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
   buscarAtendimento(data) {
 
-    if(data.clinica != null){
+    if (data.clinica != null) {
       this.ismodalidadeConsulta = true;
       this.verificaValor(data)
-    }else{
+    } else {
       this.toastrService.danger('O campo clínica é obrigatório.');
     }
-    
+
   }
-
-
 }

@@ -40,6 +40,7 @@ export class AgendarConsultaComponent {
     public detalhes = 'Consulta de retorno';
     public retorno = null;
     public agendaConsulta = {
+        waitingServiceId: null,
         nomeResponsavel: null,
         cpfResponsavel: null,
         nomeDependente: null,
@@ -97,6 +98,7 @@ export class AgendarConsultaComponent {
             tipoEspecialidade: [null],
         })
 
+        this.agendaConsulta.waitingServiceId = data.id;
         this.agendaConsulta.nomeResponsavel = data.nameMae != null ? data.nameMae : data.user.name;
         this.agendaConsulta.cpfResponsavel = data.cpfMae != null ? data.cpfMae : data.user.federalId;
         this.agendaConsulta.idMae = data.idMae != null ? data.idMae : data.user.id
@@ -260,16 +262,14 @@ export class AgendarConsultaComponent {
         if (this.validaCampos(data)) {
 
             let register = {
-
-                userId: this.agendaConsulta.idMae,
-                childId: this.agendaConsulta.idDependente,
-                dateDesired: data.dataInicio,
-                typeServiceId: data.tipoConsulta,
-                description: data.consPagto,
-                specialtyId: data.tipoEspecialidade,
-                typePaymentId: data.formaPagto,
+                doctorId: this.doctorId,
                 clinicId: this.clinicId,
-                doctorId: this.doctorId
+                dateProposal: this.dadosHorario.dateProposal,
+                description: data.consPagto,
+                typeServiceId: data.tipoConsulta,
+                startTime: this.dadosHorario.startTime,
+                endTime: this.dadosHorario.endTime,
+                waitingServiceId: this.agendaConsulta.waitingServiceId
             }
 
             this.isActive = true;
@@ -381,10 +381,12 @@ export class AgendarConsultaComponent {
                 });
 
                 this.tipoCard = this.tipoCard.map(data => {
-
                     return {
                         data: moment(data.date).format('DD/MM/YYYY'),
-                        horario: data.startTime.concat(' - ', data.endTime)
+                        horario: data.startTime.concat(' - ', data.endTime),
+                        startTime: data.startTime,
+                        endTime: data.endTime,
+                        dateProposal: data.date
                     }
 
                 })
@@ -423,6 +425,7 @@ export class AgendarConsultaComponent {
         this.dadosHorario = data;
         this.isHorario = false;
         this.isDadosAtendimento = true;
+
     }
 
 
