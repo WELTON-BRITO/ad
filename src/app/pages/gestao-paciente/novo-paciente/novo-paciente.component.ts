@@ -182,11 +182,11 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isLocalizacao = false;
       this.isContato = false;
       this.isAddDependente = true;
-      this.isProximo = true;
-      this.isCadastrar = false;
+      this.isProximo = false;
+      this.isCadastrar = true;
       this.isVoltar = true;
       this.isPrecoEspecial = false;
-    } else if (data === 'precoExclusivo') {
+    } /*else if (data === 'precoExclusivo') {
 
       this.isPrecoEspecial = true;
       this.isInformacao = false;
@@ -196,7 +196,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isProximo = false;
       this.isCadastrar = true;
       this.isVoltar = true;
-    }
+    }*/
   }
 
   proximo(data) {
@@ -226,12 +226,12 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isLocalizacao = false;
       this.isContato = false;
       this.isAddDependente = true;
-      this.isProximo = true;
-      this.isCadastrar = false;
+      this.isProximo = false;
+      this.isCadastrar = true;
       this.isVoltar = true;
       this.isPrecoEspecial = false;
 
-    } else if (data.isAddDependente == true) {
+    } /*else if (data.isAddDependente == true) {
 
       this.isPrecoEspecial = true;
       this.isInformacao = false;
@@ -242,7 +242,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isCadastrar = true;
       this.isVoltar = true;
 
-    }
+    }*/
 
   }
 

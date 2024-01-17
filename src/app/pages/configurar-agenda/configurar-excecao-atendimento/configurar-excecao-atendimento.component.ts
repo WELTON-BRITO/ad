@@ -104,9 +104,9 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   expediente(data) {
 
     if (data === 'S') {
-      this.isCardHoras = true
-    } else {
       this.isCardHoras = false
+    } else {
+      this.isCardHoras = true
     }
   }
 
