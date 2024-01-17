@@ -149,6 +149,7 @@ export class FilaEsperaComponent {
 
                     this.rowData = this.rowData.map(data => {
                         return {
+                            id: data.id,
                             name: data.child == null ? data.user.name : data.child.name,
                             cellPhone: data.user.cellPhone,
                             email: data.user.emailUser,

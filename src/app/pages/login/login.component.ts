@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-   
+
     this.formLogin = this.formBuilder.group({
       login: [null, Validators.required],
       password: [null, Validators.required],
@@ -60,23 +60,27 @@ export class LoginComponent implements OnInit {
     }
 
     this.isActive = true;
-    localStorage.setItem('Authorization', '1'); 
+    localStorage.setItem('Authorization', '1');
 
     this.service.loader
 
     this.authenticationService.getToken(usuario, password, this.domain)
       .subscribe(
         re => this.saveLogin(re),
-        (error) => {
+        (error) => {    
+              
           this.isActive = false;
-          this.toastrService.danger(error.error.message);
+          if(error.error.message == undefined){
+            this.toastrService.danger('Sistema temporariamente indisponível');
+          }else{
+            this.toastrService.danger(error.error.message);
+          }
+          
         });
   }
 
   private saveLogin(result) {
 
-
-    this.isActive = false;
     this.toastrService.success('Bem vindo a Aditi Care !');
     localStorage.clear();
     localStorage.setItem('Authorization', 'Bearer ' + result.token);
@@ -88,8 +92,9 @@ export class LoginComponent implements OnInit {
 
       this.pesquisaMedico()
 
-    this.router.navigate(['/pages/dashboard']);
-
+    setTimeout(() => {
+      this.router.navigate(['/pages/dashboard']);
+    }, 3500)
   }
 
   toggle(checked: boolean) {
@@ -111,7 +116,7 @@ export class LoginComponent implements OnInit {
         b = JSON.stringify(b);
         sessionStorage.setItem('bway-medico', b);
         var c = JSON.parse(sessionStorage.getItem('bway-medico'));
-
+        this.isActive = false;
       }, (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
@@ -129,11 +134,13 @@ export class LoginComponent implements OnInit {
         b = JSON.stringify(b);
         sessionStorage.setItem('bway-medico', b);
         var c = JSON.parse(sessionStorage.getItem('bway-medico'));
-
+        this.isActive = false;
       }, (error) => {
+        this.isActive = false;
         this.toastrService.danger(error.error.message);
       });
 
+      this.isActive = false;
     }
 
   }
@@ -147,11 +154,11 @@ export class LoginComponent implements OnInit {
   }
 
   getCpfCnpjMask(): string {
-    return this.isCPF() ?  '00.000.000/0000-00' :  '000.000.000-009';
+    return this.isCPF() ? '00.000.000/0000-00' : '000.000.000-009';
   }
 
   isValidCpf(data) {
-   
+
     if (data.login.length === 11) {
       if (!CPFValidator.isValidCPF(data.login)) {
         this.showMsgErroCpf = true;
@@ -160,8 +167,8 @@ export class LoginComponent implements OnInit {
       this.showMsgErroCpf = false;
       return true;
     }
-    
-    if (data.login.length === 14) {      
+
+    if (data.login.length === 14) {
       if (!CPFValidator.isValidCNPJ(data.login)) {
         this.showMsgErroCpf = true;
         return false;

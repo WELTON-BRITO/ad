@@ -40,3 +40,17 @@
     </div>
   </div>
 </div>
+
+
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -330px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

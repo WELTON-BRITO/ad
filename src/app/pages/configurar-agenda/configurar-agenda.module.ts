@@ -8,6 +8,7 @@ import { NbActionsModule,
   NbSelectModule,
   NbListModule,
   NbIconModule,
+  NbToggleModule,
 } from '@nebular/theme';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ThemeModule } from '../../@theme/theme.module';
@@ -47,7 +48,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     NgxEchartsModule,
     Ng2SmartTableModule,  
     CurrencyMaskModule,
-    NgxDatatableModule  
+    NgxDatatableModule,
+    NbToggleModule  
   ],
   declarations: [
     ConfigurarAgendaComponent,

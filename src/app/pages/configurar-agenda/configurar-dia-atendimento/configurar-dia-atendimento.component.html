@@ -31,7 +31,7 @@
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="div-medico">
-                        <label for="semana">Escolha o dia da semana</label>
+                        <label for="semana">Escolha o dia da semana*</label>
                         <select class="form-control" formControlName="semana">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let semana of listSemana" value="{{ semana.semana }}">{{
@@ -43,7 +43,7 @@
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="div-medico">
-                        <label for="clinica">Escolha a clínica</label>
+                        <label for="clinica">Escolha a clínica*</label>
                         <select class="form-control" formControlName="clinica"
                           (change)="verificaClinica($event.target.value)">
                           <option value="null" selected>SELECIONE</option>

@@ -73,6 +73,6 @@ export class AtendimentoService {
   }
   
   waiting(data: any, successHandle: Function, erroHandle: Function) {
-    return this.httpService.doPost('/api/waitingService', data, successHandle, erroHandle)
+    return this.httpService.doPost('/api/waitingService/proposal', data, successHandle, erroHandle)
   }
 }
