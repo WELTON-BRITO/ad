@@ -154,9 +154,9 @@ export class DetalheAtendimentoComponent implements OnInit {
   abrirComprovante() {
 
     this.service.visualizarAnexo(this.atendimento.id, null, (response => {
-
+      
       if (response != null) {
-        const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'application/pdf'));
+        const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'image/jpeg'));
         const theWindow = window.open(blobURL);
         const theDoc = theWindow.document;
         const theScript = document.createElement('script');
