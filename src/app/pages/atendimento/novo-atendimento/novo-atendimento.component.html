@@ -55,18 +55,74 @@
                                     </div>
                                     <div class="form-group col-md-2">
                                         <div class="form-group">
+                                            <label class="encaixe">Buscar Encaixe?</label>
+                                            <div class="p-1 row mb-lg-n1">
+                                                <label class="radio-inline pl-3">
+                                                    <input class="mat-button" type="radio" id="radio" name="optEncaixe"
+                                                        value="S" (click)="buscarEncaixe($event.target.value)" />
+                                                    Sim</label>
+                                                <label class="radio-inline pl-2">
+                                                    <input class="mat-button" type="radio" id="radio" name="optEncaixe"
+                                                        value="N" (click)="buscarEncaixe($event.target.value)" />
+                                                    Não</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <div class="form-group">
                                             <label for="dataInicio">Data início*</label>
-                                            <div class="row pl-3">
+                                            <div class="row">
                                                 <input class="form-control date" type="date" id="dataInicio"
                                                     name="mydate" formControlName="dataInicio" maxlength="10" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="text-right">
-                                        <button class="btn btn-primary m-4 mb-lg-4"
-                                            (click)="pesquisarConsulta(formNovoAtendimento.value)">
-                                            Pesquisar
-                                        </button>
+                                    <div class="form-group col-md-2">
+                                        <div class="text-right" *ngIf="isEncaixe">
+                                            <button class="btn btn-primary m-4"
+                                                (click)="pesquisarConsulta(formNovoAtendimento.value)">
+                                                Pesquisar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row align-items-center mt-lg-n4">
+                                    <div *ngIf="isEncaixe1">
+                                        <nb-card-body>
+                                            <section class="align-items-center">
+                                                <div class="col-md-12 col-xs-12">
+                                                    <form #card="ngForm">
+                                                        <div class="form-row align-items-center">
+                                                            <section class="border-dark btn paragraph-2 mb-3"
+                                                                style="background-color: white;"
+                                                                *ngFor="let card of tipoCardEncaixe; let i = index;"
+                                                                (click)="confHorario(card, formNovoAtendimento.value)">
+                                                                <div class="col-md-12">
+                                                                    <label for="horaInicio">Hora início</label>
+                                                                    <div class="row pl-3">
+                                                                        <input type="time" name="appt" required
+                                                                            name="card{{card.id}}"
+                                                                            [(ngModel)]="card.horaInicio" />
+                                                                    </div>
+                                                                    <label for="horaFim">Hora fim</label>
+                                                                    <div class="row pl-3">
+                                                                        <input type="time" name="appt" required
+                                                                            name="car{{card.id}}"
+                                                                            [(ngModel)]="card.horaFim" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <button class="btn btn-primary mt-2"
+                                                                        (click)="pesquisarHorario(formNovoAtendimento.value)">
+                                                                        Pesquisar
+                                                                    </button>
+                                                                </div>
+                                                            </section>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </section>
+                                        </nb-card-body>
                                     </div>
                                 </div>
                                 <div *ngIf="isHorario">
@@ -78,7 +134,7 @@
                                             <div class="modal-body alert-primary card-columns">
                                                 <section class="btn m-1" style="background-color: white;"
                                                     *ngFor="let card of tipoCard; let i = index;"
-                                                    (click)="confHorario(card)">
+                                                    (click)="confHorario(card, formNovoAtendimento.value)">
                                                     <div class="form-row align-items-center">
                                                         <div class="col-md-1">
                                                             <i class="fa fa-calendar image" aria-hidden="true"></i>
@@ -98,20 +154,20 @@
                                     </div>
                                 </div>
                                 <div *ngIf="isConfAtendimento">
-                                    <div class="form-row align-items-center mt-lg-n3">
+                                    <div class="form-row align-items-center">
                                         <div class="form-group col-md-3">
                                             <div class="form-group">
                                                 <label for="nomeResponsavel">Buscar por cpf*</label>
                                                 <input class="form-control" name="cpf" id="cpf" type="text"
-                                                    formControlName="cpf" mask="000.000.000-00" maxlength="14"                                                    
-                                                    placeholder="000.000.000-00" />                                                
-                                            </div>                                          
-                                        </div>                                      
+                                                    formControlName="cpf" mask="000.000.000-00" maxlength="14"
+                                                    placeholder="000.000.000-00" />
+                                            </div>
+                                        </div>
                                         <div class="form-group col-md-2">
                                             <button class="btn btn-primary mb-lg-n2"
-                                            (click)="isValidCpf(formNovoAtendimento.value)">
-                                            Pesquisar
-                                        </button>
+                                                (click)="isValidCpf(formNovoAtendimento.value)">
+                                                Pesquisar
+                                            </button>
                                         </div>
                                         <div class="form-group col-md-5">
                                             <div class="form-group">
@@ -119,7 +175,7 @@
                                                 <input class="form-control" name="nomeResponsavel" id="nomeResponsavel"
                                                     type="text" formControlName="nomeResponsavel" disabled />
                                             </div>
-                                        </div>                                       
+                                        </div>
                                     </div>
                                     <div class="form-group mt-lg-n4">
                                         <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
@@ -134,12 +190,12 @@
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radio"
-                                                                name="optDep" value="S" 
+                                                                name="optDep" value="S"
                                                                 (click)="consultaDependente($event.target.value)" />
                                                             Sim</label>
                                                         <label class="radio-inline pl-2">
                                                             <input class="mat-button" type="radio" id="radio"
-                                                                name="optDep" value="N"  
+                                                                name="optDep" value="N"
                                                                 (click)="consultaDependente($event.target.value)" />
                                                             Não</label>
                                                     </div>
@@ -148,9 +204,10 @@
                                             <div class="form-group col-md-4" *ngIf="isDependente">
                                                 <label for="incluirDep">Incluir filho(a)</label>
                                                 <select class="form-control" formControlName="incluirDep"
-                                                (change)="verificaDependente($event.target.value)">
+                                                    (change)="verificaDependente($event.target.value)">
                                                     <option value="null" selected>SELECIONE</option>
-                                                    <option *ngFor="let pagto of listDependente" value="{{ pagto.idChild }}">
+                                                    <option *ngFor="let pagto of listDependente"
+                                                        value="{{ pagto.idChild }}">
                                                         {{pagto.name}}</option>
                                                 </select>
                                             </div>
@@ -174,7 +231,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-row align-items-center">                                           
+                                        <div class="form-row align-items-center">
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label class="consultaParticular">Consulta particula?</label>
@@ -217,11 +274,13 @@
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radioSim"
-                                                                name="radio" value="S" (click)="consultaPaga($event.target.value)"/>
+                                                                name="radio" value="S"
+                                                                (click)="consultaPaga($event.target.value)" />
                                                             Sim</label>
                                                         <label class="radio-inline pl-2">
                                                             <input class="mat-button" type="radio" id="radioNao"
-                                                                name="radio" value="N" (click)="consultaPaga($event.target.value)" />
+                                                                name="radio" value="N"
+                                                                (click)="consultaPaga($event.target.value)" />
                                                             Não</label>
                                                     </div>
                                                 </div>

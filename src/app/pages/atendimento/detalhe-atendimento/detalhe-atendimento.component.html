@@ -24,10 +24,14 @@
               <div class="mr-2"><label>Data: </label></div>
               <label>{{atendimento.data}} </label>
             </div>
-            <div class="form-row">
-              <div class="mr-2"><label>Horário: </label></div>
-              <label>{{atendimento.horario}} </label>
+            <div *ngIf="atendimento.nomeResponsavel !== null" class="form-row">
+              <div class="mr-2"><label>Nome da mãe: </label></div>
+              <label>{{atendimento.nameMother}} </label>
             </div>
+            <div *ngIf="atendimento.nomeResponsavel !== null" class="form-row">
+              <div class="mr-2"><label>Nome do pai: </label></div>
+              <label>{{atendimento.nameFather}} </label>
+            </div>           
           </div>
         </div>
         <div class="form-group col-md-6 ">
@@ -44,10 +48,10 @@
               <div class="mr-2"><label>Status: </label></div>
               <label>{{atendimento.status}} </label>
             </div>
-            <div *ngIf="atendimento.nomeResponsavel !== null" class="form-row">
-              <div class="mr-2"><label>Responsável: </label></div>
-              <label>{{atendimento.nomeResponsavel}} </label>
-            </div>
+            <div class="form-row">
+              <div class="mr-2"><label>Horário: </label></div>
+              <label>{{atendimento.horario}} </label>
+            </div>           
           </div>
         </div>
       </div>
@@ -108,7 +112,7 @@
         </nb-action>
         <nb-action *ngIf="atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='02 - Aguardando Pagamento' || atendimento.status ==='03 - Consulta Confirmada'">
           <nb-icon class="action-icon" icon="edit-outline" (click)="editarConsulta()"></nb-icon>
-          <span>Editar</span>
+          <span>Reagendar</span>
         </nb-action>
       </nb-actions>
     </nb-card-body>

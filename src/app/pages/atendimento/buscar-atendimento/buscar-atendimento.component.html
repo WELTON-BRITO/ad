@@ -52,7 +52,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                  <div class="form-group col-md-2">
                     <div class="form-group">
                       <div class="div-cpf">
                         <label for="cpf">Buscar por cpf</label>
@@ -65,7 +65,18 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-5">
+                  <div class="form-group col-md-3">
+                    <div class="form-group">
+                      <label for="status">Status</label>
+                      <select class="form-control" formControlName="status">
+                        <option value="null" selected>SELECIONE</option>
+                        <option *ngFor="let status of tipo" value="{{ status.status }}">
+                          {{ status.descricao }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3">
                     <div class="form-group pt-4">
                       <div class="text-right">
                         <button class="btn btn-primary mr-2" (click)="buscarAtendimento(formBuscarAtendimento.value)">

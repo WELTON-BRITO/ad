@@ -139,6 +139,7 @@ export class FilaEsperaComponent {
             this.isActive = true
             let params = new HttpParams();
             params = params.append('specialtyId', data.tipoEspecialidade)
+            params = params.append('statusId', '14')
 
             this.service.waitingService(params, (response) => {
 

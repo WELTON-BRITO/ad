@@ -20,6 +20,7 @@ export class BuscarAtendimentoComponent implements OnInit {
   public rowData = null;
   public msgErro = 'CPF inválido!!!';
   public showMsgErro = false;
+  public tipo = null;
 
   TodayDate = "2022-02-15";
   FinalDate = "2022-02-15";
@@ -63,6 +64,30 @@ export class BuscarAtendimentoComponent implements OnInit {
     private router: Router,
     private service: AtendimentoService,
     private toastrService: NbToastrService) {
+
+    this.tipo = [
+      {
+        status: '7',
+        descricao: '01 - Aguardando Aprovação'
+      },
+      {
+        status: '10',
+        descricao: '02 - Aguardando Pagamento'
+      },
+      {
+        status: '4',
+        descricao: '03 - Consulta Confirmada'
+      },
+      {
+        status: '6',
+        descricao: '04 - Consulta Cancelada'
+      },
+      {
+        status: '8',
+        descricao: '05 - Consulta Finalizada'
+      },
+    ];
+
   }
 
   get selectedCountry() {
@@ -107,7 +132,8 @@ export class BuscarAtendimentoComponent implements OnInit {
       dataFim: [this.FinalDate, Validators.required],
       nome: [null],
       medico: [this.listMedico[0], Validators.required],
-      cpf: [null]
+      cpf: [null],
+      status: [null]
     });
 
     this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
@@ -135,6 +161,11 @@ export class BuscarAtendimentoComponent implements OnInit {
 
     params = params.append('startDate', data.dataInicio)
     params = params.append('endDate', data.dataFim)
+    if ((data.status != null) && (data.status != "null")) {
+      params = params.append('statusId', data.status)
+    }
+
+
     if (data.nome != null) {
       params = params.append('name', data.nome)
     }
@@ -154,6 +185,7 @@ export class BuscarAtendimentoComponent implements OnInit {
         this.service.buscaAtendimentos(params, (response) => {
           this.isActive = false
           this.rowData = response
+
           this.rowData = this.rowData.map(data => {
             return {
               medico: data.doctor.name,
