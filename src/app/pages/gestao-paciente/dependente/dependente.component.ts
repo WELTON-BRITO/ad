@@ -296,10 +296,10 @@ export class DependenteComponent implements OnDestroy {
   }
 
   cadastrarPaciente(data) {
-
+    
     let register = {
       name: data.nomeDep,
-      nameMother: this.history.data.name,
+      nameMother: this.history.data.name || data.nameMother,
       nameFather: null,
       cpf: data.cpfDep,
       rg: data.rgDep,
@@ -313,7 +313,7 @@ export class DependenteComponent implements OnDestroy {
       userId: this.history.data.id
     }
 
-    if ((data.nomeDep != null) && (data.nomeMae != null) && (data.dateNascDep != null) && (this.sexo != null)) {
+    if ((data.nomeDep != null) && (data.nameMother != null || this.history.data.name != null ) && (data.dateNascDep != null) && (this.sexo != null)) {
 
       this.isActive = true;
 

@@ -7,6 +7,7 @@ import { AtendimentoService } from '../atendimento.service';
 import { deCamelCase } from '@swimlane/ngx-datatable';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import * as moment from 'moment';
+import { concatMapTo } from 'rxjs-compat/operator/concatMapTo';
 
 @Component({
     selector: 'ngx-novo-atendimento',
@@ -44,6 +45,15 @@ export class NovoAtendimentoComponent {
     public dependente = null;
     public detalhes = 'Consulta de retorno';
     public retorno = null;
+    public isEncaixe = false;
+    public isEncaixe1 = false;
+    public tipoCardEncaixe: any[] = [{
+        id: '',
+        horaInicio: '',
+        horaFim: ''
+    }];
+    public encaixe = false;
+    public dateEncaixe = null;
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
@@ -94,6 +104,7 @@ export class NovoAtendimentoComponent {
         })
 
         this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+        this.tipoCardEncaixe = [];
     }
 
     pagamento() {
@@ -269,8 +280,16 @@ export class NovoAtendimentoComponent {
 
     salvar(data) {
 
-        var startTime = this.dadosHorario.horario.slice(0, 5)
-        var endTime = this.dadosHorario.horario.slice(8)
+
+        if (this.dadosHorario.horario === undefined) {
+            var startTime = this.tipoCardEncaixe[0].horaInicio
+            var endTime = this.tipoCardEncaixe[0].horaFim
+            this.dateEncaixe = moment(data.dataInicio).format('DD/MM/YYYY')
+        } else {
+            var startTime = this.dadosHorario.horario.slice(0, 5)
+            var endTime = this.dadosHorario.horario.slice(8)
+        }
+
         this.clinicId = localStorage.getItem('bway-entityId');
 
         if (this.dependente == 'N') {
@@ -283,16 +302,17 @@ export class NovoAtendimentoComponent {
             clinicId: this.clinicId,
             userId: this.userId,
             childId: this.childId,
-            dateService: moment(this.dadosHorario.data, "DD/MM/YYYY").format("YYYY-MM-DD"),
+            dateService: data.dataInicio,
             startTime: startTime,
             endTime: endTime,
             healthPlanId: data.formaConvenio,
             typePaymentId: data.formaPagto,
             typeServiceId: data.tipoConsulta,
-            meetingUrl: this.dadosHorario.data.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId),
+            meetingUrl: this.dadosHorario.data === undefined ? this.dateEncaixe.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId) : this.dadosHorario.data.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId),
             specialtyId: this.specialtyId,
             paymentInCreation: this.tipoPagto,
-            isReturn: this.retorno
+            isReturn: this.retorno,
+            dontCheckAvailable: this.encaixe
 
         }
 
@@ -424,12 +444,19 @@ export class NovoAtendimentoComponent {
         return true
     }
 
-    confHorario(data) {
+    confHorario(data, element) {
 
         this.tipoCard = [];
         this.dadosHorario = data;
-        this.isHorario = false;
-        this.isConfAtendimento = true;
+        if ((data.horaInicio != null) && (data.horaFim != null) && (element.dataInicio != null)) {
+            this.isHorario = false;
+            this.isConfAtendimento = true;
+        }
+        if ((data.data != null) && (data.horario != null) && (element.dataInicio != null)) {
+            this.isHorario = false;
+            this.isConfAtendimento = true;
+        }
+
     }
 
     consultaRetorno(data) {
@@ -451,6 +478,50 @@ export class NovoAtendimentoComponent {
 
     previousPage() {
         this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+    }
+
+    buscarEncaixe(data) {
+        if (data === 'S') {
+            this.isHorario = false;
+            this.isEncaixe = false;
+            this.isEncaixe1 = true;
+            this.encaixe = true;
+            if (this.tipoCardEncaixe.length === 0) {
+                this.tipoCardEncaixe.push({
+                    id: this.tipoCardEncaixe.length,
+                })
+            }
+        } else {
+            this.tipoCardEncaixe.splice(null);
+            this.isEncaixe = true;
+            this.isEncaixe1 = false;
+            this.encaixe = false;
+            this.isConfAtendimento = false;
+        }
+    }
+
+    pesquisarHorario(data) {
+
+        if (data.dataInicio === null) {
+            this.toastrService.danger('A data início do período é obrigatória!!!');
+            this.isConfAtendimento = false;
+        } else {
+
+            this.isActive = true
+            let params = new HttpParams();
+            params = params.append('doctorId', data.medico)
+            params = params.append('dateService', moment(data.dataInicio).format('YYYY-MM-DD'))
+            params = params.append('startTime', this.dadosHorario.horaInicio)
+            params = params.append('endTime', this.dadosHorario.horaFim)
+
+            this.service.timeAvailable(params, (response) => {
+                this.isActive = false
+                this.toastrService.success(response.message);
+            }, (error) => {
+                this.toastrService.danger(error.error.message);
+            });
+
+        }
     }
 
 }

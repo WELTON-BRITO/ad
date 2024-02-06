@@ -75,4 +75,8 @@ export class AtendimentoService {
   waiting(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doPost('/api/waitingService/proposal', data, successHandle, erroHandle)
   }
+
+  timeAvailable(data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doGet('/api/appointments/timeAvailable', data, successHandle, erroHandle)
+  }
 }
