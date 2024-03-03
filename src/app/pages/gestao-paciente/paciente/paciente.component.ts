@@ -68,16 +68,16 @@ export class PacienteComponent implements OnInit {
 
         this.rowData = this.rowData.map(data => {
           return {
-            avatar: data.user.avatar == null || data.user.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.user.avatar,
-            name: data.user.name,
-            cellPhone: data.user.cellPhone,
-            email: data.user.emailUser,
-            federalId: data.user.federalId,
-            id: data.user.id,
-            city: data.user.city.id,
-            uf: data.user.uf.id,
-            userChildren: data.userChildren,
-            doctorId: data.doctor.id
+            avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
+            name: data.name,
+            cellPhone: data.cellPhone,
+            email: data.emailUser,
+            federalId: data.federalId,
+            id: data.idUser  ,
+            city: data.idCityUser ,
+            uf: data.idUfUser,
+            userChildren: data.idUserChildren,
+            doctorId: data.idDoctor
           }
         })
 

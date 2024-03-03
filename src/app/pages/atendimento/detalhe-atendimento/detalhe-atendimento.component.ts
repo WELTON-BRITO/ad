@@ -90,9 +90,8 @@ export class DetalheAtendimentoComponent implements OnInit {
     this.atendimento.convenio = data.plan != null ? data.plan.name : null
     this.atendimento.id = data.id
     this.atendimento.comprovante = data.paymentProof
-    this.atendimento.nameFather = data.child.nameFather
-    this.atendimento.nameMother = data.child.nameMother
-
+    this.atendimento.nameFather = data.child?.nameFather ?? null;
+    this.atendimento.nameMother = data.child?.nameMother ?? null;
     this.paciente = data
 
   }

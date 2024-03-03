@@ -1,6 +1,6 @@
 
 export const environment = {
   production: true,
-  url_login: 'https://mauricio2799.c34.integrator.host',
-  url_server: 'https://mauricio2799.c34.integrator.host',
+  url_login: 'http://52.201.99.53:8080',
+  url_server: 'http://52.201.99.53:8080',
 };

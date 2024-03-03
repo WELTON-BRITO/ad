@@ -64,6 +64,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
     ngOnInit() {
 
         let data = history.state;
+        
 
         if(data[0].tela == 'historico'){
             this.atendimento.nome = data[0].rowData[0].user.name;
@@ -176,31 +177,28 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         this.isActive = true
 
+        let dataGrid = history.state
+
         this.service.buscaAtendimentos(params, (response) => {
-
-            this.isActive = false
-            this.rowData = response
-            this.rowData = this.rowData.map(data => {
-                return {
-                    name: data.doctor.name,
-                    cpf: data.user.federalId,
-                    birthDate: moment(data.dateService).format('DD/MM/YYYY'),
-                    id: data.id
+            this.isActive = false;
+            this.rowData = response.map(data => {
+                if (dataGrid[0].rowData.status == "04 - Consulta Finalizada") {
+                    return {
+                        name: data.doctor.name,
+                        cpf: data.user.federalId,
+                        birthDate: moment(data.dateService).format('DD/MM/YYYY'),
+                        id: data.id
+                    };
+                } else {
+                    // Se a condição não for atendida, retorne null ou outro valor apropriado
+                    return null;
                 }
-            })
-
+            });
         }, (error) => {
             this.isActive = false;
-            if (error.error instanceof ErrorEvent) {
-                console.error('An error occurred:', error.error.message);
-            } else {
-                console.error(
-                    `Backend returned code ${error.status}, ` +
-                    `body was: ${error.error}`);
-            }
-            this.toastrService.danger(error.error.message);
-
+            this.toastrService.danger(error.message);
         });
+
 
     }
 
@@ -375,25 +373,28 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         this.isActive = true
         let params = new HttpParams();
-        params = params.append('appointmentId', this.atendimento.id)
+        params = params.append('appointmentId', data.id)
 
         this.service.visualizarHistorico(params, (response) => {
 
             this.isActive = false;
             this.isDetalhes = true;
             this.isHistorico = false;
-            this.formConsultaPaciente.controls['detalhesCliente'].setValue(response.descriptionClinic);
-            this.formConsultaPaciente.controls['detalhesInterno'].setValue(response.description);
-            this.formConsultaPaciente.controls['tempoRetorno'].setValue(response.timeReturn);
-            this.formConsultaPaciente.controls['altura'].setValue(response.height);
-            this.formConsultaPaciente.controls['peso'].setValue(response.weight);
-            this.formConsultaPaciente.controls['circCabeca'].setValue(response.headSize);
-            this.formConsultaPaciente.controls['circAbdomen'].setValue(response.abdomenSize);
-            this.formConsultaPaciente.controls['urlReceita'].setValue(response.urlPrescription);
-            this.formConsultaPaciente.controls['urlAtestado'].setValue(response.urlRemovalReport);
-            this.formConsultaPaciente.controls['prescricaoMedica'].setValue(response.prescription);
-            this.formConsultaPaciente.controls['pedidoExame'].setValue(response.descriptionMedicalOrder);
-            this.formConsultaPaciente.controls['urlExame'].setValue(response.urlMedicalOrder);
+
+            this.formConsultaPaciente.controls['detalhesCliente'].setValue(response?.descriptionClinic ?? null);
+            this.formConsultaPaciente.controls['detalhesInterno'].setValue(response?.description ?? null);
+            this.formConsultaPaciente.controls['tempoRetorno'].setValue(response?.timeReturn ?? null);
+            this.formConsultaPaciente.controls['altura'].setValue(response?.height ?? null);
+            this.formConsultaPaciente.controls['peso'].setValue(response?.weight ?? null);
+            this.formConsultaPaciente.controls['circCabeca'].setValue(response?.headSize ?? null);
+            this.formConsultaPaciente.controls['circAbdomen'].setValue(response?.abdomenSize ?? null);
+            this.formConsultaPaciente.controls['urlReceita'].setValue(response?.urlPrescription ?? null);
+            this.formConsultaPaciente.controls['urlAtestado'].setValue(response?.urlRemovalReport ?? null);
+            this.formConsultaPaciente.controls['prescricaoMedica'].setValue(response?.prescription ?? null);
+            this.formConsultaPaciente.controls['pedidoExame'].setValue(response?.descriptionMedicalOrder ?? null);
+            this.formConsultaPaciente.controls['urlExame'].setValue(response?.urlMedicalOrder ?? null);
+
+
 
         }, (error) => {
             this.isActive = false;

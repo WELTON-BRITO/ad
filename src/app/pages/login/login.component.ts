@@ -87,14 +87,22 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('bway-logged-date', new Date().toString());
     localStorage.setItem('bway-domain', result.domain);
     localStorage.setItem('bway-entityId', result.entityId);
-    localStorage.setItem('bway-enterprise-name', result.name)
-    localStorage.setItem('bway-user', result.federalId),
+    localStorage.setItem('bway-enterprise-name', result.name);
+    localStorage.setItem('bway-user', result.federalId);
 
-      this.pesquisaMedico()
+    if (result.domain == 'CLINIC') {
+    this.listMedico = result.doctors
+    var b = this.listMedico
+    b = JSON.stringify(b);
+    sessionStorage.setItem('bway-medico', b);
+    var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.isActive = false;
+    }
 
-    setTimeout(() => {
-      this.router.navigate(['/pages/dashboard']);
-    }, 3500)
+   //   this.pesquisaMedico() Desativado após a inclusão dos dados  do médico da clinica no serviço de login
+
+     this.router.navigate(['/pages/dashboard']);
+
   }
 
   toggle(checked: boolean) {
