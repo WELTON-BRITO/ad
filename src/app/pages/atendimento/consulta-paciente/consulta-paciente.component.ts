@@ -66,17 +66,34 @@ export class ConsultaPacienteComponent implements OnDestroy {
         let data = history.state;
         
 
-        if(data[0].tela == 'historico'){
-            this.atendimento.nome = data[0].rowData[0].user.name;
-            this.atendimento.especialidade = data[0].rowData[0].specialty.name;
-            this.atendimento.dateNasc = moment(data[0].rowData[0].user.birthDate).format('DD/MM/YYYY');
-            this.atendimento.ultimaConsulta = moment(data[0].rowData[0].user.dateRegister).format('DD/MM/YYYY');
-            this.atendimento.doctorId = data[0].rowData[0].doctor.id;
-            this.atendimento.userId = data[0].rowData[0].user.id
-            this.atendimento.idChild = data[0].rowData[0].child != null ? data[0].rowData[0].idChild : '';
+        if (data[0] && data[0].tela === 'historico') {
+            this.atendimento.nome = data[0]?.rowData[0]?.user?.name ??  null;
+            this.atendimento.especialidade = data[0]?.rowData[0]?.specialty?.name ??  null;
+            this.atendimento.dateNasc = data[0]?.rowData[0]?.user?.birthDate
+                ? moment(data[0].rowData[0].user.birthDate).format('DD/MM/YYYY')
+                :  null;
+            this.atendimento.ultimaConsulta = data[0]?.rowData[0]?.user?.dateRegister
+                ? moment(data[0].rowData[0].user.dateRegister).format('DD/MM/YYYY')
+                :  null;
+            this.atendimento.doctorId = data[0]?.rowData[0]?.doctor?.id ?? null;
+            this.atendimento.userId = data[0]?.rowData[0]?.user?.id ??  null;
+            this.atendimento.idChild = data[0]?.rowData[0]?.child?.idChild ?? null;
+            this.atendimento.nome = data[0]?.rowData[0]?.user?.name ??  null;
+            this.atendimento.especialidade = data[0]?.rowData[0]?.specialty?.name ??  null;
+            this.atendimento.dateNasc = data[0]?.rowData[0]?.user?.birthDate
+                ? moment(data[0].rowData[0].user.birthDate).format('DD/MM/YYYY')
+                :  null;
+            this.atendimento.ultimaConsulta = data[0]?.rowData[0]?.user?.dateRegister
+                ? moment(data[0].rowData[0].user.dateRegister).format('DD/MM/YYYY')
+                :  null;
+            this.atendimento.doctorId = data[0]?.rowData[0]?.doctor?.id ??  null;
+            this.atendimento.userId = data[0]?.rowData[0]?.user?.id ??  null;
+            this.atendimento.idChild = data[0]?.rowData[0]?.child?.idChild ??  null;
+
+
             this.consultaHistorico();
         }else{
-            this.atendimento.id = data[0].rowData.id;
+            this.atendimento.id = this.atendimento.id = data[0]?.rowData?.id ?? null
             this.atendimento.doctorId = data[0].rowData.doctor.id;
             this.atendimento.idChild = data[0].rowData.child != null ? data[0].rowData.child.idChild : '';
             this.atendimento.userId = data[0].rowData.user != null ? data[0].rowData.user.id : '';
@@ -174,6 +191,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
         params = params.append('childId', this.atendimento.idChild)
         params = params.append('startDate', moment(this.startDate).format('YYYY/MM/DD'))
         params = params.append('endDate', moment(date).format('YYYY/MM/DD'))
+        params = params.append('statusId', 8) 
 
         this.isActive = true
 

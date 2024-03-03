@@ -257,7 +257,7 @@
                                                 </div>
                                             </ng-template>
                                         </ngx-datatable-column>
-                                        <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
+                                        <ngx-datatable-column [sortable]="false" name="Ações" prop="acoes" [canAutoResize]="true">
                                             <ng-template ngx-datatable-cell-template let-row="row">
                                                 <div class="text-center">
                                                     <a class="home-icon" (click)="visualizar(row)" title="Visualizar">
