@@ -5,6 +5,9 @@ import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { LoadingBarService } from "ng2-loading-bar";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "../../../../../environments/environment";
+import { Router } from '@angular/router';
+import { delay } from "rxjs-compat/operator/delay";
+
 
 @Injectable()
 export class HttpService {
@@ -14,7 +17,9 @@ export class HttpService {
   constructor(
     private http: HttpClient,
     private loadingBarService: LoadingBarService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
+
   ) { }
 
   private responsecallback(
@@ -71,9 +76,18 @@ export class HttpService {
       }
     } else if (parseInt(err.status) == 200) {
       return { message: "Realizar a operação. ", status: err.status };
-    } else if (parseInt(err.status) >= 500) {
+    } else if (parseInt(err.status) > 500) {
       return { message: "Não foi possível realizar a operação. ", status: err.status };
-    } else {
+    } else if (parseInt(err.status) == 500) {
+
+       {
+        setTimeout(() => {
+            this.router.navigate(['/login']);
+        }, 3000); // 3000 milissegundos = 3 segundos
+    }
+}
+
+    else {
       return { message: 'Erro não verificado.', status: err.status };
     }
   }

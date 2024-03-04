@@ -187,6 +187,8 @@ export class BuscarAtendimentoComponent implements OnInit {
           this.rowData = response
 
           this.rowData = this.rowData.map(data => {
+
+            if (data.status != "05 - Consulta Cancelada") {
             return {
               medico: data.doctor.name,
               nome: data.child == null ? data.user.name : data.child.name,
@@ -196,6 +198,13 @@ export class BuscarAtendimentoComponent implements OnInit {
               status: data.status,
               atendimento: data,
             }
+          }
+          else {
+
+            return null
+          }
+
+            
           })
 
         }, (error) => {
@@ -215,31 +224,34 @@ export class BuscarAtendimentoComponent implements OnInit {
 
         params = params.append('doctorId', data.medico)
 
+      // localStorage.setItem('Authorization', 'Bearer ' +'45454545455');
+
+
         this.service.buscaAtendimentos(params, (response) => {
+
           this.isActive = false
           this.rowData = response
           this.rowData = this.rowData.map(data => {
-            return {
-              medico: data.doctor.name,
-              nome: data.child == null ? data.user.name : data.child.name,
-              data: moment(data.dateService).format('DD/MM/YYYY'),
-              horario: data.startTime.concat(' - ', data.endTime),
-              especialidade: data.specialty.name,
-              status: data.status,
-              atendimento: data,
-            }
-          })
+            if (data.status !== '05 - Consulta Cancelada') {
+              return {
+                  medico: data.doctor.name,
+                  nome: data.child == null ? data.user.name : data.child.name,
+                  data: moment(data.dateService).format('DD/MM/YYYY'),
+                  horario: data.startTime.concat(' - ', data.endTime),
+                  especialidade: data.specialty.name,
+                  status: data.status,
+                  atendimento: data,
+              };
+          } else {
+              // Se o status for "05 - Consulta Cancelada", retorne null ou outro valor apropriado
+              return null;
+          }
+      }).filter(Boolean); // Filtra os registros não nulos
 
         }, (error) => {
           this.isActive = false;
-          if (error.error instanceof ErrorEvent) {
-            console.error('An error occurred:', error.error.message);
-          } else {
-            console.error(
-              `Backend returned code ${error.status}, ` +
-              `body was: ${error.error}`);
-          }
-          this.toastrService.danger(error.error.message);
+                 
+          this.toastrService.danger(error.message);
 
         });
 

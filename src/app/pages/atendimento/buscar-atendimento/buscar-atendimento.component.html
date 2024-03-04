@@ -100,42 +100,42 @@
                       <ngx-datatable-column name="Médico" prop="medico">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
-                            {{ row.medico }}
+                            {{ row?.medico }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-column name="Data" prop="data">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
-                            {{ row.data }}
+                            {{ row?.data }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-column name="Horário" prop="horario">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
-                            {{ row.horario }}
+                            {{ row?.horario }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-column name="Paciente" prop="nome">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
-                            {{ row.nome }}
+                            {{ row?.nome }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-column name="Especialidade" prop="especialidade">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
-                            {{ row.especialidade }}
+                            {{ row?.especialidade }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-column name="Status" prop="status">
                         <ng-template ngx-datatable-cell-template let-row="row">
                           <div class="text-center">
-                            {{ row.status }}
+                            {{ row?.status }}
                           </div>
                         </ng-template>
                       </ngx-datatable-column>
@@ -146,11 +146,10 @@
                               <i class="fa fa-info-circle"></i>
                             </button>
                             <button class="btn home-icon" (click)="iniciarAtendimento(row)" title="Iniciar atendimento"
-                              *ngIf="row.atendimento.status !=='01 - Aguardando Aprovação' && row.atendimento.status !=='05 - Consulta Cancelada'">
-                              <i class="fa fa-wifi"></i>
+                            *ngIf="row && row.atendimento && row.atendimento.status !== '01 - Aguardando Aprovação' && row.atendimento.status !== '05 - Consulta Cancelada'">                              <i class="fa fa-wifi"></i>
                             </button>
                             <button class="btn home-icon" (click)="videoAtendimento(row)" title="Vídeo atendimento"
-                              *ngIf="row.atendimento.meetingUrl != null">
+                              *ngIf="row && row.atendimento.meetingUrl != null">
                               <i class="fa fa-video"></i>
                             </button>
                           </div>
