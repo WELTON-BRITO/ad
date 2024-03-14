@@ -84,18 +84,20 @@
                     </div>
                     <div class="form-group row pl-3 mt-lg-n4">
                       <div class="col-md-5">
-                        <div class="align-self-start">
-                          <img src="{{this.avatar }}" style="height: 80px;" />
+                        <label for="imgem">Adicione sua foto</label>
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="imgem" name="imgem" formControlName="imgem"
+                                 (change)="converterImagem($event, $event.target)">
+                          <label class="custom-file-label" for="imgem">Escolher arquivo</label>
                         </div>
                       </div>
-                    </div>
-                    <div class="form-group row pl-3">
-                      <div class="col-md-5">
-                        <label for="imgem">Adicione sua foto</label>
-                        <input class="form-control-file media-body" name="imgem" id="imgem" type="file"
-                          formControlName="imgem" (change)="converterImagem($event, $event.target)" value="imagem" />
+                      <div class="col-md-5 mt-3">
+                        <img *ngIf="this.avatar" class="rounded-circle img-fluid" src="{{ this.avatar }}" alt="User Icon" style="height: 80px;" />
                       </div>
                     </div>
+                    
+                    
+                    
                     <div class="text-right">
                       <button class="btn btn-primary m-2" (click)="proximo(this)">
                         PRÓXIMO
@@ -109,28 +111,26 @@
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="telefoneCelular">Celular*</label>
-                        <input class="form-control" name="telefoneCelular" id="telefoneCelular" type="text"
-                          formControlName="telefoneCelular" [dropSpecialCharacters]="true"
-                          mask="(00) 0 0000-0000 || (00) 0000-0000" maxlength="16" />
+                        <!-- Resto do código para o campo de celular -->
                       </div>
                     </div>
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="email">E-mail</label>
                         <input class="form-control" name="email" id="email" type="text" formControlName="email"
-                          maxlength="50" />
+                               maxlength="50" autocomplete="new-password" />
                       </div>
                       <div class="col-md-4">
                         <label for="confirmaEmail">Confirma e-mail</label>
                         <input class="form-control" name="confirmaEmail" id="confirmaEmail" type="text"
-                          formControlName="confirmaEmail" maxlength="50"
-                          (change)="verificarEmail(formCadastroMedico.value)" />
+                               formControlName="confirmaEmail" maxlength="50" autocomplete="new-password"
+                               (change)="verificarEmail(formCadastroMedico.value)" />
                       </div>
-                    </div>
+                    </div>                  
                     <div class="form-group row pl-3">
                       <div class="col-md-4">
                         <label for="senha">Criei uma senha</label>
-                        <input class="form-control" name="senha" id="senha" formControlName="senha"
+                        <input class="form-control" name="senha" id="senha" formControlName="senha" autocomplete="new-password"
                           type="{{showPass ? 'text' : 'password' }}" />
                         <button type="button" class="btn-transparent" (click)="toggleShowPass()">
                           <i class="fa" [ngStyle]="{'color': '#757474'}"

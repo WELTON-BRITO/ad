@@ -145,7 +145,7 @@ export class CadastroMedicoComponent implements OnInit {
       this.service.cadastrarMedico(register, (response => {
 
         this.isActive = false;
-        this.toastrService.success('Cadastrado com sucesso !!!');
+        this.toastrService.success('Cadastrado Realizado com Sucesso','Aditi Care!');
         this.isInfoGerais = false;
         this.isContato = false;
         this.limparForm();
@@ -156,7 +156,7 @@ export class CadastroMedicoComponent implements OnInit {
       });
 
     } else {
-      this.toastrService.danger('Preencher os campos obrigatórios !!!');
+      this.toastrService.danger('Favor Preencher os Campos Obrigatórios !!!','Campos Não Preenchido');
     }
 
   }

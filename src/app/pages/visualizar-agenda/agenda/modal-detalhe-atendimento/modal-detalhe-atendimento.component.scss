@@ -1,6 +1,6 @@
 input[type=button], input[type=submit], input[type=reset]  {
   
-    border: none;
+    //border: none;
     color: white;
     padding: 7px 20px;
     text-align: center;
@@ -19,3 +19,33 @@ input[type=button], input[type=submit], input[type=reset]  {
    // -o-transition: all 0.3s ease-in-out;
    // transition: all 0.3s ease-in-out;
   }
+
+  .action-icon{
+    display: flexbox;
+    width: 50;
+    height: 50;
+  }
+
+
+.time_consulta{
+    float:left;
+    width: 50%;
+    height: 55px;
+}
+.div_date{
+    float:left; 
+    width: 50%;
+    height: 55px;
+}
+
+.div_time{
+  float:left; 
+  width: 30%;
+  height: 55px;
+}
+
+.valor_consulta{
+  float:left; 
+  width: 55%;
+  height: 55px;
+}

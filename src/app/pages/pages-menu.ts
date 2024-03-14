@@ -23,11 +23,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     hidden: true,
     children: [
       {
-        title: 'Buscar atendimentos',
+        title: 'Agenda de Atendimento',
         link: '/pages/atendimento/buscar-atendimento',
       },
       {
-        title: 'Fila de espera',
+        title: 'Calendário de Atendimento',
+        link: '/pages/visualizar-agenda/agenda',
+      },
+      {
+        title: 'Fila de Espera',
         link: '/pages/atendimento/fila-espera',
       }
     ]

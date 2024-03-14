@@ -21,7 +21,7 @@
                                 <div class="form-row align-items-center">
                                     <div class="form-group col-md-4">
                                         <div class="form-group">
-                                            <label for="nome">Escolha o médico*</label>
+                                            <label for="nome">Informe o Médico*</label>
                                             <select class="form-control" formControlName="medico"
                                                 (change)="verificaMedico($event.target.value)">
                                                 <option value="null" selected>SELECIONE</option>
@@ -32,18 +32,18 @@
                                     </div>
                                     <div class="form-group col-md-4">
                                         <div class="form-group">
-                                            <label for="tipoConsulta">Tipo de consulta*</label>
-                                            <select class="form-control" formControlName="tipoConsulta">
+                                            <label for="tipoConsulta">Tipo de Consulta*</label>
+                                            <select class="form-control" formControlName="tipoConsulta"
+                                                (change)="ValidaTipoConsulta($event.target.value)">
                                                 <option value="null" selected>SELECIONE</option>
                                                 <option *ngFor="let tipoConsulta of listTipoConsulta"
-                                                    value="{{ tipoConsulta.id }}">{{
-                                                    tipoConsulta.descricao}}</option>
+                                                    value="{{ tipoConsulta.id }}">{{ tipoConsulta.descricao }}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <div class="form-group">
-                                            <label for="tipoEspecialidade">Tipo de especialidade*</label>
+                                            <label for="tipoEspecialidade">Tipo de Especialidade*</label>
                                             <select class="form-control" formControlName="tipoEspecialidade"
                                                 (change)="especialidade($event.target.value)">
                                                 <option value="null" selected>SELECIONE</option>
@@ -53,58 +53,84 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <div class="form-group">
-                                            <label class="encaixe">Buscar Encaixe?</label>
-                                            <div class="p-1 row mb-lg-n1">
-                                                <label class="radio-inline pl-3">
-                                                    <input class="mat-button" type="radio" id="radio" name="optEncaixe"
-                                                        value="S" (click)="buscarEncaixe($event.target.value)" />
-                                                    Sim</label>
-                                                <label class="radio-inline pl-2">
-                                                    <input class="mat-button" type="radio" id="radio" name="optEncaixe"
-                                                        value="N" (click)="buscarEncaixe($event.target.value)" />
-                                                    Não</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <div class="form-group">
-                                            <label for="dataInicio">Data início*</label>
-                                            <div class="row">
-                                                <input class="form-control date" type="date" id="dataInicio"
-                                                    name="mydate" formControlName="dataInicio" maxlength="10" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <div class="text-right" *ngIf="isEncaixe">
-                                            <button class="btn btn-primary m-4"
-                                                (click)="pesquisarConsulta(formNovoAtendimento.value)">
-                                                Pesquisar
-                                            </button>
-                                        </div>
-                                    </div>
+                                                                    
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <div class="form-group">
+                                            <label for="tempoAtendimento">Tempo de Atendimento (Opcional)</label>
+                                            <select class="form-control" formControlName="tempoAtendimento"
+                                                (change)="tempoAtendimento($event.target.value)">
+                                                <option value="null" selected>SELECIONE</option>
+                                                <option *ngFor="let tempoAtendimento of listTempoAtendimento"
+                                                    value="{{ tempoAtendimento.id }}">{{
+                                                      tempoAtendimento.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="form-group" *ngIf="exibirDivProcedimento">
+                                            <label for="tipoProcedimento">Tipo de Procedimento*</label>
+                                            <select class="form-control" formControlName="tipoProcedimento"
+                                                (change)="SetaProcedimento($event.target.value)">
+                                                <option value="null" selected>SELECIONE</option>
+                                                <option *ngFor="let tipoProcedimento of listTipoProcedimento"
+                                                    value="{{ tipoProcedimento.procedure.idProcedure }}">{{
+                                                     tipoProcedimento.procedure.nameProcedure}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="form-row">
+
+                                    <div class="form-group col-md-4">
+                                        <label class="encaixe">Deseja Realizar um Encaixe?*</label>
+                                        <div class="p-1 row mb-lg-n1">
+                                            <label class="radio-inline pl-3">
+                                                <input class="mat-button" type="radio" id="optEncaixe" name="optEncaixe"
+                                                    value="S" formControlName="optEncaixe" (click)="buscarEncaixe($event.target.value,formNovoAtendimento.value)" />
+                                                Sim
+                                            </label>
+                                            <label class="radio-inline pl-2">
+                                                <input class="mat-button" type="radio" id="optEncaixe" name="optEncaixe"
+                                                    value="N" formControlName="optEncaixe" (click)="buscarEncaixe($event.target.value,formNovoAtendimento.value)" />
+                                                Não
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="dataInicio">Informe a Data da Consulta*</label>
+                                        <input class="form-control date" type="date" id="dataInicio"
+                                            name="mydate" formControlName="dataInicio" maxlength="10" />
+                                    </div>
+                                    <div class="form-group col-md-4 text-right" *ngIf="isEncaixe">
+                                    <button class="btn btn-primary m-4" (click)="pesquisarConsulta(formNovoAtendimento.value)">
+                                            Pesquisar
+                                        </button>
+                                    </div>
+                                
                                 <div class="form-row align-items-center mt-lg-n4">
                                     <div *ngIf="isEncaixe1">
                                         <nb-card-body>
                                             <section class="align-items-center">
                                                 <div class="col-md-12 col-xs-12">
                                                     <form #card="ngForm">
-                                                        <div class="form-row align-items-center">
+                                                        <label for="dataInicio">Informe o Horário que Deseja o Encaixe: </label>
+                                                        <div class="form-row">
                                                             <section class="border-dark btn paragraph-2 mb-3"
                                                                 style="background-color: white;"
                                                                 *ngFor="let card of tipoCardEncaixe; let i = index;"
-                                                                (click)="confHorario(card, formNovoAtendimento.value)">
+                                                                >
                                                                 <div class="col-md-12">
-                                                                    <label for="horaInicio">Hora início</label>
+                                                                    <label for="horaInicio">Hora de Início</label>
                                                                     <div class="row pl-3">
                                                                         <input type="time" name="appt" required
                                                                             name="card{{card.id}}"
                                                                             [(ngModel)]="card.horaInicio" />
                                                                     </div>
-                                                                    <label for="horaFim">Hora fim</label>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <label for="horaFim">Hora Fim</label>
                                                                     <div class="row pl-3">
                                                                         <input type="time" name="appt" required
                                                                             name="car{{card.id}}"
@@ -113,7 +139,7 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <button class="btn btn-primary mt-2"
-                                                                        (click)="pesquisarHorario(formNovoAtendimento.value)">
+                                                                        (click)="pesquisarHorario(formNovoAtendimento.value,card)">
                                                                         Pesquisar
                                                                     </button>
                                                                 </div>
@@ -125,68 +151,90 @@
                                         </nb-card-body>
                                     </div>
                                 </div>
+                            </div>
+
                                 <div *ngIf="isHorario">
                                     <div class="form-group col-md-6">
-                                        <h6 class="pt-3">Horários disponíveis para consulta</h6>
+                                        <h6 class="pt-3">Selecione o Horário da Consulta</h6>
                                     </div>
-                                    <div class="modal-dialog-scrollable">
                                         <div class="modal-content">
-                                            <div class="modal-body alert-primary card-columns">
-                                                <section class="btn m-1" style="background-color: white;"
-                                                    *ngFor="let card of tipoCard; let i = index;"
-                                                    (click)="confHorario(card, formNovoAtendimento.value)">
-                                                    <div class="form-row align-items-center">
-                                                        <div class="col-md-1">
-                                                            <i class="fa fa-calendar image" aria-hidden="true"></i>
-                                                        </div>
-                                                        <div class="col-md-7">
-                                                            <div class="div-tamanho">
-                                                                <label for="data" class="m-0">Data: {{tipoCard[i].data
-                                                                    }}</label>
-                                                                <label for="horario">Horário: {{ tipoCard[i].horario
-                                                                    }}</label>
+                                            <div class="modal-body">
+                                                <div class="card-columns">
+                                                    <div class="card"
+                                                         [ngClass]="{'card-ocupado': card.statusCard === 'Ocupado', 'card-disponivel': card.statusCard === 'Disponível'}"
+                                                         *ngFor="let card of tipoCard; let i = index;"
+                                                         >
+                                                        <div class="card-body">
+                                                            <div class="form-row align-items-center">
+                                                                <div class="col-md-2">
+                                                                    <i class="fa fa-calendar image fa-2x text-primary" aria-hidden="true"></i>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <div class="div-tamanho">
+                                                                        <label for="data" class="m-0">Data: {{ card.data }}</label>
+                                                                        <label for="data" class="m-0">Horário: {{ card.horario }}</label>
+                                                                        <br> <!-- Adicione uma quebra de linha aqui -->
+                                                                        <label>Situação: {{ card.statusCard }}</label>
+                                                                    </div>
+                                                                    <!-- Ícone ou botão para seleção (exemplo) -->
+                                                                    <button *ngIf="card.statusCard === 'Disponível'" class="btn btn-primary" (click)="confHorario(card, formNovoAtendimento.value)">Selecionar</button>                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </section>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div>                                
                                 <div *ngIf="isConfAtendimento">
                                     <div class="form-row align-items-center">
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-4">
                                             <div class="form-group">
-                                                <label for="nomeResponsavel">Buscar por cpf*</label>
+                                                <label for="horarioSelected">Horário Selecionado:</label>
+                                                <input class="form-control" name="horarioSelected" id="horarioSelected "
+                                                type="text" formControlName="horarioSelected" [value]="horarioSelecionado" disabled />
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="form-group col-md-4">
+                                            <div class="form-group">
+                                                <label for="nomeResponsavel">Informe o CPF do Paciente/Responsável*</label>
                                                 <input class="form-control" name="cpf" id="cpf" type="text"
                                                     formControlName="cpf" mask="000.000.000-00" maxlength="14"
                                                     placeholder="000.000.000-00" />
                                             </div>
                                         </div>
-                                        <div class="form-group col-md-2">
-                                            <button class="btn btn-primary mb-lg-n2"
+                                        <div class="form-group col-md-4 text-right">
+                                            <button class="btn btn-primary m-4" 
                                                 (click)="isValidCpf(formNovoAtendimento.value)">
                                                 Pesquisar
                                             </button>
                                         </div>
-                                        <div class="form-group col-md-5">
-                                            <div class="form-group">
-                                                <label for="nomeResponsavel">Nome do responsável</label>
-                                                <input class="form-control" name="nomeResponsavel" id="nomeResponsavel"
-                                                    type="text" formControlName="nomeResponsavel" disabled />
+                                        <div class="form-group col-md-12" *ngIf="isDadosAtendimento">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label for="nomeResponsavel">Nome do Paciente/Responsável</label>
+                                                    <input class="form-control" name="nomeResponsavel" id="nomeResponsavel"
+                                                        type="text" formControlName="nomeResponsavel" disabled />
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label for="telefoneResponsavel">Telefone Paciente/Responsável</label>
+                                                    <input class="form-control" name="telefoneResponsavel" id="telefoneResponsavel"
+                                                        type="text" formControlName="telefoneResponsavel" disabled />
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label for="emailResponsavel">Email Paciente/Responsável</label>
+                                                    <input class="form-control" name="emailResponsavel" id="emailResponsavel"
+                                                        type="text" formControlName="emailResponsavel" disabled />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group mt-lg-n4">
-                                        <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
-                                            {{this.msgErro}} <br /><br />
-                                        </div>
+                                        
                                     </div>
                                     <div *ngIf="isDadosAtendimento">
                                         <div class="form-row align-items-center mt-lg-n3">
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label class="consultaDependente">Consulta para dependente?</label>
+                                                    <label class="consultaDependente">Atendimento para Dependente?*</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radio"
@@ -202,7 +250,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4" *ngIf="isDependente">
-                                                <label for="incluirDep">Incluir filho(a)</label>
+                                                <label for="incluirDep">Informe o Dependente</label>
                                                 <select class="form-control" formControlName="incluirDep"
                                                     (change)="verificaDependente($event.target.value)">
                                                     <option value="null" selected>SELECIONE</option>
@@ -215,7 +263,7 @@
                                         <div class="form-row align-items-center">
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label class="consultaRetorno">Consulta de retorno?</label>
+                                                    <label class="consultaRetorno">Consulta de Retorno?</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radioRetorno"
@@ -234,23 +282,28 @@
                                         <div class="form-row align-items-center">
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label class="consultaParticular">Consulta particula?</label>
+                                                    <label class="consultaParticular">Consulta será Particular?</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
-                                                            <input class="mat-button" type="radio" id="radio"
+                                                            <input class="mat-button" type="radio" id="radioSS"
                                                                 name="optPart" value="S"
-                                                                (click)="consultaParticular($event.target.value)" />
-                                                            Sim</label>
+                                                                [checked]="optPart === true"
+                                                                (click)="buscaConvenio('S')" />
+                                                            Sim
+                                                        </label>
                                                         <label class="radio-inline pl-2">
                                                             <input class="mat-button" type="radio" id="radio"
                                                                 name="optPart" value="N"
-                                                                (click)="consultaParticular($event.target.value)" />
-                                                            Não</label>
+                                                                [checked]="optPart === false"
+                                                                (click)="buscaConvenio('N')" />
+                                                            Não
+                                                        </label>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                </div>
+                                                
                                             <div class="form-group col-md-4" *ngIf="isPagto">
-                                                <label for="formaPagto">Forma de pagamento*</label>
+                                                <label for="formaPagto">Qual será a Modalidade de Pagamento*</label>
                                                 <select class="form-control" formControlName="formaPagto">
                                                     <option value="null" selected>SELECIONE</option>
                                                     <option *ngFor="let pagto of listPagto" value="{{ pagto.id }}">{{
@@ -258,7 +311,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4" *ngIf="isConvenio">
-                                                <label for="formaConvenio">Convênio*</label>
+                                                <label for="formaConvenio">Informe o Convênio*</label>
                                                 <select class="form-control" formControlName="formaConvenio">
                                                     <option value="null" selected>SELECIONE</option>
                                                     <option *ngFor="let convenio of listConvenio"
@@ -270,7 +323,7 @@
                                         <div class="form-row align-items-center">
                                             <div class="form-group col-md-4">
                                                 <div class="form-group">
-                                                    <label class="consultaPaga">Consulta paga?</label>
+                                                    <label class="consultaPaga">Consulta Já esta Paga?</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radioSim"
@@ -287,7 +340,7 @@
                                             </div>
                                             <div class="form-group col-md-12 mt-lg-n4">
                                                 <div class="input-box">
-                                                    <label for="detalhes">Detalhes:</label>
+                                                    <label for="detalhes">Detalhes sobre a Consulta:</label>
                                                     <textarea class="form-control" rows="3" formControlName="consPagto"
                                                         id="consPagto" [value]="null" (keypress)="qdadeCaracteres()"
                                                         maxlength="2000" disabled></textarea>
@@ -298,11 +351,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-row align-items-center">
+                                    <div class="form-row align-items-center" *ngIf="isDadosAtendimento">
                                         <div class="col-md-12">
-                                            <div class="text-right">
+                                            <div class="text-right" >
                                                 <button class="btn btn-success"
-                                                    (click)="salvar(formNovoAtendimento.value)">
+                                                    (click)="salvar(formNovoAtendimento.value)" >
                                                     Salvar
                                                 </button>
                                             </div>
@@ -313,18 +366,6 @@
                         </form>
                     </nb-card-body>
                 </nb-card>
-            </div>
-        </div>
-    </div>
-</div>
-<div #card>
-    <div class="col-md-12 col-xs-12">
-        <div class="row" *ngIf="isActive" class="loader">
-            <div class="text-center" style="margin-top: -200px;margin-right: 100px;">
-                <button class="btn btn-primary" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Carregando...
-                </button>
             </div>
         </div>
     </div>

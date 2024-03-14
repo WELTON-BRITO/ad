@@ -13,7 +13,7 @@ export class AtendimentoService {
   }
 
   buscaAtendimentos(data: any, successHandle: Function, erroHandle: Function) {
-    return this.httpService.doGet('/api/appointments/all', data, successHandle, erroHandle)
+    return this.httpService.doGet('/api/appointments/status/all', data, successHandle, erroHandle)
   }
 
   buscaPagamentos(data: any, successHandle: Function, erroHandle: Function) {
@@ -42,6 +42,10 @@ export class AtendimentoService {
 
   verificaEspecialidade(id: any, data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/specialty/doctor/' + id, data, successHandle, erroHandle)
+  }
+
+  verificaProcedimento(id: any, data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doGet('/api/doctor/doctorProcedure', data, successHandle, erroHandle)
   }
   
   cancelarAtendimento(data: any, successHandle:Function, errorHandle:Function) {
@@ -79,4 +83,9 @@ export class AtendimentoService {
   timeAvailable(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/appointments/timeAvailable', data, successHandle, erroHandle)
   }
+
+  updateTimeAppointments(id: any, data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doPut('/api/appointments/' + id, data, successHandle, erroHandle)
+  }
+
 }

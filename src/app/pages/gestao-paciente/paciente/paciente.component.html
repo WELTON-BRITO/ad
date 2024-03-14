@@ -6,10 +6,10 @@
           <form id="form-paciente" [formGroup]="formPaciente">
             <div class="col-md-12 col-xs-12">
               <div class="form-group col-md-4">
-                <h5 class="ml-lg-n3">Gestão Paciente</h5>
+                <h5 class="ml-lg-n3">Consulta de Paciente</h5>
               </div>
               <div class="form-row align-items-center">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                   <label for="nome">Escolha o médico*</label>
                   <select class="form-control" formControlName="medico">
                     <option value="null" selected>SELECIONE</option>
@@ -17,24 +17,85 @@
                       medico.name}}</option>
                   </select>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
                   <label for="cpf">CPF</label>
                   <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
-                    placeholder="Digite o CPF..." />
+                    placeholder="CPF do Paciente" />
                 </div>
-                <div class="col-md-5 pl-5">
+                <div class="form-group col-md-2">
+                  <label for="nome">Nome do Paciente</label>
+                  <input class="form-control" name="nome" id="nome" type="text" formControlName="nome"
+                    placeholder="Nome do Paciente" />
+                </div>
+                <div class="form-group col-md-2">
+                  <label class="consultaPaciente">Usuário já é Paciente?</label>
+                  <div class="p-1 row">
+                    <label class="radio-inline pl-2 pl-3">
+                      <input class="mat-button" type="radio" formControlName="optPart" value="S" (change)="ValidarUsuario($event.target.value,formPaciente.value)" [checked]="formPaciente.controls.optPart.value === 'S'"> Sim
+                    </label>
+                    <label class="radio-inline pl-2">
+                      <input class="mat-button" type="radio" formControlName="optPart" value="N" (change)="ValidarUsuario($event.target.value,formPaciente.value)" [checked]="formPaciente.controls.optPart.value === 'N'"> Não
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="form-group col-md-3 pl-5">
                   <div class="text-right">
-                    <button class="btn btn-primary m-2 mb-lg-n1" (click)="pesquisaGeral(formPaciente.value)">
-                      PESQUISAR
+                    <button class="btn btn-primary m-2 mb-lg-n1" (click)="pesquisaGeral(formPaciente.value,true)">
+                      Pesquisar
                     </button>
                     <button class="btn btn-success m-2 mb-lg-n1" (click)="novoPaciente()">
-                      NOVO PACIENTE
+                      Cadastrar Paciente
                     </button>
                   </div>
                 </div>
               </div>
               <br>
               <br>
+
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-12">
+                    <div class="app-box">
+                        <div class="row">
+                            <div class="col-md-4" *ngFor="let row of rowData">
+                                <nb-card>
+                                    <nb-card-body>
+                                        <div class="text-center">
+                                            <img src="{{row.avatar}}" style="height: 55px; border-radius: 50%;">
+                                        </div>
+                                        <p class="card-text">Paciente: {{ row?.nameChild || row.name }}</p>
+                                        <p class="card-text" *ngIf="row?.nameChild && row?.name">Nome Responsável: {{ row?.name }}</p>
+                                        <p class="card-text">Telefone: {{ row.cellPhone }}</p>
+                                        <p class="card-text">Email: {{ row.email  }}</p>
+                                        <p class="card-text">CPF: {{ row.federalId  }}</p>
+    
+                                        <div class="datatable-body-box-actions">
+                                          <button class="btn home-icon pt-4" (click)="cadastrar(row)" title="Cadastrar dependente">
+                                            <i class="fas fa-user-plus" aria-label="Cadastrar dependente"></i>
+                                          </button>
+                                          <button style="margin: 0 15px;" class="btn home-icon pt-4"
+                                                  (click)="visualizar(row)"
+                                                  title="Visualizar dependente">
+                                            <i class="far fa-eye" aria-label="Visualizar dependente"></i>
+                                          </button>
+                                          <button class="btn home-icon pt-4" (click)="precoEspecial(row)" title="Preço especial">
+                                            <i class="fas fa-dollar-sign" aria-label="Preço especial"></i>
+                                          </button>
+                                          <button class="btn home-icon pt-4" (click)="buscaHistorico(row)" title="Visualizar histórico">
+                                            <i class="fas fa-history" aria-label="Visualizar histórico"></i>
+                                          </button>
+                                        </div>
+                                                                                
+                                    </nb-card-body>
+                                </nb-card>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+<!--
               <div class="form-row align-items-center">
                 <div class="form-group col-md-12">
                   <div class="app-box">
@@ -134,3 +195,5 @@
     </div>
   </div>
 </div>
+
+-->

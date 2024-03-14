@@ -22,7 +22,7 @@ import { VisualizarAgendaComponent } from './visualizar-agenda.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AgendaComponent } from './agenda/agenda.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { ModalAgendaPacienteComponent } from './agenda/modal-agenda-paciente/modal-agenda-paciente.component';
+import { ModalDetalheAtendimentoComponent } from './agenda/modal-detalhe-atendimento/modal-detalhe-atendimento.component';
 
 @NgModule({
   imports: [
@@ -51,13 +51,13 @@ import { ModalAgendaPacienteComponent } from './agenda/modal-agenda-paciente/mod
   declarations: [
     VisualizarAgendaComponent,   
     AgendaComponent,
-    ModalAgendaPacienteComponent
-  ],
+    ModalDetalheAtendimentoComponent,
+  ], 
   providers: [    
     EncriptyUtilService,
   ],
   entryComponents: [
-    ModalAgendaPacienteComponent
+    ModalDetalheAtendimentoComponent
   ],
 })
 export class VisualizarAgendaModule { }

@@ -21,9 +21,10 @@ export class LoginComponent implements OnInit {
   public isActive = false;
   public domain = null;
   public listMedico = null;
+  public listClinica = null;
   showPass = false;
   public cnpjCpf = null;
-  public msgErroCpf = 'CPF inválido!!!';
+  public msgErroCpf = 'O CPF é inválido';
   public showMsgErroCpf = false;
 
   constructor(
@@ -71,7 +72,7 @@ export class LoginComponent implements OnInit {
               
           this.isActive = false;
           if(error.error.message == undefined){
-            this.toastrService.danger('Sistema temporariamente indisponível');
+            this.toastrService.danger('Sistema temporariamente indisponível','Aditi Care!' );
           }else{
             this.toastrService.danger(error.error.message);
           }
@@ -81,8 +82,10 @@ export class LoginComponent implements OnInit {
 
   private saveLogin(result) {
 
-    this.toastrService.success('Bem vindo a Aditi Care !');
-    localStorage.clear();
+    this.toastrService.success('Bem Vindo ao Portal da Aditi', 'Aditi Care!')
+
+
+        localStorage.clear();
     localStorage.setItem('Authorization', 'Bearer ' + result.token);
     localStorage.setItem('bway-logged-date', new Date().toString());
     localStorage.setItem('bway-domain', result.domain);
@@ -91,12 +94,43 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('bway-user', result.federalId);
 
     if (result.domain == 'CLINIC') {
+    
+    //Preenchendo os dados do combo do list do médico
+
     this.listMedico = result.doctors
     var b = this.listMedico
     b = JSON.stringify(b);
     sessionStorage.setItem('bway-medico', b);
     var c = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.isActive = false;
+
+    //Preenchendo os dados do combo da Clinica
+    this.listClinica = [ { id: result.entityId, name: result.name }]
+    var b = this.listClinica
+    b = JSON.stringify(b);
+    sessionStorage.setItem('bway-clinica', b);
+    var c = JSON.parse(sessionStorage.getItem('bway-clinica'));
+    this.isActive = false;
+
+    }else if (result.domain == 'DOCTOR') {
+
+    //Preenchendo os dados do combo do list do médico
+    this.listMedico = [ { id: result.entityId, name: result.name }]
+    var b = this.listMedico
+    b = JSON.stringify(b);
+    sessionStorage.setItem('bway-medico', b);
+    var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.isActive = false;
+
+     //Preenchendo os dados do combo da Clinica
+
+     this.listClinica = result.clinics
+     var b = this.listClinica
+     b = JSON.stringify(b);
+     sessionStorage.setItem('bway-clinica', b);
+     var c = JSON.parse(sessionStorage.getItem('bway-clinica'));
+     this.isActive = false;
+
     }
 
    //   this.pesquisaMedico() Desativado após a inclusão dos dados  do médico da clinica no serviço de login

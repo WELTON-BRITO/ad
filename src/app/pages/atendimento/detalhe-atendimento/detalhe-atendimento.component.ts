@@ -18,7 +18,7 @@ export class DetalheAtendimentoComponent implements OnInit {
   public isActive = false;
   public atendimento = {
     medico: null,
-    paciente: null,
+    Nomepaciente: null,
     data: null,
     horario: null,
     nomeResponsavel: null,
@@ -34,11 +34,17 @@ export class DetalheAtendimentoComponent implements OnInit {
     atestado: null,
     id: null,
     nameMother: null,
-    nameFather: null
+    nameFather: null,
+    telefone: null,
+    email: null,
   };
   public showModal: boolean = false;
   public cancellationReason: string = '';
   public paciente = null;
+  public clinicaId = null;
+  public listClinica = null;
+  public listTipoConsulta = [];
+  
 
   settings = {
     //actions: false,
@@ -76,25 +82,80 @@ export class DetalheAtendimentoComponent implements OnInit {
 
   ngOnInit() {
     let data = history.state
+    
 
-    this.atendimento.medico = data.doctor.name
-    this.atendimento.paciente = data.child != null ? data.child.name : data.user.name
-    this.atendimento.nomeResponsavel = data.user.name
-    this.atendimento.data = moment(data.dateService).format('DD/MM/YYYY')
-    this.atendimento.horario = data.startTime.concat(' - ', data.endTime)
-    this.atendimento.formaPagamento = data.typePayment
-    this.atendimento.modalidade = data.typeService
-    this.atendimento.urlCall = data.meetingUrl
-    this.atendimento.status = data.status
-    this.atendimento.especialidade = data.specialty.name
-    this.atendimento.convenio = data.plan != null ? data.plan.name : null
-    this.atendimento.id = data.id
-    this.atendimento.comprovante = data.paymentProof
-    this.atendimento.nameFather = data.child?.nameFather ?? null;
-    this.atendimento.nameMother = data.child?.nameMother ?? null;
-    this.paciente = data
+    if(localStorage.getItem('detalhesData')==null){
+
+    if (data.doctor && data.doctor.name !== undefined){
+
+      const dataNascimento = data.child?.birthDate ?? data.user?.birthDate ?? '20240101';
+      const idadePessoa = this.calcularIdade(dataNascimento) ?? null;
+   
+      let allData = {
+        medico: data.doctor?.name ?? null,
+        nomePaciente: data.child?.name ?? data.user?.name ?? null,
+        nomeResponsavel: data.user?.name ?? null,
+        data: moment(data.dateService).format('DD/MM/YYYY'),
+        horario: data.startTime.concat(' - ', data.endTime),
+        formaPagamento: data?.typePayment?? null,
+        modalidade: data.typeService?? null,
+        urlCall: data.meetingUrl?? null,
+        status: data.status?? null,
+        especialidade: data.specialty?.name ?? null,
+        convenio: data.plan?.name ?? null,
+        id: data.id?? null,
+        comprovante: data.paymentProo?? null,
+        nameFather: data.child?.nameFather ?? null,
+        nameMother: data.child?.nameMother ?? null,
+        telefone: data.user?.cellPhone ?? null,
+        email: data.user?.emailUser ?? null,
+        dateNasc: idadePessoa ?? null,
+        ultimaConsulta: data.child?.dateRegister ?? null,
+        doctorId: data.doctor?.id ?? null,
+        userId: data.user?.id ?? null,
+        idChild: data.child?.idChild ?? null,
+        sexo: data.biologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
+        tipoSanguineo: data.child?.bloodType ?? null,
+    };
+        
+    this.paciente = allData
+
+    this.atendimento.status = data.status?? null;
+
+    this.saveData('detalhesData', allData);
+    return this.paciente;
+
+  }else{
+
+    this.router.navigate(['/pages/atendimento/buscar-atendimento'])
 
   }
+  }else{
+    
+    const allData = localStorage.getItem('detalhesData')
+
+if (allData) {
+  // Converta os dados de string para objeto
+  const parsedData = JSON.parse(allData);
+
+  // Preencha os cards com os dados recuperados
+  this.paciente = parsedData;
+}
+  }
+  }
+      // Salva os dados no LocalStorage
+      saveData(key: string, data: any): void {
+        localStorage.setItem(key, JSON.stringify(data));
+      }
+    
+      // Recupera os dados do LocalStorage
+      getData(key: string): any {
+        const storedData = localStorage.getItem(key);
+        return storedData ? JSON.parse(storedData) : null;
+      }
+  
+
+  
   abrirModalCancelamento() {
     this.dialogService.open(MotivoCancelamentoComponent)
       .onClose.subscribe(reason => this.cancelarAtendimento(reason));
@@ -107,20 +168,20 @@ export class DetalheAtendimentoComponent implements OnInit {
         this.isActive = true
 
         let register = {
-          'id': this.atendimento.id,
+          'id': this.paciente.id,
           'reasonCancellation': reason
         }
 
         this.service.cancelarAtendimento(register, (response) => {
           this.isActive = false
-          this.toastrService.success('Atendimento cancelado com sucesso !!!');
+          this.toastrService.success('Atendimento Cancelado com Sucesso','Aditi Care!');
           this.location.back()
         }, (message) => {
           this.isActive = false;
           this.toastrService.danger(message);
         });
       } else {
-        this.toastrService.danger('Preencha o motivo de cancelamento.');
+        this.toastrService.danger('Preencha o Motivo de Cancelamento','Aditi Care!');
       }
 
     }
@@ -130,11 +191,12 @@ export class DetalheAtendimentoComponent implements OnInit {
 
     this.isActive = true
 
-    this.service.aprovarPagamento(null, this.atendimento.id, (response) => {
+    this.service.aprovarPagamento(null, this.paciente.id, (response) => {
 
       this.isActive = false
-      this.toastrService.success('Pagamento aprovado com sucesso !!!');
-      this.location.back()
+      this.toastrService.success('Pagamento aprovado com sucesso','Aditi Care!');
+      this.atendimento.status ='03 - Consulta Confirmada';
+
     }, (message) => {
       this.isActive = false;
       this.toastrService.danger(message);
@@ -143,23 +205,40 @@ export class DetalheAtendimentoComponent implements OnInit {
   }
 
   abrirConsulta() {
+    let data = history.state
     let rowData = [{
       tela: 'atendimento',
-      rowData: this.paciente
+      rowData: data
+
     }]
     this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: rowData });
   }
 
   previousPage() {
     this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+    localStorage.removeItem('detalhesData');
+    localStorage.removeItem('histDetails');
+
   }
 
   abrirComprovante() {
 
-    this.service.visualizarAnexo(this.atendimento.id, null, (response => {
+    let blobURL: string;
+
+    this.service.visualizarAnexo(this.paciente.id, null, (response => {
       
       if (response != null) {
-        const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'image/jpeg'));
+
+        if(response.paymentProof == 'JPEG' || response.paymentProof == 'JPG' || response.paymentProof == 'PNG'){
+          const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'image/jpeg'));
+        }
+        else if (response.paymentProof=='PDF')
+        {
+          const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'document/pdf'));
+        }else {
+          const blobURL = URL.createObjectURL(this.pdfBlobConversion(response.paymentProof, 'image/jpeg'));
+        }
+
         const theWindow = window.open(blobURL);
         const theDoc = theWindow.document;
         const theScript = document.createElement('script');
@@ -169,13 +248,13 @@ export class DetalheAtendimentoComponent implements OnInit {
         theScript.innerHTML = 'window.onload = ${injectThis.toString()};';
         theDoc.body.appendChild(theScript);
       } else {
-        this.toastrService.danger('Não existe comprovante em anexo!!!');
+        this.toastrService.warning('Este Atendimento Não Possui Anexo','Aditi Care!');
       }
 
 
     }), (error) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(error.message);
 
     });
 
@@ -214,6 +293,26 @@ export class DetalheAtendimentoComponent implements OnInit {
   }
 
   editarConsulta() {
-    this.router.navigateByUrl('/pages/atendimento/agendar-consulta', { state: this.paciente });
+    this.router.navigateByUrl('/pages/atendimento/reagendar-atendimento', { state: this.paciente });
   }
+  verificaClinica(data) {
+    this.clinicaId = data;
+  }
+
+    calcularIdade(dataNascimento: string){
+      const hoje = new Date();
+      const nascimento = new Date(dataNascimento);
+  
+      const diff = hoje.getTime() - nascimento.getTime();
+      const idade = new Date(diff);
+  
+      const anos = idade.getUTCFullYear() - 1970;
+      const meses = idade.getUTCMonth();
+      const dias = idade.getUTCDate() - 1;
+  
+      const dataCompleta = `Nasceu em ${nascimento.getFullYear()}, e Tem ${anos} anos ${meses} Meses e ${dias} Dias de Vida.`;
+  
+      return dataCompleta;
 }
+}
+

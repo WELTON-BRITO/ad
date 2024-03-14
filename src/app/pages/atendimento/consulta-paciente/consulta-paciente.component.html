@@ -20,39 +20,60 @@
                             <div class="form-group col-md-6 ">
                                 <div class="form-group ">
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Nome:</label></div>
-                                        <label>{{atendimento.nome}} </label>
+                                        <div class="mr-2"><label>Nome do Paciente:</label></div>
+                                        <label>{{atendimento.nomePaciente}} </label>
                                     </div>
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Data Nasc:</label></div>
+                                        <div class="mr-2"><label>Tempo de Vida:</label></div>
                                         <label>{{atendimento.dateNasc}} </label>
                                     </div>
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Especialidade:</label></div>
+                                        <div class="mr-2"><label>Data do Atendimento:</label></div>
+                                        <label>{{atendimento.data}} {{atendimento.horario}} </label>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Especialidade da Consulta:</label></div>
                                         <label>{{atendimento.especialidade}} </label>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Nome da Mãe:</label></div>
+                                        <label>{{atendimento.nameMother}} </label>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Nome do Pai:</label></div>
+                                        <label>{{atendimento.nameFather}} </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 ">
                                 <div class="form-group ">
                                     <div class="form-row">
-                                        <div class="mr-2"><label>Última consulta:</label></div>
+                                        <div class="mr-2"><label>Data da Última Consulta:</label></div>
                                         <label>{{atendimento.ultimaConsulta}} </label>
                                     </div>
                                     <div class="form-row">
-                                        <div class="mr-2" *ngIf="atendimento.sexo !== null"><label>Sexo:</label>
-                                        </div>
-                                        <label>{{atendimento.sexo}} </label>
-                                        <div class="mr-2" *ngIf="atendimento.sexo == null"><label></label></div>
-                                        <!--<label>{{null}} </label>-->
+                                        <div class="mr-2"><label>Modalidade:</label></div>
+                                        <label>{{atendimento.modalidade}} </label>
                                     </div>
                                     <div class="form-row">
-                                        <div class="mr-2" *ngIf="atendimento.tipoSanguineo !== null"><label>Tipo de
-                                                sangue:</label></div>
-                                        <label>{{atendimento.tipoSanguineo}} </label>
-                                        <div class="mr-2" *ngIf="atendimento.tipoSanguineo == null"><label></label>
+                                        <div class="mr-2"><label>Sexo:</label>
                                         </div>
-                                        <!--<label>{{null}} </label>-->
+                                        <label>{{atendimento.sexo}} </label>
+                                        <div class="mr-2"><label></label></div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Grupo Sanguineo:</label></div>
+                                        <label>{{atendimento.tipoSanguineo}} </label>
+                                        <div class="mr-2"><label></label>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Telefone Paciente:</label></div>
+                                        <label>{{atendimento.telefone}} </label>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="mr-2"><label>Email Paciente:</label></div>
+                                        <label>{{atendimento.email}} </label>
                                     </div>
                                 </div>
                             </div>
@@ -64,82 +85,163 @@
                         <nb-actions size="large" fullWidth>
                             <nb-action>
                                 <nb-icon class="action-icon" icon="file-text-outline"
-                                    (click)="consultaHistorico()"></nb-icon>
-                                <span>Ver histórico</span>
+                                    (click)="consultaHistorico(true)"></nb-icon>
+                                <span>Consultar Histórico</span>
                             </nb-action>
-                            <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'">
+                            <nb-action *ngIf="atendimento.status === '03 - Consulta Confirmada' && !checkedConsulta">
                                 <nb-icon class="action-icon" icon="wifi-outline" (click)="detalhesConsulta()"></nb-icon>
                                 <span>Atendimento</span>
-                            </nb-action>
+                              </nb-action>
+                              
                         </nb-actions>
                     </nb-card-body>
                 </nb-card>
                 <div *ngIf="isDetalhes">
                     <form id="form-consulta-paciente" [formGroup]="formConsultaPaciente">
                         <nb-card>
+
+                            <nb-card-body>
+                                <div class="form-group col-md-12">
+                                    <div><label><h6>Dados Gerais do Paciente:</h6></label></div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="altura">Altura do Paciente</label>
+                                            <input class="form-control" name="altura" id="altura" type="text" formControlName="altura">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="peso">Peso do Paciente</label>
+                                            <input class="form-control" name="peso" id="peso" type="text" formControlName="peso">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="imc">Valor IMC</label>
+                                            <input class="form-control" name="imc" id="imc" type="text" formControlName="imc" disabled />
+                                        </div>
+                                        <div class="form-grou col-md-3 pt-4 text-right">
+                                            <button class="btn btn-success" (click)="calcularIMC(formConsultaPaciente)">
+                                                Calcular IMC
+                                            </button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div><label><h6>Dados Especificos de {{atendimento.especialidade}} :</h6></label></div>
+
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="circCabeca">Circunferência da Cabeça</label>
+                                                <input class="form-control" name="circCabeca" id="circCabeca" type="text"
+                                                    formControlName="circCabeca" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="circAbdomen">Circunferência Abdominal</label>
+                                                <input class="form-control" name="circAbdomen" id="circAbdomen" type="text"
+                                                    formControlName="circAbdomen" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="tempoRetorno">Prazo para Retorno (Dias) </label>
+                                                <input class="form-control" name="tempoRetorno" id="tempoRetorno" type="text"
+                                                    formControlName="tempoRetorno" />
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                            </nb-card-body>
+                        </nb-card>
+                        <nb-card>
                             <nb-card-body>
                                 <div class="form-row align-items-center">
-                                    <div class="form-group col-md-2">
-                                        <label for="tempoRetorno">Tempo retorno(Dias)</label>
-                                        <input class="form-control" name="tempoRetorno" id="tempoRetorno" type="text"
-                                            formControlName="tempoRetorno" (keypress)="number($event)" disabled />
+                                    <div class="col-lg-12">
+                                        <div class="input-medica">
+                                            <div><label><h6>Prescrição</h6></label></div>
+                                            <textarea autosize class="form-control" formControlName="prescricaoMedica"
+                                                rows="3" id="prescricaoMedica" placeholder="Informe a Prescrição médica"
+                                                [value]="" (keypress)="caracteresMedica()" maxlength="20000"
+                                                ></textarea>
+                                            <p class="text-muted"><small><span class="caracteres"
+                                                        name="txtArea">{{this.tamMedica}}</span></small>
+                                                quantidade máxima de caracteres</p>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="altura">Altura</label>
-                                        <input class="form-control" name="altura" id="altura" type="text"
-                                            formControlName="altura" disabled />
+                                </div>
+                                <div class="form-row align-items-center">
+                                    <div class="col-lg-12">
+                                        <div class="input-box">
+                                            <label for="detalhesInterno"><h6>Detalhes do Atendimento (Interno):</h6></label>
+                                            <textarea autosize class="form-control" rows="3"
+                                                formControlName="detalhesInterno" id="detalhesInterno" [value]=""
+                                                placeholder="Informe Detalhes do Prontuario Interno. Estas Informações Não Aparecem Para os Pacientes."
+                                                (keypress)="caracteresInterno()" maxlength="20000" ></textarea>
+                                            <p class="text-muted"><small><span class="caracteres"
+                                                        name="txtArea">{{this.tamInterno}}</span></small>
+                                                quantidade máxima de caracteres</p>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="peso">Peso</label>
-                                        <input class="form-control" name="peso" id="peso" type="text"
-                                            formControlName="peso" disabled />
+                                </div>
+                                <div class="form-row align-items-center">
+                                    <div class="col-lg-12">
+                                        <div class="input">
+                                            <label for="detalhesCliente"><h6>Detalhes do Atendimento (Cliente):</h6></label>
+                                            <textarea autosize class="form-control" rows="3"
+                                                formControlName="detalhesCliente" id="detalhesCliente" [value]=""
+                                                placeholder="Informe Detalhes do Prontuario que Serão Exibidos aos Pacientes."
+                                                (keypress)="caracteresCliente()" maxlength="20000" ></textarea>
+                                            <p class="text-muted"><small><span class="caracteres"
+                                                        name="txtArea">{{this.tamCliente}}</span></small>
+                                                quantidade máxima de caracteres</p>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="circCabeca">Circ cabeça</label>
-                                        <input class="form-control" name="circCabeca" id="circCabeca" type="text"
-                                            formControlName="circCabeca" disabled />
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="circAbdomen">Circ abdomen</label>
-                                        <input class="form-control" name="circAbdomen" id="circAbdomen" type="text"
-                                            formControlName="circAbdomen" disabled />
+                                </div>
+                                <div class="form-row align-items-center">
+                                    <div class="col-lg-12">
+                                        <div class="input-exame">
+                                            <label for="pedidoExame"><h6>Pedido De Exame:</h6></label>
+                                            <textarea autosize class="form-control" rows="3"
+                                                formControlName="pedidoExame" id="pedidoExame" [value]=""
+                                                placeholder="Informe Aqui os Pedidos de Exame."
+                                                (keypress)="caracteresExame()" maxlength="20000" ></textarea>
+                                            <p class="text-muted"><small><span class="caracteres"
+                                                        name="txtArea">{{this.tamExame}}</span></small>
+                                                quantidade máxima de caracteres</p>
+                                        </div>
                                     </div>
                                 </div>
                             </nb-card-body>
                         </nb-card>
                         <nb-card>
                             <nb-card-body>
+                                <div class="form-group col-md-12">
+                                    <h5>Dados do Anexo:</h5>
+                                </div>
                                 <div class="form-row align-items-center">
                                     <div class="form-group col-md-6">
-                                        <label for="urlReceita">URL receita</label>
+                                        <label for="urlReceita">URL da Receita</label>
                                         <input class="form-control" name="urlReceita" id="urlReceita" type="text"
-                                            formControlName="urlReceita" disabled />
+                                            formControlName="urlReceita" />
                                     </div>
                                     <div class="form-group col-md-6" *ngIf="isReceita">
-                                        <div mdbBtn rounded="true" outline="true" color="secondary" size="md"
-                                            mdbWavesEffect>
-                                            <label for="anexoReceita">Anexo receita</label>
+                                        <div mdbBtn rounded="true" outline="true" color="secondary" size="md" mdbWavesEffect>
+                                            <label for="anexoReceita">Anexar Receita</label>
                                             <div class="custom-file">
-                                                <input class="custom-file-input" type="file" mdbFileSelect
-                                                    (change)="onUploadReceita($event)"
+                                                <input class="custom-file-input" type="file" mdbFileSelect (change)="onUploadReceita($event)"
                                                     accept="text/xml, application/pdf">
-                                                <label #inputFileReceita class="custom-file-label"
-                                                    for="validatedCustomFile">Selecione o
+                                                <label #inputFileReceita class="custom-file-label" for="validatedCustomFile">Selecione o
                                                     arquivo...</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            
                                 <div class="form-row align-items-center">
                                     <div class="form-group col-md-6">
-                                        <label for="urlAtestado">URL atestado</label>
+                                        <label for="urlAtestado">URL do Atestado</label>
                                         <input class="form-control" name="urlAtestado" id="urlAtestado" type="text"
-                                            formControlName="urlAtestado" disabled />
+                                            formControlName="urlAtestado"  />
                                     </div>
                                     <div class="form-group col-md-6" *ngIf="isAtestado">
                                         <div mdbBtn rounded="true" outline="true" color="secondary" size="md"
                                             mdbWavesEffect>
-                                            <label for="anexoAtestado">Anexo atestado</label>
+                                            <label for="anexoAtestado">Anexar Atestado</label>
                                             <div class="custom-file">
                                                 <input class="custom-file-input" type="file" mdbFileSelect
                                                     (change)="onUploadAtestado($event, $event.target)"
@@ -153,155 +255,78 @@
                                 </div>
                                 <div class="form-row align-items-center">
                                     <div class="form-group col-md-6">
-                                        <label for="urlExame">URL exame</label>
+                                        <label for="urlExame">URL Do Exame</label>
                                         <input class="form-control" name="urlExame" id="urlExame" type="text"
-                                            formControlName="urlExame" disabled />
+                                            formControlName="urlExame"  />
                                     </div>
-                                </div>
-                            </nb-card-body>
-                        </nb-card>
-                        <nb-card>
-                            <nb-card-body>
-                                <div class="form-row align-items-center">
-                                    <div class="col-lg-12">
-                                        <div class="input-medica">
-                                            <div><label>Prescrição </label></div>
-                                            <textarea autosize class="form-control" formControlName="prescricaoMedica"
-                                                rows="3" id="prescricaoMedica" placeholder="Prescrição médica"
-                                                [value]="" (keypress)="caracteresMedica()" maxlength="20000"
-                                                disabled></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamMedica}}</span></small>
-                                                quantidade máxima de caracteres</p>
+                                    <div class="form-group col-md-6" *ngIf="isReceita">
+                                        <div mdbBtn rounded="true" outline="true" color="secondary" size="md"
+                                            mdbWavesEffect>
+                                            <label for="anexoReceita">Anexar Exame</label>
+                                            <div class="custom-file">
+                                                <input class="custom-file-input" type="file" mdbFileSelect
+                                                    (change)="onUploadAtestado($event, $event.target)"
+                                                    accept="text/xml, application/pdf">
+                                                <label #inputFileReceita class="custom-file-label"
+                                                    for="validatedCustomFile">Selecione o
+                                                    arquivo...</label>
+                                            </div>
                                         </div>
                                     </div>
+                                  
                                 </div>
-                                <div class="form-row align-items-center">
-                                    <div class="col-lg-12">
-                                        <div class="input-box">
-                                            <label for="detalhesInterno">Detalhes(Interno):</label>
-                                            <textarea autosize class="form-control" rows="3"
-                                                formControlName="detalhesInterno" id="detalhesInterno" [value]=""
-                                                (keypress)="caracteresInterno()" maxlength="20000" disabled></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamInterno}}</span></small>
-                                                quantidade máxima de caracteres</p>
-                                        </div>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                      <div class="text-right" *ngIf="bloqueioSave">
+                                        <button class="btn btn-warning col-md-2" (click)="salvareContinuar(formConsultaPaciente.value)" [disabled]="isSaving">
+                                          Salvar e Continuar
+                                        </button>
+                                      </div>
+                                      <div class="text-right" style="margin-top: 20px;" *ngIf="bloqueioSave">
+                                        <button class="btn btn-success col-md-2" (click)="salvar(formConsultaPaciente.value)" [disabled]="isSaving">
+                                          Salvar e Finalizar
+                                        </button>
+                                      </div>
                                     </div>
-                                </div>
-                                <div class="form-row align-items-center">
-                                    <div class="col-lg-12">
-                                        <div class="input">
-                                            <label for="detalhesCliente">Detalhes(cliente):</label>
-                                            <textarea autosize class="form-control" rows="3"
-                                                formControlName="detalhesCliente" id="detalhesCliente" [value]=""
-                                                (keypress)="caracteresCliente()" maxlength="20000" disabled></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamCliente}}</span></small>
-                                                quantidade máxima de caracteres</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row align-items-center">
-                                    <div class="col-lg-12">
-                                        <div class="input-exame">
-                                            <label for="pedidoExame">Pedido exame:</label>
-                                            <textarea autosize class="form-control" rows="3"
-                                                formControlName="pedidoExame" id="pedidoExame" [value]=""
-                                                (keypress)="caracteresExame()" maxlength="20000" disabled></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamExame}}</span></small>
-                                                quantidade máxima de caracteres</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <button class="btn btn-primary m-2" (click)="voltar()">
-                                        Voltar
-                                    </button>
-                                    <button class="btn btn-success" (click)="salvar(formConsultaPaciente.value)">
-                                        Salvar
-                                    </button>
-                                </div>
+                                  </div>
+                                  
+                                  
                             </nb-card-body>
                         </nb-card>
                     </form>
                 </div>
+
                 <div *ngIf="isHistorico">
                     <div class="form-row align-items-center">
                         <div class="form-group col-md-12">
                             <div class="app-box">
                                 <nb-card>
-                                    <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
-                                        [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
-                                        [messages]="{emptyMessage: 'Sem dados...'}" [limit]="10">
-
-                                        <ngx-datatable-column name="Nome" prop="nome">
-                                            <ng-template ngx-datatable-cell-template let-row="row">
-                                                <div class="text-left">
-                                                    {{ row.name }}
-                                                </div>
-                                            </ng-template>
-                                        </ngx-datatable-column>
-                                        <ngx-datatable-column name="CPF" prop="cpf">
-                                            <ng-template ngx-datatable-cell-template let-row="row">
-                                                <div class="text-center">
-                                                    {{ row.cpf }}
-                                                </div>
-                                            </ng-template>
-                                        </ngx-datatable-column>
-                                        <ngx-datatable-column name="Data" prop="dataNascimento">
-                                            <ng-template ngx-datatable-cell-template let-row="row">
-                                                <div class="text-center">
-                                                    {{ row.birthDate }}
-                                                </div>
-                                            </ng-template>
-                                        </ngx-datatable-column>
-                                        <ngx-datatable-column [sortable]="false" name="Ações" prop="acoes" [canAutoResize]="true">
-                                            <ng-template ngx-datatable-cell-template let-row="row">
-                                                <div class="text-center">
-                                                    <a class="home-icon" (click)="visualizar(row)" title="Visualizar">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                </div>
-                                            </ng-template>
-                                        </ngx-datatable-column>
-                                        <ngx-datatable-footer>
-                                            <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
-                                                let-pageSize="pageSize" let-selectedCount="selectedCount"
-                                                let-curPage="curPage" let-offset="offset">
-                                                <div>
-                                                    <div class="page-count">
-                                                        Total de Registros: {{rowCount}}
+                                    <nb-card-body>
+                                        <div class="row">
+                                            <div class="col-md-4" *ngFor="let row of rowData">
+                                                <nb-card>
+                                                    <nb-card-header>Data da Consulta: {{ row.dateService  }} {{ row.horario  }}</nb-card-header>
+                                                    <nb-card-body>
+                                                        <p>Médico: {{ row.name }}</p>
+                                                        <p>Tipo do Serviço: {{ row.typeService }}</p>
+                                                        <p>Nome Responsável: {{ row.NameResponse }}</p>
+                                                        <p>CPF Responsável: {{ row. federalIdUser }}</p>
+                                                        <p>Telefone Responsável: {{ row.cellPhoneUser }}</p>
+                                                        <p>Email Responsável: {{ row.emailUser }}</p>
+                                                    </nb-card-body>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-primary mb-2" (click)="visualizar(row)" title="Detalhe">
+                                                          <i class="fa fa-info-circle"></i> Visualizar Consulta
+                                                        </button>
                                                     </div>
-                                                </div>
-                                                <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
-                                                    [pagerRightArrowIcon]="'fa fa-angle-double-right '"
-                                                    [pagerPreviousIcon]="'fa fa-angle-left'"
-                                                    [pagerNextIcon]="'fa fa-angle-right '" [page]="curPage"
-                                                    [size]="pageSize" [count]="rowCount"
-                                                    [hidden]="!((rowCount / pageSize) > 1)"
-                                                    (change)="myTable.onFooterPage($event)">
-                                                </datatable-pager>
-                                            </ng-template>
-                                        </ngx-datatable-footer>
-                                    </ngx-datatable>
+                                                </nb-card>
+                                            </div>
+                                        </div>
+                                    </nb-card-body>
                                 </nb-card>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div #card>
-        <div class="col-md-12 col-xs-12">
-            <div class="row" *ngIf="isActive" class="loader">
-                <div class="text-center" style="margin-top: -200px;margin-right: 100px;">
-                    <button class="btn btn-primary" type="button" disabled>
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Carregando...
-                    </button>
                 </div>
             </div>
         </div>

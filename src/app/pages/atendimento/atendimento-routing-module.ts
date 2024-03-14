@@ -8,6 +8,9 @@ import { ConsultaPacienteComponent } from "./consulta-paciente/consulta-paciente
 import { DetalheAtendimentoComponent } from "./detalhe-atendimento/detalhe-atendimento.component";
 import { FilaEsperaComponent } from "./fila-espera/fila-espera.component";
 import { AgendarConsultaComponent } from "./agendar-consulta/agendar-consulta.component";
+import { bloquearAtendimentoComponent } from "./bloquear-atendimento/bloquear-atendimento.component";
+import { reagendarAtendimentoComponent } from "./reagendar/reagendar-atendimento.component";
+
 
 const routes: Routes = [{
   path: '',
@@ -37,6 +40,16 @@ const routes: Routes = [{
       path: 'agendar-consulta',
       component: AgendarConsultaComponent,
     },
+    {
+      path: 'bloquear-atendimento',
+      component: bloquearAtendimentoComponent,
+    }
+    ,
+    {
+      path: 'reagendar-atendimento',
+      component: reagendarAtendimentoComponent,
+    }
+    ,
   ],
 
 }];
@@ -59,5 +72,6 @@ export const routedComponents = [
   ConsultaPacienteComponent,
   DetalheAtendimentoComponent,
   FilaEsperaComponent,
-  AgendarConsultaComponent
+  AgendarConsultaComponent,
+  bloquearAtendimentoComponent
 ];

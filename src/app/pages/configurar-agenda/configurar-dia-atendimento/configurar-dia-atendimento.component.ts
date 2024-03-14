@@ -191,7 +191,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
         this.isActive = true;
         this.service.salveAtenHora(register, (response => {
           this.isActive = false;
-          this.toastrService.success('Registro cadastrado com sucesso !!!');
+          this.toastrService.success('Registro cadastrado com sucesso !!!','Aditi Care!');
           this.limpaForm()
           this.verificaHorario(this.doctorId, this.clinicaId)
         }), (error) => {
@@ -387,7 +387,7 @@ export class ConfigurarDiaAtendimentoComponent implements OnDestroy {
     this.isActive = true;
     this.service.delete(id, (response => {
       this.isActive = false;
-      this.toastrService.success('Registro removido com sucesso !!!');
+      this.toastrService.success('Registro removido com sucesso !!!','Aditi Care!');
       this.verificaHorario(this.doctorId, this.clinicaId)
     }), (error) => {
       this.verificaHorario(this.doctorId, this.clinicaId)

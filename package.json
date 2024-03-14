@@ -32,7 +32,7 @@
   "dependencies": {
     "@angular/animations": "^14.2.12",
     "@angular/cdk": "12.1.0",
-    "@angular/common": "^14.2.12",
+    "@angular/common": "^14.3.0",
     "@angular/compiler": "^14.2.12",
     "@angular/core": "^14.2.12",
     "@angular/forms": "^14.2.12",
@@ -76,6 +76,7 @@
     "ng2-smart-table": "^1.6.0",
     "ngx-echarts": "^4.2.2",
     "ngx-mask": "^10.0.4",
+    "ngx-toastr": "^18.0.0",
     "node-sass": "^8.0",
     "normalize.css": "6.0.0",
     "pace-js": "1.0.2",

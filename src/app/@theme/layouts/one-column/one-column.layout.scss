@@ -5,5 +5,8 @@
 @include nb-install-component() {
   .menu-sidebar ::ng-deep .scrollable {
     padding-top: nb-theme(layout-padding-top);
+    display: flex;
+    flex-direction: column; /* Alinha os itens verticalmente */
+    overflow-y: auto; /* Adiciona rolagem vertical se necessário */
   }
 }

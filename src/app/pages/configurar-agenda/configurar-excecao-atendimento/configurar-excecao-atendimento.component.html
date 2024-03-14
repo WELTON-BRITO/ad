@@ -23,13 +23,13 @@
                   </div>
                   <div class="form-group col-md-3">
                     <div class="form-group">
-                      <div class="div-medico">
+                      <div class="div-clinica">
                         <label for="clinica">Escolha a clínica*</label>
                         <select class="form-control" formControlName="clinica"
                           (change)="verificaClinica($event.target.value)">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let clinica of listClinica" value="{{ clinica.id }}">{{
-                            clinica.socialName}}</option>
+                            clinica.name}}</option>
                         </select>
                       </div>
                     </div>
@@ -119,6 +119,13 @@
                           <ng-template ngx-datatable-cell-template let-row="row">
                             <div class="text-center">
                               {{ row.nome }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Nome Clinica" prop="Nome Clinica">
+                          <ng-template ngx-datatable-cell-template let-row="row">
+                            <div class="text-center">
+                              {{ row.name }}
                             </div>
                           </ng-template>
                         </ngx-datatable-column>

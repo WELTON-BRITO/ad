@@ -22,6 +22,9 @@ export class NovoAtendimentoComponent {
     public listPagto = null;
     public listDependente = null;
     public listTipoEspecialidade = null;
+    public listTipoProcedimento = null;
+    public listTempoAtendimento  = null;
+    public tipoProcedimento = null;
     public listConvenio = null;
     public isConvenio = false;
     public isPagto = false;
@@ -47,6 +50,16 @@ export class NovoAtendimentoComponent {
     public retorno = null;
     public isEncaixe = false;
     public isEncaixe1 = false;
+    public optEncaixe = null;
+    public telefoneResponsavel = null
+    public emailResponsavel = null
+    public optPart = null;
+    public exibirDivProcedimento: boolean = false;
+    public bloqueioSave: boolean = false;
+    public origem: null;
+
+
+
     public tipoCardEncaixe: any[] = [{
         id: '',
         horaInicio: '',
@@ -54,37 +67,76 @@ export class NovoAtendimentoComponent {
     }];
     public encaixe = false;
     public dateEncaixe = null;
+    public horarioSelecionado: string;
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
         private toastrService: NbToastrService,
         private service: AtendimentoService) {
 
-        this.listTipoConsulta = [{
+        this.listTipoConsulta = [
+        
+        
+            {
             id: 1,
-            descricao: "Presencial"
-        },
-        {
-            id: 2,
-            descricao: "Video Chamada"
-        },
-        {
+            descricao: "01 - Presencial"
+          },
+          {
             id: 3,
-            descricao: "Emergencial Presencial"
-        },
-        {
-            id: 4,
-            descricao: "Em Casa"
-        },
-        {
+            descricao: "02 - Presencial Emergencial"
+          },
+          {
+            id: 2,
+            descricao: "03 - Por Video Chamada"
+          },
+          {
             id: 5,
-            descricao: "Video Chamada Emergencial"
-        }];
+            descricao: "04 - Video Chamada Emergencial"
+          },
+          {
+            id: 4,
+            descricao: "05 - Em Casa"
+          },
+          {
+            id: 6,
+            descricao: "06 - Procedimentos"
+          }
+    ];
+
+    this.listTempoAtendimento = [
+        
+        
+        {
+        id:  15,
+        name: "15 Minutos"
+      },
+      {
+        id: 30,
+        name: "30 Minutos"
+      },
+      {
+        id: 15,
+        name: "45 Minutos"
+      },
+      {
+        id: 60,
+        name: "60 Minutos"
+      },
+      {
+        id: 90,
+        name: "90 Minutos"
+      },
+      {
+        id: 120,
+        name: "120 Minutos"
+      }
+];
 
     }
 
     ngOnInit() {
 
+        let data = history.state
         this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
         this.verificaMedico(this.listMedico[0].id);
         this.pagamento();
@@ -98,13 +150,36 @@ export class NovoAtendimentoComponent {
             formaConvenio: [null],
             incluirDep: [null],
             consPagto: [null],
-            nomeResponsavel: [null],
+            nomeResponsavel: [{ value: null, disabled: true }],
             tipoConsulta: [null],
             tipoEspecialidade: [null],
-        })
-
+            tipoProcedimento: [null],
+            optEncaixe: null,
+            telefoneResponsavel: [{ value: null, disabled: true }],
+            emailResponsavel: [{ value: null, disabled: true }],
+            optPart: null,
+            listTempoAtendimento: [null],
+            tempoAtendimento: null,
+            horarioSelected: null,
+          });
+          
         this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
-        this.tipoCardEncaixe = [];
+        this.formNovoAtendimento.controls['tipoConsulta'].setValue(this.listTipoConsulta[0].id, { onlySelf: true });
+
+        this.tipoCardEncaixe = []; 
+
+        if(data.data !=null){
+            this.origem = data?.location
+            this.formNovoAtendimento.controls['dataInicio'].setValue(this.formatarData(data.data), { onlySelf: true });
+            this.formNovoAtendimento.controls['tipoConsulta'].setValue(1, { onlySelf: true });
+           // this.formNovoAtendimento.controls['tipoEspecialidade'].setValue(1, { onlySelf: true });
+            this.formNovoAtendimento.controls['optEncaixe'].setValue('N', { onlySelf: true });
+            this.formNovoAtendimento.controls['horarioSelected'].setValue(data.data + ' - ' + data.horario, { onlySelf: true });
+            this.horarioSelecionado = (data.data + ' - ' + data.horario);
+            this.dadosHorario = data;
+            this.isConfAtendimento = true;       
+    }
+
     }
 
     pagamento() {
@@ -123,14 +198,32 @@ export class NovoAtendimentoComponent {
 
     buscaConvenio(data) {
 
-        this.service.buscaConvenio(data, null, (response) => {
+        if (data == 'S') {
+            this.isConvenio = false;
+            this.isPagto = true;
+        } else {
+            this.isActive = true;
+            this.isConvenio = true;
+            this.isPagto = false;
 
-            this.listConvenio = response
-
-        }, (error) => {
-            this.toastrService.danger(error.error.message);
-        });
-
+            this.service.buscaConvenio(this.doctorId, null, (response) => {
+                this.isActive = false;
+                if (response.length === 0){
+                this.toastrService.danger('Este médico não aceita Convênio','Aditi Care');
+                this.optPart = true;
+                document.getElementById('radioSS').setAttribute('checked', 'true');
+                const radioSS = document.getElementById('radioSS') as HTMLInputElement;
+                radioSS.checked = true;
+                this.isConvenio = false;
+                this.isPagto = true;
+            }else{
+                    this.listConvenio = response;
+                }
+        
+            }, (error) => {
+                this.toastrService.danger(error.message);
+            });
+        }
     }
 
     buscaDependente(data) {
@@ -159,7 +252,7 @@ export class NovoAtendimentoComponent {
             });
 
         } else {
-            this.toastrService.danger('O campos CPF é obrigatórios!!!');
+            this.toastrService.danger('O CPF deve ser Informado','Aditi Care');
         }
 
 
@@ -180,6 +273,8 @@ export class NovoAtendimentoComponent {
             nomeResponsavel: [null],
             tipoConsulta: [null],
             tipoEspecialidade: [null],
+            telefoneResponsavel:null,
+            emailResponsavel:null,
         })
 
     }
@@ -188,7 +283,7 @@ export class NovoAtendimentoComponent {
 
         this.dependente = data
         if (this.childId == null) {
-            this.toastrService.danger('Não possui dependente!!!');
+            this.toastrService.danger('Este Usuário Não Possui Dependentes','Aditi Care');
             this.isDependente = false;
         } else {
 
@@ -212,6 +307,15 @@ export class NovoAtendimentoComponent {
             this.isPagto = false;
         }
     }
+
+    formatarData(data) {
+        const partes = data.split("/");
+        const ano = partes[2];
+        const mes = partes[1].padStart(2, '0');
+        const dia = partes[0].padStart(2, '0');
+        return `${ano}-${mes}-${dia}`;
+    }
+    
 
     qdadeCaracteres() {
 
@@ -237,36 +341,49 @@ export class NovoAtendimentoComponent {
             this.isActive = true;
 
             this.service.buscaPaciente(null, data.cpf, (response) => {
-                this.isActive = false;
-                this.userId = response.id
-                this.formNovoAtendimento.controls['nomeResponsavel'].setValue(response.name);
-                this.buscaDependente(this.userId)
-                this.isDadosAtendimento = true
+                
+                if(response == null){
+                    this.isActive = false;
+                    this.toastrService.warning('O CPF Informado Não Foi Encontrado','Aditi Care');
+                }
+                else{ 
+                    this.isActive = false;
+                    this.userId = response.id
+                    this.isDadosAtendimento=true;
+                    this.formNovoAtendimento.controls['nomeResponsavel'].setValue(response.name);
+                    this.formNovoAtendimento.controls['telefoneResponsavel'].setValue(response.cellPhone);
+                    this.formNovoAtendimento.controls['emailResponsavel'].setValue(response.emailUser);
+                    this.buscaDependente(this.userId)
+                    this.isConvenio =false;}
+
+               
             }, (error) => {
                 this.isActive = false;
-                this.toastrService.danger(error.error.message);
+                this.toastrService.danger(error.message);
             });
 
         } else {
-            this.toastrService.danger('O campos CPF é obrigatórios!!!');
+            this.toastrService.danger('O campo CPF deve ser Preenchido','Aditi Care');
         }
 
     }
 
     isValidCpf(data) {
 
+        if(this.validaCampo(data)){
+
         this.listDependente = [];
         this.isDependente = false;
 
         if (!CPFValidator.isValidCPF(data.cpf)) {
-            this.showMsgErro = true;
             this.isDadosAtendimento = false;
             this.formNovoAtendimento.controls['nomeResponsavel'].setValue(null);
+            this.toastrService.warning('O campo CPF Não é valido!','Aditi Care');
             return false;
         }
-        this.showMsgErro = false;
         this.pesquisaPaciente(data)
         return true;
+    }
     }
 
     consultaPaga(data) {
@@ -276,9 +393,20 @@ export class NovoAtendimentoComponent {
         } else {
             this.tipoPagto = false
         }
+        this.bloqueioSave= true;
+
     }
 
     salvar(data) {
+
+        this.bloqueioSave= false;
+
+
+        if (this.specialtyId == null) {
+            this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
+            this.bloqueioSave= true;
+
+        }
 
 
         if (this.dadosHorario.horario === undefined) {
@@ -291,10 +419,14 @@ export class NovoAtendimentoComponent {
         }
 
         this.clinicId = localStorage.getItem('bway-entityId');
-
-        if (this.dependente == 'N') {
-            this.childId = null
-        }
+       
+        if(data.horarioSelected !== undefined)
+        {
+        const dataTemp = data.horarioSelected.split(" ");
+        var dataCompleta = dataTemp[0]; // Acessa a primeira parte do array
+            }else{
+        var  dataCompleta=data.dataInicio
+            }
 
         let register = {
 
@@ -302,7 +434,7 @@ export class NovoAtendimentoComponent {
             clinicId: this.clinicId,
             userId: this.userId,
             childId: this.childId,
-            dateService: data.dataInicio,
+            dateService:dataCompleta,
             startTime: startTime,
             endTime: endTime,
             healthPlanId: data.formaConvenio,
@@ -312,24 +444,28 @@ export class NovoAtendimentoComponent {
             specialtyId: this.specialtyId,
             paymentInCreation: this.tipoPagto,
             isReturn: this.retorno,
-            dontCheckAvailable: this.encaixe
-
+            dontCheckAvailable: this.encaixe,
+            procedureId: this.tipoProcedimento,
+            customDuration: data.tempoAtendimento,
         }
 
         this.isActive = true;
-
         this.service.salvarAgendamento(register, (response => {
             this.isActive = false;
-            this.toastrService.success('Cadastrado com sucesso !!!');
+            this.toastrService.success('Cadastrado Realizado com Sucesso','Aditi Care!');
+            localStorage.removeItem('meuCardData'); //garante que o cache foi apagado das telas posteriores
             this.limpaForm();
             this.previousPage();
         }), (error) => {
+            this.bloqueioSave= true;
             this.isActive = false;
-            this.toastrService.danger(error.error.message);
+            this.toastrService.danger(error.message);
 
         });
 
     }
+
+    
 
     verificaMedico(data) {
 
@@ -341,7 +477,9 @@ export class NovoAtendimentoComponent {
         }
 
         this.verificaEspecialidade(this.doctorId);
-        this.buscaConvenio(this.doctorId);
+        this.verificaprocedimento(this.doctorId);
+
+        // this.buscaConvenio(this.doctorId);
     }
 
     verificaDependente(data) {
@@ -370,12 +508,59 @@ export class NovoAtendimentoComponent {
         this.service.verificaEspecialidade(data, null, (response => {
 
             this.listTipoEspecialidade = response
+          //  this.formNovoAtendimento.controls['tipoEspecialidade'].setValue(this.listTipoEspecialidade[0].id, { onlySelf: true });
+           // this.specialtyId = this.listTipoEspecialidade[0].id;
+
+        }), (error) => {
+            this.isActive = false;
+            this.toastrService.danger(error.error.message);
+        });
+
+    }
+
+    ValidaTipoConsulta(data) {
+                if (data == 6) {
+                    this.exibirDivProcedimento = true;
+            }else {
+                this.exibirDivProcedimento = false;
+
+            }
+
+    }
+
+    SetaProcedimento(data) {
+
+        for (var i = 0; i < this.listTipoProcedimento.length; i++) {
+
+            if (data == this.listTipoProcedimento[i].id) {
+                this.tipoProcedimento = this.listTipoProcedimento[i].id
+        }
+    }
+    }
+
+    verificaprocedimento(data) {
+        this.service.verificaProcedimento(data, null, (response => {
+
+
+            this.listTipoProcedimento = response
 
         }), (error) => {
             this.isActive = false;
             this.toastrService.danger(error.error.message);
 
         });
+
+    }
+
+    tempoAtendimento(data){
+
+        for (var i = 0; i < this.listTempoAtendimento.length; i++) {
+
+            if (data == this.listTempoAtendimento[i].id) {
+                this.tempoAtendimento = this.listTempoAtendimento[i].id
+            }
+        }
+
 
     }
 
@@ -395,25 +580,28 @@ export class NovoAtendimentoComponent {
             params = params.append('startDate', data.dataInicio)
             params = params.append('endDate', moment(date).format('YYYY-MM-DD'))
             params = params.append('typeServiceId', data.tipoConsulta)
+            
+            if (data.tipoConsulta == 6 && data.tipoProcedimento !== null) {
+                params = params.append('procedureId', data.tipoProcedimento)
+            }
+            if (data.tempoAtendimento !== null && data.tempoAtendimento !== "null") {
+                params = params.append('duration', data.tempoAtendimento);
+            }
+            
 
             this.service.buscaHorario(params, (response) => {
 
                 this.tipoCard = response.times;
                 this.tipoCard = this.tipoCard.filter(function (item) {
-                    if (item.status === 'Disponível') {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                return true;
                 });
-
                 this.tipoCard = this.tipoCard.map(data => {
-
                     return {
-                        data: moment(data.date).format('DD/MM/YYYY'),
-                        horario: data.startTime.concat(' - ', data.endTime)
+                        data: data.date,
+                        horario: data.startTime.concat(' - ', data.endTime),
+                        statusCard: data.status,
+                        nomePaciente: data.status
                     }
-
                 })
 
                 this.isActive = false
@@ -421,7 +609,7 @@ export class NovoAtendimentoComponent {
 
             }, (error) => {
                 this.isActive = false;
-                this.toastrService.danger(error.error.message);
+                this.toastrService.danger(error);
             });
         }
     }
@@ -429,15 +617,23 @@ export class NovoAtendimentoComponent {
     validaCampo(data) {
 
         if (data.medico == null) {
-            this.toastrService.danger('O campo médico é obrigatório!!!');
+            this.toastrService.warning('O campo Médico é Obrigatório','Aditi Care');
             return false
         }
         if (data.tipoConsulta == null) {
-            this.toastrService.danger('O campo tipo consulta é obrigatório!!!');
+            this.toastrService.warning('O campo tipo consulta é obrigatório','Aditi Care');
             return false
         }
         if (data.dataInicio == null) {
-            this.toastrService.danger('A data início do período é obrigatória!!!');
+            this.toastrService.warning('A Data Deve ser Informada','Aditi Care');
+            return false
+        }
+        if (data.tipoConsulta == 6 && data.tipoProcedimento == null) {
+            this.toastrService.warning('O Tipo do Procedimento deve ser Informado','Aditi Care');
+            return false
+        }
+        if (data.tipoEspecialidade == null) {
+            this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
             return false
         }
 
@@ -446,15 +642,17 @@ export class NovoAtendimentoComponent {
 
     confHorario(data, element) {
 
+        this.formNovoAtendimento.controls['horarioSelected'].setValue((data.data + " - " +  data.horario));
+
         this.tipoCard = [];
         this.dadosHorario = data;
         if ((data.horaInicio != null) && (data.horaFim != null) && (element.dataInicio != null)) {
             this.isHorario = false;
-            this.isConfAtendimento = true;
+               this.isConfAtendimento = true;
         }
         if ((data.data != null) && (data.horario != null) && (element.dataInicio != null)) {
             this.isHorario = false;
-            this.isConfAtendimento = true;
+               this.isConfAtendimento = true;
         }
 
     }
@@ -477,34 +675,68 @@ export class NovoAtendimentoComponent {
     }
 
     previousPage() {
-        this.router.navigate(['/pages/atendimento/buscar-atendimento'])
-    }
 
-    buscarEncaixe(data) {
-        if (data === 'S') {
-            this.isHorario = false;
-            this.isEncaixe = false;
-            this.isEncaixe1 = true;
-            this.encaixe = true;
-            if (this.tipoCardEncaixe.length === 0) {
-                this.tipoCardEncaixe.push({
-                    id: this.tipoCardEncaixe.length,
-                })
-            }
-        } else {
-            this.tipoCardEncaixe.splice(null);
-            this.isEncaixe = true;
-            this.isEncaixe1 = false;
-            this.encaixe = false;
-            this.isConfAtendimento = false;
+        if (this.origem === 'agendaGoogle') {
+            this.router.navigate(['/pages/visualizar-agenda/agenda'])
+
+        }else{
+            this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+
         }
     }
 
-    pesquisarHorario(data) {
+    buscarEncaixe(data,form) {
 
-        if (data.dataInicio === null) {
-            this.toastrService.danger('A data início do período é obrigatória!!!');
-            this.isConfAtendimento = false;
+        this.isConfAtendimento = false;
+
+        if(form.tipoConsulta == null){
+
+            this.toastrService.warning('Por favor Informe o Tipo de Consulta Desejada','Aditi Care');
+            this.formNovoAtendimento.controls['optEncaixe'].setValue(null);
+                }
+        else if(form.tipoEspecialidade == null){
+
+            this.toastrService.warning('Por favor Informe a Especialidade Desejada','Aditi Care');
+            this.formNovoAtendimento.controls['optEncaixe'].setValue(null);
+
+         } else if(form.tipoConsulta == 6 && form.tipoProcedimento == null) {
+            this.toastrService.warning('Por favor Informe o Procedimento Desejado','Aditi Care');
+        }
+         else{
+
+            if (data === 'S') {
+                this.isHorario = false;
+                this.isEncaixe = false;
+                this.isEncaixe1 = true;
+                this.encaixe = true;
+                if (this.tipoCardEncaixe.length === 0) {
+                    this.tipoCardEncaixe.push({
+                        id: this.tipoCardEncaixe.length,
+                    })
+                }
+            } else {
+                this.tipoCardEncaixe.splice(null);
+                this.isEncaixe = true;
+                this.isEncaixe1 = false;
+                this.encaixe = false;
+                this.isConfAtendimento = false;
+            }
+        }
+     }
+      
+
+    pesquisarHorario(data,form) {
+
+        this.dadosHorario = form;
+
+        this.isConfAtendimento = false;
+        if (data.dataInicio == null ) {
+            this.toastrService.warning('Por favor Informa a Data Desejada!','Aditi Care');
+        } 
+        else if(this.dadosHorario.horaInicio == null || this.dadosHorario.horaFim == null ){
+
+            this.toastrService.warning('Por favor Informa o Horário do Encaixe Desejado!','Aditi Care');
+
         } else {
 
             this.isActive = true
@@ -514,11 +746,25 @@ export class NovoAtendimentoComponent {
             params = params.append('startTime', this.dadosHorario.horaInicio)
             params = params.append('endTime', this.dadosHorario.horaFim)
 
+            if(data.tipoConsulta == 6 && data.tipoProcedimento != null){
+                params = params.append('procedureId', this.tipoProcedimento)
+            }
+
             this.service.timeAvailable(params, (response) => {
+                this.isConfAtendimento = false;
                 this.isActive = false
-                this.toastrService.success(response.message);
+                if(response.value ==true){
+                    this.isConfAtendimento = true;
+                    this.toastrService.success('O Horário Informado Está Disponível','Aditi Care');
+                    this.formNovoAtendimento.controls['horarioSelected'].setValue((data.dataInicio + " - " +this.dadosHorario.horaInicio + " - " + this.dadosHorario.horaFim ));
+                }
+                else{
+                    this.isConfAtendimento = false;
+                    this.toastrService.warning('O Horário Informado não Está Disponível','Aditi Care');
+
+                }
             }, (error) => {
-                this.toastrService.danger(error.error.message);
+                this.toastrService.danger(error.message);
             });
 
         }

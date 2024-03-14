@@ -34,52 +34,95 @@ export class PacienteComponent implements OnInit {
     this.formPaciente = this.formBuilder.group({
       cpf: [null],
       medico: [this.listMedico[0], Validators.required],
+      optPart: "S",
+      nome: null,
     })
 
     this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
     let registe = {
       cpf: null,
-      medico: this.listMedico[0].id
+      medico: this.listMedico[0].id,
+      optPart: "S",
+      nome: null,
     }
-    this.pesquisaGeral(registe)
+
+    if(localStorage.getItem('meuPaciente') ===null || localStorage.getItem('meuPaciente') ==='') {
+
+      this.pesquisaGeral(registe,true)
+    }else{
+      this.pesquisaGeral(registe,false)
+    }
 
   }
 
-  pesquisaGeral(data) {
+  ValidarUsuario(data,form){
+
+    if(form.cpf == null && data === 'N'){
+
+      this.toastrService.danger('Por Favor Informe o CPF do Usuário','Aditi Care');
+      this.formPaciente.controls['optPart'].setValue(null, { onlySelf: true });
+    }
+
+  }
+
+  pesquisaGeral(data,checked) {
+
+    if(localStorage.getItem('meuPaciente') ===null  || checked==true || localStorage.getItem('meuPaciente') ===''){
+
+      localStorage.removeItem('meuPaciente'); //garante que o cache foi apagado das telas posteriores
 
     let params = new HttpParams();
 
-    if (data.medico != null) {
+    if(data.optPart == null){
+      this.toastrService.warning('O Campo Usuário é Paciente Deve ser Informado','Aditi Care');
+    }
+
+    if (data.medico != null && data.optPart == 'S') {
       params = params.append('doctorId', data.medico)
     }
     if (data.cpf != null) {
       params = params.append('federalId', data.cpf)
     }
 
+    if (data.nome != null) {
+      params = params.append('name', data.nome)
+    }
+
+
     if ((data.cpf != null) || (data.medico != 'null')) {
 
       this.isActive = true;
-
+      let allData = []; // Crie uma variável vazia para armazenar os dados
       this.service.buscaPaciente(params, (response) => {
+        allData = response
+        .map(data => ({
+          avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
+          name: data.name,
+          nameChild: data.nameChild,
+          idChild: data.idChild,
+          cellPhone: data.cellPhone,
+          email: data.emailUser,
+          federalId: data.federalId,
+          id: data.idUser  ,
+          city: data.idCityUser ,
+          uf: data.idUfUser,
+          userChildren: data.idUserChildren,
+          doctorId: data.idDoctor,
+          birthDateChild:  data.birthDateChild,
+          birthDate:  data.birthDate,
+                        }));
 
-        this.isActive = false;
-        this.rowData = response
-
-        this.rowData = this.rowData.map(data => {
-          return {
-            avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
-            name: data.name,
-            cellPhone: data.cellPhone,
-            email: data.emailUser,
-            federalId: data.federalId,
-            id: data.idUser  ,
-            city: data.idCityUser ,
-            uf: data.idUfUser,
-            userChildren: data.idUserChildren,
-            doctorId: data.idDoctor
-          }
-        })
+  if (allData.length === 0) {
+      this.toastrService.warning("Não Foram Encontradas Usuários", 'Aditi Care');
+      this.saveData('meuPaciente', null);
+      this.isActive = false;
+      this.rowData = null;
+  } else {
+      this.saveData('meuPaciente', allData);
+      this.isActive = false;
+      this.rowData = allData;
+  }
 
       }, (error) => {
         this.isActive = false;
@@ -87,9 +130,33 @@ export class PacienteComponent implements OnInit {
       });
 
     } else {
-      this.toastrService.danger('O campos médico ou CPF são obrigatórios!!!');
+      this.toastrService.warning('O campos médico ou CPF são obrigatórios!!!');
     }
 
+  }else {
+
+    const allData = localStorage.getItem('meuPaciente')
+    
+    if (allData) {
+    // Converta os dados de string para objeto
+    const parsedData = JSON.parse(allData);
+    
+    // Preencha os cards com os dados recuperados
+    this.rowData = parsedData;
+    }
+    }
+
+  }
+
+   // Salva os dados no LocalStorage
+   saveData(key: string, data: any): void {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  // Recupera os dados do LocalStorage
+  getData(key: string): any {
+    const storedData = localStorage.getItem(key);
+    return storedData ? JSON.parse(storedData) : null;
   }
 
   cadastrar(data) {

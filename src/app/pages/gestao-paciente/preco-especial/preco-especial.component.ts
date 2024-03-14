@@ -171,7 +171,7 @@ export class PrecoEspecialComponent implements OnDestroy {
       this.isActive = true;
       this.service.cadastrarPriceExclusive(register, (response => {
         this.isActive = false;
-        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.toastrService.success('Registro cadastrado com sucesso !!!','Aditi Care!');
         this.limpaForm()
         this.previousPage()
       }), (error) => {

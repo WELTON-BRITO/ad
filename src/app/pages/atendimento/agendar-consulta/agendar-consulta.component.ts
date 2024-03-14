@@ -276,7 +276,7 @@ export class AgendarConsultaComponent {
 
             this.service.waiting(register, (response => {
                 this.isActive = false;
-                this.toastrService.success('Cadastrado com sucesso !!!');
+                this.toastrService.success('Consulta Agendada com Sucesso', 'Aditi Care!')
                 this.limpaForm();
                 this.previousPage();
             }), (error) => {
@@ -289,27 +289,27 @@ export class AgendarConsultaComponent {
     validaCampos(data) {
 
         if (data.medico == null) {
-            this.toastrService.danger('O campo médico é obrigatório!!!');
+            this.toastrService.danger('O Campo Médico deve Ser Preenchido', 'Campo Não Informado')
             return false
         }
         if (data.tipoConsulta == null) {
-            this.toastrService.danger('O campo tipo consulta é obrigatório!!!');
+            this.toastrService.danger('O Campo Tipo Consulta deve Ser Preenchido', 'Campo Não Informado')
             return false
         }
         if (data.tipoEspecialidade == null) {
-            this.toastrService.danger('O campo tipo especialidade é obrigatório!!!');
+            this.toastrService.danger('O campo tipo especialidade é obrigatório!!!', 'Campo Não Informado')
             return false
         }
         if (data.dataInicio == null) {
-            this.toastrService.danger('A data início do período é obrigatória!!!');
+            this.toastrService.danger('A Data de Início é obrigatório!!!', 'Campo Não Informado')
             return false
         }
         if (data.consPagto == null) {
-            this.toastrService.danger('O campo detalhes é obrigatória!!!');
+            this.toastrService.danger('O Campo Detalhes é obrigatório!!!', 'Campo Não Informado')
             return false
         }
         if (data.formaPagto == null) {
-            this.toastrService.danger('O tipo de pagamento é obrigatória!!!');
+            this.toastrService.danger('O Tipo de Pagamento é Obrigatório!!!', 'Campo Não Informado')
             return false
         }
 

@@ -37,7 +37,7 @@ import { AtendimentoRoutingModule } from './pages/atendimento/atendimento-routin
 import { AutosizeModule } from '@techiediaries/ngx-textarea-autosize';
 import { SolicitarSenhaModule } from './pages/solicitar-senha/solicitar-senha.module';
 import { SolicitarSenhaRoutingModule } from './pages/solicitar-senha/solicitar-senha-routing.module';
-
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [AppComponent],
@@ -72,7 +72,8 @@ import { SolicitarSenhaRoutingModule } from './pages/solicitar-senha/solicitar-s
     AtendimentoModule,
     AutosizeModule,
     SolicitarSenhaModule,
-    SolicitarSenhaRoutingModule
+    SolicitarSenhaRoutingModule,
+    FullCalendarModule
    ],
   providers:    [
     { provide: LOCALE_ID, useValue: 'pt' },

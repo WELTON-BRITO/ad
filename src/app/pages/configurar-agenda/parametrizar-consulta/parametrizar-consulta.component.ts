@@ -39,6 +39,12 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public isBloqueio = true;
   public clinic = null;
   public ismodalidadeConsulta = false;
+  public radioValuePresencial: boolean;
+  public radioValueVideo: boolean;
+  public radioValueEmergencial: boolean;
+  public radioValueCasa: boolean;
+  public radioValueChamada: boolean;
+  public checkboxValue: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -81,7 +87,8 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       tempoVideoChamada: [null],
       qrVideoChamada: [null],
       optVideoChamada: [null],
-      valorVideoChamada: [null]
+      valorVideoChamada: [null],
+      checkPresencial: [null]
     })
     this.formParametrizarConsulta.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
@@ -123,10 +130,24 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
   salvar(data) {
 
-    if ((data.medico == null) || ((data.valorPresencial == null) && (data.valorEmergencial == null) &&
-      (data.valorVideo == null) && (data.valorCasa == null)) || ((data.tempoEmergencial == null) &&
-        (data.tempoPresencial == null) && (data.tempoVideo == null) && (data.tempoCasa == null))
-      || ((this.isBloqueio == true) && (data.optPresencial == null || data.optVideo == null || data.optEmergencial == null || data.optCasa == null || data.optVideoChamada == null))) {
+    const checkboxPresencial: any = document.getElementsByName('checkboxPresencial');
+    const checkboxVideo: any = document.getElementsByName('checkboxVideo');
+    const checkboxCasa: any = document.getElementsByName('checkboxCasa');
+    const checkboxEmergencial: any = document.getElementsByName('checkboxEmergencial');
+    const checkboxChamada: any = document.getElementsByName('checkboxChamada');
+
+    if ((checkboxPresencial[0].checked == false && checkboxChamada[0].checked == false && checkboxVideo[0].checked == false &&
+      checkboxCasa[0].checked == false && checkboxEmergencial[0].checked == false &&
+      checkboxChamada[0].checked == false) ||
+      (data.tempoPresencial == null && data.tempoCasa == null &&
+        data.tempoEmergencial == null && data.tempoVideo == null &&
+        data.tempoVideoChamada == null) ||
+      (data.valorCasa == null && data.valorEmergencial == null &&
+        data.valorPresencial == null && data.valorVideo == null &&
+        data.valorVideoChamada == null) ||
+      (data.qrCasa == null && data.qrEmergencial == null &&
+        data.qrPresencial == null && data.qrVideo == null &&
+        data.qrVideoChamada == null)) {
 
       this.toastrService.danger('Preencher os campos obrigatórios!!!');
 
@@ -232,7 +253,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
           this.limpaForm()
         });
       }
-
     }
 
   }
@@ -327,15 +347,14 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         document.getElementById('qrVideoChamada').removeAttribute('disabled');
 
       } else {
-
         this.atualizar = response;
         for (var i = 0; i < response.length; i++) {
 
           if (response[i].typeService.id == 1) {
-
             this.formParametrizarConsulta.controls['tempoPresencial'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorPresencial'].setValue(response[i].value);
             this.formParametrizarConsulta.controls['qrPresencial'].setValue(response[i].qrCode);
+            this.radioValuePresencial = response[i].qrCodeBlocked;
 
             var checkbox = document.querySelector("#presencial");
             function ativarCheckbox(el) {
@@ -352,6 +371,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['tempoVideo'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorVideo'].setValue(response[i].value);
             this.formParametrizarConsulta.controls['qrVideo'].setValue(response[i].qrCode);
+            this.radioValueVideo = response[i].qrCodeBlocked;
 
             var checkbox = document.querySelector("#video");
             function ativarCheckbox(el) {
@@ -368,6 +388,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorEmergencial'].setValue(response[i].value);
             this.formParametrizarConsulta.controls['qrEmergencial'].setValue(response[i].qrCode);
+            this.radioValueEmergencial = response[i].qrCodeBlocked;
 
             var checkbox = document.querySelector("#emergencial");
             function ativarCheckbox(el) {
@@ -385,6 +406,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['tempoCasa'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorCasa'].setValue(response[i].value);
             this.formParametrizarConsulta.controls['qrCasa'].setValue(response[i].qrCode);
+            this.radioValueCasa = response[i].qrCodeBlocked;
 
             var checkbox = document.querySelector("#casa");
             function ativarCheckbox(el) {
@@ -401,6 +423,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['tempoVideoChamada'].setValue(response[i].duration);
             this.formParametrizarConsulta.controls['valorVideoChamada'].setValue(response[i].value);
             this.formParametrizarConsulta.controls['qrVideoChamada'].setValue(response[i].qrCode);
+            this.radioValueChamada = response[i].qrCodeBlocked;
 
             var checkbox = document.querySelector("#videoChamada");
             function ativarCheckbox(el) {
@@ -448,6 +471,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.formParametrizarConsulta.controls['valorEmergencial'].setValue(null);
         this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(null);
         this.formParametrizarConsulta.controls['qrEmergencial'].setValue(null);
+        this.radioValueEmergencial = null;
         var checkbox = document.querySelector("#emergencial");
         function ativarCheckbox(el) {
           el.checked = false;
@@ -458,6 +482,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.formParametrizarConsulta.controls['valorVideo'].setValue(null);
         this.formParametrizarConsulta.controls['tempoVideo'].setValue(null);
         this.formParametrizarConsulta.controls['qrVideo'].setValue(null);
+        this.radioValueVideo = null;
         var checkbox = document.querySelector("#video");
         function ativarCheckbox(el) {
           el.checked = false;
@@ -468,6 +493,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.formParametrizarConsulta.controls['tempoPresencial'].setValue(null);
         this.formParametrizarConsulta.controls['valorPresencial'].setValue(null);
         this.formParametrizarConsulta.controls['qrPresencial'].setValue(null);
+        this.radioValuePresencial = null
         var checkbox = document.querySelector("#presencial");
         function ativarCheckbox(el) {
           el.checked = false;
@@ -478,6 +504,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.formParametrizarConsulta.controls['tempoCasa'].setValue(null);
         this.formParametrizarConsulta.controls['valorCasa'].setValue(null);
         this.formParametrizarConsulta.controls['qrCasa'].setValue(null);
+        this.radioValueCasa = null;
         var checkbox = document.querySelector("#casa");
         function ativarCheckbox(el) {
           el.checked = false;
@@ -488,6 +515,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.formParametrizarConsulta.controls['tempoVideoChamada'].setValue(null);
         this.formParametrizarConsulta.controls['valorVideoChamada'].setValue(null);
         this.formParametrizarConsulta.controls['qrVideoChamada'].setValue(null);
+        this.radioValueChamada = null;
         var checkbox = document.querySelector("#videoChamada");
         function ativarCheckbox(el) {
           el.checked = false;

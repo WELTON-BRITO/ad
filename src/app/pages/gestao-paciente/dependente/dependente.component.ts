@@ -37,6 +37,7 @@ export class DependenteComponent implements OnDestroy {
   public isVisualizar = false;
   public rowData = [];
   public nameMae = null;
+  public NewowData: any = {};
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -95,44 +96,6 @@ export class DependenteComponent implements OnDestroy {
 
   ngOnInit() {
 
-    this.history = history.state;
-
-    if (this.history.tipo == "cadastrar") {
-      this.isCadastro = true;
-      this.isVisualizar = false;
-    } else {
-      this.isCadastro = false;
-      this.isVisualizar = true;
-
-      this.nameMae = this.history.data.name
-
-      let params = new HttpParams();
-
-      params = params.append('userId', this.history.data.id)
-
-      this.isActive = true;
-
-      this.service.visualizarDependente(params, (response) => {
-
-        this.isActive = false;
-        this.rowData = response
-
-        this.rowData = this.rowData.map(data => {
-          return {
-            name: data.name,
-            birthDate: moment(data.birthDate).format('DD/MM/YYYY'),
-            federalId: data.cpf,
-            status: data.status
-          }
-        })
-
-      }, (error) => {
-        this.isActive = false;
-        this.toastrService.danger(error.error.message);
-      });
-
-    }
-
     this.formDependente = this.formBuilder.group({
       nomeDep: [null],
       dateNascDep: [null],
@@ -143,6 +106,71 @@ export class DependenteComponent implements OnDestroy {
       tipoSanguineo: [null],
       imagemDep: [null],
     })
+
+    this.history = history.state;
+
+    console.log(this.history)
+
+    if (this.history.tipo == "cadastrar") {
+      this.isCadastro = true;
+      this.isVisualizar = false;
+    } else {
+      this.isCadastro = false;
+      this.isVisualizar = true;
+    }
+
+  if (this.history.data && this.history.data.id !== null  ) {
+
+    if(this.history.tipo !== "cadastrar"){
+
+      this.nameMae = this.history.data.name
+
+      let params = new HttpParams();
+  
+      params = params.append('userId', this.history.data.id)
+  
+      this.isActive = true;
+  
+      this.service.visualizarDependente(params, (response) => {
+  
+        this.isActive = false;
+        this.rowData = response
+  
+        this.rowData = this.rowData.map(data => {
+          return {
+            name: data.name,
+            birthDate: moment(data.birthDate).format('DD/MM/YYYY'),
+            federalId: data.cpf,
+            status: data.status
+          }
+        })
+  
+      }, (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message);
+      });
+
+      
+    }else{
+
+      this.NewowData = {
+        name: this.history.data.name,
+        email: this.history.data.email,
+        telefone: this.history.data.cellPhone,
+        federalId: this.history.data.federalId,
+      };
+
+      console.log( this.NewowData)
+
+    }
+
+  }else{
+    this.previousPage()
+  }
+
+      
+
+  
 
   }
 
@@ -279,17 +307,15 @@ export class DependenteComponent implements OnDestroy {
 
     if (element.id === 'cpf') {
       if (!CPFValidator.isValidCPF(data.cpf)) {
-        this.showMsgErroCpf = true;
+        this.toastrService.danger('Cpf Informado é Inválido','Aditi Care');
         return false;
       }
-      this.showMsgErroCpf = false;
       return true;
     } else if (element.id === 'cpfDep') {
       if (!CPFValidator.isValidCPF(data.cpfDep)) {
-        this.showMsgErroCpf = true;
+        this.toastrService.danger('Cpf Informado é Inválido','Aditi Care');
         return false;
       }
-      this.showMsgErroCpf = false;
       return true;
     }
 
@@ -319,7 +345,7 @@ export class DependenteComponent implements OnDestroy {
 
       this.service.cadastrarDependente(register, (response => {
         this.isActive = false;
-        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.toastrService.success('Inclusão Realizada com Sucesso','Aditi Care');
         this.limpaForm()
       }), (error) => {
         this.isActive = false;
@@ -327,7 +353,7 @@ export class DependenteComponent implements OnDestroy {
       });
     } else {
       this.isActive = false;
-      this.toastrService.danger('Preencher os campos obrigatório!!!');
+      this.toastrService.danger('Preencher Preencher os Campos Obrigatorio','Aditi Care');
     }
 
 

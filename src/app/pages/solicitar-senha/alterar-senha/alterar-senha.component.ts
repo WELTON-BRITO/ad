@@ -54,7 +54,7 @@ export class AlterarSenhaComponent implements OnInit {
     this.service.validateCode(register, (response => {
 
       this.isActive = false;
-      this.toastrService.success('Senha alterada com sucesso');
+      this.toastrService.success('Senha Alterada com Sucesso','Aditi Care!');
       this.router.navigate(['/login']);
 
     }), (error) => {

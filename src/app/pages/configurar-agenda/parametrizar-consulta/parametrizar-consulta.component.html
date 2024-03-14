@@ -96,7 +96,7 @@
                     <div class="form-group col-md-3">
                       <div class="form-group">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="presencial" name="optcheckbox" value="1"
+                          <input class="form-check-input" type="checkbox" id="presencial" name="checkboxPresencial" value="1"
                             (click)="funcValor($event.target.value, $event.target)" />
                           Presencial</label>
                       </div>
@@ -125,12 +125,12 @@
                       <div class="form-group">
                         <div class="pb-2 row">
                           <label class="radio-inline pl-3">
-                            <input class="mat-button" type="radio" id="radioSim" name="optPresencial" value=""
-                              formControlName="optPresencial"/>
+                            <input class="mat-button" type="radio" id="radio" name="optPresencial" value="true"
+                              formControlName="optPresencial" [checked]="radioValuePresencial === true"/>
                             Sim</label>
                           <label class="radio-inline pl-2">
-                            <input class="mat-button" type="radio" id="radioNao" name="optPresencial" value=""
-                              formControlName="optPresencial" />
+                            <input class="mat-button" type="radio" id="radio" name="optPresencial" value="false"
+                              formControlName="optPresencial" [checked]="radioValuePresencial === false"/>
                             Não</label>
                         </div>
                       </div>
@@ -140,7 +140,7 @@
                     <div class="form-group col-md-3">
                       <div class="form-group">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="video" name="optcheckbox" value="2"
+                          <input class="form-check-input" type="checkbox" id="video" name="checkboxChamada" value="2"
                             (click)="funcValor($event.target.value, $event.target)" />
                           Video Chamada</label>
                       </div>
@@ -170,11 +170,11 @@
                         <div class="pb-2 row">
                           <label class="radio-inline pl-3">
                             <input class="mat-button" type="radio" id="radio" name="optVideo" value="true"
-                              formControlName="optVideo" />
+                              formControlName="optVideo" [checked]="radioValueVideo === true"/>
                             Sim</label>
                           <label class="radio-inline pl-2">
                             <input class="mat-button" type="radio" id="radio" name="optVideo" value="false"
-                              formControlName="optVideo" />
+                              formControlName="optVideo" [checked]="radioValueVideo === false"/>
                             Não</label>
                         </div>
                       </div>
@@ -184,7 +184,7 @@
                     <div class="form-group col-md-3">
                       <div class="form-group">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="emergencial" name="optcheckbox" value="3"
+                          <input class="form-check-input" type="checkbox" id="emergencial" name="checkboxEmergencial" value="3"
                             (click)="funcValor($event.target.value, $event.target)" />
                           Emergencial Presencial</label>
                       </div>
@@ -216,11 +216,11 @@
                         <div class="pb-2 row">
                           <label class="radio-inline pl-3">
                             <input class="mat-button" type="radio" id="radio" name="optEmergencial" value="true"
-                              formControlName="optEmergencial" />
+                              formControlName="optEmergencial" [checked]="radioValueEmergencial === true"/>
                             Sim</label>
                           <label class="radio-inline pl-2">
                             <input class="mat-button" type="radio" id="radio" name="optEmergencial" value="false"
-                              formControlName="optEmergencial" />
+                              formControlName="optEmergencial" [checked]="radioValueEmergencial === false"/>
                             Não</label>
                         </div>
                       </div>
@@ -230,7 +230,7 @@
                     <div class="form-group col-md-3">
                       <div class="form-group">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="casa" name="optcheckbox" value="4"
+                          <input class="form-check-input" type="checkbox" id="casa" name="checkboxCasa" value="4"
                             (click)="funcValor($event.target.value, $event.target)" />
                           Em Casa</label>
                       </div>
@@ -260,11 +260,11 @@
                         <div class="pb-2 row">
                           <label class="radio-inline pl-3">
                             <input class="mat-button" type="radio" id="radio" name="optCasa" value="true"
-                              formControlName="optCasa" />
+                              formControlName="optCasa" [checked]="radioValueCasa === true"/>
                             Sim</label>
                           <label class="radio-inline pl-2">
                             <input class="mat-button" type="radio" id="radio" name="optCasa" value="false"
-                              formControlName="optCasa" />
+                              formControlName="optCasa" [checked]="radioValueCasa === false"/>
                             Não</label>
                         </div>
                       </div>
@@ -274,7 +274,7 @@
                     <div class="form-group col-md-3">
                       <div class="form-group">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="videoChamada" name="optcheckbox" value="5"
+                          <input class="form-check-input" type="checkbox" id="videoChamada" name="checkboxVideo" value="5"
                             (click)="funcValor($event.target.value, $event.target)" />
                           Video Chamada Emergencial
                         </label>
@@ -305,11 +305,11 @@
                         <div class="pb-2 row">
                           <label class="radio-inline pl-3">
                             <input class="mat-button" type="radio" id="radio" name="optVideoChamada" value="true"
-                              formControlName="optVideoChamada" />
+                              formControlName="optVideoChamada" [checked]="radioValueChamada === true"/>
                             Sim</label>
                           <label class="radio-inline pl-2">
                             <input class="mat-button" type="radio" id="radio" name="optVideoChamada" value="false"
-                              formControlName="optVideoChamada" />
+                              formControlName="optVideoChamada" [checked]="radioValueChamada === false"/>
                             Não</label>
                         </div>
                       </div>

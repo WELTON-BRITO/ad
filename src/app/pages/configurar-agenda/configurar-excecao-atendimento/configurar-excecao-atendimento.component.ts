@@ -32,9 +32,11 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   public horaInicio = [];
   public horaFim = [];
   public clinicaId = null;
-  public listClinica = [];
+  public listClinica = null;
   public listTipoConsulta = [];
   public timeList = [];
+  public params = new HttpParams();
+
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -71,20 +73,25 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
   ngOnInit() {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
+
     this.verificaMedico(this.listMedico[0].id);
-    this.pesquisaClinica(this.listMedico[0].id)
+    //this.params = this.params.append('clinicId', this.listClinica[0].id)
+    this.pesquisaClinica(this.listClinica[0].id)
     this.formExcecaoAtendimento = this.formBuilder.group({
       dataExcecao: [null],
       horaInicio: [null],
       horaFim: [null],
       card: [null],
       medico: [this.listMedico[0], Validators.required],
-      clinica: [null],
-      tipoConsulta: [null]
+      clinica: [this.listClinica[0], Validators.required],
+      tipoConsulta: [null],
     })
 
     this.formExcecaoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
+    this.formExcecaoAtendimento.controls['clinica'].setValue(this.listClinica[0].id, { onlySelf: true }); // use the id of the first clinica
 
+    this.buscarExcecaoDoctor(this.pesquisaClinica)
 
   }
 
@@ -112,11 +119,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
   buscarExcecaoDoctor(data) {
 
-    let params = new HttpParams();
-
-    params = params.append('doctorId', data)
-
-    this.service.buscarExcecaoDoctor(params, (response) => {
+    this.service.buscarExcecaoDoctor(this.params, (response) => {
 
       this.rowData = response;
 
@@ -127,6 +130,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
             data: moment(data.dateException).format("DD/MM/YYYY"),
             horaInicio: data.startTime == null ? 'sem expediente' : data.startTime,
             horaFim: data.endTime == null ? 'sem expediente' : data.endTime,
+            name: data.clinic.socialName == null ? 'Não informada' : data.clinic.socialName,
           }
         })
       } else {
@@ -145,20 +149,18 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
       this.timeList.push({
         startTime: this.tipoCard[i].horaInicio,
-        endTime: this.tipoCard[i].horaFim,
-        dateException: data.dataExcecao,
-        away: this.isCardHoras,
-        typeServiceId: data.tipoConsulta
+        endTime: this.tipoCard[i].horaFim
       })
-
     }
 
     let register =
     {
       doctorId: this.doctorId,
       clinicId: this.clinicaId,
-      timeList: this.timeList
-
+      timeList: this.timeList,
+      away: this.isCardHoras,
+      typeServiceId: data.tipoConsulta,
+      dateException: data.dataExcecao
     }
 
 
@@ -168,15 +170,15 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
       this.service.salvarExcecaoDoctor(register, (response => {
         this.isActive = false;
-        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.toastrService.success('Registro cadastrado com sucesso !!!','Aditi Care!');
         this.buscarExcecaoDoctor(response[0].doctor.id)
         this.limpaForm()
       }), (error) => {
         this.isActive = false;
-        this.toastrService.danger(error.error.message);
+        this.toastrService.danger(error.message);
       });
     } else {
-      this.toastrService.danger('Preencher os campos obrigatório!!!');
+      this.toastrService.danger('Preencher os campos obrigatório!!!','Aditi Care!');
     }
 
     this.horaInicio = [];
@@ -203,7 +205,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
     if (data != 'null') {
       this.doctorId = data
-      this.buscarExcecaoDoctor(data)
+      this.params = this.params.append('doctorId', data)
     } else {
       this.toastrService.danger('Preencher o campo obrigatório!!!');
     }
@@ -212,16 +214,22 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
   pesquisaClinica(data) {
 
-    this.service.buscaClinica(data, null, (response) => {
+    if (data != 'null ') {
+      this.clinicaId = data
 
-      this.listClinica = response
-      this.isActive = false
+    } else {
+      this.service.buscaClinica(data, null, (response) => {
 
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
+        this.listClinica = response
+        this.isActive = false
+  
+      }, (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.message);
+      });
+      }
 
+   
   }
 
   verificaClinica(data) {

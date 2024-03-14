@@ -1,0 +1,87 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="dialog-body">
+                <nb-card>
+                    <nb-card-body>
+                        <form id="form-novo-atendimento" [formGroup]="formNovoAtendimento">
+                            <div class="col-md-12 col-xs-12">
+                                <div class="form-row align-items-center">
+                                    <nb-card-header class="aditi-header">
+                                        <div class="back-link">
+                                            <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                                                <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                                            </a>
+                                        </div>
+                                    </nb-card-header>
+                                    <div class="form-group col-md-6">
+                                        <h5 class="pt-3">Bloquear Horário de Atendimento</h5>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-4">
+                                        <div class="form-group">
+                                        <label for="nome">Informe o Médico*</label>
+                                        <select class="form-control" formControlName="medico" (change)="verificaMedico($event.target.value)">
+                                            <option value="null" selected>SELECIONE</option>
+                                            <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{ medico.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="form-group">
+                                            <label for="tipoEspecialidade">Tipo de Especialidade*</label>
+                                            <select class="form-control" formControlName="tipoEspecialidade"
+                                                (change)="especialidade($event.target.value)">
+                                                <option value="null" selected>SELECIONE</option>
+                                                <option *ngFor="let tipoEspecialidade of listTipoEspecialidade"
+                                                    value="{{ tipoEspecialidade.id }}">{{
+                                                    tipoEspecialidade.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <div class="form-group">
+                                        <label for="dataAtendimento">Informe o dia do Bloqueio*</label>
+                                        <input type="date" class="form-control" formControlName="dataAtendimento">
+                                    </div>
+                                </div>
+                                </div>
+
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-4">
+                                        <label for="horarioInicial">Horário Inicial*</label>
+                                        <input type="time" class="form-control" formControlName="horarioInicial">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="horarioFinal">Horário Final*</label>
+                                        <input type="time" class="form-control" formControlName="horarioFinal">
+                                    </div>
+                                    <div class="form-group col-md-4" style="margin-top: 25px;">
+                                        <button type="button" class="btn btn-primary" (click)="pesquisarHorario(formNovoAtendimento.value)">Pesquisar</button>
+                                    </div>
+
+                                </div>
+                                
+                                
+                                    <div class="form-group" *ngIf="isConfAtendimento">
+                                    <div class="col-md-12">
+                                        <div class="text-right">
+                                            <button class="btn btn-success"
+                                                (click)="salvar(formNovoAtendimento.value)">
+                                                Salvar
+                                            </button>
+                                        </div>
+                                </div>
+                                </div>   
+                        
+                                
+                            </div>
+                        </form>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

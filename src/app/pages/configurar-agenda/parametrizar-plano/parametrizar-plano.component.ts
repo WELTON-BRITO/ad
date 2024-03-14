@@ -133,7 +133,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       this.isActive = true;
       this.service.removerConvenio(this.doctorId, this.convenio, (response => {
         this.isActive = false;
-        this.toastrService.success('Registro removido com sucesso !!!');
+        this.toastrService.success('Registro removido com sucesso !!!','Aditi Care!');
         this.limpaForm()
       }), (error) => {
         this.isActive = false;
@@ -156,7 +156,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       this.isActive = true;
       this.service.cadastrarConvenio(register, (response => {
         this.isActive = false;
-        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.toastrService.success('Registro cadastrado com sucesso !!!','Aditi Care!');
         // this.limpaForm()
       }), (error) => {
         this.isActive = false;

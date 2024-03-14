@@ -387,40 +387,40 @@ export class NovoPacienteComponent implements OnDestroy {
     }
 
     if (data.nome === null) {
-      this.toastrService.danger('O campo nome é obrigatório!!!');
+      this.toastrService.danger('O campo nome é obrigatório!!!','Aditi Care!');
     } else if (data.dateNasc === null) {
-      this.toastrService.danger('O campo data nascimento é obrigatório!!!');
+      this.toastrService.danger('O campo data nascimento é obrigatório!!!','Aditi Care!');
     } else if (data.cpf === null) {
-      this.toastrService.danger('O campo CPF é obrigatório!!!');
+      this.toastrService.danger('O campo CPF é obrigatório!!!','Aditi Care!');
     } else if (data.bairro === null) {
-      this.toastrService.danger('O campo bairro é obrigatório!!!');
+      this.toastrService.danger('O campo bairro é obrigatório!!!','Aditi Care!');
     } else if (data.cep === null) {
-      this.toastrService.danger('O campo cep é obrigatório!!!');
+      this.toastrService.danger('O campo cep é obrigatório!!!','Aditi Care!');
     } else if (data.cidade === null) {
-      this.toastrService.danger('O campo cidade é obrigatório!!!');
+      this.toastrService.danger('O campo cidade é obrigatório!!!','Aditi Care!');
     } else if (data.endereco === null) {
-      this.toastrService.danger('O campo endereco é obrigatório!!!');
+      this.toastrService.danger('O campo endereco é obrigatório!!!','Aditi Care!');
     } else if (data.numero === null) {
-      this.toastrService.danger('O campo numero é obrigatório!!!');
+      this.toastrService.danger('O campo numero é obrigatório!!!','Aditi Care!');
     } else if (data.estado === null) {
-      this.toastrService.danger('O campo estado é obrigatório!!!');
+      this.toastrService.danger('O campo estado é obrigatório!!!','Aditi Care!');
     } else if (data.celular === null) {
-      this.toastrService.danger('O campo celular é obrigatório!!!');
+      this.toastrService.danger('O campo celular é obrigatório!!!','Aditi Care!');
     } else if (data.email === null) {
-      this.toastrService.danger('O campo email é obrigatório!!!');
+      this.toastrService.danger('O campo email é obrigatório!!!','Aditi Care!');
     } else if (this.sexo === null) {
-      this.toastrService.danger('O campo sexo biologico é obrigatório!!!');
+      this.toastrService.danger('O campo sexo biologico é obrigatório!!!','Aditi Care!');
     } else if ((data.nomeDep != null) && (data.dateNascDep === null)) {
-      this.toastrService.danger('Os campos do dependente são obrigatórios!!!');
+      this.toastrService.danger('Os campos do dependente são obrigatórios!!!','Aditi Care!');
     } else if (this.showMsgErroCpf === true || this.showMsgErroCpfDep === true) {
-      this.toastrService.danger('O campo cpf inválido!!!');
+      this.toastrService.danger('O campo cpf inválido!!!','Aditi Care!');
     } else {
 
       this.isActive = true;
 
       this.service.salvarPaciente(this.register, (response => {
         this.isActive = false;
-        this.toastrService.success('Registro cadastrado com sucesso !!!');
+        this.toastrService.success('Registro Realizado com Sucesso !!!','Aditi Care!');
         this.limparForm()
         this.previousPage()
       }), (error) => {
@@ -489,25 +489,23 @@ export class NovoPacienteComponent implements OnDestroy {
   }
 
   public convertToBase64(file: File, element) {
-
-    const observable = new Observable((subscriber: Subscriber<any>) => {
-      this.readFile(file, subscriber)
-    })
-
-    observable.subscribe((d: String) => {
-
-      if (element.id == 'imagem') {
-        this.imagem = d.slice(d.indexOf(",") + 1);
-        this.avatar = 'data:application/pdf;base64,' + this.imagem;
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      const base64String = event.target.result.split(',')[1];
+      if (element.id === 'imagem') {
+        this.imagem = base64String;
+        this.avatar = 'data:image/png;base64,' + this.imagem; // Ajuste o tipo MIME conforme necessário
       } else {
-        this.imagemDep = d.slice(d.indexOf(",") + 1);
+        this.imagemDep = base64String;
         this.avatarDep = 'data:application/pdf;base64,' + this.imagemDep;
       }
-
-
-    })
-
+    };
+    reader.onerror = (error) => {
+      console.error('Error: ', error);
+    };
+    reader.readAsDataURL(file);
   }
+  
 
   public readFile(file: File, subscribe: Subscriber<any>) {
     const filereader = new FileReader();

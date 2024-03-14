@@ -1,15 +1,15 @@
+
 <div class="text-center">
   <div class="col-md-12 col-xs-12">
     <div class="row">
       <div class="col-md-12 col-xs-12">
-        <nb-card>
-          <div class="dialog-body sidebar-header">
+        <nb-card style="overflow: hidden;">
+                    <div class="dialog-body sidebar-header">
             <form class="login" method="post" name="login" id="login" [formGroup]="formLogin">
-              <div class="m-lg-n4 text-center">
-                <img class="p-4" style="height: 255px; width: 450px;" src="assets/images/login_aditi.png" id="icon"
-                  alt="User Icon" />
-              </div>
-              <p>Digite login e senha para acessar conta.</p>
+<div class="d-flex align-items-center justify-content-center">
+  <img class="img-fluid mb-4" style="height: 255px; width: 450px;" src="assets/images/login_aditi.png" id="icon" alt="User Icon" />
+</div>
+              <p>Informe Seu Email e Senha</p>
               <div class="text-center">
                 <input type="text" formControlName="login" id="login" class="fadeIn second border" name="login"
                   placeholder="Login" maxlength="80" autocomplete="off" [(ngModel)]="cnpjCpf" 
@@ -29,9 +29,9 @@
               <input type="submit" class="fade_8S" style="width: 250px;" name="login" id="login" value="Entrar" (click)="login()"/>
               <div class="linksForm">
                 <a href="#/enviar-senha-email" class="fade_4S" title="Resgatar Senha"><nb-icon class="fade_4S"
-                    icon="refresh-outline"></nb-icon>Resgatar Senha</a>
+                    icon="refresh-outline"></nb-icon> Recuperar Senha</a>
                 <a href="#/cadastro" class="fade_4S" title="Cadastrar-se"><nb-icon class="fade_4S"
-                    icon="file-add-outline"></nb-icon>Cadastro</a>
+                    icon="file-add-outline"></nb-icon> Realizar Cadastro</a>
               </div>
             </form>
           </div>

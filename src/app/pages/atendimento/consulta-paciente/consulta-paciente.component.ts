@@ -33,12 +33,16 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public tamCliente: number = 20000;
     public tamMedica: number = 20000;
     public tamExame: number = 20000;
+    public bloqueioSave: boolean = false;
+    public isSaving: boolean = false;
+    public checkedConsulta: boolean = false;
+
     public file: any;
     formData: FormData;
     public atendimento = {
         id: null,
         doctorId: null,
-        nome: null,
+        nomePaciente: null,
         dateNasc: null,
         sexo: null,
         especialidade: null,
@@ -46,8 +50,16 @@ export class ConsultaPacienteComponent implements OnDestroy {
         ultimaConsulta: null,
         userId: null,
         idChild: null,
-        status: null
-    };
+        status: null,
+        data: null,
+        horario: null,
+        nameMother: null,
+        nameFather: null,
+        modalidade: null,
+        telefone: null,
+        email: null,
+        patchPaciente: false,
+        };
     public anexoAtestado = null;
     public anexoReceita = null;
     public rowData = null;
@@ -63,49 +75,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
     ngOnDestroy() { }
     ngOnInit() {
 
-        let data = history.state;
-        
-
-        if (data[0] && data[0].tela === 'historico') {
-            this.atendimento.nome = data[0]?.rowData[0]?.user?.name ??  null;
-            this.atendimento.especialidade = data[0]?.rowData[0]?.specialty?.name ??  null;
-            this.atendimento.dateNasc = data[0]?.rowData[0]?.user?.birthDate
-                ? moment(data[0].rowData[0].user.birthDate).format('DD/MM/YYYY')
-                :  null;
-            this.atendimento.ultimaConsulta = data[0]?.rowData[0]?.user?.dateRegister
-                ? moment(data[0].rowData[0].user.dateRegister).format('DD/MM/YYYY')
-                :  null;
-            this.atendimento.doctorId = data[0]?.rowData[0]?.doctor?.id ?? null;
-            this.atendimento.userId = data[0]?.rowData[0]?.user?.id ??  null;
-            this.atendimento.idChild = data[0]?.rowData[0]?.child?.idChild ?? null;
-            this.atendimento.nome = data[0]?.rowData[0]?.user?.name ??  null;
-            this.atendimento.especialidade = data[0]?.rowData[0]?.specialty?.name ??  null;
-            this.atendimento.dateNasc = data[0]?.rowData[0]?.user?.birthDate
-                ? moment(data[0].rowData[0].user.birthDate).format('DD/MM/YYYY')
-                :  null;
-            this.atendimento.ultimaConsulta = data[0]?.rowData[0]?.user?.dateRegister
-                ? moment(data[0].rowData[0].user.dateRegister).format('DD/MM/YYYY')
-                :  null;
-            this.atendimento.doctorId = data[0]?.rowData[0]?.doctor?.id ??  null;
-            this.atendimento.userId = data[0]?.rowData[0]?.user?.id ??  null;
-            this.atendimento.idChild = data[0]?.rowData[0]?.child?.idChild ??  null;
-
-
-            this.consultaHistorico();
-        }else{
-            this.atendimento.id = this.atendimento.id = data[0]?.rowData?.id ?? null
-            this.atendimento.doctorId = data[0].rowData.doctor.id;
-            this.atendimento.idChild = data[0].rowData.child != null ? data[0].rowData.child.idChild : '';
-            this.atendimento.userId = data[0].rowData.user != null ? data[0].rowData.user.id : '';
-            this.atendimento.nome = data[0].rowData.child != null ? data[0].rowData.child.name : data[0].rowData.user.name;
-            this.atendimento.dateNasc = data[0].rowData.child != null ? moment(data[0].rowData.child.birthDate).format('DD/MM/YYYY') : moment(data[0].rowData.user.birthDate).format('DD/MM/YYYY');
-            this.atendimento.sexo = data[0].rowData.child != null ? data[0].rowData.child.biologicalSex == 'M' ? "Masculino" : "Feminino" : null;
-            this.atendimento.especialidade = data[0].rowData.specialty.name;
-            this.atendimento.tipoSanguineo = data[0].rowData.child != null ? data[0].rowData.child.bloodType : null;
-            this.atendimento.ultimaConsulta = data[0].rowData.child != null ? moment(data[0].rowData.child.dateRegister).format('DD/MM/YYYY') : moment(data[0].rowData.user.dateRegister).format('DD/MM/YYYY');
-            this.atendimento.status = data[0].rowData.status
-        }
-       
 
         this.formConsultaPaciente = this.formBuilder.group({
             detalhesCliente: [null],
@@ -122,11 +91,69 @@ export class ConsultaPacienteComponent implements OnDestroy {
             receita: [null],
             prescricaoMedica: [null],
             pedidoExame: [null],
-            urlExame: [null]
+            urlExame: [null],
+            imc: [null],
+            id: null,
+            patchPaciente: false,
         })
+
+        let data = history.state
+
+        if(localStorage.getItem('detalhesData')!==null){
+            
+            const allData = localStorage.getItem('detalhesData')
+
+            if (allData) {
+              // Converta os dados de string para objeto
+              const parsedData = JSON.parse(allData);
+              this.atendimento = parsedData;
+            }
+
+    }else if(data[0].tela =='atendimento' && data[0].rowData.user!=null){
+
+        const dataNascimento = data[0].rowData.child?.birthDate ?? data[0].rowData.user?.birthDate ?? '20240101';
+        const idadePessoa = this.calcularIdade(dataNascimento) ?? null;
+     
+        let allData = {
+          medico: data[0].rowData.doctor?.name ?? null,
+          nomePaciente: data[0].rowData.child?.name ?? data[0].rowData.user?.name ?? null,
+          nomeResponsavel: data[0].rowData.user?.name ?? null,
+          data: moment(data[0].rowData.dateService).format('DD/MM/YYYY'),
+          horario: data[0].rowData.startTime.concat(' - ', data[0].rowData.endTime),
+          formaPagamento: data[0]?.rowData.typePayment?? null,
+          modalidade: data[0].rowData.typeService?? null,
+          urlCall: data[0].rowData.meetingUrl?? null,
+          status: data[0].rowData.status?? null,
+          especialidade: data[0].rowData.specialty?.name ?? null,
+          convenio: data[0].rowData.plan?.name ?? null,
+          id: data[0].rowData.id?? null,
+          comprovante: data[0].rowData.paymentProo?? null,
+          nameFather: data[0].rowData.child?.nameFather ?? null,
+          nameMother: data[0].rowData.child?.nameMother ?? null,
+          telefone: data[0].rowData.user?.cellPhone ?? null,
+          email: data[0].rowData.user?.emailUser ?? null,
+          dateNasc: idadePessoa ?? null,
+          ultimaConsulta: data[0].rowData.child?.dateRegister ?? null,
+          doctorId: data[0].rowData.doctor?.id ?? null,
+          userId: data[0].rowData.user?.id ?? null,
+          idChild: data[0].rowData.child?.idChild ?? null,
+          sexo: data[0].rowData.biologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
+          tipoSanguineo: data[0].rowData.child?.bloodType ?? null,
+          patchPaciente: false,
+      };
+           
+      this.atendimento = allData;
+
+      this.atendimento.status = data[0].rowData.status?? null;
+  
+      this.saveData('detalhesData', allData);
+    }
+    else{
+        this.router.navigate(['/pages/atendimento/buscar-atendimento'])
 
     }
 
+    }
 
     limpaForm() {
 
@@ -145,7 +172,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
             receita: [null],
             prescricaoMedica: [null],
             pedidoExame: [null],
-            urlExame: [null]
+            urlExame: [null],
+            imc:[null],
         })
         this.tamMedica = 20000;
         this.tamInterno = 20000;
@@ -158,67 +186,118 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isHistorico = false;
         this.isAtestado = true;
         this.isReceita = true;
+        this.bloqueioSave= true;
+        this.limpaForm()
+        
 
-        setTimeout(() => {
-            document.getElementById('tempoRetorno').removeAttribute('disabled');
-            document.getElementById('altura').removeAttribute('disabled');
-            document.getElementById('peso').removeAttribute('disabled');
-            document.getElementById('circCabeca').removeAttribute('disabled');
-            document.getElementById('circAbdomen').removeAttribute('disabled');
-            document.getElementById('urlReceita').removeAttribute('disabled');
-            document.getElementById('urlAtestado').removeAttribute('disabled');
-            document.getElementById('prescricaoMedica').removeAttribute('disabled');
-            document.getElementById('detalhesInterno').removeAttribute('disabled');
-            document.getElementById('detalhesCliente').removeAttribute('disabled');
-            document.getElementById('urlExame').removeAttribute('disabled');
-            document.getElementById('pedidoExame').removeAttribute('disabled');
-        }, 10)
+        if(localStorage.getItem('draftAtendimento') !== null)
+        {
 
+            const allData = localStorage.getItem('draftAtendimento')
+                
+            if (allData) {
+              // Converta os dados de string para objeto
+              const parsedData = JSON.parse(allData);
+
+              this.formConsultaPaciente.controls['detalhesCliente'].setValue(parsedData?.detalhesCliente ?? null);
+              this.formConsultaPaciente.controls['detalhesInterno'].setValue(parsedData?.detalhesInterno ?? null);
+              this.formConsultaPaciente.controls['tempoRetorno'].setValue(parsedData?.tempoRetorno ?? null);
+              this.formConsultaPaciente.controls['altura'].setValue(parsedData?.altura ?? null);
+              this.formConsultaPaciente.controls['peso'].setValue(parsedData?.peso ?? null);
+              this.formConsultaPaciente.controls['circCabeca'].setValue(parsedData?.circCabeca ?? null);
+              this.formConsultaPaciente.controls['circAbdomen'].setValue(parsedData?.circAbdomen ?? null);
+              this.formConsultaPaciente.controls['urlReceita'].setValue(parsedData?.urlReceita ?? null);
+              this.formConsultaPaciente.controls['urlAtestado'].setValue(parsedData?.urlAtestado ?? null);
+              this.formConsultaPaciente.controls['prescricaoMedica'].setValue(parsedData?.prescricaoMedica ?? null);
+              this.formConsultaPaciente.controls['pedidoExame'].setValue(parsedData?.pedidoExame ?? null);
+              this.formConsultaPaciente.controls['urlExame'].setValue(parsedData?.urlExame ?? null);
+
+            }
+        }
     }
 
-    consultaHistorico() {
+    formatDate(dateString) {
+        const parts = dateString.split('/');
+        const year = parts[2];
+        const month = parts[1].padStart(2, '0');
+        const day = parts[0].padStart(2, '0');
+        return `${year}/${month}/${day}`;
+    }
+
+    consultaHistorico(checked) {
         this.isDetalhes = false;
         this.isHistorico = true;
         this.isAtestado = false;
         this.isReceita = false;
 
-        let date = new Date(this.endDate)
-        date.setDate(date.getDate() + 1)
-
+    if (        localStorage.getItem('histDetails') ===null  || checked==true || localStorage.getItem('histDetails') ==='') {
         let params = new HttpParams();
-        params = params.append('doctorId', this.atendimento.doctorId)
-        params = params.append('userId', this.atendimento.userId)
-        params = params.append('childId', this.atendimento.idChild)
-        params = params.append('startDate', moment(this.startDate).format('YYYY/MM/DD'))
-        params = params.append('endDate', moment(date).format('YYYY/MM/DD'))
-        params = params.append('statusId', 8) 
-
-        this.isActive = true
-
-        let dataGrid = history.state
-
+        params = params.append('doctorId', this.atendimento.doctorId);
+        params = params.append('userId', this.atendimento.userId);
+        if(this.atendimento.idChild!==null){
+            params = params.append('childId', this.atendimento.idChild);
+        }
+        params = params.append('startDate', moment(this.startDate).format('YYYY/MM/DD'));
+       // params = params.append('endDate',this.formatDate(this.atendimento.data));       
+        params = params.append('statusIds', '8'); // Use a string para o statusId
+    
+        this.isActive = true;
+        let allData = []; // Crie uma variável vazia para armazenar os dados
         this.service.buscaAtendimentos(params, (response) => {
-            this.isActive = false;
-            this.rowData = response.map(data => {
-                if (dataGrid[0].rowData.status == "04 - Consulta Finalizada") {
-                    return {
-                        name: data.doctor.name,
-                        cpf: data.user.federalId,
-                        birthDate: moment(data.dateService).format('DD/MM/YYYY'),
-                        id: data.id
-                    };
-                } else {
-                    // Se a condição não for atendida, retorne null ou outro valor apropriado
-                    return null;
-                }
+            response.forEach(data => {
+                allData.push({
+                    name: data.doctor.name,
+                    birthDate: moment(data.child.birthDate).format('DD/MM/YYYY') ?? moment(data.user.birthDate).format('DD/MM/YYYY'),
+                    id: data.id,
+                    dateService: data.dateService,
+                    horario: data.startTime +" - "+ data.endTime,
+                    typeService: data.typeService,
+                    cellPhoneUser: data.user.cellPhone,
+                    emailUser:data.user.emailUser,
+                    federalIdUser: data.user.federalId,
+                    NameResponse: data.user.name
+                });
             });
+
+            if (allData.length === 0) {
+                this.toastrService.warning("Não Foram Encontradas Consultas Para Este Paciente.", 'Aditi Care');
+                localStorage.removeItem('histDetails');
+                this.isActive = false;
+                this.rowData = null;
+
+            }else{
+
+                this.saveData('histDetails', allData);
+                this.isActive = false;
+                this.rowData = allData;
+            }
+    
+
         }, (error) => {
             this.isActive = false;
-            this.toastrService.danger(error.message);
+            if (error && error.status === 400) {
+                this.toastrService.warning("Não Foram Encontradas Consultas Para Este Paciente.", 'Aditi Care');
+            }
         });
-
-
+            }else {
+                const allData = localStorage.getItem('histDetails')
+                
+                if (allData) {
+                  // Converta os dados de string para objeto
+                  const parsedData = JSON.parse(allData);
+                
+                  // Preencha os cards com os dados recuperados
+                  this.rowData = parsedData;
+                }
+                  }
     }
+    
+    salvareContinuar(data){
+
+        this.saveData('draftAtendimento', data);
+                this.isActive = false;
+    }
+
 
     caracteresInterno() {
 
@@ -288,11 +367,17 @@ export class ConsultaPacienteComponent implements OnDestroy {
         });
     }
 
-
     voltar() {
         this.isDetalhes = false;
         this.isHistorico = false;
-        this.limpaForm();
+        this.checkedConsulta = true;
+
+        if(this.atendimento.patchPaciente == true){
+            this.router.navigate(['/pages/atendimento/detalhe-atendimento'])
+        }else {
+            this.router.navigate(['/pages/gestao-paciente/paciente'])
+
+        }
     }
 
     public onUploadAtestado = ($event: Event, element) => {
@@ -354,6 +439,22 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
     salvar(data) {
 
+        this.isSaving = true;
+
+        if(data.detalhesCliente==null){
+            this.toastrService.warning('Por Favor Informe dos Os Detalhes do Cliente','Aditi Care!');
+            this.isSaving = false;
+        }else
+        if(data.prescricaoMedica==null){
+            this.toastrService.warning('Por Favor Informe a Prescrição Médica','Aditi Care!');
+            this.isSaving = false;
+        }
+        if(data.detalhesCliente==null){
+            this.toastrService.warning('Por Favor Informe a Prescrição Médica','Aditi Care!');
+            this.isSaving = false;
+        }
+        else{
+
         let register = {
             serviceId: this.atendimento.id,  // id da consulta da buscar-atendimento
             description: data.detalhesCliente,
@@ -364,10 +465,10 @@ export class ConsultaPacienteComponent implements OnDestroy {
             urlRemovalReport: data.urlAtestado,
             prescriptionAttachment: this.anexoAtestado, //anexo mandar igual o da imagem
             removalAttachment: this.anexoReceita, // anexo
-            height: data.altura,
-            weight: data.peso,
-            headSize: data.circCabeca,
-            abdomenSize: data.circAbdomen,
+            height: data.altura ? data.altura.replace(/,/g, '.') : '0',
+            weight: data.peso ? data.peso.replace(/,/g, '.') : '0',
+            headSize: data.circCabeca ? data.circCabeca.replace(/,/g, '.') : '0',
+            abdomenSize: data.circAbdomen ? data.circAbdomen.replace(/,/g, '.') : '0',
             descriptionClinic: data.detalhesInterno,
             descriptionUser: data.detalhesCliente,
             urlMedicalOrder: data.urlExame,
@@ -377,14 +478,32 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isActive = true;
         this.service.salvarDetalheAtendimento(register, (response => {
             this.isActive = false;
-            this.toastrService.success('Cadastrado com sucesso !!!');
-            this.limpaForm();
+            this.toastrService.success('Prontuario Cadastrado com Sucesso','Aditi Care!');
+            this.checkedConsulta=true;
+            this.AlterarStatusStorage();
+            localStorage.removeItem('draftAtendimento');
+            localStorage.removeItem('histDetails');
             this.voltar();
         }), (error) => {
             this.isActive = false;
-            this.toastrService.danger(error.error.message);
-
+            this.toastrService.danger(error.message);
+            this.isSaving = false;
         });
+    }
+    }
+
+    AlterarStatusStorage(){
+        const allData = localStorage.getItem('detalhesData')
+
+        if (allData) {
+          // Converta os dados de string para objeto
+          const parsedData = JSON.parse(allData);
+
+          parsedData.status = '04 - Consulta Finalizada';
+
+          this.saveData('detalhesData', parsedData);
+
+        }
     }
 
     visualizar(data) {
@@ -412,15 +531,13 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.formConsultaPaciente.controls['pedidoExame'].setValue(response?.descriptionMedicalOrder ?? null);
             this.formConsultaPaciente.controls['urlExame'].setValue(response?.urlMedicalOrder ?? null);
 
-
-
         }, (error) => {
             this.isActive = false;
             this.toastrService.danger(error.error.message);
         });
 
     }
-
+     
     number(event): boolean {
         const charCode = (event.which) ? event.which : event.keyCode;
 
@@ -431,7 +548,74 @@ export class ConsultaPacienteComponent implements OnDestroy {
     }
 
     previousPage() {
-        this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+
+        localStorage.removeItem('histDetails');
+
+
+
+        if(this.atendimento.patchPaciente === true){
+            this.router.navigate(['/pages/gestao-paciente/paciente'])
+
+        }else {
+            this.router.navigate(['/pages/atendimento/detalhe-atendimento'])
+        }
     }
+
+        // Salva os dados no LocalStorage
+        saveData(key: string, data: any): void {
+            localStorage.setItem(key, JSON.stringify(data));
+          }
+        
+          // Recupera os dados do LocalStorage
+          getData(key: string): any {
+            const storedData = localStorage.getItem(key);
+            return storedData ? JSON.parse(storedData) : null;
+          }
+
+          calcularIMC(data){
+            
+
+            if(data.controls.altura.value!=null){
+
+                const alturaInput = data.controls.altura.value.toString();
+                const pesoInput = data.controls.peso.value.toString();
+                
+                // Substitua vírgulas por pontos
+                const altura = alturaInput.replace(/,/g, '.');
+                const peso = pesoInput.replace(/,/g, '.');
+                
+        
+                // Cálculo do IMC
+                const V_imc = peso / (altura * altura);
+
+                // Arredondamento
+
+                const V_imc_arredondado = V_imc.toFixed(2);
+        
+                // Exibindo o resultado
+                this.formConsultaPaciente.controls['imc'].setValue(V_imc_arredondado ?? null);
+
+            }else{
+                this.toastrService.warning('Por Favor Preencha Altura e o Peso Para o Calculo','Aditi Care!');
+            }
+       
+}
+
+calcularIdade(dataNascimento: string){
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+
+    const diff = hoje.getTime() - nascimento.getTime();
+    const idade = new Date(diff);
+
+    const anos = idade.getUTCFullYear() - 1970;
+    const meses = idade.getUTCMonth();
+    const dias = idade.getUTCDate() - 1;
+
+    const dataCompleta = `Nasceu em ${nascimento.getFullYear()}, e Tem ${anos} anos ${meses} Meses e ${dias} Dias de Vida.`;
+
+    return dataCompleta;
+}
+
 
 }

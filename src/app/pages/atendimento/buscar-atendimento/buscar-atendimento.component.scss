@@ -90,10 +90,48 @@
   border: none !important;
 }
 
+.card-pendente {
+  background-color: #0894f142;
+  /* Outros estilos para o card cinza, se necessário */
+}
+.card-bloqueado {
+  background-color: #d613f02c;
+  /* Outros estilos para o card cinza, se necessário */
+}
+
+.card-livre{
+background-color: #07c28373;
+/* Outros estilos para o card cinza, se necessário */
+}
+
 :host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions .btn:focus{
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* Estilo padrão para dispositivos não móveis */
+.card {
+  height: 300px;
+}
+
+/* Estilo para dispositivos móveis com largura de tela menor que 768px */
+@media (max-width: 820px) {
+  .card {
+    height: auto;
+  }
+}
+
+.button {
+  margin-top: 0px;
+}
+
+/* Estilos específicos para telas com largura máxima de 768px (dispositivos móveis) */
+@media screen and (max-width: 768px) {
+  .button {
+    margin-top: 20px; /* Reduz a margem para 0 em telas móveis */
+  }
+}
+
 
 :host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions .btn:hover{
   text-decoration: none;

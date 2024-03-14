@@ -107,7 +107,7 @@ export class GerarQrCodeComponent implements OnDestroy {
       this.service.salvarQRCode(register, (response => {
 
         this.isActive = false;
-        this.toastrService.success('QR code cadastrado com sucesso !!!');
+        this.toastrService.success('QR code cadastrado com sucesso !!!','Aditi Care!');
 
         this.limparForm();
 

@@ -85,13 +85,13 @@ export class AssociarMedicoComponent implements OnDestroy {
     this.service.associarDoctor(register, (response => {
 
       this.isActive = false;
-      this.toastrService.success('Cadastro com sucesso !!!');
+      this.toastrService.success('Médico Associado','Aditi Care!');
 
       this.limparForm();
 
     }), (error) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(error.message);
 
     });
   }
