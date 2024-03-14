@@ -87,14 +87,16 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('bway-logged-date', new Date().toString());
     localStorage.setItem('bway-domain', result.domain);
     localStorage.setItem('bway-entityId', result.entityId);
-    localStorage.setItem('bway-enterprise-name', result.name)
-    localStorage.setItem('bway-user', result.federalId),
+    localStorage.setItem('bway-enterprise-name', result.name);
+    localStorage.setItem('bway-user', result.federalId);
 
-      this.pesquisaMedico()
-
-    setTimeout(() => {
-      this.router.navigate(['/pages/dashboard']);
-    }, 3500)
+    this.listMedico = result.doctors
+    var b = this.listMedico
+    b = JSON.stringify(b);
+    sessionStorage.setItem('bway-medico', b);
+    //var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.isActive = false;
+    this.router.navigate(['/pages/dashboard']);       
   }
 
   toggle(checked: boolean) {
@@ -117,6 +119,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('bway-medico', b);
         var c = JSON.parse(sessionStorage.getItem('bway-medico'));
         this.isActive = false;
+        this.router.navigate(['/pages/dashboard']);
       }, (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
@@ -135,6 +138,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('bway-medico', b);
         var c = JSON.parse(sessionStorage.getItem('bway-medico'));
         this.isActive = false;
+        this.router.navigate(['/pages/dashboard']);
       }, (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
@@ -142,7 +146,7 @@ export class LoginComponent implements OnInit {
 
       this.isActive = false;
     }
-
+  
   }
 
   toggleShowPass() {

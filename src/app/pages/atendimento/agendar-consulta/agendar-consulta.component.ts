@@ -81,6 +81,7 @@ export class AgendarConsultaComponent {
     ngOnInit() {
 
         let data = history.state
+
         this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
         this.verificaMedico(this.listMedico[0].id);
         this.pagamento();
@@ -126,6 +127,7 @@ export class AgendarConsultaComponent {
         }
 
         this.formAgendarConsulta.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+        this.formAgendarConsulta.controls['tipoConsulta'].setValue(data.typeServiceId, { onlySelf: true });
 
     }
 
@@ -261,28 +263,55 @@ export class AgendarConsultaComponent {
 
         if (this.validaCampos(data)) {
 
-            let register = {
-                doctorId: this.doctorId,
-                clinicId: this.clinicId,
-                dateProposal: this.dadosHorario.dateProposal,
-                description: data.consPagto,
-                typeServiceId: data.tipoConsulta,
-                startTime: this.dadosHorario.startTime,
-                endTime: this.dadosHorario.endTime,
-                waitingServiceId: this.agendaConsulta.waitingServiceId
-            }
-
             this.isActive = true;
 
-            this.service.waiting(register, (response => {
-                this.isActive = false;
-                this.toastrService.success('Cadastrado com sucesso !!!');
-                this.limpaForm();
-                this.previousPage();
-            }), (error) => {
-                this.isActive = false;
-                this.toastrService.danger(error.error.message);
-            });
+            if (data.cpfMae != null) {
+
+                let register = {
+                    doctorId: this.doctorId,
+                    clinicId: this.clinicId,
+                    dateProposal: this.dadosHorario.dateProposal,
+                    description: data.consPagto,
+                    typeServiceId: data.tipoConsulta,
+                    startTime: this.dadosHorario.startTime,
+                    endTime: this.dadosHorario.endTime,
+                    waitingServiceId: this.agendaConsulta.waitingServiceId
+                }
+
+                this.service.waiting(register, (response => {
+                    this.isActive = false;
+                    this.toastrService.success('Cadastrado com sucesso !!!');
+                    this.limpaForm();
+                    this.previousPage();
+                }), (error) => {
+                    this.isActive = false;
+                    this.toastrService.danger(error.error.message);
+                });
+            } else {
+
+                let params = new HttpParams();
+
+                params = params.append('appointmentId', this.agendaConsulta.waitingServiceId)
+
+                let register = {
+                    dateService: moment(data.dataInicio).format('DD/MM/YYYY'),
+                    startTime: this.dadosHorario.startTime,
+                    endTime: this.dadosHorario.endTime,
+                    meetingUrl: null,
+                }
+
+                this.service.waitingEdit(params, register, (response => {
+                    this.isActive = false;
+                    this.toastrService.success('Cadastrado com sucesso !!!');
+                    //this.limpaForm();
+                    //this.previousPage();
+                }), (error) => {
+                    this.isActive = false;
+                    this.toastrService.danger(error.error.message);
+                });
+
+            }
+
         }
     }
 
@@ -427,7 +456,6 @@ export class AgendarConsultaComponent {
         this.isDadosAtendimento = true;
 
     }
-
 
     previousPage() {
         this.router.navigate(['/pages/atendimento/fila-espera'])

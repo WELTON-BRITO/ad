@@ -1,55 +1,51 @@
-
-
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12 col-xs-12">
       <div class="dialog-body">
-
-        <div class='div-app'>  
-          <div class='app-main'>
-            <full-calendar *ngIf='calendarVisible' [options]='calendarOptions'>
-              <ng-template #eventContent let-arg>
-                <b>{{ arg.timeText }}</b>
-                <i>{{ arg.event.title }}</i>
-              </ng-template>
-            </full-calendar>
-          </div>
-        </div>
-       
+        <nb-card>
+          <nb-card-body>
+            <form id=“form-buscar-atendimento” [formGroup]="formAgendaAtendimento">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4">
+                    <h5 class="ml-lg-n3">Atendimento</h5>
+                  </div>
+                </div>
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <label for="medico">Escolha o médico* </label>
+                      <select class="form-control" id="medico" formControlName="medico">
+                        <option value="{{ listMedico }}" selected>Selecione um Médico</option>
+                        <option *ngFor="let medico of listMedico" [value]="medico.id">
+                          <!-- use value instead of ngValue -->
+                          {{ medico.ID }} {{ medico.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-8">
+                    <div class="form-group pt-4">
+                      <div class="text-right">
+                        <button class="btn btn-primary mr-2" (click)="buscarAtendimento(formAgendaAtendimento.value)">
+                          BUSCAR
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class='div-app'>
+              <div class='app-main'>
+                <full-calendar *ngIf='calendarVisible' [options]='calendarOptions' [plugins]="calendarPlugins"
+                  [initialView]="'timeGridWeek'" [events]="calendarEvents">
+                </full-calendar>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
       </div>
     </div>
   </div>
 </div>
-
-<section id="dados-modal">
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-  <div class="row">
-    <div class="col-lg-6">
-      <nb-card size="small">
-        <nb-card-header>Popover Position</nb-card-header>
-        <nb-card-body>
-          <p>When popover has not enough space based on the configured placement, it will adjust accordingly trying to fit the screen.</p>
-          <button nbButton status="danger" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint" nbPopoverPlacement="left">Left</button>
-          <button nbButton status="danger" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint" nbPopoverPlacement="top">Top</button>
-          <button nbButton status="danger" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint" nbPopoverPlacement="bottom">Bottom</button>
-          <button nbButton status="danger" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint" nbPopoverPlacement="right">Right</button>
-        </nb-card-body>
-      </nb-card>
-    </div>
-    <div class="col-lg-6">
-      <nb-card size="small">
-        <nb-card-header>Simple Popovers</nb-card-header>
-        <nb-card-body>
-          <p>In a simples form popover can take a string of text to render.</p>
-          <button nbButton status="success" nbPopover="Hello, how are you today?">on click</button>
-          <button nbButton status="success" nbPopover="Hello, how are you today?" nbPopoverTrigger="hover">on hover</button>
-          <button nbButton status="success" nbPopover="Hello, how are you today?" nbPopoverTrigger="hint">on hint</button>
-        </nb-card-body>
-      </nb-card>
-    </div>
-  </div>
-  
-</div>
-</section>
-
-

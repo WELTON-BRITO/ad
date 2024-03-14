@@ -1,0 +1,105 @@
+<div #card>
+  <nb-card>
+    <nb-card-body>
+      <form id="form-associa-cartao" [formGroup]="formDetalheAtendimento">
+        <div class="text-center">
+          <h5 class="text-center p-2">Agenda de Paciente</h5>
+          <div class="text-right mt-lg-n5">
+            <button type="submit" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close"
+              aria-hidden="true" (click)="close()">&times;</button>
+          </div>
+        </div>
+        <div class="modal-dialog modal-dialog-scrollable mt-3">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-12 ">
+                  <div class="form-group ">
+                    <div class="form-row">
+                      <div class="mr-2"><label>Médico: </label></div>
+                      <label>{{atendimento.medico}} </label>
+                    </div>
+                    <div class="form-row">
+                      <div class="mr-2"><label>Paciente: </label></div>
+                      <label>{{atendimento.paciente}} </label>
+                    </div>
+                    <div class="form-row">
+                      <div class="mr-2"><label>Data: </label></div>
+                      <label>{{atendimento.data}} </label>
+                    </div>
+                    <div *ngIf="atendimento.nameMother !== null" class="form-row">
+                      <div class="mr-2"><label>Nome da mãe: </label></div>
+                      <label>{{atendimento.nameMother}} </label>
+                    </div>
+                    <div *ngIf="atendimento.nameFather !== null" class="form-row">
+                      <div class="mr-2"><label>Nome do pai: </label></div>
+                      <label>{{atendimento.nameFather}} </label>
+                    </div>
+                    <div class="form-row">
+                      <div class="mr-2"><label>Forma pagamento: </label></div>
+                      <label>{{atendimento.formaPagamento}} </label>
+                    </div>
+                    <div class="form-row">
+                      <div class="mr-2"><label>Modalidade: </label></div>
+                      <label>{{atendimento.modalidade}} </label>
+                    </div>
+                    <div class="form-row">
+                      <div class="mr-2"><label>Status: </label></div>
+                      <label>{{atendimento.status}} </label>
+                    </div>
+                    <div class="form-row">
+                      <div class="mr-2"><label>Horário: </label></div>
+                      <label>{{atendimento.horario}} </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <nb-card>
+              <nb-card-body>
+                <nb-actions size="small" fullWidth>
+                  <nb-action *ngIf="atendimento.status ==='01 - Aguardando Aprovação'
+                    || atendimento.status ==='03 - Consulta Confirmada'
+                    || atendimento.status ==='02 - Aguardando Pagamento'" (click)="abrirModalCancelamento()"
+                    title="Cancelar">
+                    <nb-icon class="action-icon" icon="trash-2-outline"></nb-icon>
+                  </nb-action>
+                  <nb-action
+                    *ngIf="atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='02 - Aguardando Pagamento'"
+                    (click)="aprovarPagamento()" title="Aprovar pagamento">
+                    <nb-icon class="action-icon" icon="checkmark-circle-outline"></nb-icon>
+                  </nb-action>
+                  <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'
+                    && atendimento.modalidade ==='Consulta por Video Chamada'
+                    && atendimento.urlCall !== null" (click)="goToLink(atendimento.urlCall)"
+                    title="Iniciar atendimento">
+                    <nb-icon class="action-icon" icon="wifi-outline"></nb-icon>
+                  </nb-action>
+                  <!--<nb-action>
+                      <nb-icon class="action-icon" icon="archive-outline"></nb-icon>
+                      <span>Ver histórico</span>
+                    </nb-action>-->
+                  <nb-action *ngIf="(atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='03 - Consulta Confirmada'
+                    || atendimento.status ==='02 - Aguardando Pagamento') && atendimento.formaPagamento == 'PIX'"
+                    (click)="abrirComprovante()" title="Ver comprovante">
+                    <nb-icon class="action-icon" icon="attach-outline"></nb-icon>
+                  </nb-action>
+                  <nb-action
+                    *ngIf="atendimento.status ==='03 - Consulta Confirmada' || atendimento.status === '04 - Consulta Finalizada'"
+                    (click)="abrirConsulta()" title="Atualizar prontuário">
+                    <nb-icon class="action-icon" icon="file-outline"></nb-icon>
+                  </nb-action>
+                  <nb-action
+                    *ngIf="atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='02 - Aguardando Pagamento' || atendimento.status ==='03 - Consulta Confirmada'"
+                    (click)="editarConsulta()" title="Reagendar">
+                    <nb-icon class="action-icon" icon="edit-outline"></nb-icon>
+                  </nb-action>
+                </nb-actions>
+              </nb-card-body>
+            </nb-card>
+          </div>
+        </div>
+      </form>
+    </nb-card-body>
+  </nb-card>
+</div>

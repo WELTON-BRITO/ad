@@ -161,6 +161,8 @@ export class FilaEsperaComponent {
                             idMae: data.user.id,
                             cpfDependente: data.child == null ? null : data.child.cpf,
                             idDependente: data.child == null ? null : data.child.idChild,
+                            typeService: data.typeService.description,
+                            typeServiceId: data.typeService.id
                         }
                     })
                 } else {

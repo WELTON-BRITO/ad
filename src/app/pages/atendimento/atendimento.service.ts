@@ -79,4 +79,8 @@ export class AtendimentoService {
   timeAvailable(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/appointments/timeAvailable', data, successHandle, erroHandle)
   }
+
+  waitingEdit(idAtendimento,data: any, successHandle:Function, errorHandle:Function) {
+    return this.httpService.doPut('/api/appointments/' + idAtendimento ,data, successHandle, errorHandle);
+  }
 }

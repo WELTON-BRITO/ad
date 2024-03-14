@@ -9,7 +9,7 @@ export class PacienteService {
   constructor(private httpService:HttpService) { }
 
   buscaPaciente(data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/patient/all', data, successHandle, erroHandle)
+    return this.httpService.doGet('/api/patient/custom/all', data, successHandle, erroHandle)
   }
 
   buscaPhoto(data:any, successHandle: Function, erroHandle: Function){

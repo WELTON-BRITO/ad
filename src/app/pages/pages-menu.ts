@@ -32,7 +32,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       }
     ]
   },
-  /*{
+  {
     title: 'Visualizar Agenda',
     icon: 'monitor-outline',
     link: '/pages/visualizar-agenda',
@@ -44,7 +44,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/visualizar-agenda/agenda',
       }
     ]
-  },*/
+  },
   {
     title: 'Gestão de Pacientes',
     icon: 'people-outline',

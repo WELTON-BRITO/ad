@@ -217,8 +217,8 @@ export class BuscarAtendimentoComponent implements OnInit {
 
         this.service.buscaAtendimentos(params, (response) => {
           this.isActive = false
-          this.rowData = response
-          this.rowData = this.rowData.map(data => {
+          this.rowData = response         
+          this.rowData = this.rowData.map(data => {            
             return {
               medico: data.doctor.name,
               nome: data.child == null ? data.user.name : data.child.name,
@@ -296,6 +296,7 @@ export class BuscarAtendimentoComponent implements OnInit {
   }
 
   detalhes(data) {
+    console.log(data)
     this.router.navigateByUrl('/pages/atendimento/detalhe-atendimento', { state: data.atendimento });
   }
 

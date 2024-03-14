@@ -7,7 +7,7 @@ const API = environment.url_server;
 @Injectable({
   providedIn: 'root'
 })
-export class ModalAgendaPacienteService {
+export class ModalDetalheAtendimentoService {
 
   constructor(
     private httpService: HttpService

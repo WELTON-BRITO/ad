@@ -30,7 +30,6 @@ export class PacienteComponent implements OnInit {
   ngOnInit() {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
-
     this.formPaciente = this.formBuilder.group({
       cpf: [null],
       medico: [this.listMedico[0], Validators.required],
@@ -68,16 +67,16 @@ export class PacienteComponent implements OnInit {
 
         this.rowData = this.rowData.map(data => {
           return {
-            avatar: data.user.avatar == null || data.user.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.user.avatar,
-            name: data.user.name,
-            cellPhone: data.user.cellPhone,
-            email: data.user.emailUser,
-            federalId: data.user.federalId,
-            id: data.user.id,
-            city: data.user.city.id,
-            uf: data.user.uf.id,
-            userChildren: data.userChildren,
-            doctorId: data.doctor.id
+            avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
+            name: data.name,
+            cellPhone: data.cellPhone,
+            email: data.emailUser,
+            federalId: data.federalId,
+            id: data.idPatient,
+           // city: data.city.id,
+          //  uf: data.uf.id,
+          //  userChildren: data.userChildren,
+            //doctorId: data.doctor.id
           }
         })
 

@@ -65,7 +65,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         let data = history.state;
 
-        if(data[0].tela == 'historico'){
+        if (data[0].tela == 'historico') {
             this.atendimento.nome = data[0].rowData[0].user.name;
             this.atendimento.especialidade = data[0].rowData[0].specialty.name;
             this.atendimento.dateNasc = moment(data[0].rowData[0].user.birthDate).format('DD/MM/YYYY');
@@ -74,7 +74,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.atendimento.userId = data[0].rowData[0].user.id
             this.atendimento.idChild = data[0].rowData[0].child != null ? data[0].rowData[0].idChild : '';
             this.consultaHistorico();
-        }else{
+        } else {
             this.atendimento.id = data[0].rowData.id;
             this.atendimento.doctorId = data[0].rowData.doctor.id;
             this.atendimento.idChild = data[0].rowData.child != null ? data[0].rowData.child.idChild : '';
@@ -87,7 +87,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.atendimento.ultimaConsulta = data[0].rowData.child != null ? moment(data[0].rowData.child.dateRegister).format('DD/MM/YYYY') : moment(data[0].rowData.user.dateRegister).format('DD/MM/YYYY');
             this.atendimento.status = data[0].rowData.status
         }
-       
+
 
         this.formConsultaPaciente = this.formBuilder.group({
             detalhesCliente: [null],
@@ -375,7 +375,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         this.isActive = true
         let params = new HttpParams();
-        params = params.append('appointmentId', this.atendimento.id)
+        params = params.append('appointmentId', data.id)
 
         this.service.visualizarHistorico(params, (response) => {
 

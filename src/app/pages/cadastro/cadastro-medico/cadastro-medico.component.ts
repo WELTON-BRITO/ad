@@ -7,6 +7,7 @@ import { Observable, Subscriber } from 'rxjs';
 import { co } from '@fullcalendar/core/internal-common';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import { SearchZipCodeService } from '../../shared/services/searchZipCode.services';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-cadastro-medico',
@@ -75,7 +76,7 @@ export class CadastroMedicoComponent implements OnInit {
       socialName: [null],
       federalId: [null],
       ufId: [null],
-      cityId: [null],
+      cityId: [this.listCidade],
       numeroClinica: [null],
       neighborhood: [null],
       street: [null],
@@ -204,9 +205,7 @@ export class CadastroMedicoComponent implements OnInit {
   buscaEstado() {
 
     this.service.buscaEstado(null, (response) => {
-
       this.listEstado = response
-
     }, (error) => {
       this.toastrService.danger(error.error.message);
     });
@@ -216,9 +215,7 @@ export class CadastroMedicoComponent implements OnInit {
   buscaCidade(data) {
 
     this.service.buscaCidade(null, data, (response) => {
-
       this.listCidade = response
-
     }, (error) => {
       this.toastrService.danger(error.error.message);
     });
@@ -442,6 +439,49 @@ export class CadastroMedicoComponent implements OnInit {
     this.formCadastroMedico.controls['neighborhood'].setValue(null);
     this.formCadastroMedico.controls['numeroClinica'].setValue(null);
     this.formCadastroMedico.controls['complementoClinica'].setValue(null);
+
+  }
+
+  buscaClinica(data) {
+
+    let cnpj = data.replace(/\D/g, '');
+
+    if (data != null) {
+
+      this.service.buscaClinica(cnpj, null, (response) => {
+
+        this.buscaCidade(response.uf.id)
+
+        setTimeout(() => {
+          this.formCadastroMedico.controls['name'].setValue(response.name);
+          this.formCadastroMedico.controls['socialName'].setValue(response.socialName);
+          this.formCadastroMedico.controls['ufId'].setValue(response.uf.id);
+          this.formCadastroMedico.controls['cityId'].setValue(response.city.id);
+          this.formCadastroMedico.controls['cellPhone'].setValue(response.cellPhone);
+          this.formCadastroMedico.controls['zipCode'].setValue(response.cep);
+          this.formCadastroMedico.controls['street'].setValue(response.street);
+          this.formCadastroMedico.controls['neighborhood'].setValue(response.neighborhood);
+          this.formCadastroMedico.controls['numeroClinica'].setValue(response.number);
+          this.formCadastroMedico.controls['complementoClinica'].setValue(response.complement);
+        }, 20)
+
+      }, (error) => {
+        this.toastrService.danger(error.error.message);
+        this.formCadastroMedico.controls['name'].setValue(null);
+        this.formCadastroMedico.controls['socialName'].setValue(null);
+        this.formCadastroMedico.controls['ufId'].setValue(null);
+        this.formCadastroMedico.controls['cityId'].setValue(null);
+        this.formCadastroMedico.controls['cellPhone'].setValue(null);
+        this.formCadastroMedico.controls['zipCode'].setValue(null);
+        this.formCadastroMedico.controls['street'].setValue(null);
+        this.formCadastroMedico.controls['neighborhood'].setValue(null);
+        this.formCadastroMedico.controls['numeroClinica'].setValue(null);
+        this.formCadastroMedico.controls['complementoClinica'].setValue(null);
+      });
+
+    }
+
+
 
   }
 
