@@ -25,6 +25,17 @@ b { /* used for event dates/times */
   font-size: 14px;
 }
 
+.fc-toolbar {
+  .fc-center h2 {
+      font-size: 1.25em
+  }
+  display: block;
+  text-align: center;
+  @media (min-width: 600px) {
+      display: flex;
+  }
+}
+
 
 .demo-app-sidebar {
   width: auto;
@@ -61,3 +72,22 @@ b { /* used for event dates/times */
 .div-app {
   height: 100vh; /* 100% da altura da viewport */
 }
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.cor-box {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 1px solid #000;
+}
+/* Defina as cores para cada status */
+.cor-box.aguardando-aprovacao { background-color: coral; }
+.cor-box.aguardando-pagamento { background-color: red; }
+.cor-box.consulta-confirmada { background-color: green; }
+.cor-box.consulta-finalizada { background-color: blue; }
+.cor-box.outros-status { background-color: rgb(249, 255, 249); }
+

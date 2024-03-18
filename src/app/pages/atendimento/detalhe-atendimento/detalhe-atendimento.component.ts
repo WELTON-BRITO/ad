@@ -36,7 +36,7 @@ export class DetalheAtendimentoComponent implements OnInit {
     nameMother: null,
     nameFather: null,
     telefone: null,
-    email: null,
+    email: null
   };
   public showModal: boolean = false;
   public cancellationReason: string = '';
@@ -44,6 +44,7 @@ export class DetalheAtendimentoComponent implements OnInit {
   public clinicaId = null;
   public listClinica = null;
   public listTipoConsulta = [];
+  public patchPaciente: false;
   
 
   settings = {
@@ -83,10 +84,13 @@ export class DetalheAtendimentoComponent implements OnInit {
   ngOnInit() {
     let data = history.state
     
-
     if(localStorage.getItem('detalhesData')==null){
 
     if (data.doctor && data.doctor.name !== undefined){
+
+      if(data.patchPaciente !==null){
+        patchPaciente: true;
+      }
 
       const dataNascimento = data.child?.birthDate ?? data.user?.birthDate ?? '20240101';
       const idadePessoa = this.calcularIdade(dataNascimento) ?? null;
@@ -215,9 +219,17 @@ if (allData) {
   }
 
   previousPage() {
-    this.router.navigate(['/pages/atendimento/buscar-atendimento'])
-    localStorage.removeItem('detalhesData');
-    localStorage.removeItem('histDetails');
+
+    if(this.patchPaciente){
+      localStorage.removeItem('detalhesData');
+      localStorage.removeItem('histDetails');
+      this.router.navigate(['/pages/visualizar-agenda/agenda'])
+      }else {
+      localStorage.removeItem('detalhesData');
+      localStorage.removeItem('histDetails');
+      this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+
+  }
 
   }
 

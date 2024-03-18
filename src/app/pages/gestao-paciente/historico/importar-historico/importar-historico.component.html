@@ -4,6 +4,7 @@
             <div class="dialog-body">
                 <nb-card>
                     <nb-card-body>
+                        <form id=“formBuscarAtendimento” [formGroup]="formBuscarAtendimento">
                         <div class="form-row align-items-center">
                             <nb-card-header class="aditi-header">
                                 <div class="back-link">
@@ -13,12 +14,108 @@
                                 </div>
                             </nb-card-header>
                             <div class="form-group col-md-6">
-                                <h5 class="pt-3">Importar Histórico</h5>
+                                <h5 class="pt-3">Importação de Dados:</h5>
                             </div>
                         </div>
+                        <form [formGroup]="formBuscarAtendimento">
+
+                        <div class="form-row align-items-center">
+                            <div class="form-group col-md-6 ">
+                               <div class="form-row">
+                                    <div class="mr-2"><label>Nome do Paciente: </label></div>
+                                    <label>{{ paciente.nameChild || paciente.name}} </label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label>Email: </label></div>
+                                    <label>{{ paciente.email }} </label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label>Data de Nascimento: </label></div>
+                                    <label>{{ paciente.birthDateChild || paciente.birthDate  }} </label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label>Documento Responsável: </label></div>
+                                    <label>{{ paciente.federalId  }} </label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label>Telefone: </label></div>
+                                    <label>{{ paciente.cellPhone  }} </label>
+                                </div>
+                            </div>
+                            
+                            </div>
+                        </form>
+
+                            <div class="form-group col-md-6">
+                                <h5 class="pt-3">Filtros da Associação:</h5>
+                            </div>
+
+                        <div class="form-row align-items-center">
+                            <div class="form-group col-md-4">
+                              <label for="nome">Escolha o médico*</label>
+                              <select class="form-control" formControlName="medico">
+                                <option value="null" selected>SELECIONE</option>
+                                <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
+                                  medico.name}}</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                              <label for="cpf">CPF</label>
+                              <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
+                                placeholder="CPF do Paciente" />
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label for="nomePaciente">Nome do Paciente</label>
+                              <input class="form-control" name="nome" id="nomePaciente" type="text" formControlName="nomePaciente"
+                                placeholder="Nome do Paciente" />
+                            </div>
+                            <div class="form-group col-md-2 pl-5">
+                              <div class="text-right">
+                                <button class="btn btn-primary m-2 mb-lg-n1" (click)="pesquisaGeral(formBuscarAtendimento.value,true)">
+                                  Pesquisar
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
                       
                     </nb-card-body>
                 </nb-card>
+                <div class="form-row align-items-center">
+                    <div class="form-group col-md-12">
+                        <div class="app-box">
+                            <div class="row">
+                                <div class="col-md-4" *ngFor="let row of rowData">
+                                    <nb-card>
+                                        <nb-card-body>
+                                            <p class="card-text">Paciente: {{ row?.firstName }} {{ row.lastName }}</p>
+                                            <p class="card-text">Telefone: {{ row.phone }}</p>
+                                            <p class="card-text">Email: {{ row.email }}</p>
+                                            <p class="card-text">Data de Nascimento: {{ row.dateBirth }}</p>
+                                            <p class="card-text">CPF: {{ row.document }}</p>
+                                            <div class="form-row align-items-center justify-content-center">
+                                                <!-- Exibe o botão apenas se row.process for igual a 'n' -->
+                                                <ng-container *ngIf="row.process === 'N'; else usuarioAssociado">
+                                                    <button class="btn btn-success ml-2 button" (click)="AssociarPaciente(row)">
+                                                        Associar Usuário
+                                                    </button>
+                                                </ng-container>
+                                                <!-- Mostra a mensagem "Usuário já associado" caso contrário -->
+                                                <ng-template #usuarioAssociado>
+                                                    <button class="btn btn-danger ml-2 button" disabled>
+                                                        Usuário já associado
+                                                    </button>
+                                                </ng-template>
+                                            </div>
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
             </div>
         </div>
     </div>

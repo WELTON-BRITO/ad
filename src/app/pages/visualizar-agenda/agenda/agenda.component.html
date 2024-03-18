@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12 col-xs-12">
@@ -12,8 +13,7 @@
                   </div>
                 </div>
                 <div class="form-row align-items-center">
-                  <div class="form-group col-md-4">
-                    <div class="form-group">
+                  <div class="form-group col-md-3">
                       <label for="medico">Escolha o médico* </label>
                       <select class="form-control" id="medico" formControlName="medico">
                         <option value="{{ listMedico }}" selected>Selecione um Médico</option>
@@ -22,9 +22,18 @@
                           {{ medico.ID }} {{ medico.name }}
                         </option>
                       </select>
-                    </div>
                   </div>
-                  <div class="form-group col-md-8">
+                    <div class="form-group col-md-3">
+                        <label for="dataInicio">Período Inicial*</label>
+                        <input class="form-control date" type="date" id="dataInicio" name="Data Início"
+                            [value]="TodayDate" maxlength="10" formControlName="dataInicio" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="dataFim">Período Final*</label>
+                        <input class="form-control date" type="date" id="dataFim" name="Data Fim"
+                            [value]="FinalDate" maxlength="10" formControlName="dataFim" />
+                    </div>
+                  <div class="form-group col-md-3">
                     <div class="form-group pt-4">
                       <div class="text-right">
                         <button class="btn btn-primary mr-2" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
@@ -43,6 +52,24 @@
                   [initialView]="'timeGridWeek'" [events]="calendarEvents">
                 </full-calendar>
               </div>
+              <h6>Legenda de Cores para Status de Eventos</h6>
+              <div class="legenda-item">
+                  <div class="cor-box" style="background-color: coral;"></div>
+                  <span>Aguardando Aprovação</span>
+              </div>
+              <div class="legenda-item">
+                  <div class="cor-box" style="background-color: red;"></div>
+                  <span>Aguardando Pagamento</span>
+              </div>
+              <div class="legenda-item">
+                  <div class="cor-box" style="background-color: green;"></div>
+                  <span>Consulta Confirmada</span>
+              </div>
+              <div class="legenda-item">
+                  <div class="cor-box" style="background-color: blue;"></div>
+                  <span>Consulta Finalizada</span>
+              </div>
+
             </div>
           </nb-card-body>
         </nb-card>

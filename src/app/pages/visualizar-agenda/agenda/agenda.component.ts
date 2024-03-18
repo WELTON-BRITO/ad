@@ -13,6 +13,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDetalheAtendimentoComponent } from './modal-detalhe-atendimento/modal-detalhe-atendimento.component';
 import { Router } from '@angular/router';
 
+
 declare var $: any;
 
 @Component({
@@ -46,11 +47,12 @@ export class AgendaComponent implements OnInit {
   currentEvents: EventApi[] = [];
   calendarVisible = true;
   public DefaultStatus = '7,10,4,8';
-
+  public StartedDate : any;
 
   calendarOptions: CalendarOptions = {
     locale: 'pt-br',
     height: 1000,
+    themeSystem: 'bootstrap',
     
     slotMinTime: '06:00',
     slotMaxTime: '23:00',
@@ -100,6 +102,8 @@ export class AgendaComponent implements OnInit {
 
   ngOnInit() {
 
+    
+
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
     if (this.currentMonth < 10) {
@@ -127,8 +131,13 @@ export class AgendaComponent implements OnInit {
     outraData.setDate(time.getDate() + 7);
     this.FinalDate = moment(outraData).format('YYYY-MM-DD')
 
+    var outraData2 = new Date();
+    outraData2.setDate(time.getDate() - 7);
+    this.StartedDate = moment(outraData2).format('YYYY-MM-DD')
+
+
     this.formAgendaAtendimento = this.formBuilder.group({
-      dataInicio: [this.TodayDate, Validators.required],
+      dataInicio: [this.StartedDate, Validators.required],
       dataFim: [this.FinalDate, Validators.required],
       medico: [this.listMedico[0], Validators.required],
       
@@ -141,7 +150,7 @@ export class AgendaComponent implements OnInit {
     })
 
     let register = {
-      dataInicio: this.TodayDate,
+      dataInicio: this.StartedDate,
       dataFim: this.FinalDate,
       medico: this.listMedico[0].id,
     }
@@ -198,8 +207,6 @@ export class AgendaComponent implements OnInit {
       location: "agendaGoogle",
     }
 
-    console.log(data)
-
     this.router.navigateByUrl('/pages/atendimento/novo-atendimento', { state: data });
 
   }
@@ -220,6 +227,8 @@ export class AgendaComponent implements OnInit {
 
   buscarAtendimento(data,checked) {
 
+    console.log(data)
+
     let params = new HttpParams();
     let clinica = localStorage.getItem('bway-entityId');
 
@@ -238,29 +247,51 @@ export class AgendaComponent implements OnInit {
 
       if (data.medico == '9999999') {
         params = params.append('doctorId', data.medico)
-      } else {
-
+      } 
         let allData = []; // Crie uma variável vazia para armazenar os dados
         this.service.buscaAtendimentos(params, (response) => {
           this.isActive = false
           this.rowData = response
-          this.calendarEvents = this.rowData.map(evento => ({
-            title: evento.child == null ? evento.user.name : evento.child.name,
-            start: evento.dateService.concat('T', evento.startTime),
-            end: evento.dateService.concat('T', evento.endTime),
-            id: evento.id,
-            medico: evento.doctor.name,
-            paciente: evento.child == null ? evento.user.name : evento.child.name,
-            data: evento.dateService,
-            nameFather: evento.child == null ? evento.user.name : evento.child.nameFather,
-            nameMother: evento.child == null ? evento.user.name : evento.child.nameMother,
-            typePayment: evento.typePayment,
-            typeService: evento.typeService,
-            status: evento.status,
-            horario: evento.startTime.concat(' - ', evento.endTime),
-            dados: evento
-            //color: 'green'
-          }));
+          this.calendarEvents = this.rowData.map(evento => {
+            let color;
+            switch (evento.status) {
+                case '01 - Aguardando Aprovação':
+                    color = 'coral'; // Vermelho claro
+                    break;
+                case '02 - Aguardando Pagamento':
+                    color = 'red'; // Amarelo claro
+                    break;
+                case '03 - Consulta Confirmada':
+                    color = 'green'; // Verde claro
+                    break;
+                case '04 - Consulta Finalizada':
+                    color = 'blue'; // Azul claro
+                    break;
+                default:
+                    color = 'green'; // Cor padrão (caso o status não corresponda a nenhum dos valores acima)
+            }
+        
+            return {
+                title: evento.child?.name ?? evento.user.name,
+                start: evento.dateService.concat('T', evento.startTime),
+                end: evento.dateService.concat('T', evento.endTime),
+                id: evento.id,
+                responsavel: evento.user.name,
+                medico: evento.doctor.name,
+                paciente: evento.child?.name ?? evento.user.name,
+                data: evento.dateService,
+                nameFather: evento.child?.nameFather ?? null,
+                nameMother: evento.child?.nameMother ?? null,
+                typePayment: evento.typePayment,
+                typeService: evento.typeService,
+                status: evento.status,
+                horario: evento.startTime.concat(' - ', evento.endTime),
+                dados: evento,
+                patchPaciente: 'googleCalendar',
+                color: color
+            };
+        });
+        
 
           allData = this.calendarEvents; 
 
@@ -290,7 +321,6 @@ export class AgendaComponent implements OnInit {
 
         });
 
-      }
     }
 
     } else {

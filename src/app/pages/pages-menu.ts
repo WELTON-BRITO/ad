@@ -57,7 +57,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     hidden: false,
     children: [
       {
-        title: 'Listar Pacientes',
+        title: 'Buscar Pacientes',
         link: '/pages/gestao-paciente/paciente',
       },
     ]

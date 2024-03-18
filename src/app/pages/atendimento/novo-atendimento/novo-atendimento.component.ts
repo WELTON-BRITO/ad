@@ -35,7 +35,7 @@ export class NovoAtendimentoComponent {
     public doctorId = null;
     public clinicId = null;
     public userId = null;
-    public childId = [];
+    public childId = null;
     public specialtyId = null;
     public listTipoConsulta = [];
     public rowData = [];
@@ -176,8 +176,12 @@ export class NovoAtendimentoComponent {
             this.formNovoAtendimento.controls['optEncaixe'].setValue('N', { onlySelf: true });
             this.formNovoAtendimento.controls['horarioSelected'].setValue(data.data + ' - ' + data.horario, { onlySelf: true });
             this.horarioSelecionado = (data.data + ' - ' + data.horario);
+            document.getElementById('dataInicio').setAttribute('disabled', 'true');
+
             this.dadosHorario = data;
-            this.isConfAtendimento = true;       
+            this.isConfAtendimento = true;   
+            this.encaixe=true;    
+
     }
 
     }
@@ -240,9 +244,7 @@ export class NovoAtendimentoComponent {
 
                 if (response.length > 0) {
                     this.listDependente = response
-                    this.childId = response[0].idChild
-                } else {
-                    this.childId = null;
+                   // this.childId = response[0].idChild
                 }
 
                 this.isActive = false;
@@ -281,12 +283,12 @@ export class NovoAtendimentoComponent {
 
     consultaDependente(data) {
 
-        this.dependente = data
-        if (this.childId == null) {
+        console.log(data)
+
+        if (this.listDependente == null) {
             this.toastrService.danger('Este Usuário Não Possui Dependentes','Aditi Care');
             this.isDependente = false;
         } else {
-
             if (data == 'S') {
                 this.isDependente = true;
             } else {
@@ -308,13 +310,27 @@ export class NovoAtendimentoComponent {
         }
     }
 
-    formatarData(data) {
-        const partes = data.split("/");
-        const ano = partes[2];
-        const mes = partes[1].padStart(2, '0');
-        const dia = partes[0].padStart(2, '0');
-        return `${ano}-${mes}-${dia}`;
+ formatarData(dataString) {
+        // Verifica se a string está no formato correto (dia/mês/ano)
+        const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+        const match = dataString.match(regex);
+    
+        if (!match) {
+            // A string não está no formato esperado
+            console.log("Formato de data inválido.");
+            return dataString; // Retorna a mesma string
+        }
+    
+        // Extrai os valores do dia, mês e ano
+        const dia = match[1];
+        const mes = match[2].padStart(2, "0"); // Garante que o mês tenha 2 dígitos
+        const ano = match[3];
+    
+        // Monta a nova string no formato desejado
+        const novaData = `${ano}-${mes}-${dia}`;
+        return novaData;
     }
+    
     
 
     qdadeCaracteres() {
@@ -397,17 +413,17 @@ export class NovoAtendimentoComponent {
 
     }
 
+    
+
     salvar(data) {
 
         this.bloqueioSave= false;
-
 
         if (this.specialtyId == null) {
             this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
             this.bloqueioSave= true;
 
         }
-
 
         if (this.dadosHorario.horario === undefined) {
             var startTime = this.tipoCardEncaixe[0].horaInicio
@@ -425,7 +441,7 @@ export class NovoAtendimentoComponent {
         const dataTemp = data.horarioSelected.split(" ");
         var dataCompleta = dataTemp[0]; // Acessa a primeira parte do array
             }else{
-        var  dataCompleta=data.dataInicio
+        var  dataCompleta=(data.dataInicio)
             }
 
         let register = {
@@ -434,17 +450,17 @@ export class NovoAtendimentoComponent {
             clinicId: this.clinicId,
             userId: this.userId,
             childId: this.childId,
-            dateService:dataCompleta,
-            startTime: startTime,
-            endTime: endTime,
+            dateService:this.formatarData(dataCompleta),
+            startTime: startTime.trim(),
+            endTime: endTime.trim(),
             healthPlanId: data.formaConvenio,
-            typePaymentId: data.formaPagto,
-            typeServiceId: data.tipoConsulta,
+            typePaymentId: data.formaPagto ?? 1,
+            typeServiceId: data.tipoConsulta ?? 1,
             meetingUrl: this.dadosHorario.data === undefined ? this.dateEncaixe.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId) : this.dadosHorario.data.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId),
-            specialtyId: this.specialtyId,
-            paymentInCreation: this.tipoPagto,
-            isReturn: this.retorno,
-            dontCheckAvailable: this.encaixe,
+            specialtyId: this.specialtyId ?? 1,
+            paymentInCreation: this.tipoPagto ?? false,
+            isReturn: this.retorno ?? false ,
+            dontCheckAvailable: this.encaixe ?? true,
             procedureId: this.tipoProcedimento,
             customDuration: data.tempoAtendimento,
         }
@@ -454,6 +470,7 @@ export class NovoAtendimentoComponent {
             this.isActive = false;
             this.toastrService.success('Cadastrado Realizado com Sucesso','Aditi Care!');
             localStorage.removeItem('meuCardData'); //garante que o cache foi apagado das telas posteriores
+            localStorage.removeItem('googleData'); //garante que o cache foi apagado das telas posteriores
             this.limpaForm();
             this.previousPage();
         }), (error) => {

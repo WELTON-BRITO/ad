@@ -164,20 +164,32 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-row align-items-center">
+                                <!-- Exibe a primeira div quando this.hasSpecial for true -->
+                                <div *ngIf="!this.hasSpecial" class="form-row align-items-center">
                                     <div class="col-lg-12">
                                         <div class="input-box">
                                             <label for="detalhesInterno"><h6>Detalhes do Atendimento (Interno):</h6></label>
                                             <textarea autosize class="form-control" rows="3"
-                                                formControlName="detalhesInterno" id="detalhesInterno" [value]=""
+                                                formControlName="detalhesInterno" id="detalhesInterno"
                                                 placeholder="Informe Detalhes do Prontuario Interno. Estas Informações Não Aparecem Para os Pacientes."
-                                                (keypress)="caracteresInterno()" maxlength="20000" ></textarea>
+                                                (keypress)="caracteresInterno()" maxlength="20000"></textarea>
                                             <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamInterno}}</span></small>
+                                                    name="txtArea">{{this.tamInterno}}</span></small>
                                                 quantidade máxima de caracteres</p>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Exibe a segunda div quando this.hasSpecial for false -->
+                                <div *ngIf="this.hasSpecial" class="form-row align-items-center">
+                                    <div class="col-lg-12">
+                                        <div class="input">
+                                            <label for="detalhesInterno"><h6>Detalhes do Atendimento (Interno):</h6></label>
+                                            <div [innerHtml]="html_string"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="form-row align-items-center">
                                     <div class="col-lg-12">
                                         <div class="input">

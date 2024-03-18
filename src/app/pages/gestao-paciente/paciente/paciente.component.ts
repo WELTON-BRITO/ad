@@ -81,11 +81,11 @@ export class PacienteComponent implements OnInit {
     if (data.medico != null && data.optPart == 'S') {
       params = params.append('doctorId', data.medico)
     }
-    if (data.cpf != null) {
+    if (data.cpf != null && data.cpf) {
       params = params.append('federalId', data.cpf)
     }
 
-    if (data.nome != null) {
+    if (data.nome != null && data.nome) {
       params = params.append('name', data.nome)
     }
 

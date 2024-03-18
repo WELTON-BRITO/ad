@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
@@ -6,6 +6,7 @@ import { NbToastrService } from '@nebular/theme';
 import { AtendimentoService } from '../atendimento.service';
 import * as moment from 'moment';
 import { Observable, Subscriber } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var $: any;
 @Component({
@@ -36,6 +37,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public bloqueioSave: boolean = false;
     public isSaving: boolean = false;
     public checkedConsulta: boolean = false;
+    public hasSpecial: boolean = false;
+    public html_string: any ;
 
     public file: any;
     formData: FormData;
@@ -64,16 +67,22 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public anexoReceita = null;
     public rowData = null;
     public endDate = new Date()
-    public startDate = new Date((new Date().valueOf() - 1000 * 60 * 60 * 2200))
+    public startDate = new Date();
 
+    
     constructor(private formBuilder: FormBuilder,
         private router: Router,
         private toastrService: NbToastrService,
+        private sanitizer: DomSanitizer, private elRef: ElementRef, private cdRef: ChangeDetectorRef,
         private service: AtendimentoService) {
     }
 
     ngOnDestroy() { }
     ngOnInit() {
+
+        this.startDate.setFullYear(this.startDate.getFullYear() - 5);
+
+        this.hasSpecial=false;
 
 
         this.formConsultaPaciente = this.formBuilder.group({
@@ -199,7 +208,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
               // Converta os dados de string para objeto
               const parsedData = JSON.parse(allData);
 
-              this.formConsultaPaciente.controls['detalhesCliente'].setValue(parsedData?.detalhesCliente ?? null);
+              this.formConsultaPaciente.controls['detalhesCliente'].setValue(parsedData?.this.detalhesCliente ?? null);
               this.formConsultaPaciente.controls['detalhesInterno'].setValue(parsedData?.detalhesInterno ?? null);
               this.formConsultaPaciente.controls['tempoRetorno'].setValue(parsedData?.tempoRetorno ?? null);
               this.formConsultaPaciente.controls['altura'].setValue(parsedData?.altura ?? null);
@@ -230,7 +239,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isAtestado = false;
         this.isReceita = false;
 
-    if (        localStorage.getItem('histDetails') ===null  || checked==true || localStorage.getItem('histDetails') ==='') {
+    if (localStorage.getItem('histDetails') ===null  || checked==true || localStorage.getItem('histDetails') ==='') {
+
         let params = new HttpParams();
         params = params.append('doctorId', this.atendimento.doctorId);
         params = params.append('userId', this.atendimento.userId);
@@ -297,6 +307,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.saveData('draftAtendimento', data);
                 this.isActive = false;
     }
+
 
 
     caracteresInterno() {
@@ -372,7 +383,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isHistorico = false;
         this.checkedConsulta = true;
 
-        if(this.atendimento.patchPaciente == true){
+        if(this.atendimento.patchPaciente === true){
             this.router.navigate(['/pages/atendimento/detalhe-atendimento'])
         }else {
             this.router.navigate(['/pages/gestao-paciente/paciente'])
@@ -506,6 +517,12 @@ export class ConsultaPacienteComponent implements OnDestroy {
         }
     }
 
+    hasSpecialTags(text: string | null | undefined): boolean {
+        // Verifica se o texto não é nulo ou indefinido e contém os caracteres específicos
+        return text !== null && text !== undefined &&
+            (text.includes('</strong>') || text.includes('</p>') || text.includes(' '));
+    }
+    
     visualizar(data) {
 
         this.isActive = true
@@ -518,8 +535,31 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.isDetalhes = true;
             this.isHistorico = false;
 
-            this.formConsultaPaciente.controls['detalhesCliente'].setValue(response?.descriptionClinic ?? null);
-            this.formConsultaPaciente.controls['detalhesInterno'].setValue(response?.description ?? null);
+            let v_descriptionUser = null;
+            let v_descriptionClinic = null;
+           
+           // this.html_cliente = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic);
+           // this.cdRef.detectChanges();
+
+           if(this.hasSpecialTags(response?.descriptionUser)){
+            v_descriptionUser = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionUser)
+            this.hasSpecial = true;
+           }else{
+            v_descriptionUser = response?.descriptionUser;
+           }
+
+           if(this.hasSpecialTags(response?.descriptionClinic)){
+            v_descriptionClinic = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic)
+            this.html_string = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic);
+            v_descriptionClinic = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic);
+            this.hasSpecial = true;
+           }else{
+            v_descriptionClinic = response?.descriptionUser;
+           }
+
+            // Defina o valor no controle do formulário
+            this.formConsultaPaciente.controls['detalhesCliente'].setValue(v_descriptionUser);
+            this.formConsultaPaciente.controls['detalhesInterno'].setValue(v_descriptionClinic);
             this.formConsultaPaciente.controls['tempoRetorno'].setValue(response?.timeReturn ?? null);
             this.formConsultaPaciente.controls['altura'].setValue(response?.height ?? null);
             this.formConsultaPaciente.controls['peso'].setValue(response?.weight ?? null);

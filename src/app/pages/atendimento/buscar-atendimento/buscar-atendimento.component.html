@@ -89,9 +89,7 @@
                         <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
                           mask="000.000.000-00" maxlength="14" (change)="isValidCpf(formBuscarAtendimento.value)"
                           placeholder="000.000.000-00" />
-                        <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
-                          {{this.msgErro}} <br /><br />
-                        </div>
+
                       </div>
                     </div>
                   </div>

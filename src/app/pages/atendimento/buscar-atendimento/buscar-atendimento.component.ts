@@ -376,26 +376,26 @@ this.pesquisarConsulta(data,checked);
   validaCampo(data) {
 
     if (data.medico == null) {
-      this.toastrService.danger('O campo médico é obrigatório!!!');
+      this.toastrService.danger('O campo Médico é Obrigatório','Aditi Care');
       return false
     }
     if (data.dataInicio == null) {
-      this.toastrService.danger('A data início do período é obrigatória!!!');
+      this.toastrService.danger('A data Início do Período é Obrigatória!!!','Aditi Care');
       return false
     }
     if (data.dataFim == null) {
-      this.toastrService.danger('A data fim do período é obrigatória!!!');
+      this.toastrService.danger('A data Fim do Período é Obrigatória','Aditi Care');
       return false
     }
 
     if (data.dataInicio > data.dataFim) {
-      this.toastrService.danger('A data início não pode ser maior que a data fim!!!');
+      this.toastrService.danger('A data Inicial não Pode Ser Maior que a Data Fim','Aditi Care');
       return false
     }
     var diff = Math.abs(new Date(data.dataFim).getTime() - new Date(data.dataInicio).getTime());
     var diffDays = Math.ceil(diff / (1000 * 3600 * 24))
     if (diffDays > 15) {
-      this.toastrService.danger('O período de datas deve ser menor ou igual a 15 dias!!!');
+      this.toastrService.danger('O Período Máximo de Consultas é de 30 dias','Aditi Care');
       return false
     }
     return true
@@ -404,10 +404,9 @@ this.pesquisarConsulta(data,checked);
   isValidCpf(data) {
 
     if (!CPFValidator.isValidCPF(data.cpf)) {
-      this.showMsgErro = true;
+      this.toastrService.warning('O Cpf Informado Não é Válido','Aditi Care');
       return false;
     }
-    this.showMsgErro = false;
     return true;
   }
 
@@ -501,7 +500,7 @@ this.pesquisarConsulta(data,checked);
             }));
 
             if (this.tipoCard.length === 0) {
-              this.toastrService.warning("Não Existem Horários Livres Para Estes Dias", 'Aditi Care');
+             // this.toastrService.warning("Não Existem Horários Livres Para Estes Dias", 'Aditi Care');
               this.isActive = false;
               this.rowData2 = null;
           } else {

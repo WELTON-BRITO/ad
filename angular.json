@@ -12,6 +12,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "preserveSymlinks": true,
+         
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -56,7 +57,11 @@
               "echarts",
               "lodash",
               "zrender/lib/svg/svg",
-              "zrender/lib/vml/vml"
+              "zrender/lib/vml/vml",
+              "rxjs-compat",
+              "ng2-loading-bar",
+              "moment",
+              "crypto-js",
             ],
             "vendorChunk": true,
             "extractLicenses": false,
