@@ -66,6 +66,20 @@ export class PacienteComponent implements OnInit {
 
   }
 
+   limparCpf(cpf: string): string {
+    // Substitui acentos e caracteres especiais por seus equivalentes sem acento
+    const cpfSemAcentos = cpf
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  
+    // Remove espaços, pontos e hífens
+    const cpfLimpo = cpfSemAcentos
+      .replace(/\s+/g, '_') // Substitui espaços por underscores
+      .replace(/[.-]/g, ''); // Remove pontos e hífens
+  
+    return cpfLimpo;
+  }
+
   pesquisaGeral(data,checked) {
 
     if(localStorage.getItem('meuPaciente') ===null  || checked==true || localStorage.getItem('meuPaciente') ===''){
@@ -82,7 +96,7 @@ export class PacienteComponent implements OnInit {
       params = params.append('doctorId', data.medico)
     }
     if (data.cpf != null && data.cpf) {
-      params = params.append('federalId', data.cpf)
+      params = params.append('federalId', this.limparCpf(data.cpf))
     }
 
     if (data.nome != null && data.nome) {
