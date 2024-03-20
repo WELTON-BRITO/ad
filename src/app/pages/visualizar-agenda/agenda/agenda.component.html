@@ -1,4 +1,3 @@
-
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12 col-xs-12">
@@ -14,29 +13,30 @@
                 </div>
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-3">
-                      <label for="medico">Escolha o médico* </label>
-                      <select class="form-control" id="medico" formControlName="medico">
-                        <option value="{{ listMedico }}" selected>Selecione um Médico</option>
-                        <option *ngFor="let medico of listMedico" [value]="medico.id">
-                          <!-- use value instead of ngValue -->
-                          {{ medico.ID }} {{ medico.name }}
-                        </option>
-                      </select>
+                    <label for="medico">Escolha o médico* </label>
+                    <select class="form-control" id="medico" formControlName="medico">
+                      <option value="{{ listMedico }}" selected>Selecione um Médico</option>
+                      <option *ngFor="let medico of listMedico" [value]="medico.id">
+                        <!-- use value instead of ngValue -->
+                        {{ medico.ID }} {{ medico.name }}
+                      </option>
+                    </select>
                   </div>
-                    <div class="form-group col-md-3">
-                        <label for="dataInicio">Período Inicial*</label>
-                        <input class="form-control date" type="date" id="dataInicio" name="Data Início"
-                            [value]="TodayDate" maxlength="10" formControlName="dataInicio" />
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="dataFim">Período Final*</label>
-                        <input class="form-control date" type="date" id="dataFim" name="Data Fim"
-                            [value]="FinalDate" maxlength="10" formControlName="dataFim" />
-                    </div>
+                  <div class="form-group col-md-3">
+                    <label for="dataInicio">Período Inicial*</label>
+                    <input class="form-control date" type="date" id="dataInicio" name="Data Início" [value]="TodayDate"
+                      maxlength="10" formControlName="dataInicio" />
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label for="dataFim">Período Final*</label>
+                    <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate"
+                      maxlength="10" formControlName="dataFim" />
+                  </div>
                   <div class="form-group col-md-3">
                     <div class="form-group pt-4">
                       <div class="text-right">
-                        <button class="btn btn-primary mr-2" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
+                        <button class="btn btn-primary mr-2"
+                          (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
                           BUSCAR
                         </button>
                       </div>
@@ -54,25 +54,38 @@
               </div>
               <h6>Legenda de Cores para Status de Eventos</h6>
               <div class="legenda-item">
-                  <div class="cor-box" style="background-color: coral;"></div>
-                  <span>Aguardando Aprovação</span>
+                <div class="cor-box" style="background-color: coral;"></div>
+                <span>Aguardando Aprovação</span>
               </div>
               <div class="legenda-item">
-                  <div class="cor-box" style="background-color: red;"></div>
-                  <span>Aguardando Pagamento</span>
+                <div class="cor-box" style="background-color: red;"></div>
+                <span>Aguardando Pagamento</span>
               </div>
               <div class="legenda-item">
-                  <div class="cor-box" style="background-color: green;"></div>
-                  <span>Consulta Confirmada</span>
+                <div class="cor-box" style="background-color: green;"></div>
+                <span>Consulta Confirmada</span>
               </div>
               <div class="legenda-item">
-                  <div class="cor-box" style="background-color: blue;"></div>
-                  <span>Consulta Finalizada</span>
+                <div class="cor-box" style="background-color: blue;"></div>
+                <span>Consulta Finalizada</span>
               </div>
 
             </div>
           </nb-card-body>
         </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -1300px;margin-right: 80px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
       </div>
     </div>
   </div>

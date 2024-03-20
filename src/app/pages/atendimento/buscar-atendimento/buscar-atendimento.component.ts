@@ -30,9 +30,7 @@ export class BuscarAtendimentoComponent implements OnInit {
   public checked = false;
   diaAnterior: string | null = null; // Inicialmente, não há dia anterior
   public tipoCard = [];
-
-
-
+  public isBlock: boolean = true;
   TodayDate = "2022-02-15";
   FinalDate = "2022-02-15";
 
@@ -154,31 +152,31 @@ export class BuscarAtendimentoComponent implements OnInit {
         descricao: "Todas"
       },
       {
-      id: 1,
-      descricao: "01 - Presencial"
-    },
-    {
-      id: 3,
-      descricao: "02 - Presencial Emergencial"
-    },
-    {
-      id: 2,
-      descricao: "03 - Por Video Chamada"
-    },
-    {
-      id: 5,
-      descricao: "04 - Video Chamada Emergencial"
-    },
-    {
-      id: 4,
-      descricao: "05 - Em Casa"
-    },
-    {
-      id: 6,
-      descricao: "06 - Procedimentos"
-    }
- ];
-  
+        id: 1,
+        descricao: "01 - Presencial"
+      },
+      {
+        id: 3,
+        descricao: "02 - Presencial Emergencial"
+      },
+      {
+        id: 2,
+        descricao: "03 - Por Video Chamada"
+      },
+      {
+        id: 5,
+        descricao: "04 - Video Chamada Emergencial"
+      },
+      {
+        id: 4,
+        descricao: "05 - Em Casa"
+      },
+      {
+        id: 6,
+        descricao: "06 - Procedimentos"
+      }
+    ];
+
     this.formBuscarAtendimento = this.formBuilder.group({
       dataInicio: [this.TodayDate, Validators.required],
       dataFim: [this.FinalDate, Validators.required],
@@ -186,8 +184,8 @@ export class BuscarAtendimentoComponent implements OnInit {
       medico: [this.listMedico[0], Validators.required],
       clinica: [this.listClinica[0], Validators.required],
       cpf: [null],
-      status:        [this.tipo[0], Validators.required],
-      tipoConsulta:  [this.listTipoConsulta[0], Validators.required]
+      status: [this.tipo[0], Validators.required],
+      tipoConsulta: [this.listTipoConsulta[0], Validators.required]
     });
 
 
@@ -212,190 +210,189 @@ export class BuscarAtendimentoComponent implements OnInit {
       status: this.DefaultStatus,
       tipo: this.tipo[0].id ?? 1,
     }
-    if(localStorage.getItem('meuCardData') ===null || localStorage.getItem('meuCardData') ==='') {
+    if (localStorage.getItem('meuCardData') === null || localStorage.getItem('meuCardData') === '') {
 
-    this.buscarAtendimento(register,true)
-  }else{
-    this.buscarAtendimento(register,false)
+      this.buscarAtendimento(register, true)
+    } else {
+      this.buscarAtendimento(register, false)
+    }
+
+    if (localStorage.getItem('CardTimesDisponivel') === null || localStorage.getItem('CardTimesDisponivel') === '') {
+
+      this.pesquisarConsulta(register, true)
+    } else {
+      this.pesquisarConsulta(register, false)
+    }
+
   }
 
-  if(localStorage.getItem('CardTimesDisponivel') ===null || localStorage.getItem('CardTimesDisponivel') ==='') {
-
-    this.pesquisarConsulta(register,true)
-  }else{
-    this.pesquisarConsulta(register,false)
-  }
-
-  }
-
-  buscarAtendimento(data,checked) {
+  buscarAtendimento(data, checked) {
 
     let clinica = localStorage.getItem('bway-entityId');
 
-    if(localStorage.getItem('meuCardData') ===null  || checked==true || localStorage.getItem('meuCardData') ===''){
+    if (localStorage.getItem('meuCardData') === null || checked == true || localStorage.getItem('meuCardData') === '') {
       this.saveData('meuCardData', '');
       localStorage.removeItem('detalhesData');
       localStorage.removeItem('draftAtendimento');
 
-    this.isActive = true
-    let params = new HttpParams();
+      this.isActive = true
+      let params = new HttpParams();
 
-    if(data.status != '9999'){
-      params = params.append('statusIds', data.statusId ?? data.status ?? this.DefaultStatus);
-    }else{
-      params = params.append('statusIds', this.DefaultStatus);
-
-    }
-    params = params.append('startDate', data.dataInicio ?? '2024-01-01');
-    params = params.append('endDate', data.dataFim ?? '2024-01-01');
-    params = params.append('clinicId', data.clinicaId || data.clinica || 1);
-
-    if(data.tipoConsulta != '9999' && data.tipoConsulta != null ){
-      params = params.append('typeServiceId', data.tipoConsulta)
-    }
-
-    if (data.nome != null) {
-      params = params.append('name', data.nome)
-    }
-    if (data.cpf != null) {
-      params = params.append('federalId', data.cpf)
-    }
-
-    if (this.validaCampo(data)) {
-
-      if (data.medico == '9999999') {
-
-        params = params.append('clinicId', clinica)
-
-        this.service.buscaAtendimentos(params, (response) => {
-          this.isActive = false
-          this.rowData = response
-
-          this.rowData = this.rowData.map(data => {
-
-            if (data.status != "05 - Consulta Cancelada") {
-            return {
-              medico: data.doctor.name,
-              nome: data.child == null ? data.user.name : data.child.name,
-              data: moment(data.dateService).format('DD/MM/YYYY'),
-              horario: data.startTime.concat(' - ', data.endTime),
-              especialidade: data.specialty.name,
-              status: data.status,
-              atendimento: data,
-              modalidade: data.typeService,
-              dataInicio: this.formBuscarAtendimento.dataInicio,
-              dataFim: this.formBuscarAtendimento.dataInicio,
-              clinicaId:clinica,
-              statusId: this.DefaultStatus,
-              medicoId: data.doctor.id,
-            }
-          }
-          else {
-
-            return null
-          }
-
-          })
-
-        }, (error) => {
-          this.isActive = false;
-          if (error.error instanceof ErrorEvent) {
-            console.error('An error occurred:', error.error.message);
-          } else {
-            console.error(
-              `Backend returned code ${error.status}, ` +
-              `body was: ${error.error}`);
-          }
-          this.toastrService.danger(error.message);
-
-        });
-
+      if (data.status != '9999') {
+        params = params.append('statusIds', data.statusId ?? data.status ?? this.DefaultStatus);
       } else {
+        params = params.append('statusIds', this.DefaultStatus);
 
-        params = params.append('doctorId', data.medicoId?? data.medico);
-        let allData = []; // Crie uma variável vazia para armazenar os dados
-        this.service.buscaAtendimentos(params, (response) => {
-            allData = response
-                .filter(data => data.status !== '05 - Consulta Cancelada')
-                .map(data => ({
-                    id: data.id,
-                    medico: data.doctor.name,
-                    nomeDependente: data?.child?.name,
-                    nomeResponsavel: data.user.name,
-                    data: moment(data.dateService).format('DD/MM/YYYY'),
-                    horario: data.startTime.concat(' - ', data.endTime),
-                    especialidade: data.specialty.name,
-                    status: data.status,
-                    atendimento: data,
-                    modalidade: data.typeService + ' - ' + (data?.procedure?.nameProcedure ?? ''),
-                    email: data.user.cellPhone,
-                    telefone: data.user.emailUser,
-                    dataInicio: data.dataInicio,
-                    dataFim: data.dataInicio,
-                    clinicaId:clinica,
-                    statusId: this.DefaultStatus,
-                    medicoId: data.doctor.id,
-                                  }));
-        
-            if (allData.length === 0) {
-                this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
-                this.saveData('meuCardData', null);
-                this.saveData('detalhesData', null);
-                this.saveData('histDetails', null);
-                this.isActive = false;
-                this.rowData = null;
+      }
+      params = params.append('startDate', data.dataInicio ?? '2024-01-01');
+      params = params.append('endDate', data.dataFim ?? '2024-01-01');
+      params = params.append('clinicId', data.clinicaId || data.clinica || 1);
+
+      if (data.tipoConsulta != '9999' && data.tipoConsulta != null) {
+        params = params.append('typeServiceId', data.tipoConsulta)
+      }
+
+      if (data.nome != null) {
+        params = params.append('name', data.nome)
+      }
+      if (data.cpf != null) {
+        params = params.append('federalId', data.cpf)
+      }
+
+      if (this.validaCampo(data)) {
+
+        if (data.medico == '9999999') {
+
+          params = params.append('clinicId', clinica)
+
+          this.service.buscaAtendimentos(params, (response) => {
+            this.isActive = false
+            this.rowData = response
+            this.rowData = this.rowData.map(data => {
+
+              if (data.status != "05 - Consulta Cancelada") {
+                return {
+                  medico: data.doctor.name,
+                  nome: data.child == null ? data.user.name : data.child.name,
+                  data: moment(data.dateService).format('DD/MM/YYYY'),
+                  horario: data.startTime.concat(' - ', data.endTime),
+                  especialidade: data.specialty.name,
+                  status: data.status,
+                  atendimento: data,
+                  modalidade: data.typeService,
+                  dataInicio: this.formBuscarAtendimento.dataInicio,
+                  dataFim: this.formBuscarAtendimento.dataInicio,
+                  clinicaId: clinica,
+                  statusId: this.DefaultStatus,
+                  medicoId: data.doctor.id,
+                }
+              }
+              else {
+
+                return null
+              }
+
+            })
+
+          }, (error) => {
+            this.isActive = false;
+            if (error.error instanceof ErrorEvent) {
+              console.error('An error occurred:', error.error.message);
             } else {
-                this.saveData('meuCardData', allData);
-                this.isActive = false;
-                this.rowData = allData;
+              console.error(
+                `Backend returned code ${error.status}, ` +
+                `body was: ${error.error}`);
             }
-        }, (error) => {
+            this.toastrService.danger(error.message);
+
+          });
+
+        } else {
+
+          params = params.append('doctorId', data.medicoId ?? data.medico);
+          let allData = []; // Crie uma variável vazia para armazenar os dados
+          this.service.buscaAtendimentos(params, (response) => {
+            allData = response
+              .filter(data => data.status !== '05 - Consulta Cancelada')
+              .map(data => ({
+                id: data.id,
+                medico: data.doctor.name,
+                nomeDependente: data?.child?.name,
+                nomeResponsavel: data.user.name,
+                data: moment(data.dateService).format('DD/MM/YYYY'),
+                horario: data.startTime.concat(' - ', data.endTime),
+                especialidade: data.specialty.name,
+                status: data.status,
+                atendimento: data,
+                modalidade: data.typeService + ' - ' + (data?.procedure?.nameProcedure ?? ''),
+                email: data.user.cellPhone,
+                telefone: data.user.emailUser,
+                dataInicio: data.dataInicio,
+                dataFim: data.dataInicio,
+                clinicaId: clinica,
+                statusId: this.DefaultStatus,
+                medicoId: data.doctor.id,
+              }));
+
+            if (allData.length === 0) {
+              this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
+              this.saveData('meuCardData', null);
+              this.saveData('detalhesData', null);
+              this.saveData('histDetails', null);
+              this.isActive = false;
+              this.rowData = null;
+            } else {
+              this.saveData('meuCardData', allData);
+              this.isActive = false;
+              this.rowData = allData;
+            }
+          }, (error) => {
             this.isActive = false;
             this.toastrService.danger(error?.message || "Erro desconhecido.");
-        });
-        
+          });
+
+        }
+      }
+    } else {
+
+      const allData = localStorage.getItem('meuCardData')
+
+      if (allData) {
+        // Converta os dados de string para objeto
+        const parsedData = JSON.parse(allData);
+
+        // Preencha os cards com os dados recuperados
+        this.rowData = parsedData;
+      }
     }
+
+    this.pesquisarConsulta(data, checked);
   }
-}else {
 
-const allData = localStorage.getItem('meuCardData')
-
-if (allData) {
-// Converta os dados de string para objeto
-const parsedData = JSON.parse(allData);
-
-// Preencha os cards com os dados recuperados
-this.rowData = parsedData;
-}
-}
-
-this.pesquisarConsulta(data,checked);
-  }
-  
 
   validaCampo(data) {
 
     if (data.medico == null) {
-      this.toastrService.danger('O campo Médico é Obrigatório','Aditi Care');
+      this.toastrService.danger('O campo Médico é Obrigatório', 'Aditi Care');
       return false
     }
     if (data.dataInicio == null) {
-      this.toastrService.danger('A data Início do Período é Obrigatória!!!','Aditi Care');
+      this.toastrService.danger('A data Início do Período é Obrigatória!!!', 'Aditi Care');
       return false
     }
     if (data.dataFim == null) {
-      this.toastrService.danger('A data Fim do Período é Obrigatória','Aditi Care');
+      this.toastrService.danger('A data Fim do Período é Obrigatória', 'Aditi Care');
       return false
     }
 
     if (data.dataInicio > data.dataFim) {
-      this.toastrService.danger('A data Inicial não Pode Ser Maior que a Data Fim','Aditi Care');
+      this.toastrService.danger('A data Inicial não Pode Ser Maior que a Data Fim', 'Aditi Care');
       return false
     }
     var diff = Math.abs(new Date(data.dataFim).getTime() - new Date(data.dataInicio).getTime());
     var diffDays = Math.ceil(diff / (1000 * 3600 * 24))
     if (diffDays > 15) {
-      this.toastrService.danger('O Período Máximo de Consultas é de 30 dias','Aditi Care');
+      this.toastrService.danger('O Período Máximo de Consultas é de 30 dias', 'Aditi Care');
       return false
     }
     return true
@@ -404,7 +401,7 @@ this.pesquisarConsulta(data,checked);
   isValidCpf(data) {
 
     if (!CPFValidator.isValidCPF(data.cpf)) {
-      this.toastrService.warning('O Cpf Informado Não é Válido','Aditi Care');
+      this.toastrService.warning('O Cpf Informado Não é Válido', 'Aditi Care');
       return false;
     }
     return true;
@@ -416,51 +413,46 @@ this.pesquisarConsulta(data,checked);
 
   }
 
-  desbloquear(data){
+  desbloquear(data) {
 
-          this.isActive = true
-  
-          let register = {
-            'id': data.id,
-            'reasonCancellation': 'Botão Cancelar'
-          }
-  
-          this.service.cancelarAtendimento(register, (response) => {
-            this.isActive = false
-            this.toastrService.success('Atendimento Cancelado com Sucesso','Aditi Care!');
-          }, (message) => {
-            this.isActive = false;
-            this.toastrService.danger(message);
-          });
+    this.isActive = true
+
+    let register = {
+      'id': data.id,
+      'reasonCancellation': 'Botão Cancelar'
+    }
+
+    this.service.cancelarAtendimento(register, (response) => {
+      this.isActive = false
+      this.toastrService.success('Atendimento Cancelado com Sucesso', 'Aditi Care!');
+    }, (message) => {
+      this.isActive = false;
+      this.toastrService.danger(message);
+    });
   }
 
-  AgendaDefinida(data){
-
-    console.log(data)
-
+  AgendaDefinida(data) {
     this.router.navigateByUrl('/pages/atendimento/novo-atendimento', { state: data });
   }
 
   BloquearAtendimento() {
-
     this.router.navigate(['/pages/atendimento/bloquear-atendimento']);
-
   }
 
   detalhes(data) {
     this.router.navigateByUrl('/pages/atendimento/detalhe-atendimento', { state: data.atendimento });
   }
 
-    // Salva os dados no LocalStorage
-    saveData(key: string, data: any): void {
-      localStorage.setItem(key, JSON.stringify(data));
-    }
-  
-    // Recupera os dados do LocalStorage
-    getData(key: string): any {
-      const storedData = localStorage.getItem(key);
-      return storedData ? JSON.parse(storedData) : null;
-    }
+  // Salva os dados no LocalStorage
+  saveData(key: string, data: any): void {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  // Recupera os dados do LocalStorage
+  getData(key: string): any {
+    const storedData = localStorage.getItem(key);
+    return storedData ? JSON.parse(storedData) : null;
+  }
 
   iniciarAtendimento(data) {
     this.rowData = [{
@@ -473,23 +465,23 @@ this.pesquisarConsulta(data,checked);
   videoAtendimento(url) {
     window.open(url.atendimento.meetingUrl, "_blank");
   }
-  pesquisarConsulta(data,checked) {
+  pesquisarConsulta(data, checked) {
 
-    if(localStorage.getItem('CardTimesDisponivel') ===null  || checked==true || localStorage.getItem('CardTimesDisponivel') ===''){
+    if (localStorage.getItem('CardTimesDisponivel') === null || checked == true || localStorage.getItem('CardTimesDisponivel') === '') {
       localStorage.removeItem('CardTimesDisponivel');
 
-    let date = new Date(data.dataInicio)
-    date.setDate(date.getDate() + 6)
+      let date = new Date(data.dataInicio)
+      date.setDate(date.getDate() + 6)
 
-    this.tipoCard = [];
-    if (this.validaCampo(data)) {
+      this.tipoCard = [];
+      if (this.validaCampo(data)) {
 
         this.isActive = true
         let params = new HttpParams();
         params = params.append('doctorId', data.medico)
         params = params.append('startDate', data.dataInicio)
         params = params.append('endDate', moment(date).format('YYYY-MM-DD'))
-        params = params.append('typeServiceId', data.tipo?? 1)
+        params = params.append('typeServiceId', data.tipo ?? 1)
 
         this.service.buscaHorario(params, (response) => {
           this.tipoCard = response.times.filter(item => item.status === 'Disponível')
@@ -499,33 +491,34 @@ this.pesquisarConsulta(data,checked);
               status: 'Disponível',
             }));
 
-            if (this.tipoCard.length === 0) {
-             // this.toastrService.warning("Não Existem Horários Livres Para Estes Dias", 'Aditi Care');
-              this.isActive = false;
-              this.rowData2 = null;
+          if (this.tipoCard.length === 0) {
+            // this.toastrService.warning("Não Existem Horários Livres Para Estes Dias", 'Aditi Care');
+            this.isActive = false;
+            this.isBlock = false;
+            this.rowData2 = null;
           } else {
-              this.saveData('CardTimesDisponivel',  this.tipoCard);
-              this.isActive = false;
-              this.rowData2 =  this.tipoCard;
+            this.saveData('CardTimesDisponivel', this.tipoCard);
+            this.isActive = false;
+            this.rowData2 = this.tipoCard;
           }
         }, (error) => {
           this.isActive = false;
           this.toastrService.danger(error.error.message);
         });
-        
-    }
-  }else {
 
-    const allData = localStorage.getItem('CardTimesDisponivel')
-    
-    if (allData) {
-    // Converta os dados de string para objeto
-    const parsedData = JSON.parse(allData);
-    
-    // Preencha os cards com os dados recuperados
-    this.rowData2 = parsedData;
+      }
+    } else {
+
+      const allData = localStorage.getItem('CardTimesDisponivel')
+
+      if (allData) {
+        // Converta os dados de string para objeto
+        const parsedData = JSON.parse(allData);
+
+        // Preencha os cards com os dados recuperados
+        this.rowData2 = parsedData;
+      }
     }
-    }
-}
+  }
 }
 

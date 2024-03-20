@@ -28,7 +28,7 @@
                     <div class="form-group">
                       <div class="div-clinica">
                         <label for="clinica">Informe a Clínica*</label>
-                        <select class="form-control" formControlName="clinica">  
+                        <select class="form-control" formControlName="clinica">
                           <option value="null" selected>SELECIONE</option>
                           <option *ngFor="let clinica of listClinica" value="{{ clinica.id }}">{{
                             clinica.name}}</option>
@@ -47,31 +47,27 @@
                     </div>
                   </div>
                 </div>
-                  <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="dataInicio">Período Inicial*</label>
-                        <input class="form-control date" type="date" id="dataInicio" name="Data Início"
-                            [value]="TodayDate" maxlength="10" formControlName="dataInicio" />
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="dataFim">Período Final*</label>
-                        <input class="form-control date" type="date" id="dataFim" name="Data Fim"
-                            [value]="FinalDate" maxlength="10" formControlName="dataFim" />
-                    </div>
-                
-                <div class="form-group col-md-4">
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="dataInicio">Período Inicial*</label>
+                    <input class="form-control date" type="date" id="dataInicio" name="Data Início" [value]="TodayDate"
+                      maxlength="10" formControlName="dataInicio" />
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="dataFim">Período Final*</label>
+                    <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate"
+                      maxlength="10" formControlName="dataFim" />
+                  </div>
+                  <div class="form-group col-md-4">
                     <label for="status">Situação Desejada</label>
                     <select class="form-control" formControlName="status">
-                        <option value="null" selected>SELECIONE</option>
-                        <option *ngFor="let status of tipo" value="{{ status.status }}">
-                            {{ status.descricao }}
-                        </option>
+                      <option value="null" selected>SELECIONE</option>
+                      <option *ngFor="let status of tipo" value="{{ status.status }}">
+                        {{ status.descricao }}
+                      </option>
                     </select>
+                  </div>
                 </div>
-
-              </div>
-                
-                
                 <div class="form-row">
                   <div class="form-group col-md-4">
                     <div class="form-group">
@@ -96,13 +92,14 @@
                   <div class="form-group col-md-4">
                     <div class="form-group pt-4">
                       <div class="text-right">
-                        <button class="btn btn-primary mr-2 button" (click)="buscarAtendimento(formBuscarAtendimento.value,true)">
+                        <button class="btn btn-primary mr-2 button"
+                          (click)="buscarAtendimento(formBuscarAtendimento.value,true)" [disabled]="isBlock">
                           Pesquisar
                         </button>
                         <button class="btn btn-success ml-2 button" (click)="agendarAtendimento()">
                           Agendar Horário
                         </button>
-                        <button class="btn btn-warning ml-2 button"  (click)="BloquearAtendimento()">
+                        <button class="btn btn-warning ml-2 button" (click)="BloquearAtendimento()">
                           Bloquear Agenda
                         </button>
                       </div>
@@ -112,25 +109,26 @@
 
               </div>
 
-<h5>Horários Disponíveis:</h5>
+              <h5>Horários Disponíveis:</h5>
 
-<div class="row">
-  <div class="col-md-4" *ngFor="let row of rowData2">
-    <div class=" mb-3" [ngClass]="{
+              <div class="row">
+                <div class="col-md-4" *ngFor="let row of rowData2">
+                  <div class=" mb-3" [ngClass]="{
       'card-livre': row.status === 'Disponível'
-  }">      <div class="card-body">
-        <h6 class="card-title"> Data: {{ row?.data }} </h6>
-        <h6 class="card-title"> Horário: {{ row?.horario }}</h6>
-       
-        <div class="text-center">
-          <button class="btn btn-success mb-2" (click)="AgendaDefinida(row)" title="Agendar" >
-            <i class="fa fa-info-circle"></i> Agendar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  }">
+                    <div class="card-body">
+                      <h6 class="card-title"> Data: {{ row?.data }} </h6>
+                      <h6 class="card-title"> Horário: {{ row?.horario }}</h6>
+
+                      <div class="text-center">
+                        <button class="btn btn-success mb-2" (click)="AgendaDefinida(row)" title="Agendar">
+                          <i class="fa fa-info-circle"></i> Agendar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <h5>Horários Agendados:</h5>
               <div class="row">
                 <div class="col-md-4" *ngFor="let row of rowData">
@@ -142,34 +140,34 @@
                       <h6 class="card-title">Data: {{ row?.data }}</h6>
                       <h6 class="card-title">Horário: {{ row?.horario }}</h6>
                       <p class="card-text">Paciente: {{ row?.nomeDependente || row?.nomeResponsavel }}</p>
-                      <p class="card-text" *ngIf="row?.nomeDependente && row?.nomeResponsavel">Responsável: {{ row?.nomeResponsavel }}</p>
+                      <p class="card-text" *ngIf="row?.nomeDependente && row?.nomeResponsavel">Responsável: {{
+                        row?.nomeResponsavel }}</p>
                       <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
                       <p class="card-text">Situação: {{ row?.status }}</p>
                       <div class="text-center">
-                        <button class="btn btn-primary mb-2" (click)="detalhes(row)" *ngIf="row.nomeResponsavel !== 'Bloqueado'" title="Detalhe">
+                        <button class="btn btn-primary mb-2" (click)="detalhes(row)"
+                          *ngIf="row.nomeResponsavel !== 'Bloqueado'" title="Detalhe">
                           <i class="fa fa-info-circle"></i>
                         </button>
-                        <button style="margin: 0 15px;" class="btn btn-success mb-2"
-                                (click)="iniciarAtendimento(row)"
-                                *ngIf="row && row.atendimento && row.atendimento.status === '03 - Consulta Confirmada'">
+                        <button style="margin: 0 15px;" class="btn btn-success mb-2" (click)="iniciarAtendimento(row)"
+                          *ngIf="row && row.atendimento && row.atendimento.status === '03 - Consulta Confirmada'">
                           <i class="fa fa-wifi"></i>
                         </button>
                         <button class="btn btn-danger mb-2" (click)="videoAtendimento(row)"
-                                *ngIf="row && row.atendimento.meetingUrl !== null && row.atendimento.status === '03 - Consulta Confirmada'">
+                          *ngIf="row && row.atendimento.meetingUrl !== null && row.atendimento.status === '03 - Consulta Confirmada'">
                           <i class="fa fa-video"></i>
                         </button>
                         <button class="btn btn-danger mb-2" (click)="desbloquear(row)"
-                                *ngIf="row.nomeResponsavel === 'Bloqueado' && row.atendimento.status === '02 - Aguardando Pagamento'">
+                          *ngIf="row.nomeResponsavel === 'Bloqueado' && row.atendimento.status === '02 - Aguardando Pagamento'">
                           <i class="fa fa-key"></i>
                         </button>
                       </div>
-                      
+
                     </div>
                   </div>
                 </div>
               </div>
-              
-<!--
+              <!--
               <div class="form-row">
                 <div class="form-group col-md-12">
                   <div class="app-box">
@@ -242,7 +240,7 @@
                   </div>
                 </div>
               </div>
-       -->       
+       -->
             </form>
           </nb-card-body>
         </nb-card>
@@ -250,3 +248,16 @@
     </div>
   </div>
 </div>
+
+<div #card>
+  <div class="col-md-12 col-xs-12">
+    <div class="row" *ngIf="isActive" class="loader">
+      <div class="text-center" style="margin-top: -4460px;margin-right: 80px;">
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Carregando...
+        </button>
+      </div>
+    </div>
+  </div>
+</div>        

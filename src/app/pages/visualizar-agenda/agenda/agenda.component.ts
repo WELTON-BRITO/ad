@@ -47,13 +47,12 @@ export class AgendaComponent implements OnInit {
   currentEvents: EventApi[] = [];
   calendarVisible = true;
   public DefaultStatus = '7,10,4,8';
-  public StartedDate : any;
+  public StartedDate: any;
 
   calendarOptions: CalendarOptions = {
     locale: 'pt-br',
     height: 1000,
     themeSystem: 'bootstrap',
-    
     slotMinTime: '06:00',
     slotMaxTime: '23:00',
     timeZone: 'local', // Fuso horário local
@@ -65,16 +64,35 @@ export class AgendaComponent implements OnInit {
       listPlugin,
     ],
     headerToolbar: {
-      left: 'prev,next today',
+      start: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
     },
     buttonText: {
       today: 'Hoje',
       month: 'Mês',
       week: 'Semana',
       day: 'Hoje',
-      list: 'Lista'
+      list: 'Lista',
+    },
+    windowResize: (view) => {
+      // Função para ajustar o headerToolbar com base no tamanho da janela
+      if (window.innerWidth <= 581) { // Para telas menores que 581px (por exemplo, tamanhos de celular)
+        this.calendarOptions.headerToolbar = {
+          start: '',
+          center: 'prev,next,today,title,dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+          right: '',
+        }
+        document.querySelector('.fc-toolbar-title').setAttribute('style', 'font-size: 25px');
+      } else { // Para telas maiores que 581px (por exemplo, tamanhos de tablet e desktop)
+        this.calendarOptions.headerToolbar = {
+          start: 'prev,next,today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+          end: ''
+        };
+        document.querySelector('.fc-toolbar-title').removeAttribute('style');
+      }
     },
     initialView: 'timeGridWeek',
     initialEvents: INITIAL_EVENTS,
@@ -101,8 +119,6 @@ export class AgendaComponent implements OnInit {
     private router: Router,) { }
 
   ngOnInit() {
-
-    
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
@@ -140,7 +156,7 @@ export class AgendaComponent implements OnInit {
       dataInicio: [this.StartedDate, Validators.required],
       dataFim: [this.FinalDate, Validators.required],
       medico: [this.listMedico[0], Validators.required],
-      
+
     });
 
     this.formAgendaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
@@ -154,12 +170,12 @@ export class AgendaComponent implements OnInit {
       dataFim: this.FinalDate,
       medico: this.listMedico[0].id,
     }
-    
-    if(localStorage.getItem('googleData') ===null || localStorage.getItem('googleData') ==='') {
 
-      this.buscarAtendimento(register,true)
-    }else{
-      this.buscarAtendimento(register,false)
+    if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
+      this.buscarAtendimento(register, true)
+    } else {
+      this.buscarAtendimento(register, false)
+
     }
   }
 
@@ -201,7 +217,7 @@ export class AgendaComponent implements OnInit {
 
     let data = {
       data: dataFormatada,
-      horario: horaInicio + ' -  ' + horaFim ,
+      horario: horaInicio + ' -  ' + horaFim,
       medicoId: selected,
       status: "Disponível",
       location: "agendaGoogle",
@@ -225,89 +241,85 @@ export class AgendaComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  buscarAtendimento(data,checked) {
-
-    console.log(data)
+  buscarAtendimento(data, checked) {
 
     let params = new HttpParams();
     let clinica = localStorage.getItem('bway-entityId');
 
-    if(localStorage.getItem('googleData') ===null  || checked==true || localStorage.getItem('googleData') ===''){
+    if (localStorage.getItem('googleData') === null || checked == true || localStorage.getItem('googleData') === '') {
       localStorage.removeItem('googleData');
 
-    params = params.append('startDate', data.dataInicio)
-    params = params.append('endDate', data.dataFim)
-    params = params.append('statusIds', this.DefaultStatus);
-    params = params.append('clinicId', clinica)
+      params = params.append('startDate', data.dataInicio)
+      params = params.append('endDate', data.dataFim)
+      params = params.append('statusIds', this.DefaultStatus);
+      params = params.append('clinicId', clinica)
 
-   
-    this.isActive = true
+      this.isActive = true
 
-    if (this.validaCampo(data)) {
+      if (this.validaCampo(data)) {
 
-      if (data.medico == '9999999') {
-        params = params.append('doctorId', data.medico)
-      } 
+        if (data.medico == '9999999') {
+          params = params.append('doctorId', data.medico)
+        }
         let allData = []; // Crie uma variável vazia para armazenar os dados
         this.service.buscaAtendimentos(params, (response) => {
+          console.log('entrei aqui')
           this.isActive = false
           this.rowData = response
           this.calendarEvents = this.rowData.map(evento => {
             let color;
             switch (evento.status) {
-                case '01 - Aguardando Aprovação':
-                    color = 'coral'; // Vermelho claro
-                    break;
-                case '02 - Aguardando Pagamento':
-                    color = 'red'; // Amarelo claro
-                    break;
-                case '03 - Consulta Confirmada':
-                    color = 'green'; // Verde claro
-                    break;
-                case '04 - Consulta Finalizada':
-                    color = 'blue'; // Azul claro
-                    break;
-                default:
-                    color = 'green'; // Cor padrão (caso o status não corresponda a nenhum dos valores acima)
+              case '01 - Aguardando Aprovação':
+                color = 'coral'; // Vermelho claro
+                break;
+              case '02 - Aguardando Pagamento':
+                color = 'red'; // Amarelo claro
+                break;
+              case '03 - Consulta Confirmada':
+                color = 'green'; // Verde claro
+                break;
+              case '04 - Consulta Finalizada':
+                color = 'blue'; // Azul claro
+                break;
+              default:
+                color = 'green'; // Cor padrão (caso o status não corresponda a nenhum dos valores acima)
             }
-        
+
             return {
-                title: evento.child?.name ?? evento.user.name,
-                start: evento.dateService.concat('T', evento.startTime),
-                end: evento.dateService.concat('T', evento.endTime),
-                id: evento.id,
-                responsavel: evento.user.name,
-                medico: evento.doctor.name,
-                paciente: evento.child?.name ?? evento.user.name,
-                data: evento.dateService,
-                nameFather: evento.child?.nameFather ?? null,
-                nameMother: evento.child?.nameMother ?? null,
-                typePayment: evento.typePayment,
-                typeService: evento.typeService,
-                status: evento.status,
-                horario: evento.startTime.concat(' - ', evento.endTime),
-                dados: evento,
-                patchPaciente: 'googleCalendar',
-                color: color
+              title: evento.child?.name ?? evento.user.name,
+              start: evento.dateService.concat('T', evento.startTime),
+              end: evento.dateService.concat('T', evento.endTime),
+              id: evento.id,
+              responsavel: evento.user.name,
+              medico: evento.doctor.name,
+              paciente: evento.child?.name ?? evento.user.name,
+              data: evento.dateService,
+              nameFather: evento.child?.nameFather ?? null,
+              nameMother: evento.child?.nameMother ?? null,
+              typePayment: evento.typePayment,
+              typeService: evento.typeService,
+              status: evento.status,
+              horario: evento.startTime.concat(' - ', evento.endTime),
+              dados: evento,
+              patchPaciente: 'googleCalendar',
+              color: color
             };
-        });
-        
+          });
 
-          allData = this.calendarEvents; 
+          allData = this.calendarEvents;
 
-      
-            if (allData.length === 0) {
-                this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
-                this.isActive = false;
-                this.calendarEvents = null;
-                this.rowData = null;
-            } else {
-                this.saveData('googleData', allData);
-                this.isActive = false;
-                this.calendarEvents = allData;
-                this.rowData=allData;
-            }
-       
+          if (allData.length === 0) {
+            this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
+            this.isActive = false;
+            this.calendarEvents = null;
+            this.rowData = null;
+          } else {
+            this.saveData('googleData', allData);
+            this.isActive = false;
+            this.calendarEvents = allData;
+            this.rowData = allData;
+          }
+
         }, (error) => {
           this.isActive = false;
           if (error.error instanceof ErrorEvent) {
@@ -321,18 +333,18 @@ export class AgendaComponent implements OnInit {
 
         });
 
-    }
+      }
 
     } else {
       const allData = localStorage.getItem('googleData')
-
       if (allData) {
-      // Converta os dados de string para objeto
-      const parsedData = JSON.parse(allData);
-      
-      // Preencha os cards com os dados recuperados
-      this.calendarEvents = parsedData;
-      }    }
+        // Converta os dados de string para objeto
+        const parsedData = JSON.parse(allData);
+
+        // Preencha os cards com os dados recuperados
+        this.calendarEvents = parsedData;
+      }
+    }
 
   }
 
@@ -363,15 +375,15 @@ export class AgendaComponent implements OnInit {
     }
     return true
   }
-      // Salva os dados no LocalStorage
-      saveData(key: string, data: any): void {
-        localStorage.setItem(key, JSON.stringify(data));
-      }
-    
-      // Recupera os dados do LocalStorage
-      getData(key: string): any {
-        const storedData = localStorage.getItem(key);
-        return storedData ? JSON.parse(storedData) : null;
-      }
+  // Salva os dados no LocalStorage
+  saveData(key: string, data: any): void {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  // Recupera os dados do LocalStorage
+  getData(key: string): any {
+    const storedData = localStorage.getItem(key);
+    return storedData ? JSON.parse(storedData) : null;
+  }
 
 }
