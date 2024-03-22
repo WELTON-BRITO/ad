@@ -64,7 +64,7 @@ export class AgendaComponent implements OnInit {
       listPlugin,
     ],
     headerToolbar: {
-      start: 'prev,next today',
+      left: 'prev,next today',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
     },

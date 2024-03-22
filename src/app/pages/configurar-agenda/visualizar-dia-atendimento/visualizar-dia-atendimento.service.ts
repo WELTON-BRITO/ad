@@ -19,5 +19,10 @@ export class VisualizarDiaAtendimentoService {
   verificaEspecialidade(id: any, data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/specialty/doctor/' + id, data, successHandle, erroHandle)
   }
- 
+  
+  delete(id: any, successHandle: Function, erroHandle: Function){
+
+    return this.httpService.doDeleteNothingParameters('/api/schedule/'+ id, successHandle, erroHandle)
+  } 
+
 }

@@ -26,7 +26,7 @@
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="div-medico">
-                        <label for="clinica">Escolha a clínica</label>
+                        <label for="clinica">Filtrar por Clínica</label>
                         <select class="form-control" formControlName="clinica"
                           (change)="verificaClinica($event.target.value)">
                           <option value="null" selected>SELECIONE</option>
@@ -36,33 +36,53 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-2">
-                    <div class="form-group pt-4">
-                      <div class="text-right">
+                  <div class="form-group col-md-2 text-right">
                         <button class="btn btn-primary m-lg-n5"
                           (click)="buscarAtendimento(formVisualizarDiaAtendimento.value)">
-                          BUSCAR
+                          Consultar
                         </button>
-                      </div>
-                    </div>
                   </div>
-                  <div class="col-md-3">
-                    <div class="form-group pt-2">
-                      <div class="text-right">
+                  <div class="form-group col-md-3 text-right">
                         <button class="btn btn-success mr-3" id="bntConfig"
                           (click)="configAtendimento(formVisualizarDiaAtendimento.value)">
-                          Definir horários
+                          Definir Horários
                         </button>
-                      </div>
-                    </div>
                   </div>
+                </div>
+
+                <div class="form-group">
+                  <h5 class="pt-3">Agenda de Atendimento:</h5>
                 </div>
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-12">
                     <div class="app-box">
+
+                      <div class="row">
+                        <div class="col-md-4" *ngFor="let horarios of horariosPorDia; let i = index">
+                          <div class="card mb-3">
+                            <div class="card-header">
+                              {{ getDiaSemana(i) }}
+                            </div>
+                            <div class="card-body" *ngIf="horariosPorDia.length > 0">
+                              <ul class="list-unstyled">
+                                <li *ngFor="let horario of horarios">
+                                  <small>{{ formatHorario(horario) }}</small>
+                                  <!-- Ícone de exclusão -->
+                                  <i class="fa fa-trash ml-2" (click)="deletarHorario(horario)"></i>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                        
+                     <!--
                       <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
                         [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
                         [messages]="{emptyMessage: 'Sem dados...'}" [limit]="8">
+
+   
 
                         <ngx-datatable-column name="Segunda" prop="segunda">
                           <ng-template ngx-datatable-cell-template let-row="row">
@@ -129,7 +149,7 @@
                             </datatable-pager>
                           </ng-template>
                         </ngx-datatable-footer>
-                      </ngx-datatable>
+                      </ngx-datatable>-->
                     </div>
                   </div>
                 </div>

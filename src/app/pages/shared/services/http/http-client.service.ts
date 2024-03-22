@@ -25,25 +25,36 @@ export class HttpService {
   private responsecallback(
     observable: Observable<HttpResponse<Object>>,
     successHandle: Function,
-    errorHandle?: Function
+    errorHandle: Function
 
   ) {
     try {
       observable.subscribe(
         (res) => {
-          successHandle(res.body);
+          const retorno =res.body ||res.statusText
+          successHandle(retorno);
           this.loadingBarService.complete();
         },
         (err) => {
-          errorHandle(err)
-          if ((errorHandle != null) && ((parseInt(err.status) != 200))) {
-            errorHandle(this.getErrorMessage(err));
+          if((parseInt(err.status) == 204)){
+            successHandle(err);
             this.loadingBarService.complete();
-          } else {
-            this.loadingBarService.complete();
-            throw err;
+
+          }else if (parseInt(err.status) == 500) {
+
+            {
+             setTimeout(() => {
+                 this.router.navigate(['/login']);
+             }, 3000); // 3000 milissegundos = 3 segundos
+         }
+     } else {
+              errorHandle(err);
+              this.loadingBarService.complete();
+            //  throw err;
+            }
+
           }
-        }
+
       );
     } catch (err) {
       if (errorHandle != null) {
@@ -140,6 +151,23 @@ export class HttpService {
     let url = this.urlBase + path;
     return this.responsecallback(
       this.http.delete(url, { params, observe: "response" }),
+      successHandle,
+      errorHandle
+    );
+
+  }
+
+  public doDeleteNothingParameters(
+    path: string,
+    successHandle: Function,
+    errorHandle?: Function
+  ) {
+    this.loadingBarService.reset();
+    this.loadingBarService.start();
+
+    let url = this.urlBase + path;
+    return this.responsecallback(
+      this.http.delete(url, { observe: "response" }),
       successHandle,
       errorHandle
     );

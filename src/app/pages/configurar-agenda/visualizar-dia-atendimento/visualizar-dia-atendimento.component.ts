@@ -28,6 +28,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   public listClinica: any = [];
   public clinicaId = null;
   public doctorId = null;
+  public horariosPorDia: string[][] = [];
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -70,19 +71,29 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   ngOnInit() {
 
     document.getElementById('bntConfig').setAttribute('disabled', 'true');
+    this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.formVisualizarDiaAtendimento = this.formBuilder.group({
       medico: [this.listMedico[0], Validators.required],
-      clinica: [null, Validators.required],
+      clinica: [this.listClinica[0], Validators.required],
     })
 
     this.formVisualizarDiaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
-    this.pesquisaClinica(this.listMedico[0].id)
+
+    this.formVisualizarDiaAtendimento.controls['clinica'].setValue(this.listClinica[0].id, { onlySelf: true }); // use the id of the first clinica
+
+    this.verificaHorario(null)
   }
 
   configAtendimento(data) {
     this.verificaEspecialidade(data)
+  }
+
+  formatHorario(horario: string): string {
+    // Suponha que o formato seja sempre "números - horário - descrição"
+    const partes = horario.split(' - ');
+    return partes[1] + ' - ' + partes[2] +  ' ' + partes.slice(3).join(' - ');
   }
 
   verificaHorario(data) {
@@ -91,100 +102,98 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
     this.rowData = [];
     let params = new HttpParams();
 
-    params = params.append('doctorId', data.medico)
-    if (this.clinicaId != null) {
+    this.horariosPorDia= []   
+
+    if (data && data.medico !== null) {
+      params = params.append('doctorId', data.medico);
+  } else {
+      params = params.append('doctorId', this.formVisualizarDiaAtendimento.value.medico.id || this.listMedico[0].id);
+  }
+
+      if (this.clinicaId != null) {
       params = params.append('clinicId', data.clinica)
     }
-    this.service.agendaDoctor(params, (response) => {
-
-      if (response.length != 0) {
-
+    this.service.agendaDoctor(params, (response: any[]) => {
+      if (response.length !== 0) {
         this.rowData = response;
-
-        this.rowData = this.rowData.map(data => {
-
-          if (data.weekday == 1) {
-            this.segunda = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
-            this.terca = null;
-            this.quarta = null;
-            this.quinta = null;
-            this.sexta = null;
-            this.sabado = null;
-            this.domingo = null;
-          } else if (data.weekday == 2) {
-            this.terca = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
-            this.segunda = null;
-            this.quarta = null;
-            this.quinta = null;
-            this.sexta = null;
-            this.sabado = null;
-            this.domingo = null;
-          } else if (data.weekday == 3) {
-            this.quarta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
-            this.segunda = null;
-            this.terca = null;
-            this.quinta = null;
-            this.sexta = null;
-            this.sabado = null;
-            this.domingo = null;
-          } else if (data.weekday == 4) {
-            this.quinta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
-            this.segunda = null;
-            this.terca = null;
-            this.quarta = null;
-            this.sexta = null;
-            this.sabado = null;
-            this.domingo = null;
-          } else if (data.weekday == 5) {
-            this.sexta = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
-            this.segunda = null;
-            this.terca = null;
-            this.quarta = null;
-            this.quinta = null;
-            this.sabado = null;
-            this.domingo = null;
-          } else if (data.weekday == 6) {
-            this.sabado = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
-            this.segunda = null;
-            this.terca = null;
-            this.quarta = null;
-            this.quinta = null;
-            this.sexta = null;
-            this.domingo = null;
-          } else if (data.weekday == 7) {
-            this.domingo = [data.startTime.concat(' - ', data.endTime, ' - ', data.typeService.description, ' - ', data.clinic.name)]
-            this.segunda = null;
-            this.terca = null;
-            this.quarta = null;
-            this.quinta = null;
-            this.sexta = null;
-            this.sabado = null;
+    
+        this.rowData.forEach(data => {
+          const diaSemana = data.weekday;
+          const horario = `${data.id} - ${data.startTime} - ${data.endTime} - ${data.clinic.name} - ${data.typeService.description}`;
+          
+          // Verifica se o array não está vazio e se o horário não é vazio
+          if (!this.horariosPorDia[diaSemana] && horario.trim() !== '') {
+            this.horariosPorDia[diaSemana] = [];
           }
-
-          return {
-            segunda: this.segunda,
-            terca: this.terca,
-            quarta: this.quarta,
-            quinta: this.quinta,
-            sexta: this.sexta,
-            sabado: this.sabado,
-            domingo: this.domingo,
+    
+          // Adiciona o horário apenas se não for vazio
+          if (horario.trim() !== '') {
+            this.horariosPorDia[diaSemana].push(horario);
           }
-        })
-        this.isActive = false
-        document.getElementById('bntConfig').removeAttribute('disabled');
-      } else {
-        this.isActive = false
-        document.getElementById('bntConfig').removeAttribute('disabled');
-        this.toastrService.warning('Não possui nenhum atendimento agendado.');
-      }
-
+        });
+    
+        // Remove a posição 0 do array
+        this.horariosPorDia.shift();
+    
+        this.isActive = false;
+          }
+           
     }, (error) => {
+      this.isActive = false;
       this.toastrService.danger(error.error.message);
-      document.getElementById('bntConfig').removeAttribute('disabled');
     });
+    
+    document.getElementById('bntConfig').removeAttribute('disabled');
 
   }
+
+  // No seu componente TypeScript (por exemplo, agenda.component.ts)
+getDiaSemana(diaSemana: number): string {
+  switch (diaSemana) {
+    case 0:
+      return 'Segunda-feira';
+    case 1:
+      return 'Terça-feira';
+    case 2:
+      return 'Quarta-feira';
+    case 3:
+      return 'Quinta-feira';
+    case 4:
+      return 'Sexta-feira';
+    case 5:
+      return 'Sábado';
+    case 6:
+      return 'Domingo';
+    default:
+      return 'Dia não encontrado';
+  }
+}
+
+deletarHorario(horario: string) {
+  // Implemente a lógica para deletar o horário
+  const partes = horario.split(' - ');
+
+  var id =partes[0];
+
+  this.isActive = true;
+  
+  this.service.delete(id, (response => {
+    this.isActive = false;
+    this.toastrService.success('Horário Removido Com Sucesso','Aditi Care!');
+    this.verificaHorario(null);
+  }), (error) => {
+
+    if(error==='OK'){
+    this.isActive = false;
+    this.toastrService.success('Horário Removido Com Sucesso','Aditi Care!');
+  }else{
+    this.isActive = false;
+    this.toastrService.danger(error.error.message);
+  }
+
+  });
+  
+}
 
   pesquisaClinica(data) {
 
@@ -224,7 +233,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       if (response != null) {
         this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data });
       } else {
-        this.toastrService.danger('Médico não possi especialidade cadastrada por gentileza cadastrar.');
+        this.toastrService.danger('O Médico Não Possui Especialidade Cadastrada, Realize o Cadastro');
       }
 
     }), (error) => {

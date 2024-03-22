@@ -756,11 +756,27 @@ export class NovoAtendimentoComponent {
 
         } else {
 
+            const horaInicio = this.dadosHorario.horaInicio;
+            const partesHora = horaInicio.split(':');
+            const hora = parseInt(partesHora[0]);
+            const minutos = parseInt(partesHora[1]);
+
+            // Crie um objeto Date com a hora atual
+            const dataHora = new Date();
+            dataHora.setHours(hora);
+            dataHora.setMinutes(minutos);
+
+            // Adicione 1 minuto
+            dataHora.setMinutes(dataHora.getMinutes() + 1);
+
+            // Formate o resultado de volta para o formato "HH:mm"
+            const horaFormatada = `${dataHora.getHours()}:${dataHora.getMinutes()}`;
+
             this.isActive = true
             let params = new HttpParams();
             params = params.append('doctorId', data.medico)
             params = params.append('dateService', moment(data.dataInicio).format('YYYY-MM-DD'))
-            params = params.append('startTime', this.dadosHorario.horaInicio)
+            params = params.append('startTime', horaFormatada)
             params = params.append('endTime', this.dadosHorario.horaFim)
 
             if(data.tipoConsulta == 6 && data.tipoProcedimento != null){

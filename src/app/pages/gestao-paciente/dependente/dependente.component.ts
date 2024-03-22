@@ -27,7 +27,6 @@ export class DependenteComponent implements OnDestroy {
   public register = null;
   public listMedico = null;
   public doctorId = null;
-  public avatar = null;
   public msgErro = 'Data inválida!!!';
   public showMsgErro = false;
   public msgErroCpf = 'CPF inválido!!!';
@@ -38,6 +37,8 @@ export class DependenteComponent implements OnDestroy {
   public rowData = [];
   public nameMae = null;
   public NewowData: any = {};
+  public avatar = "assets/images/avatar.png";
+
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -109,8 +110,6 @@ export class DependenteComponent implements OnDestroy {
 
     this.history = history.state;
 
-    console.log(this.history)
-
     if (this.history.tipo == "cadastrar") {
       this.isCadastro = true;
       this.isVisualizar = false;
@@ -138,12 +137,29 @@ export class DependenteComponent implements OnDestroy {
   
         this.rowData = this.rowData.map(data => {
           return {
-            name: data.name,
-            birthDate: moment(data.birthDate).format('DD/MM/YYYY'),
-            federalId: data.cpf,
-            status: data.status
+            name: data.name || null,
+            email: data.email || null,
+            telefone: data.cellPhone || null,
+            federalId: data.federalId || null,
+            idChild: data.idChild || null,
+            nameMother: data.nameMother || null,
+            nameFather: data.nameFather || null,
+            cpf: data.cpf || null,
+            rg: data.rg || null,
+            biologicalSex: data.biologicalSex || null,
+            dateRegister: data.dateRegister || null,
+            birthCountry: data.birthCountry || null,
+            birthDate: data.birthDate || null,
+            birthState: data.birthState || null,
+            birthCity: data.birthCity || null,
+            bloodType: data.bloodType || null,
+            avatar: data.avatar
+              ? 'data:application/pdf;base64,' + data.avatar
+              : this.avatar || null,
+            status: data.status || null,
           }
         })
+        
   
       }, (error) => {
         this.isActive = false;
@@ -154,15 +170,28 @@ export class DependenteComponent implements OnDestroy {
     }else{
 
       this.NewowData = {
-        name: this.history.data.name,
-        email: this.history.data.email,
-        telefone: this.history.data.cellPhone,
-        federalId: this.history.data.federalId,
+        name: this.history.data.name || null,
+        email: this.history.data.email || null,
+        telefone: this.history.data.cellPhone || null,
+        federalId: this.history.data.federalId || null,
+        idChild: this.history.data.idChild || null,
+        nameMother: this.history.data.nameMother || null,
+        nameFather: this.history.data.nameFather || null,
+        cpf: this.history.data.cpf || null,
+        rg: this.history.data.rg || null,
+        biologicalSex: this.history.data.biologicalSex || null,
+        dateRegister: this.history.data.dateRegister || null,
+        birthCountry: this.history.data.birthCountry || null,
+        birthDate: this.history.data.birthDate || null,
+        birthState: this.history.data.birthState || null,
+        birthCity: this.history.data.birthCity || null,
+        bloodType: this.history.data.bloodType || null,
+        avatar: this.history.data.avatar
+          ? 'data:application/pdf;base64,' + this.history.data.avatar
+          : this.avatar || null,
+        status: this.history.data.status || null,
       };
-
-      console.log( this.NewowData)
-
-    }
+          }
 
   }else{
     this.previousPage()

@@ -20,16 +20,10 @@ export class ConfigurarDiaAtendimentoService {
     return this.httpService.doGet('/api/schedule/all', data, successHandle, erroHandle)
   }
 
-  buscaClinica(id: any, data:any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doGet('/api/clinic/doctor/' + id, data, successHandle, erroHandle)
-  } 
-
   buscaModalidade(doctorId: any, data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/configuration/service/doctor/'+ doctorId +'/typePrice', data, successHandle, erroHandle)
   } 
 
-  delete(id: any, successHandle: Function, erroHandle: Function){
-    return this.httpService.doDelete('/api/schedule/' + id, successHandle, erroHandle)
-  } 
+
 
 }
