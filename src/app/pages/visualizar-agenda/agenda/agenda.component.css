@@ -36,6 +36,18 @@ b { /* used for event dates/times */
   }
 }
 
+.button {
+  margin-top: 27px;
+}
+
+/* Estilos específicos para telas com largura máxima de 768px (dispositivos móveis) */
+@media screen and (max-width: 768px) {
+  .button {
+    margin-top: 20px; /* Reduz a margem para 0 em telas móveis */
+  }
+}
+
+
 
 .demo-app-sidebar {
   width: auto;

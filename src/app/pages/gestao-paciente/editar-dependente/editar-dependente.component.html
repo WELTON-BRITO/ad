@@ -1,0 +1,98 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="dialog-body">
+        <nb-card>
+          <nb-card-body>
+            <form id="form-novo-paciente" [formGroup]="formDependente">
+              <div class="col-md-12 col-xs-12">
+                <div class="form-row align-items-center">
+                  <nb-card-header class="aditi-header">
+                    <div class="back-link">
+                      <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                        <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                      </a>
+                    </div>
+                  </nb-card-header>
+                  <div class="form-group col-md-3">
+                    <h5 class="pt-3">Editar Dependente</h5>
+                  </div>
+                </div>
+
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-6">
+                  <label for="nomeDep">Nome do dependente</label>
+                  <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="dateNascDep">Data de nascimento</label>
+                  <div class="row pl-3">
+                    <input class="date" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
+                      maxlength="10" />
+                  </div>
+
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-6">
+                  <label for="nome">Nome da Mãe</label>
+                  <input class="form-control" name="nomeMae" id="nomeMae" type="text"
+                    formControlName="nomeMae" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="nome">Nome do Pai</label>
+                  <input class="form-control" name="nomePai" id="nomePai" type="text"
+                    formControlName="nomePai" />
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-3">
+                  <label for="cpfDep">CPF</label>
+                  <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
+                    value="cpfDep" mask="000.000.000-00"
+                    (change)="isValidCpf($event.target,formDependente.value)" />
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="rgDep">RG</label>
+                  <input class="form-control" name="rgDep" id="rgDep" type="text" formControlName="rgDep"
+                    mask="00.000.000-0" />
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="mat-button mb-3">Sexo biologico:</label>
+                  <div class="row">
+                    <label class="radio-inline mr-3 pl-3">
+                      <input class="mat-button" type="radio" id="radio-masculino" name="radio-masculino" value="M"
+                        (click)="viewdiv($event.target.value)">
+                      Masculino</label>
+                    <label class="radio-inline">
+                      <input class="mat-button" type="radio" id="radio-feminino" name="radio-feminino" value="F"
+                        (click)="viewdiv($event.target.value)"> Feminino</label>
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="tipoSanguineo">Tipo sanguineo</label>
+                  <select class="form-control" formControlName="tipoSanguineo">
+                    <option value="null" selected>SELECIONE</option>
+                    <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.descricao }}">{{
+                      tipoSanguineo.descricao}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-row align-items-center">
+              <div class="col-md-12">
+                  <div class="text-right" >
+                      <button class="btn btn-success"
+                          (click)="salvar(formDependente.value)" >
+                          Salvar
+                      </button>
+                  </div>
+              </div>
+          </div>
+          </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

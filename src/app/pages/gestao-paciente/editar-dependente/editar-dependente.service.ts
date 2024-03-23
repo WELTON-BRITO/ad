@@ -4,7 +4,7 @@ import { HttpService } from '../../shared/services/http/http-client.service';
 @Injectable({
   providedIn: 'root'
 })
-export class DependenteService {
+export class EditarDependenteService {
 
   constructor(private httpService: HttpService) { }
 
@@ -23,10 +23,4 @@ export class DependenteService {
   visualizarDependente(data: any, successHandle: Function, errorHandle: Function) {
     return this.httpService.doGet('/api/child/all', data, successHandle, errorHandle);
   }
-
-  AtualizarDependente(data, id:any,successHandle: Function, errorHandle: Function){
-    return this.httpService.doPut('api/child/' + id,  data, successHandle, errorHandle)
-  }
-
-  
 }

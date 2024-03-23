@@ -225,7 +225,10 @@ export class DependenteComponent implements OnDestroy {
     });
   }
 
+  EditarDependente(data){
+    this.router.navigateByUrl('/pages/gestao-paciente/editar-dependente', { state: data });
 
+  }
 
   viewdiv(data) {
     this.sexo = data;

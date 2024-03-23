@@ -8,6 +8,9 @@ import { DependenteComponent } from './dependente/dependente.component';
 import { PrecoEspecialComponent } from './preco-especial/preco-especial.component';
 import { HistoricoComponent } from './historico/historico.component';
 import { ImportarHistoricoComponent } from './historico/importar-historico/importar-historico.component';
+import { EditarDependenteComponent } from '../gestao-paciente/editar-dependente/editar-dependente.component';
+
+
 
 const routes: Routes = [{
   path: '',
@@ -36,7 +39,11 @@ const routes: Routes = [{
     {
       path: 'importar-historico',
       component: ImportarHistoricoComponent,
-    },   
+    },  
+    {
+      path: 'editar-dependente',
+      component: EditarDependenteComponent,
+    },  
   ],
 
 }];
@@ -60,5 +67,6 @@ export const routedComponents = [
   DependenteComponent,
   PrecoEspecialComponent,
   HistoricoComponent,
-  ImportarHistoricoComponent
+  ImportarHistoricoComponent,
+  EditarDependenteComponent
 ];

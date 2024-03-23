@@ -26,6 +26,8 @@ import { PrecoEspecialComponent } from './preco-especial/preco-especial.componen
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { HistoricoComponent } from './historico/historico.component';
 import { ImportarHistoricoComponent } from './historico/importar-historico/importar-historico.component';
+import { EditarDependenteComponent } from '../gestao-paciente/editar-dependente/editar-dependente.component';
+
 
 @NgModule({
   imports: [
@@ -57,7 +59,8 @@ import { ImportarHistoricoComponent } from './historico/importar-historico/impor
     DependenteComponent,
     PrecoEspecialComponent,
     HistoricoComponent,
-    ImportarHistoricoComponent
+    ImportarHistoricoComponent,
+    EditarDependenteComponent,
   ],
 })
 export class GestaoPacienteModule { }

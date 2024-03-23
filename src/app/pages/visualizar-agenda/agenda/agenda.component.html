@@ -6,43 +6,43 @@
           <nb-card-body>
             <form id=“form-buscar-atendimento” [formGroup]="formAgendaAtendimento">
               <div class="col-md-12 col-xs-12">
-                <div class="form-row align-items-center">
                   <div class="form-group col-md-4">
                     <h5 class="ml-lg-n3">Atendimento</h5>
                   </div>
-                </div>
-                <div class="form-row align-items-center">
-                  <div class="form-group col-md-3">
-                    <label for="medico">Escolha o médico* </label>
-                    <select class="form-control" id="medico" formControlName="medico">
-                      <option value="{{ listMedico }}" selected>Selecione um Médico</option>
-                      <option *ngFor="let medico of listMedico" [value]="medico.id">
-                        <!-- use value instead of ngValue -->
-                        {{ medico.ID }} {{ medico.name }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <label for="dataInicio">Período Inicial*</label>
-                    <input class="form-control date" type="date" id="dataInicio" name="Data Início" [value]="TodayDate"
-                      maxlength="10" formControlName="dataInicio" />
-                  </div>
-                  <div class="form-group col-md-3">
-                    <label for="dataFim">Período Final*</label>
-                    <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate"
-                      maxlength="10" formControlName="dataFim" />
-                  </div>
-                  <div class="form-group col-md-3">
-                    <div class="form-group pt-4">
-                      <div class="text-right">
-                        <button class="btn btn-primary mr-2"
-                          (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
-                          BUSCAR
-                        </button>
-                      </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-3">
+                      <label for="medico">Escolha o médico*</label>
+                      <select class="form-control" id="medico" formControlName="medico">
+                        <option value="{{ listMedico }}" selected>Selecione o Médico</option>
+                        <option *ngFor="let medico of listMedico" [value]="medico.id">
+                          <!-- use value instead of ngValue -->
+                          {{ medico.ID }} {{ medico.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="dataInicio">Período Inicial*</label>
+                      <input class="form-control date" type="date" id="dataInicio" name="Data Início" [value]="TodayDate"
+                        maxlength="10" formControlName="dataInicio" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="dataFim">Período Final*</label>
+                      <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate"
+                        maxlength="10" formControlName="dataFim" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <button class="btn btn-primary mr-2 button" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
+                        Pesquisar
+                      </button>
+                      <button class="btn btn-success mr-2 button" (click)="agendarAtendimento()">
+                        Agendar
+                      </button>
+                      <button class="btn btn-warning button" (click)="BloquearAtendimento()">
+                        Bloquear
+                      </button>
                     </div>
                   </div>
-                </div>
+                  
               </div>
             </form>
             <div class="col-md-12 col-xs-12">

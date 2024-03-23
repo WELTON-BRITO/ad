@@ -258,12 +258,11 @@ export class AgendaComponent implements OnInit {
 
       if (this.validaCampo(data)) {
 
-        if (data.medico == '9999999') {
+        if (data.medico !='9999999') {
           params = params.append('doctorId', data.medico)
         }
         let allData = []; // Crie uma variável vazia para armazenar os dados
         this.service.buscaAtendimentos(params, (response) => {
-          console.log('entrei aqui')
           this.isActive = false
           this.rowData = response
           this.calendarEvents = this.rowData.map(evento => {
@@ -384,6 +383,37 @@ export class AgendaComponent implements OnInit {
   getData(key: string): any {
     const storedData = localStorage.getItem(key);
     return storedData ? JSON.parse(storedData) : null;
+  }
+  agendarAtendimento() {
+
+    this.router.navigate(['/pages/atendimento/novo-atendimento']);
+
+  }
+
+  desbloquear(data) {
+
+    this.isActive = true
+
+    let register = {
+      'id': data.id,
+      'reasonCancellation': 'Botão Cancelar'
+    }
+
+    this.service.cancelarAtendimento(register, (response) => {
+      this.isActive = false
+      this.toastrService.success('Atendimento Cancelado com Sucesso', 'Aditi Care!');
+    }, (message) => {
+      this.isActive = false;
+      this.toastrService.danger(message);
+    });
+  }
+
+  AgendaDefinida(data) {
+    this.router.navigateByUrl('/pages/atendimento/novo-atendimento', { state: data });
+  }
+
+  BloquearAtendimento() {
+    this.router.navigate(['/pages/atendimento/bloquear-atendimento']);
   }
 
 }
