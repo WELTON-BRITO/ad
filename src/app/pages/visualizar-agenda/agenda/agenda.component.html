@@ -12,7 +12,7 @@
                   <div class="form-row">
                     <div class="form-group col-md-3">
                       <label for="medico">Escolha o médico*</label>
-                      <select class="form-control" id="medico" formControlName="medico">
+                      <select class="form-control" id="medico" formControlName="medico" (change)="buscaId(formAgendaAtendimento.value)">
                         <option value="{{ listMedico }}" selected>Selecione o Médico</option>
                         <option *ngFor="let medico of listMedico" [value]="medico.id">
                           <!-- use value instead of ngValue -->
@@ -20,17 +20,18 @@
                         </option>
                       </select>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                       <label for="dataInicio">Período Inicial*</label>
                       <input class="form-control date" type="date" id="dataInicio" name="Data Início" [value]="TodayDate"
                         maxlength="10" formControlName="dataInicio" />
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                       <label for="dataFim">Período Final*</label>
                       <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate"
                         maxlength="10" formControlName="dataFim" />
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4 ml-auto">
+                      <div class="text-right mb-3">
                       <button class="btn btn-primary mr-2 button" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
                         Pesquisar
                       </button>
@@ -41,6 +42,7 @@
                         Bloquear
                       </button>
                     </div>
+                  </div>
                   </div>
                   
               </div>
