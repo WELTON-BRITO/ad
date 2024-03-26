@@ -14,6 +14,7 @@ import { ModalDetalheAtendimentoComponent } from './modal-detalhe-atendimento/mo
 import { Router } from '@angular/router';
 
 
+
 declare var $: any;
 
 @Component({
@@ -354,6 +355,9 @@ export class AgendaComponent implements OnInit {
               default:
                 color = 'green'; // Cor padrão (caso o status não corresponda a nenhum dos valores acima)
             }
+            if (evento.isReturn==='Horário Não Confirmado') {
+              color = 'orange';
+            }
 
             return {
               title: evento.child?.name ?? evento.user.name,
@@ -371,6 +375,7 @@ export class AgendaComponent implements OnInit {
               status: evento.status,
               horario: evento.startTime.concat(' - ', evento.endTime),
               dados: evento,
+              isConfirmed: evento.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado', 
               patchPaciente: 'googleCalendar',
               color: color
             };

@@ -53,8 +53,6 @@ export class ImportarHistoricoComponent implements OnInit {
 
     AssociarPaciente(data){
 
-    console.log(data)
-
     this.isActive = true
 
     let newdata = {

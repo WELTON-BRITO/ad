@@ -40,7 +40,11 @@ export class HttpService {
             successHandle(err);
             this.loadingBarService.complete();
 
-          }else if (parseInt(err.status) == 500) {
+          }else if((parseInt(err.status) == 200)){
+            successHandle(err);
+            this.loadingBarService.complete();
+          }
+          else if (parseInt(err.status) == 500) {
 
             {
              setTimeout(() => {

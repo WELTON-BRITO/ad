@@ -197,12 +197,14 @@ export class DependenteComponent implements OnDestroy {
     this.previousPage()
   }
 
-      
-
   
-
   }
 
+  buscaAgenda(data){
+    this.router.navigateByUrl('/pages/gestao-paciente/visualizar-AgendaHistorico', { state: data });
+
+  }
+  
   buscaEstado() {
 
     this.service.buscaEstado(null, (response) => {

@@ -9,7 +9,7 @@ import { PrecoEspecialComponent } from './preco-especial/preco-especial.componen
 import { HistoricoComponent } from './historico/historico.component';
 import { ImportarHistoricoComponent } from './historico/importar-historico/importar-historico.component';
 import { EditarDependenteComponent } from '../gestao-paciente/editar-dependente/editar-dependente.component';
-
+import { AgendaPacienteComponent } from '../gestao-paciente/visualizar-AgendaHistorico/visualizar-AgendaHistorico.component';
 
 
 const routes: Routes = [{
@@ -44,6 +44,10 @@ const routes: Routes = [{
       path: 'editar-dependente',
       component: EditarDependenteComponent,
     },  
+    {
+      path: 'visualizar-AgendaHistorico',
+      component: AgendaPacienteComponent,
+    }, 
   ],
 
 }];
@@ -68,5 +72,6 @@ export const routedComponents = [
   PrecoEspecialComponent,
   HistoricoComponent,
   ImportarHistoricoComponent,
-  EditarDependenteComponent
+  EditarDependenteComponent,
+  AgendaPacienteComponent,
 ];

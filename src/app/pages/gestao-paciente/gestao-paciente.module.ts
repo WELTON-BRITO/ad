@@ -27,6 +27,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { HistoricoComponent } from './historico/historico.component';
 import { ImportarHistoricoComponent } from './historico/importar-historico/importar-historico.component';
 import { EditarDependenteComponent } from '../gestao-paciente/editar-dependente/editar-dependente.component';
+import { AgendaPacienteComponent } from '../gestao-paciente/visualizar-AgendaHistorico/visualizar-AgendaHistorico.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { EditarDependenteComponent } from '../gestao-paciente/editar-dependente/
     HistoricoComponent,
     ImportarHistoricoComponent,
     EditarDependenteComponent,
+    AgendaPacienteComponent,
   ],
 })
 export class GestaoPacienteModule { }

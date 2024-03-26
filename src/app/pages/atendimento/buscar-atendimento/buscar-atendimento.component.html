@@ -109,6 +109,27 @@
 
               </div>
 
+              <h5>Legenda:</h5>
+              <div class="legend d-flex">
+                <p class="mr-3">
+                  <i class="fa fa-info-circle text-primary"></i> Detalhe Do Atendimento
+                </p>
+                <p class="mr-3">
+                  <i class="fa fa-wifi text-success"></i> Iniciar Atendimento
+                </p>
+                <p class="mr-3">
+                  <i class="fa fa-video text-danger"></i> Iniciar Video Atendimento
+                </p>
+                <p class="mr-3">
+                  <i class="fa fa-key text-danger"></i> Desbloquear Horário
+                </p>
+                <p>
+                  <i class="fa fa-clock text-danger"></i> Confirmar Horário
+                </p>
+              </div>
+              
+              
+
 
               <h5>Horários Agendados:</h5>
               <div class="row">
@@ -125,8 +146,14 @@
                         row?.nomeResponsavel }}</p>
                       <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
                       <p class="card-text">Situação: {{ row?.status }}</p>
-                      <div class="text-center">
-                        <button class="btn btn-primary mb-2" (click)="detalhes(row)"
+                      <p class="card-text">
+                        Consulta Confirmada:
+                        <span [style.font-weight]="row?.isConfirmed === 'Horário Confirmado' ? 'bold' : 'bold'" [style.color]="row?.isConfirmed === 'Horário Confirmado' ? 'green' : 'red'">
+                          {{ row?.isConfirmed }}
+                        </span>
+                      </p>
+                 <div class="text-center">
+                        <button style="margin: 0 15px;"  class="btn btn-primary mb-2" (click)="detalhes(row)"
                           *ngIf="row.nomeResponsavel !== 'Bloqueado'" title="Detalhe">
                           <i class="fa fa-info-circle"></i>
                         </button>
@@ -134,14 +161,18 @@
                           *ngIf="row && row.atendimento && row.atendimento.status === '03 - Consulta Confirmada'">
                           <i class="fa fa-wifi"></i>
                         </button>
-                        <button class="btn btn-danger mb-2" (click)="videoAtendimento(row)"
+                        <button style="margin: 0 15px;"  class="btn btn-danger mb-2" (click)="videoAtendimento(row)"
                           *ngIf="row && row.atendimento.meetingUrl !== null && row.atendimento.status === '03 - Consulta Confirmada'">
                           <i class="fa fa-video"></i>
                         </button>
-                        <button class="btn btn-danger mb-2" (click)="desbloquear(row)"
-                          *ngIf="row.nomeResponsavel === 'Bloqueado' && row.atendimento.status === '02 - Aguardando Pagamento'">
+                        <button style="margin: 0 15px;"  class="btn btn-danger mb-2" (click)="desbloquear(row)"
+                          *ngIf="row.nomeResponsavel === 'Bloqueado'">
                           <i class="fa fa-key"></i>
                         </button>
+                        <button style="margin: 0 15px;"  class="btn btn-danger mb-2" (click)="confirmarHorario(row)"
+                        *ngIf="row.isConfirmed ==='Horário Não Confirmado'">
+                        <i class="fa fa-clock"></i>
+                      </button>
                       </div>
 
                     </div>

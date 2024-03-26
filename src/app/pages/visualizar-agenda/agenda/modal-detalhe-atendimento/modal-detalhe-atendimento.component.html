@@ -55,6 +55,12 @@
                       <div class="mr-2"><label>Horário: </label></div>
                       <label>{{atendimento.horario}} </label>
                     </div>
+                    <p class="card-text">
+                      Consulta Confirmada:
+                      <span [style.font-weight]="atendimento?.isConfirmed === 'Horário Confirmado' ? 'bold' : 'bold'" [style.color]="atendimento?.isConfirmed === 'Horário Confirmado' ? 'green' : 'red'">
+                        {{ atendimento?.isConfirmed }}
+                      </span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -62,23 +68,29 @@
             <nb-card>
               <nb-card-body>
                 <nb-actions size="small" fullWidth>
-                  <nb-action *ngIf="atendimento.status === '03 - Consulta Confirmada' && atendimento.modalidade === 'Consulta por Video Chamada' && atendimento.urlCall !== null"
+                  <nb-action *ngIf="atendimento.status === '03 - Consulta Confirmada' && atendimento.modalidade === 'Consulta por Video Chamada' && atendimento.urlCall !== null && atendimento.nomeResponsavel !== 'Bloqueado'"
                              (click)="goToLink(atendimento.urlCall)" title="Iniciar atendimento">
                     <nb-icon class="action-icon" icon="wifi-outline"></nb-icon>
-                    <span class="action-label">Iniciar atendimento</span>
+                    <span class="action-label">Iniciar Video Atendimento</span>
                   </nb-action>
             
-                  <nb-action
+                  <nb-action  *ngIf="atendimento.nomeResponsavel !== 'Bloqueado'"
                              (click)="abrirConsulta()" title="Atualizar prontuário">
                     <nb-icon class="action-icon" icon="file-outline"></nb-icon>
                     <span class="action-label">Detalhes</span>
                   </nb-action>
 
-                  <nb-action *ngIf="atendimento.status === '03 - Consulta Confirmada' && atendimento.modalidade === 'Consulta por Video Chamada' && atendimento.urlCall !== null"
-                  (click)="goToLink(atendimento.urlCall)" title="Iniciar atendimento">
-                    <nb-icon class="action-icon" icon="wifi-outline"></nb-icon>
-                    <span class="action-label">Iniciar atendimento</span>
+                  <nb-action  *ngIf="atendimento.isConfirmed ==='Horário Não Confirmado' && atendimento.nomeResponsavel !== 'Bloqueado'"
+                  (click)="confirmarHorario(atendimento)" title="Confirmar Atendimento">
+                    <nb-icon class="action-icon" icon="clock-outline"></nb-icon>
+                    <span class="action-label">Confirmar Atendimento</span>
                   </nb-action>
+
+                  <nb-action *ngIf="atendimento.nomeResponsavel === 'Bloqueado'" (click)="desbloquear(atendimento)" title="Confirmar Atendimento">
+                    <nb-icon class="action-icon" icon="file-outline"></nb-icon>
+                    <span class="action-label">Desbloquear</span>
+                  </nb-action>
+                  
                 </nb-actions>
               </nb-card-body>
             </nb-card>

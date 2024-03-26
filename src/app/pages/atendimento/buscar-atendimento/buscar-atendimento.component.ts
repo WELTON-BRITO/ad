@@ -286,6 +286,7 @@ export class BuscarAtendimentoComponent implements OnInit {
                   clinicaId: clinica,
                   statusId: this.DefaultStatus,
                   medicoId: data.doctor.id,
+                  isConfirmed: data.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado' 
                 }
               }
               else {
@@ -333,6 +334,7 @@ export class BuscarAtendimentoComponent implements OnInit {
                 clinicaId: clinica,
                 statusId: this.DefaultStatus,
                 medicoId: data.doctor.id,
+                isConfirmed: data.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado' 
               }));
 
             if (allData.length === 0) {
@@ -371,6 +373,26 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.pesquisarConsulta(data, true)
   }
 
+  confirmarHorario(data){
+   
+    this.isActive = true
+ 
+    this.service.confirmarConsulta(data.id,'true', (response) => {
+      this.isActive = false
+      this.toastrService.success('Atendimento Confirmado com Sucesso', 'Aditi Care!');
+      data.isConfirmed = 'Horário Confirmado';
+    }, (message) => {
+      if(message.code ===200){
+      this.toastrService.success('Atendimento Confirmado com Sucesso', 'Aditi Care!');
+      data.isConfirmed = 'Horário Confirmado';
+
+    }
+else{
+  this.toastrService.danger('Ocorreu um Erro ao Confirmar o Horário, tente novamente mais tarde', 'Aditi Care!');
+}
+      this.isActive = false;
+    });
+  }
 
   validaCampo(data) {
 

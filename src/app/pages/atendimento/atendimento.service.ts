@@ -72,6 +72,10 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/appointments/paymentProof/' + id, data, successHandle, erroHandle)
   }
 
+  confirmarConsulta(id: any, flag: string, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doPut('/api/appointments/confirm/' + id +'?flagConfirmation=' + flag, successHandle, erroHandle)
+  }
+
   waitingService(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/waitingService', data, successHandle, erroHandle)
   }

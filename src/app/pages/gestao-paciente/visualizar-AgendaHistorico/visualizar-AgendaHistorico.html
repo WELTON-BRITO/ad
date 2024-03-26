@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="dialog-body">
+        <nb-card>
+          <nb-card-body>
+            <div class="col-md-12 col-xs-12">
+              <div class="form-row align-items-center">
+                <nb-card-header class="aditi-header">
+                  <div class="back-link">
+                    <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                      <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                    </a>
+                  </div>
+                </nb-card-header>
+                <div class="form-group col-md-3">
+                  <h5 class="pt-3">Historico de Atendimentos</h5>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-6">
+                  <label for="nome-paciente">Nome do Paciente: {{ this.name }}</label>
+                </div>
+              </div>
+            </div>
+            <div class="container">
+              <div class="row">
+                <div class="col-md-4" *ngFor="let row of rowData">
+                  <nb-card>
+                    <nb-card-header>Data da Consulta: {{ row.dateService }} {{ row.horario }}</nb-card-header>
+                    <nb-card-body>
+                      <div class="patient-info">
+                        <img src="{{ row?.avatar }}" alt="Avatar" class="avatar">
+                        <p>Médico: {{ row.name }}</p>
+                        <p>Tipo do Serviço: {{ row.typeService }}</p>
+                        <p>Nome Responsável: {{ row.NameResponse }}</p>
+                        <p>CPF Responsável: {{ row.federalIdUser }}</p>
+                        <p>Telefone Responsável: {{ row.cellPhoneUser }}</p>
+                        <p>Email Responsável: {{ row.emailUser }}</p>
+                        <p>Situação do Atendimento: {{ row.status }}</p>
+                      </div>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+              </div>
+            </div>
+            
+
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

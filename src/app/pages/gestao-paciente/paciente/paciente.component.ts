@@ -80,6 +80,11 @@ export class PacienteComponent implements OnInit {
     return cpfLimpo;
   }
 
+  buscaAgenda(data){
+    this.router.navigateByUrl('/pages/gestao-paciente/visualizar-AgendaHistorico', { state: data });
+
+  }
+
   pesquisaGeral(data,checked) {
 
     if(localStorage.getItem('meuPaciente') ===null  || checked==true || localStorage.getItem('meuPaciente') ===''){

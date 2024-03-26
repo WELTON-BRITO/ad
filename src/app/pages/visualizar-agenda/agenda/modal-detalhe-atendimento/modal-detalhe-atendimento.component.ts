@@ -3,9 +3,11 @@ import { NbDialogRef, NbDialogService, NbToastrService } from '@nebular/theme';
 import { FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
 import { MotivoCancelamentoComponent } from '../../../atendimento/detalhe-atendimento/motivo-cancelamento/motivo-cancelamento.component';
-import { VisualizarAgendaService } from '../../visualizar-agenda';
+//import { VisualizarAgendaService } from '../../visualizar-agenda';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { AtendimentoService } from "../../../atendimento/atendimento.service";
+
 
 @Component({
   selector: 'ngx-modal-detalhe-atendimento',
@@ -38,14 +40,15 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
     atestado: null,
     id: null,
     nameMother: null,
-    nameFather: null
+    nameFather: null,
+    isConfirmed: null,
   };
   public isActive = false;
 
   constructor(
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<ModalDetalheAtendimentoComponent>,
-    private service: VisualizarAgendaService,
+    private service: AtendimentoService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
     private location: Location,
@@ -83,7 +86,29 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
       this.atendimento.nameMother = this.dados._def.extendedProps.nameMother,
       this.atendimento.nameFather = this.dados._def.extendedProps.nameFather,
       this.atendimento.nomeResponsavel = this.dados._def.extendedProps.responsavel;
+      this.atendimento.isConfirmed = this.dados._def.extendedProps.isConfirmed;
 
+  }
+
+  confirmarHorario(data){
+   
+    this.isActive = true
+ 
+    this.service.confirmarConsulta(data.id,'true', (response) => {
+      this.isActive = false
+      this.toastrService.success('Atendimento Confirmado com Sucesso', 'Aditi Care!');
+      data.isConfirmed = 'Horário Confirmado';
+    }, (message) => {
+      if(message.code ===200){
+      this.toastrService.success('Atendimento Confirmado com Sucesso', 'Aditi Care!');
+      data.isConfirmed = 'Horário Confirmado';
+
+    }
+else{
+  this.toastrService.danger('Ocorreu um Erro ao Confirmar o Horário, tente novamente mais tarde', 'Aditi Care!');
+}
+      this.isActive = false;
+    });
   }
 
   goToLink(url: string) {
@@ -91,8 +116,6 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
   }
 
   abrirConsulta() {
-
-    console.log(this.dados._def.extendedProps.dados)
 
     let rowData =  this.dados._def.extendedProps.dados;
     this.ref.close();
@@ -102,6 +125,24 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
   editarConsulta() {
     this.ref.close();
     this.router.navigateByUrl('/pages/atendimento/agendar-consulta', { state: this.dados._def.extendedProps.dados });
+  }
+
+  desbloquear(data) {
+
+    this.isActive = true
+
+    let register = {
+      'id': data.id,
+      'reasonCancellation': 'Botão Cancelar'
+    }
+
+    this.service.cancelarAtendimento(register, (response) => {
+      this.isActive = false
+      this.toastrService.success('Atendimento Desbloqueado com Sucesso', 'Aditi Care!');
+    }, (message) => {
+      this.isActive = false;
+      this.toastrService.danger(message);
+    });
   }
 
 }

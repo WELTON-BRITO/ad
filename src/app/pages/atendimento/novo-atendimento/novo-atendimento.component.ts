@@ -283,8 +283,6 @@ export class NovoAtendimentoComponent {
 
     consultaDependente(data) {
 
-        console.log(data)
-
         if (this.listDependente == null) {
             this.toastrService.danger('Este Usuário Não Possui Dependentes','Aditi Care');
             this.isDependente = false;
@@ -317,7 +315,7 @@ export class NovoAtendimentoComponent {
     
         if (!match) {
             // A string não está no formato esperado
-            console.log("Formato de data inválido.");
+            //("Formato de data inválido.");
             return dataString; // Retorna a mesma string
         }
     
