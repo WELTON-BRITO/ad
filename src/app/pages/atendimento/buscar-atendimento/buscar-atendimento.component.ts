@@ -228,6 +228,7 @@ export class BuscarAtendimentoComponent implements OnInit {
 
   buscarAtendimento(data, checked) {
 
+
     let clinica = localStorage.getItem('bway-entityId');
 
     if (localStorage.getItem('meuCardData') === null || checked == true || localStorage.getItem('meuCardData') === '') {
@@ -353,6 +354,7 @@ export class BuscarAtendimentoComponent implements OnInit {
 
         }
       }
+
     } else {
 
       const allData = localStorage.getItem('meuCardData')
@@ -366,7 +368,7 @@ export class BuscarAtendimentoComponent implements OnInit {
       }
     }
 
-    this.pesquisarConsulta(data, checked);
+    this.pesquisarConsulta(data, true)
   }
 
 
@@ -391,10 +393,7 @@ export class BuscarAtendimentoComponent implements OnInit {
     }
     var diff = Math.abs(new Date(data.dataFim).getTime() - new Date(data.dataInicio).getTime());
     var diffDays = Math.ceil(diff / (1000 * 3600 * 24))
-    if (diffDays > 15) {
-      this.toastrService.danger('O Período Máximo de Consultas é de 30 dias', 'Aditi Care');
-      return false
-    }
+
     return true
   }
 
@@ -480,7 +479,7 @@ export class BuscarAtendimentoComponent implements OnInit {
         let params = new HttpParams();
         params = params.append('doctorId', data.medico)
         params = params.append('startDate', data.dataInicio)
-        params = params.append('endDate', moment(date).format('YYYY-MM-DD'))
+        params = params.append('endDate', data.dataFim ?? '2024-01-01');
         params = params.append('typeServiceId', data.tipo ?? 1)
 
         this.service.buscaHorario(params, (response) => {
@@ -494,7 +493,6 @@ export class BuscarAtendimentoComponent implements OnInit {
           if (this.tipoCard.length === 0) {
             // this.toastrService.warning("Não Existem Horários Livres Para Estes Dias", 'Aditi Care');
             this.isActive = false;
-            this.isBlock = false;
             this.rowData2 = null;
           } else {
             this.saveData('CardTimesDisponivel', this.tipoCard);
