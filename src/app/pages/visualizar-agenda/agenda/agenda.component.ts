@@ -48,6 +48,7 @@ export class AgendaComponent implements OnInit {
   calendarVisible = true;
   public DefaultStatus = '7,10,4,8';
   public StartedDate: any;
+  public medicoId = null;
 
   calendarOptions: CalendarOptions = {
     locale: 'pt-br',
@@ -93,6 +94,73 @@ export class AgendaComponent implements OnInit {
         };
         document.querySelector('.fc-toolbar-title').removeAttribute('style');
       }
+    },
+    datesSet: (info) => {
+      // Verificar se a visualização atual mudou para um mês diferente
+
+      if (info.view.type === 'timeGridWeek') {
+
+        // Obter o primeiro e último dia da semana atual
+        const startDate = info.view.activeStart;
+        const endDate = info.view.activeEnd;
+
+        // Verificar se o primeiro dia e o último dia estão em meses diferentes
+        const inicioMesAtual = startDate.getMonth();
+        const fimMesAtual = endDate.getMonth();
+
+        if (inicioMesAtual !== fimMesAtual) {
+
+          var dataInicio = new Date(startDate);
+          var dataFim = new Date(startDate);
+
+          // Subtrair 7 dias da data original
+          var dataMenosSeteDias = new Date(dataInicio.getTime() - (7 * 24 * 60 * 60 * 1000));
+          // Extrair os componentes da nova data
+          var ano = dataMenosSeteDias.getFullYear();
+          var mes = (dataMenosSeteDias.getMonth() + 1).toString().padStart(2, '0'); // Adiciona um zero à esquerda, se necessário
+          var dia = dataMenosSeteDias.getDate().toString().padStart(2, '0'); // Adiciona um zero à esquerda, se necessário
+          // Formatando a nova data
+          var dateInicio = ano + '/' + mes + '/' + dia;
+
+          // Subtrair 7 dias da data original
+          var dataMais30Dias = new Date(dataFim.getTime() + (30 * 24 * 60 * 60 * 1000));
+          // Extrair os componentes da nova data
+          var ano = dataMais30Dias.getFullYear();
+          var mes = (dataMais30Dias.getMonth() + 1).toString().padStart(2, '0'); // Adiciona um zero à esquerda, se necessário
+          var dia = dataMais30Dias.getDate().toString().padStart(2, '0'); // Adiciona um zero à esquerda, se necessário
+          // Formatando a nova data
+          var dateFim = ano + '/' + mes + '/' + dia;
+
+          let register = {
+            dataInicio: dateInicio,
+            dataFim: dateFim,
+            medico: this.medicoId !== null ? this.medicoId : this.listMedico[0].id,
+          }
+
+          this.buscarAtendimento(register, true)
+          this.TodayDate = dateInicio.replace(/\//g, '-');
+          this.FinalDate = dateFim.replace(/\//g, '-');
+
+        }
+      } else if (info.view.type === 'dayGridMonth') {
+
+        var dataInicioOriginal = info.startStr;
+        var dataFimOriginal = info.endStr;
+        // Extrair a parte da data (sem o fuso horário)
+        var dateInicio = dataInicioOriginal.split('T')[0];
+        var dateFim = dataFimOriginal.split('T')[0];
+
+        let register = {
+          dataInicio: dateInicio,
+          dataFim: dateFim,
+          medico: this.medicoId !== null ? this.medicoId : this.listMedico[0].id,
+        }
+
+        this.buscarAtendimento(register, true)
+        this.TodayDate = dateInicio.replace(/\//g, '-');
+        this.FinalDate = dateFim.replace(/\//g, '-');
+      }
+
     },
     initialView: 'timeGridWeek',
     initialEvents: INITIAL_EVENTS,
@@ -179,6 +247,10 @@ export class AgendaComponent implements OnInit {
     }
   }
 
+  buscaId(data) {
+    this.medicoId = data.medico
+  }
+
   handleCalendarToggle() {
     this.calendarVisible = !this.calendarVisible;
   }
@@ -203,7 +275,6 @@ export class AgendaComponent implements OnInit {
     let countryId = this.formAgendaAtendimento.controls.medico.value;
     let selected = this.listMedico.find(medico => medico.id == countryId);
 
-
     const dataOriginal = dataInicio;
     const dataObj = new Date(dataOriginal);
 
@@ -213,7 +284,6 @@ export class AgendaComponent implements OnInit {
 
     // Formate a data no formato DD/MM/YYYY
     const dataFormatada = `${dia}/${mes}/${ano}`;
-
 
     let data = {
       data: dataFormatada,
@@ -258,11 +328,12 @@ export class AgendaComponent implements OnInit {
 
       if (this.validaCampo(data)) {
 
-        if (data.medico !='9999999') {
+        if (data.medico != '9999999') {
           params = params.append('doctorId', data.medico)
         }
         let allData = []; // Crie uma variável vazia para armazenar os dados
         this.service.buscaAtendimentos(params, (response) => {
+
           this.isActive = false
           this.rowData = response
           this.calendarEvents = this.rowData.map(evento => {
@@ -310,8 +381,8 @@ export class AgendaComponent implements OnInit {
           if (allData.length === 0) {
             this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
             this.isActive = false;
-            this.calendarEvents = null;
-            this.rowData = null;
+            this.calendarEvents = [];
+            this.rowData = [];
           } else {
             this.saveData('googleData', allData);
             this.isActive = false;
@@ -366,12 +437,12 @@ export class AgendaComponent implements OnInit {
       this.toastrService.danger('A data início não pode ser maior que a data fim!!!');
       return false
     }
-    var diff = Math.abs(new Date(data.dataFim).getTime() - new Date(data.dataInicio).getTime());
+    /*var diff = Math.abs(new Date(data.dataFim).getTime() - new Date(data.dataInicio).getTime());
     var diffDays = Math.ceil(diff / (1000 * 3600 * 24))
     if (diffDays > 15) {
       this.toastrService.danger('O período de datas deve ser menor ou igual a 15 dias!!!');
       return false
-    }
+    }*/
     return true
   }
   // Salva os dados no LocalStorage
