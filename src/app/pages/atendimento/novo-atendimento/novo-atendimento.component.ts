@@ -744,6 +744,9 @@ export class NovoAtendimentoComponent {
 
         this.dadosHorario = form;
 
+        console.log(data)
+        console.log(form)
+
         this.isConfAtendimento = false;
         if (data.dataInicio == null ) {
             this.toastrService.warning('Por favor Informa a Data Desejada!','Aditi Care');
@@ -753,7 +756,6 @@ export class NovoAtendimentoComponent {
             this.toastrService.warning('Por favor Informa o Horário do Encaixe Desejado!','Aditi Care');
 
         } else {
-
             const horaInicio = this.dadosHorario.horaInicio;
             const partesHora = horaInicio.split(':');
             const hora = parseInt(partesHora[0]);
@@ -768,7 +770,7 @@ export class NovoAtendimentoComponent {
             dataHora.setMinutes(dataHora.getMinutes() + 1);
 
             // Formate o resultado de volta para o formato "HH:mm"
-            const horaFormatada = `${dataHora.getHours()}:${dataHora.getMinutes()}`;
+            const horaFormatada = `${dataHora.getHours().toString().padStart(2, '0')}:${dataHora.getMinutes().toString().padStart(2, '0')}`;
 
             this.isActive = true
             let params = new HttpParams();
