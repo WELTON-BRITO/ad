@@ -62,6 +62,7 @@
               "ng2-loading-bar",
               "moment",
               "crypto-js",
+              "eva-icons"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
