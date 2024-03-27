@@ -47,6 +47,10 @@ export class AssociarMedicoComponent implements OnDestroy {
 
       this.service.buscaDoctor(params, (response) => {
 
+        if (response.length <= 0) {
+          this.toastrService.warning('Este CPF não Pode Ser Associado.','Aditi Care');
+      }
+
         this.rowData = response
         this.isActive = false;
         this.rowData = this.rowData.map(data => {
@@ -64,7 +68,7 @@ export class AssociarMedicoComponent implements OnDestroy {
       });
 
     } else {
-      this.toastrService.danger('Campo CPF é obrigatório!!!');
+      this.toastrService.danger('O CPF deve Ser Preenchido','Aditi Care');
     }
 
   }
@@ -85,7 +89,7 @@ export class AssociarMedicoComponent implements OnDestroy {
     this.service.associarDoctor(register, (response => {
 
       this.isActive = false;
-      this.toastrService.success('Médico Associado','Aditi Care!');
+      this.toastrService.success('Médico Associado com Sucesso','Aditi Care!');
 
       this.limparForm();
 

@@ -32,6 +32,8 @@ export class ParametrizarPlanoComponent implements OnDestroy {
   public convenio = [];
   public plano = null;
   public isBtnPlano = false
+  public optradio: string = 'N'; 
+
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -44,6 +46,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.verificaMedico(this.listMedico[0].id);
     this.verificaConvenio(this.listMedico[0].id);
+
     this.formParametrizarPlano = this.formBuilder.group({
       medico: [this.listMedico[0], Validators.required],
       unimed: [null],
@@ -60,6 +63,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
 
 
   }
+  
 
   funcValor(event, element) {
 
@@ -110,6 +114,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
 
   }
 
+
   removerConvenio(event) {
 
     this.convenio.push(event);
@@ -133,7 +138,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       this.isActive = true;
       this.service.removerConvenio(this.doctorId, this.convenio, (response => {
         this.isActive = false;
-        this.toastrService.success('Registro removido com sucesso !!!','Aditi Care!');
+        this.toastrService.success('Registro Removido com Sucesso !!!','Aditi Care!');
         this.limpaForm()
       }), (error) => {
         this.isActive = false;
@@ -170,6 +175,8 @@ export class ParametrizarPlanoComponent implements OnDestroy {
 
   planoSaude(data) {
 
+    this.optradio = data; // Atualiza o valor da variável com o valor selecionado
+
     if (data === 'S') {
       this.isCardPlano = true
       this.isBtnPlano = true
@@ -198,6 +205,14 @@ export class ParametrizarPlanoComponent implements OnDestroy {
     this.isActive = true
 
     this.service.convenioAssociado(data, null, (response) => {
+
+      if(response.length<=0){
+        this.toastrService.warning('Este Médico Não Aceita Convenios','Aditi Care');
+        this.planoSaude('N')
+        this.isActive = false
+
+
+      }else{
 
       this.isActive = false
       var checkbox = document.querySelector("#unimed");
@@ -340,6 +355,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
         }
 
       }
+    }
 
     }, (error) => {
       this.isActive = false;

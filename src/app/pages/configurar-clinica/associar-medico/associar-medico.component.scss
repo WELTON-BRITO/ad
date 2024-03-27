@@ -6,6 +6,21 @@ nb-card-body {
     margin-top: 1rem;
   }
 }
+/* Estilo para o avatar do médico */
+.doctor-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, filter 0.3s; /* Adiciona transições suaves */
+}
+
+/* Efeito quando o mouse está sobre o avatar */
+.doctor-avatar:hover {
+  transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+  filter: brightness(80%); /* Aplica um efeito de desfoque ou sombra */
+}
 
 .full-name-inputs,
 .validation-checkboxes {

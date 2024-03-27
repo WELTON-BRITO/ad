@@ -63,8 +63,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Configurações do sistema',
-    icon: 'calendar-outline',
+    title: 'Configurações de Atendimento',
+    icon: 'settings-outline',
     link: '/pages/configurar-agenda',
     data: ['USER','DOCTOR','CLINIC'],
     hidden: false,
@@ -72,23 +72,23 @@ export const MENU_ITEMS: NbMenuItem[] = [
       /*{
         title: 'Configurar dia de Atendimento',
         link: '/pages/configurar-agenda/configurar-dia-atendimento',
-      },*/     
+      },*/ 
       {
-        title: 'Configurar Exceção',
-        link: '/pages/configurar-agenda/configurar-excecao-atendimento',
-      },
-      {
-        title: 'Configurar horários',
+        title: 'Configurar Horários',
         link: '/pages/configurar-agenda/visualizar-dia-atendimento',
-      },
+      },    
       {
-        title: 'Configurar Valores e Modalidades',
+        title: 'Configurar Valores',
         link: '/pages/configurar-agenda/parametrizar-consulta',
       },
       {
-        title: 'Configurar Plano',
+        title: 'Configurar Planos de Saúde',
         link: '/pages/configurar-agenda/parametrizar-plano',
       },
+      {
+        title: 'Configurar Exceção de Horários',
+        link: '/pages/configurar-agenda/configurar-excecao-atendimento',
+      }, 
      /* {
         title: 'Configurar QR Code',
         link: '/pages/configurar-agenda/gerar-qr-code',
@@ -103,12 +103,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     hidden: true,
     children: [
       {
-        title: 'Listar Médicos',
+        title: 'Médicos da Clínica',
         link: '/pages/configurar-clinica/list-medico',
       },
       {
 
-       title: 'Associar Médicos',
+       title: 'Associar Novos Médicos',
         link: '/pages/configurar-clinica/associar-medico',
       }
     ]

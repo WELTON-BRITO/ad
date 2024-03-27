@@ -36,15 +36,21 @@
                       <div class="row pl-3">
                         <label class="radio-inline mr-3">
                           <input class="mat-button" type="radio" id="radio" name="optradio" value="S"
-                            (click)="planoSaude($event.target.value)">
-                          Sim</label>
+                            (click)="planoSaude('S')" [checked]="optradio === 'S'">
+                          Sim
+                        </label>
                         <label class="radio-inline">
                           <input class="mat-button" type="radio" id="radio" name="optradio" value="N"
-                            (click)="planoSaude($event.target.value)"> Não</label>
+                            (click)="planoSaude('N')" [checked]="optradio === 'N'">
+                          Não
+                        </label>
                       </div>
                     </div>
                   </div>
+                  
                 </div>
+
+                
                 <div *ngIf="isCardPlano">
                   <div class="form-row align-items-center">
                     <div class="form-group">
@@ -142,19 +148,6 @@
             </form>
           </nb-card-body>
         </nb-card>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div #card>
-  <div class="col-md-12 col-xs-12">
-    <div class="row" *ngIf="isActive" class="loader">
-      <div class="text-center" style="margin-top: -300px;margin-right: 40px;">
-        <button class="btn btn-primary" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Carregando...
-        </button>
       </div>
     </div>
   </div>

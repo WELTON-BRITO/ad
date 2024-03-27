@@ -18,8 +18,9 @@ export class ListMedicoComponent implements OnDestroy {
   public rowData: any[];
   public listEstado = null;
   public isActive = false;
-  public clinicId = null;
   public avatar = "assets/images/avatar.png";
+  public clinicId = localStorage.getItem('bway-entityId')
+
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -30,13 +31,15 @@ export class ListMedicoComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
-    this.formListMedico = this.formBuilder.group({
-      cpf: [null],
-    })
+  this.buscarMedicos();
+   
+  }
 
-    let clinicId = localStorage.getItem('bway-entityId')
+  buscarMedicos()
+  {
+    this.isActive = true;
 
-    this.service.buscaDoctorClinic(clinicId, null, (response) => {
+    this.service.buscaDoctorClinic(this.clinicId, null, (response) => {
 
       this.rowData = response    
       this.rowData = this.rowData.map(data => {
@@ -47,50 +50,25 @@ export class ListMedicoComponent implements OnDestroy {
           name: data.name,
           specialty: data.specialty == null ? null : data.specialty[0].name,
         }
-      })  
+        
+      })
 
     }, (error) => {
       this.toastrService.danger(error.error.message);
     });
 
+    this.isActive = false;
+
   }
 
-  pesquisaMedico(data) {
-
-    if (data.cpf != null) {
-
-      let params = new HttpParams();
-      params = params.append('federalId', data.cpf)
-
-      this.isActive = true;
-
-      this.service.buscaDoctor(params, (response) => {
-
-        this.rowData = response       
-        this.isActive = false;
-        this.rowData = this.rowData.map(data => {
-          return {
-            avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
-            id: data.id,
-            name: data.name,
-            specialty: data.specialty == null ? null : data.specialty[0].name,
-          }
-        })
-
-      }, (error) => {
-        this.isActive = false;
-        this.toastrService.danger(error.error.message);
-      });
-
-    } else {
-      this.toastrService.danger('Preencher campo obrigatório!!!');
-    }
+  AtualizarAvatar(){
+    this.toastrService.warning('Funcionalidade Ainda em Desenvolvimento','Aditi Care');
 
   }
 
   desvincular(data){
 
-     this.clinicId = localStorage.getItem('bway-entityId')
+    this.isActive = false;
 
     let register = {
 
@@ -101,13 +79,18 @@ export class ListMedicoComponent implements OnDestroy {
 
     this.service.doctorClinic(register, (response) => {
 
-      this.isActive = false;
-     
+      this.toastrService.success('Médico Removido com Sucesso','Aditi Care');
+
+      this.buscarMedicos();
+    
     }, (error) => {
-      this.isActive = false;
       this.toastrService.danger(error.error.message);
     });
-   
+
+    this.isActive = true;
+
   }
 
+
 }
+

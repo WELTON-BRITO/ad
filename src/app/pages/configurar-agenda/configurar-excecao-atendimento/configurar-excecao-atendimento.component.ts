@@ -119,6 +119,10 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
 
   buscarExcecaoDoctor(data) {
 
+    this.params = null;
+    
+    this.params = this.params.append('doctorId', this.doctorId)
+
     this.service.buscarExcecaoDoctor(this.params, (response) => {
 
       this.rowData = response;
@@ -128,19 +132,42 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
           return {
             nome: data.doctor.name.split(' ')[0],
             data: moment(data.dateException).format("DD/MM/YYYY"),
-            horaInicio: data.startTime == null ? 'sem expediente' : data.startTime,
-            horaFim: data.endTime == null ? 'sem expediente' : data.endTime,
-            name: data.clinic.socialName == null ? 'Não informada' : data.clinic.socialName,
+            horaInicio: data.startTime == null ? 'Sem Expediente' : data.startTime,
+            horaFim: data.endTime == null ? 'Sem Expediente' : data.endTime,
+            nomeClinica: data.clinic.socialName == null ? 'Não Informada' : data.clinic.socialName,
+            description:data.typeService.description,
+            id: data.id
+
           }
         })
       } else {
-        this.toastrService.warning('Ainda não foi configurado nenhuma exceção no horário de atendimento !!!');
+        null;
       }
 
     }, (error) => {
       this.toastrService.danger(error.error.message);
     });
 
+  }
+
+  deletar(data){
+
+    this.isActive = true;
+
+    this.service.removeExcecaoDoctor(data, (response => {
+      this.isActive = false;
+      this.toastrService.success('Registro Removido com Sucesso','Aditi Care!');
+      this.buscarExcecaoDoctor(this.doctorId)
+    }), (error) => {
+      if(error=== 'OK'){
+        this.toastrService.success('Registro Removido com Sucesso','Aditi Care!');
+        this.buscarExcecaoDoctor(this.doctorId)
+
+      }else{
+        this.toastrService.danger('Ocorreu um Erro, Tente Novamente Mais Tarde','Aditi Care!');
+      }
+    });
+    this.isActive = false;
   }
 
   salvar(data) {

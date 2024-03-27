@@ -20,5 +20,9 @@ export class ConfigurarExcecaoAtendimentoService {
     return this.httpService.doGet('/api/clinic/doctor/' + id, data, successHandle, erroHandle)
   } 
 
+  removeExcecaoDoctor(data: any, successHandle: Function, errorHandle: Function) {
+    return this.httpService.doDelete('/api/schedule/exception/'+ data, successHandle, errorHandle);
+  }
+
 
 }

@@ -8,111 +8,44 @@
               <div class="col-md-12 col-xs-12">
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-6">
-                    <h5>Listar médico associado</h5>
+                    <h5>Relação de Médicos da Clínica:</h5>
                   </div>
                 </div>
-                <div class="form-row align-items-center">
-                  <div class="form-group">
-                    <label class="pl-1">Por favor escolha o médico abaixo para realizar a configuração:</label>
-                  </div>
-                </div>
-                <div class="form-row align-items-center">
-                  <div class="form-group col-md-4">
-                    <div class="form-group">
-                      <div class="div-medico">
-                        <label for="cpf">Médico</label>
-                        <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
-                          mask="000.000.000-00" maxlength="14" placeholder="Informa o CPF do médico" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-2 pt-lg-3">
-                    <div class="form-group">
-                      <button class="btn btn-primary" (click)="pesquisaMedico(formListMedico.value)">
-                        PESQUISAR
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row align-items-center">
-                  <div class="form-group">
-                    <label class="pl-1">Verifique abaixo o médico retornado:</label>
-                  </div>
-                </div>
-                <div class="form-row align-items-center">
-                  <div class="form-group col-md-12">
-                    <div class="app-box">
-                      <ngx-datatable #myTable class="bootstrap" [rows]="rowData" [columnMode]="'force'"
-                        [headerHeight]="35" [footerHeight]="50" [rowHeight]="'auto'"
-                        [messages]="{emptyMessage: 'Sem dados...'}" [limit]="6">
-                        <ngx-datatable-column name="Foto" prop="avatar">
-                          <ng-template ngx-datatable-cell-template let-row="row">
-                            <div class="text-center">
-                              <img src="{{row.avatar}}" style="height:55px; border-radius:50%;">
-                            </div>
-                          </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column name="Nome do médico" prop="nome" [width]="280">
-                          <ng-template ngx-datatable-cell-template let-row="row">
-                            <div class="text-left p-4">
-                              {{ row.name }}
-                            </div>
-                          </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column name="Especialidade" prop="especialidade">
-                          <ng-template ngx-datatable-cell-template let-row="row">
-                            <div class="text-left p-4">
-                              {{ row.specialty }}
-                            </div>
-                          </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column [sortable]="false" name="Ações" [canAutoResize]="true">
-                          <ng-template ngx-datatable-cell-template let-row="row">
-                            <div class="text-center p-4">
-                              <a class="home-icon" (click)="desvincular(row)" title="Desvincular Médico">
-                                <i class="fa fa-window-close p-2"></i>
-                              </a>
-                            </div>
-                          </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-footer>
-                          <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
-                            let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset">
-                            <div>
-                              <div class="page-count">
-                                Total de Registros: {{rowCount}}
-                              </div>
-                            </div>
-                            <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-double-left'"
-                              [pagerRightArrowIcon]="'fa fa-angle-double-right '"
-                              [pagerPreviousIcon]="'fa fa-angle-left'" [pagerNextIcon]="'fa fa-angle-right '"
-                              [page]="curPage" [size]="pageSize" [count]="rowCount"
-                              [hidden]="!((rowCount / pageSize) > 1)" (change)="myTable.onFooterPage($event)">
-                            </datatable-pager>
-                          </ng-template>
-                        </ngx-datatable-footer>
-                      </ngx-datatable>
+
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-4" *ngFor="let row of rowData">
+                      <nb-card>
+                        <nb-card-body>
+                          <div class="text-center">
+                            <img src="{{ row.avatar }}" alt="Foto do Médico" class="doctor-avatar">
+                          </div>
+                          <div class="text-center">
+                            <p class="doctor-name">{{ row.name }}</p>
+                            <button class="btn btn-danger mr-2" size="small" (click)="desvincular(row)">
+                              Remover Médico
+                            </button>
+                          
+                            <button class="btn btn-success" size="small" (click)="AtualizarAvatar(row)">
+                              Atualizar Avatar
+                            </button>
+                          </div>
+                          
+                          
+                        </nb-card-body>
+                      </nb-card>
                     </div>
                   </div>
                 </div>
+                
+                
+                
+
               </div>
             </form>
           </div>
         </nb-card-body>
       </nb-card>
-    </div>
-  </div>
-</div>
-
-<div #card>
-  <div class="col-md-12 col-xs-12">
-    <div class="row" *ngIf="isActive" class="loader">
-      <div class="text-center" style="margin-top: -260px;margin-right: 40px;">
-        <button class="btn btn-primary" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Carregando...
-        </button>
-      </div>
     </div>
   </div>
 </div>

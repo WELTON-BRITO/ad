@@ -28,6 +28,7 @@ export class AgendaPacienteComponent implements OnDestroy {
   public isActive = false;
   public startDate = new Date();
   public avatar = "assets/images/avatar.png";
+  public domain = null;
 
 
 
@@ -54,11 +55,7 @@ export class AgendaPacienteComponent implements OnDestroy {
 
     this.startDate.setFullYear(this.startDate.getFullYear() - 5);
 
-
-
     this.consultaHistorico(true)
-
-
 
   }else{
     this.previousPage();
@@ -76,6 +73,20 @@ consultaHistorico(checked) {
   }
   params = params.append('startDate', moment(this.startDate).format('YYYY/MM/DD'));
   params = params.append('statusIds', '7,10,4,8'); // Use a string para o statusId
+
+  this.domain = (localStorage.getItem('bway-domain'));
+
+  console.log(this.domain)
+
+  if(this.domain ==='CLINIC'){
+    params = params.append('clinicId', (localStorage.getItem('bway-entityId')));
+  }
+
+  if(this.domain ==='DOCTOR'){
+    params = params.append('doctorId', (localStorage.getItem('bway-entityId')));
+  }
+
+
 
   this.isActive = true;
   let allData = []; // Crie uma variável vazia para armazenar os dados

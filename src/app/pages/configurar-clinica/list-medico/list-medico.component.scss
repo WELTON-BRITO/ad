@@ -18,6 +18,23 @@
   }
 }
 
+/* Estilo para o avatar do médico */
+.doctor-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, filter 0.3s; /* Adiciona transições suaves */
+}
+
+/* Efeito quando o mouse está sobre o avatar */
+.doctor-avatar:hover {
+  transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+  filter: brightness(80%); /* Aplica um efeito de desfoque ou sombra */
+}
+
+
 :host ::ng-deep .ngx-datatable.bootstrap {
   border: 1px solid #d1d4d7;
   box-shadow: 0 1px 2px 0 rgba(50,50,50,.2);

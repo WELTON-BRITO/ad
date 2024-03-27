@@ -66,9 +66,9 @@ export class AgendaComponent implements OnInit {
       listPlugin,
     ],
     headerToolbar: {
-      left: 'prev,next today',
+      start: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
     },
     buttonText: {
       today: 'Hoje',
@@ -355,7 +355,7 @@ export class AgendaComponent implements OnInit {
               default:
                 color = 'green'; // Cor padrão (caso o status não corresponda a nenhum dos valores acima)
             }
-            if (evento.isReturn==='Horário Não Confirmado') {
+            if (!evento.isConfirmed && evento.name !=='Bloqueado') {
               color = 'orange';
             }
 
