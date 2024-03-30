@@ -76,7 +76,6 @@ consultaHistorico(checked) {
 
   this.domain = (localStorage.getItem('bway-domain'));
 
-  console.log(this.domain)
 
   if(this.domain ==='CLINIC'){
     params = params.append('clinicId', (localStorage.getItem('bway-entityId')));
@@ -94,7 +93,7 @@ consultaHistorico(checked) {
       response.forEach(data => {
           allData.push({
               name: data.doctor.name,
-              birthDate: moment(data.child.birthDate).format('DD/MM/YYYY') ?? moment(data.user.birthDate).format('DD/MM/YYYY'),
+              birthDate: (data.child?.birthDate || data.user?.birthDate) ? moment(data.child?.birthDate || data.user?.birthDate).format('DD/MM/YYYY') : null,
               id: data.id,
               dateService: data.dateService,
               horario: data.startTime +" - "+ data.endTime,

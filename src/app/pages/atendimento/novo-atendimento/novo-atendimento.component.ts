@@ -55,7 +55,7 @@ export class NovoAtendimentoComponent {
     public emailResponsavel = null
     public optPart = null;
     public exibirDivProcedimento: boolean = false;
-    public bloqueioSave: boolean = false;
+    public bloqueioSave: boolean = true;
     public origem: null;
 
 
@@ -407,7 +407,8 @@ export class NovoAtendimentoComponent {
         } else {
             this.tipoPagto = false
         }
-        this.bloqueioSave= true;
+
+        this.bloqueioSave=false;
 
     }
 
@@ -415,12 +416,11 @@ export class NovoAtendimentoComponent {
 
     salvar(data) {
 
-        this.bloqueioSave= false;
+        this.bloqueioSave = true;
+        
 
         if (this.specialtyId == null) {
             this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
-            this.bloqueioSave= true;
-
         }
 
         if (this.dadosHorario.horario === undefined) {
@@ -442,6 +442,34 @@ export class NovoAtendimentoComponent {
         var  dataCompleta=(data.dataInicio)
             }
 
+            const dataInicio = dataCompleta; // Exemplo de data
+
+            console.log(dataInicio)
+
+            // Divide a data em partes (ano, mês, dia)
+            const [dia,mes,ano ] = dataInicio.split(/[-/]/); // Utiliza regex para considerar ambos os delimitadores
+
+            if(dia.length>=4){
+                // Formata o dia e o mes com dois dígitos e a data esta no formato dia mes e ano
+                const diaFormatado = (ano ? ano.padStart(2, "0") : "");
+                const mesFormatado = (mes ? mes.padStart(2, "0") : "");
+
+                // Cria a data completa no formato desejado
+                dataCompleta = `${dia}-${mesFormatado}-${diaFormatado}`;
+
+            }else{
+                // Formata o dia e o mes com dois dígitos e a data esta no formato dia mes e ano
+                const diaFormatado = (dia ? dia.padStart(2, "0") : "");
+                const mesFormatado = (mes ? mes.padStart(2, "0") : "");
+                
+                // Cria a data completa no formato desejado
+                dataCompleta = `${ano}-${mesFormatado}-${diaFormatado}`;
+            }
+            
+
+
+
+            
         let register = {
 
             doctorId: this.doctorId,
@@ -472,11 +500,18 @@ export class NovoAtendimentoComponent {
             this.limpaForm();
             this.previousPage();
         }), (error) => {
-            this.bloqueioSave= true;
             this.isActive = false;
             this.toastrService.danger(error.message);
 
         });
+
+        {
+            setTimeout(() => {
+                this.bloqueioSave = false;
+            }, 3000); // 3000 milissegundos = 3 segundos
+        }
+
+
 
     }
 
@@ -743,9 +778,6 @@ export class NovoAtendimentoComponent {
     pesquisarHorario(data,form) {
 
         this.dadosHorario = form;
-
-        console.log(data)
-        console.log(form)
 
         this.isConfAtendimento = false;
         if (data.dataInicio == null ) {
