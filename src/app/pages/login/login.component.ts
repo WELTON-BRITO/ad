@@ -47,7 +47,15 @@ export class LoginComponent implements OnInit {
 
   }
 
+  recuperarSenha()
+  {
+
+    this.router.navigate(['/enviar-senha-email']);
+
+  }
   login() {
+
+    console.log(this.formLogin)
 
     let usuario = this.formLogin.controls['login'].value.replace(/\D/g, '');
     let password = this.formLogin.controls['password'].value;

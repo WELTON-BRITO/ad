@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core'; // Importe OnInit 
 import { FormBuilder, Validators } from "@angular/forms";
 import { Router } from '@angular/router';
 import { AtendimentoService } from "../atendimento.service";
@@ -6,6 +6,8 @@ import { NbToastrService } from "@nebular/theme";
 import { HttpParams } from "@angular/common/http";
 import * as moment from 'moment';
 import { CPFValidator } from "../../shared/validators/CPFValidator";
+import { LoaderService } from '../../shared/component/spinner/loarder/loader.service';
+
 
 @Component({
   selector: 'ngx-buscar-atendimento',
@@ -33,15 +35,15 @@ export class BuscarAtendimentoComponent implements OnInit {
   public isBlock: boolean = true;
   TodayDate = "2022-02-15";
   FinalDate = "2022-02-15";
-
   date1 = new Date();
-
   currentYear = this.date1.getUTCFullYear();
   currentMonth = this.date1.getUTCMonth() + 1;
   currentDay = this.date1.getUTCDate();
   currentDay2 = this.date1.getUTCDate() + 7;
   FinalMonth: any;
   FinalDay: any;
+
+
 
   settings = {
     //actions: false,
@@ -72,7 +74,9 @@ export class BuscarAtendimentoComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private router: Router,
     private service: AtendimentoService,
-    private toastrService: NbToastrService) {
+    private toastrService: NbToastrService,
+    private loader: LoaderService,
+    ) {
 
     this.tipo = [
 
@@ -115,7 +119,6 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     localStorage.removeItem('detalhesData'); //garante que o cache foi apagado das telas posteriores
     localStorage.removeItem('draftAtendimento');//garante que o cache foi apagado das telas posteriores
-
 
     if (this.currentMonth < 10) {
       this.FinalMonth = "0" + this.currentMonth;
@@ -227,6 +230,12 @@ export class BuscarAtendimentoComponent implements OnInit {
   }
 
   buscarAtendimento(data, checked) {
+
+    this.isActive = true;
+    this.loader.loader
+
+    console.log(this.isActive)
+    console.log( this.loader)
 
 
     let clinica = localStorage.getItem('bway-entityId');

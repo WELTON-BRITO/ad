@@ -1,56 +1,20 @@
-
-<div class="text-center">
-  <div class="col-md-12 col-xs-12">
-    <div class="row">
-      <div class="col-md-12 col-xs-12">
-        <nb-card style="overflow: hidden;">
-                    <div class="dialog-body sidebar-header">
-            <form class="login" method="post" name="login" id="login" [formGroup]="formLogin">
-<div class="d-flex align-items-center justify-content-center">
-  <img class="img-fluid mb-4" style="height: 255px; width: 450px;" src="assets/images/login_aditi.png" id="icon" alt="User Icon" />
-</div>
-              <p>Informe Seu Email e Senha</p>
-              <div class="text-center">
-                <input type="text" formControlName="login" id="login" class="fadeIn second border" name="login"
-                  placeholder="Login" maxlength="80" autocomplete="off" [(ngModel)]="cnpjCpf" 
-                  (change)="isValidCpf(formLogin.value)"/>
-                  <div *ngIf="showMsgErroCpf" class="link-text pt-2" style="color: #dc3545;">
-                    {{this.msgErroCpf}} <br />
-                  </div>
-              </div>            
-              <div class="text-center">
-                <input type="password" formControlName="password" id="password" class="fadeIn third border" name="password"
-                  placeholder="Senha" maxlength="100" autocomplete="off" type="{{showPass ? 'text' : 'password' }}" />
-                  <button type="button" class="btn-transparent" (click)="toggleShowPass()">
-                    <i class="fa" [ngStyle]="{'color': '#757474'}" [ngClass]="{'fa-eye': showPass, 'fa-eye-slash': !showPass}"
-                      aria-hidden="true"></i>
-                  </button>
-              </div>
-              <input type="submit" class="fade_8S" style="width: 250px;" name="login" id="login" value="Entrar" (click)="login()"/>
-              <div class="linksForm">
-                <a href="#/enviar-senha-email" class="fade_4S" title="Resgatar Senha"><nb-icon class="fade_4S"
-                    icon="refresh-outline"></nb-icon> Recuperar Senha</a>
-                <a href="#/cadastro" class="fade_4S" title="Cadastrar-se"><nb-icon class="fade_4S"
-                    icon="file-add-outline"></nb-icon> Realizar Cadastro</a>
-              </div>
-            </form>
-          </div>
-        </nb-card>
+<div class="login-container">
+  <div class="login-form">
+      <div class="logo-container">
+          <img src="assets/images/login_aditi.png" alt="User Icon" class="login-icon">
       </div>
-    </div>
-  </div>
-</div>
+      <h2>Informe Seu CPF OU CNPJ e sua Senha</h2>
+      <form class="login" method="post" name="login" id="login" [formGroup]="formLogin">
+          <input type="text" formControlName="login" id="login" class="login-input"
+              placeholder="Login" maxlength="80" autocomplete="off">
 
+          <input type="password" formControlName="password" id="password" class="login-input"
+              placeholder="Senha" maxlength="100" autocomplete="off">
 
-<div #card>
-  <div class="col-md-12 col-xs-12">
-    <div class="row" *ngIf="isActive" class="loader">
-      <div class="text-center" style="margin-top: -330px;">
-        <button class="btn btn-primary" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Carregando...
-        </button>
+          <input type="submit" class="fade_8S" style="width: 250px;" name="login" id="login" value="Entrar" (click)="login()"/>
+      </form>
+      <div class="login-links">
+          <button class="btn btn-success ml-2 button" (click)="recuperarSenha()">Recuperar Senha</button>
       </div>
-    </div>
   </div>
 </div>

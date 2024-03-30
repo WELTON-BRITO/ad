@@ -38,9 +38,10 @@ import { AutosizeModule } from '@techiediaries/ngx-textarea-autosize';
 import { SolicitarSenhaModule } from './pages/solicitar-senha/solicitar-senha.module';
 import { SolicitarSenhaRoutingModule } from './pages/solicitar-senha/solicitar-senha-routing.module';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SpinnerComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
