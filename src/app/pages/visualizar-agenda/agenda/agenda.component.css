@@ -70,6 +70,21 @@ b { /* used for event dates/times */
   }
 }
 
+/* CSS para bloquear a visualização na orientação horizontal */
+@media screen and (orientation: portrait) {
+  body {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    height: 100vw;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+}
+
+
 .demo-app-sidebar {
   width: auto;
   line-height: 1.5;
@@ -86,7 +101,8 @@ b { /* used for event dates/times */
 
 .fc { /* the calendar root */
   margin: 0 auto;
-  height: auto;
+  height: 1224px;
+
 }
 
 /* Oculta a barra de rolagem vertical */

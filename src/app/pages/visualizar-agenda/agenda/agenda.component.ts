@@ -69,9 +69,9 @@ export class AgendaComponent implements OnInit {
       listPlugin,
     ],
     headerToolbar: {
-      start: 'prev,next today',
+      start: 'prev,next, timeGridDay',
       center: 'title',
-       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+      right: 'dayGridMonth,timeGridWeek,listWeek',
     },
     buttonText: {
       today: 'Hoje',
@@ -83,12 +83,24 @@ export class AgendaComponent implements OnInit {
 
     
     windowResize: function(view) {
-      if (window.innerWidth < 768) { // Supondo que 768px seja o breakpoint para dispositivos móveis
+      if (window.innerWidth < 581) { // Supondo que 768px seja o breakpoint para dispositivos móveis
         this.changeView('timeGridDay'); // Muda para a visualização do dia
-        this.calendar.changeView('timeGridDay');
-        this.changeDetector.detectChanges();
+        this.calendarOptions.headerToolbar = {
+          start: '',
+          center: 'today',
+          right: '',
+        }
+        document.querySelector('.fc-toolbar-title').setAttribute('style', 'font-size: 25px');
+
       } else {
         this.changeView('timeGridWeek'); // Muda para a visualização do mês
+        this.calendarOptions.headerToolbar = {
+        start: 'prev,next, timeGridDay',
+         center: 'title',
+         right: 'dayGridMonth,timeGridWeek,listWeek',
+        }
+        document.querySelector('.fc-toolbar-title').removeAttribute('style');
+
       }
     },
    
@@ -184,6 +196,17 @@ export class AgendaComponent implements OnInit {
     private router: Router,) { }
 
   ngOnInit() {
+
+      window.addEventListener('orientationchange', function() {
+        var orientation = screen.orientation.type;
+        if (orientation === 'portrait-primary' || orientation === 'portrait-secondary') {
+          document.body.classList.add('force-landscape');
+        } else {
+          document.body.classList.remove('force-landscape');
+        }
+      });
+
+    
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
