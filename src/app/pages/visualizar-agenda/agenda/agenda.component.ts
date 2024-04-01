@@ -54,8 +54,9 @@ export class AgendaComponent implements OnInit {
 
 
   calendarOptions: CalendarOptions = {
+    initialView: 'timeGridWeek',
     locale: 'pt-br',
-    height: 1000,
+    //height: 1000,
     themeSystem: 'bootstrap',
     slotMinTime: '06:00',
     slotMaxTime: '23:00',
@@ -76,28 +77,21 @@ export class AgendaComponent implements OnInit {
       today: 'Hoje',
       month: 'Mês',
       week: 'Semana',
-      day: 'Hoje',
+      day: 'Dia',
       list: 'Lista',
     },
-    windowResize: (view) => {
-      // Função para ajustar o headerToolbar com base no tamanho da janela
-      if (window.innerWidth <= 581) { // Para telas menores que 581px (por exemplo, tamanhos de celular)
-        this.calendarOptions.headerToolbar = {
-          start: '',
-          center: 'prev,next,today,title,dayGridMonth,timeGridWeek,timeGridDay,listWeek',
-          right: '',
-        }
-        document.querySelector('.fc-toolbar-title').setAttribute('style', 'font-size: 25px');
-      } else { // Para telas maiores que 581px (por exemplo, tamanhos de tablet e desktop)
-        this.calendarOptions.headerToolbar = {
-          start: 'prev,next,today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
-          end: ''
-        };
-        document.querySelector('.fc-toolbar-title').removeAttribute('style');
+
+    
+    windowResize: function(view) {
+      if (window.innerWidth < 768) { // Supondo que 768px seja o breakpoint para dispositivos móveis
+        this.changeView('timeGridDay'); // Muda para a visualização do dia
+        this.calendar.changeView('timeGridDay');
+        this.changeDetector.detectChanges();
+      } else {
+        this.changeView('timeGridWeek'); // Muda para a visualização do mês
       }
     },
+   
     datesSet: (info) => {
       // Verificar se a visualização atual mudou para um mês diferente
 
@@ -165,7 +159,7 @@ export class AgendaComponent implements OnInit {
       }
 
     },
-    initialView: 'timeGridWeek',
+    //initialView: 'timeGridWeek',
     initialEvents: INITIAL_EVENTS,
     weekends: true,
     editable: true,
@@ -251,7 +245,6 @@ export class AgendaComponent implements OnInit {
   }
 
   async fetchData(data) {
-    console.log(data)
     if(data){
     // Mostra o loader
     this.isLoader =true
@@ -272,6 +265,7 @@ export class AgendaComponent implements OnInit {
   }
 
   handleWeekendsToggle() {
+
     const { calendarOptions } = this;
     calendarOptions.weekends = !calendarOptions.weekends;
   }
@@ -323,6 +317,7 @@ export class AgendaComponent implements OnInit {
   }
 
   handleEvents(events: EventApi[]) {
+
     this.currentEvents = events;
     this.changeDetector.detectChanges();
   }
@@ -421,10 +416,14 @@ export class AgendaComponent implements OnInit {
           this.isActive = false;
           if (error.error instanceof ErrorEvent) {
             console.error('An error occurred:', error.error.message);
+            this.fetchData(true)
+
           } else {
             console.error(
               `Backend returned code ${error.status}, ` +
               `body was: ${error.error}`);
+              this.fetchData(true)
+
           }
           this.toastrService.danger(error.error.message);
 
@@ -495,6 +494,7 @@ export class AgendaComponent implements OnInit {
   }
 
   desbloquear(data) {
+    this.fetchData(true)
 
     this.isActive = true
 
@@ -506,9 +506,13 @@ export class AgendaComponent implements OnInit {
     this.service.cancelarAtendimento(register, (response) => {
       this.isActive = false
       this.toastrService.success('Atendimento Cancelado com Sucesso', 'Aditi Care!');
+      this.fetchData(false)
+
     }, (message) => {
       this.isActive = false;
       this.toastrService.danger(message);
+      this.fetchData(false)
+
     });
   }
 

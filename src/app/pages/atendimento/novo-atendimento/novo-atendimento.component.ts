@@ -60,6 +60,9 @@ export class NovoAtendimentoComponent {
     public radioDisabled: boolean = false;
     public dependenteDisabled: boolean = false;
     public optDependente: boolean = false;
+    public isLoader: boolean = false;
+    public horaFormatada= null;
+
 
 
 
@@ -206,7 +209,21 @@ export class NovoAtendimentoComponent {
 
     }
 
+    fetchData(data) {
+        if(data){
+        // Mostra o loader
+        this.isLoader =true
+        }else{
+          setTimeout(() => {
+            // Oculta o loader após o atraso
+            this.isLoader =false
+        }, 2000);
+    }
+    }
+
     buscaConvenio(data) {
+
+        this.fetchData(true)
 
         if (data == 'S') {
             this.isConvenio = false;
@@ -229,13 +246,17 @@ export class NovoAtendimentoComponent {
                 this.isConvenio = false;
                 this.isPagto = true;
                 this.radioDisabled =true;
-                console.log(this.radioDisabled)
+                this.fetchData(false)
+
             }else{
                     this.listConvenio = response;
+                    this.fetchData(false)
                 }
         
             }, (error) => {
                 this.toastrService.danger(error.message);
+                this.fetchData(false)
+
             });
         }
     }
@@ -378,6 +399,7 @@ export class NovoAtendimentoComponent {
                     this.toastrService.warning('O CPF Informado Não Foi Encontrado','Aditi Care');
                 }
                 else if(response === 'OK'){
+                    this.isActive = false;
                     this.toastrService.warning('O CPF Informado Não Foi Encontrado','Aditi Care');
                 }
                 else{ 
@@ -437,10 +459,20 @@ export class NovoAtendimentoComponent {
     salvar(data) {
 
         this.bloqueioSave = true;
+
+        if(this.isPagto == true && data.formaPagto == null){
+            this.toastrService.warning('A Forma de Pagamento Deve ser Informada','Aditi Care');
+            this.bloqueioSave = false;
+            return false
+        }
         
 
         if (this.specialtyId == null) {
             this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
+            this.bloqueioSave = false;
+            return false
+
+
         }
 
         if (this.dadosHorario.horario === undefined) {
@@ -451,6 +483,7 @@ export class NovoAtendimentoComponent {
             var startTime = this.dadosHorario.horario.slice(0, 5)
             var endTime = this.dadosHorario.horario.slice(8)
         }
+
 
         this.clinicId = localStorage.getItem('bway-entityId');
        
@@ -497,7 +530,7 @@ export class NovoAtendimentoComponent {
             userId: this.userId,
             childId: this.childId,
             dateService:this.formatarData(dataCompleta),
-            startTime: startTime.trim(),
+            startTime: this.horaFormatada ?? startTime.trim(),
             endTime: endTime.trim(),
             healthPlanId: data.formaConvenio,
             typePaymentId: data.formaPagto ?? 1,
@@ -512,16 +545,21 @@ export class NovoAtendimentoComponent {
         }
 
         this.isActive = true;
-        this.service.salvarAgendamento(register, (response => {
+        this.fetchData(true)
+
+       this.service.salvarAgendamento(register, (response => {
             this.isActive = false;
             this.toastrService.success('Cadastrado Realizado com Sucesso','Aditi Care!');
             localStorage.removeItem('meuCardData'); //garante que o cache foi apagado das telas posteriores
             localStorage.removeItem('googleData'); //garante que o cache foi apagado das telas posteriores
             this.limpaForm();
             this.previousPage();
+            this.fetchData(false)
+
         }), (error) => {
             this.isActive = false;
             this.toastrService.danger(error.message);
+            this.fetchData(false)
 
         });
 
@@ -530,8 +568,6 @@ export class NovoAtendimentoComponent {
                 this.bloqueioSave = false;
             }, 3000); // 3000 milissegundos = 3 segundos
         }
-
-
 
     }
 
@@ -702,7 +738,7 @@ export class NovoAtendimentoComponent {
             this.toastrService.warning('O Tipo do Procedimento deve ser Informado','Aditi Care');
             return false
         }
-        if (data.tipoEspecialidade == null) {
+        if (this.specialtyId == null) {
             this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
             return false
         }
@@ -735,6 +771,7 @@ export class NovoAtendimentoComponent {
             document.getElementById('radioNao').setAttribute('disabled', 'true');
             this.formNovoAtendimento.controls['consPagto'].setValue(this.detalhes);
             this.retorno = true
+            this.bloqueioSave=false;
         } else {
             document.getElementById('consPagto').removeAttribute('disabled');
             document.getElementById('radioNao').removeAttribute('disabled');
@@ -822,13 +859,13 @@ export class NovoAtendimentoComponent {
             dataHora.setMinutes(dataHora.getMinutes() + 1);
 
             // Formate o resultado de volta para o formato "HH:mm"
-            const horaFormatada = `${dataHora.getHours().toString().padStart(2, '0')}:${dataHora.getMinutes().toString().padStart(2, '0')}`;
+            this.horaFormatada = `${dataHora.getHours().toString().padStart(2, '0')}:${dataHora.getMinutes().toString().padStart(2, '0')}`;
 
             this.isActive = true
             let params = new HttpParams();
             params = params.append('doctorId', data.medico)
             params = params.append('dateService', moment(data.dataInicio).format('YYYY-MM-DD'))
-            params = params.append('startTime', horaFormatada)
+            params = params.append('startTime', this.horaFormatada)
             params = params.append('endTime', this.dadosHorario.horaFim)
 
             if(data.tipoConsulta == 6 && data.tipoProcedimento != null){
