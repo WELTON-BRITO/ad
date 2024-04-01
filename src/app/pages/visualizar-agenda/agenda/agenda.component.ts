@@ -50,6 +50,8 @@ export class AgendaComponent implements OnInit {
   public DefaultStatus = '7,10,4,8';
   public StartedDate: any;
   public medicoId = null;
+  public isLoader: boolean = false;
+
 
   calendarOptions: CalendarOptions = {
     locale: 'pt-br',
@@ -248,6 +250,19 @@ export class AgendaComponent implements OnInit {
     }
   }
 
+  async fetchData(data) {
+    console.log(data)
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
+
   buscaId(data) {
     this.medicoId = data.medico
   }
@@ -312,7 +327,10 @@ export class AgendaComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  buscarAtendimento(data, checked) {
+   buscarAtendimento(data, checked) {
+
+    this.fetchData(true)
+    
 
     let params = new HttpParams();
     let clinica = localStorage.getItem('bway-entityId');
@@ -333,11 +351,12 @@ export class AgendaComponent implements OnInit {
           params = params.append('doctorId', data.medico)
         }
         let allData = []; // Crie uma variável vazia para armazenar os dados
-        this.service.buscaAtendimentos(params, (response) => {
+       
+         this.service.buscaAtendimentos(params, (response) => {
 
           this.isActive = false
           this.rowData = response
-          this.calendarEvents = this.rowData.map(evento => {
+          this.calendarEvents =  this.rowData.map(evento => {
             let color;
             switch (evento.status) {
               case '01 - Aguardando Aprovação':
@@ -383,6 +402,9 @@ export class AgendaComponent implements OnInit {
 
           allData = this.calendarEvents;
 
+          this.fetchData(false)
+
+
           if (allData.length === 0) {
             this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
             this.isActive = false;
@@ -406,6 +428,9 @@ export class AgendaComponent implements OnInit {
           }
           this.toastrService.danger(error.error.message);
 
+          this.fetchData(false)
+
+
         });
 
       }
@@ -419,7 +444,10 @@ export class AgendaComponent implements OnInit {
         // Preencha os cards com os dados recuperados
         this.calendarEvents = parsedData;
       }
+      this.fetchData(false)
+
     }
+
 
   }
 

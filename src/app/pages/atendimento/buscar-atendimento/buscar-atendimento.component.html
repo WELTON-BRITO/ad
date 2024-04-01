@@ -1,3 +1,4 @@
+<div class="loader" *ngIf="isLoader"></div>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12 col-xs-12">
@@ -146,13 +147,13 @@
                       <h6 class="card-title">Data: {{ row?.data }}</h6>
                       <h6 class="card-title">Horário: {{ row?.horario }}</h6>
                       <p class="card-text">Paciente: {{ row?.nomeDependente || row?.nomeResponsavel }}</p>
-                      <p class="card-text" *ngIf="row?.nomeDependente && row?.nomeResponsavel">Responsável: {{
+                      <p class="card-text">Responsável: {{
                         row?.nomeResponsavel }}</p>
                       <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
                       <p class="card-text">Situação: {{ row?.status }}</p>
                       <p class="card-text">
                         Consulta Confirmada:
-                        <span [style.font-weight]="row?.isConfirmed === 'Horário Confirmado' ? 'bold' : 'bold'" [style.color]="row?.isConfirmed === 'Horário Confirmado' ? 'green' : 'red'">
+                        <span [style.font-weight]="row?.isConfirmed === 'Confirmado' ? 'bold' : 'bold'" [style.color]="row?.isConfirmed === 'Confirmado' ? 'green' : 'red'">
                           {{ row?.isConfirmed }}
                         </span>
                       </p>
@@ -187,23 +188,32 @@
               <h5>Horários Disponíveis:</h5>
 
               <div class="row">
-                <div class="col-md-4" *ngFor="let row of rowData2">
-                  <div class=" mb-3" [ngClass]="{
-      'card-livre': row.status === 'Disponível'
-  }">
-                    <div class="card-body">
-                      <h6 class="card-title"> Data: {{ row?.data }} </h6>
-                      <h6 class="card-title"> Horário: {{ row?.horario }}</h6>
-
-                      <div class="text-center">
-                        <button class="btn btn-success mb-2" (click)="AgendaDefinida(row)" title="Agendar">
-                          <i class="fa fa-info-circle"></i> Agendar
-                        </button>
+                <!-- Verifique se a matriz 'rowData2' está vazia -->
+                <ng-container *ngIf="rowData2 === null; else showData">
+                  <p>Não foram encontrados horários disponíveis no período informado.</p>
+                </ng-container>
+              
+                <!-- Caso haja dados, exiba-os -->
+                <ng-template #showData>
+                  <div class="col-md-4" *ngFor="let row of rowData2">
+                    <div class="mb-3" [ngClass]="{
+                      'card-livre': row.status === 'Disponível'
+                    }">
+                      <div class="card-body">
+                        <h6 class="card-title"> Data: {{ row?.data }} </h6>
+                        <h6 class="card-title"> Horário: {{ row?.horario }}</h6>
+              
+                        <div class="text-center">
+                          <button class="btn btn-success mb-2" (click)="AgendaDefinida(row)" title="Agendar">
+                            <i class="fa fa-info-circle"></i> Agendar
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </ng-template>
               </div>
+              
               <!--
               <div class="form-row">
                 <div class="form-group col-md-12">

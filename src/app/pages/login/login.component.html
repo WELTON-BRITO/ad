@@ -1,20 +1,32 @@
+
+<div class="loader" *ngIf="isLoader"></div>
+
 <div class="login-container">
-  <div class="login-form">
+  <div class="login-form ">
       <div class="logo-container">
           <img src="assets/images/login_aditi.png" alt="User Icon" class="login-icon">
       </div>
-      <h2>Informe Seu CPF OU CNPJ e sua Senha</h2>
+      <h2>Informe Seu CPF / CNPJ e a Senha</h2>
       <form class="login" method="post" name="login" id="login" [formGroup]="formLogin">
-          <input type="text" formControlName="login" id="login" class="login-input"
-              placeholder="Login" maxlength="80" autocomplete="off">
+        <input type="text" formControlName="login" id="login" class="login-input"
+        placeholder="Informe seu CPF/CNPJ" maxlength="18" autocomplete="off"
+        (blur)="formatCpfCnpj(formLogin.get('login').value)">
+    
 
           <input type="password" formControlName="password" id="password" class="login-input"
-              placeholder="Senha" maxlength="100" autocomplete="off">
+              placeholder="Informe sua Senha" maxlength="100" autocomplete="off" type="{{showPass ? 'text' : 'password' }}">
 
-          <input type="submit" class="fade_8S" style="width: 250px;" name="login" id="login" value="Entrar" (click)="login()"/>
-      </form>
+              <button type="button" class="btn-transparent" (click)="toggleShowPass()">
+                <i class="fa" [ngStyle]="{'color': '#757474'}" [ngClass]="{'fa-eye': showPass, 'fa-eye-slash': !showPass}"
+                  aria-hidden="true"></i>
+              </button>
+
+              <button type="submit" class="fade_8S" name="login" id="login" (click)="login()">Entrar</button>
+            </form>
       <div class="login-links">
-          <button class="btn btn-success ml-2 button" (click)="recuperarSenha()">Recuperar Senha</button>
+          <button class="fade_9S" (click)="recuperarSenha()">Resetar Senha</button>
       </div>
   </div>
 </div>
+
+

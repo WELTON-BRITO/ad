@@ -4,10 +4,8 @@ import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { NbToastrService } from '@nebular/theme';
 import { AtendimentoService } from '../atendimento.service';
-import { deCamelCase } from '@swimlane/ngx-datatable';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import * as moment from 'moment';
-import { concatMapTo } from 'rxjs-compat/operator/concatMapTo';
 
 @Component({
     selector: 'ngx-novo-atendimento',
@@ -54,9 +52,14 @@ export class NovoAtendimentoComponent {
     public telefoneResponsavel = null
     public emailResponsavel = null
     public optPart = null;
+    public optDep = null;
     public exibirDivProcedimento: boolean = false;
     public bloqueioSave: boolean = true;
     public origem: null;
+    public AtendimentoDireto: boolean = true;
+    public radioDisabled: boolean = false;
+    public dependenteDisabled: boolean = false;
+    public optDependente: boolean = false;
 
 
 
@@ -161,10 +164,12 @@ export class NovoAtendimentoComponent {
             listTempoAtendimento: [null],
             tempoAtendimento: null,
             horarioSelected: null,
+            optDependente: null,
           });
           
         this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
         this.formNovoAtendimento.controls['tipoConsulta'].setValue(this.listTipoConsulta[0].id, { onlySelf: true });
+        this.buscaConvenio(false);
 
         this.tipoCardEncaixe = []; 
 
@@ -172,7 +177,7 @@ export class NovoAtendimentoComponent {
             this.origem = data?.location
             this.formNovoAtendimento.controls['dataInicio'].setValue(this.formatarData(data.data), { onlySelf: true });
             this.formNovoAtendimento.controls['tipoConsulta'].setValue(1, { onlySelf: true });
-           // this.formNovoAtendimento.controls['tipoEspecialidade'].setValue(1, { onlySelf: true });
+            //this.formNovoAtendimento.controls['tipoEspecialidade'].setValue(1, { onlySelf: true });
             this.formNovoAtendimento.controls['optEncaixe'].setValue('N', { onlySelf: true });
             this.formNovoAtendimento.controls['horarioSelected'].setValue(data.data + ' - ' + data.horario, { onlySelf: true });
             this.horarioSelecionado = (data.data + ' - ' + data.horario);
@@ -180,7 +185,8 @@ export class NovoAtendimentoComponent {
 
             this.dadosHorario = data;
             this.isConfAtendimento = true;   
-            this.encaixe=true;    
+            this.encaixe=true;   
+            this.AtendimentoDireto=false; 
 
     }
 
@@ -213,13 +219,17 @@ export class NovoAtendimentoComponent {
             this.service.buscaConvenio(this.doctorId, null, (response) => {
                 this.isActive = false;
                 if (response.length === 0){
-                this.toastrService.danger('Este médico não aceita Convênio','Aditi Care');
+             //   this.toastrService.danger('Este médico não aceita Convênio','Aditi Care');
                 this.optPart = true;
-                document.getElementById('radioSS').setAttribute('checked', 'true');
-                const radioSS = document.getElementById('radioSS') as HTMLInputElement;
-                radioSS.checked = true;
                 this.isConvenio = false;
                 this.isPagto = true;
+               // document.getElementById('radioSS').setAttribute('checked', 'true');
+                const radioSS = document.getElementById('radioSS') as HTMLInputElement;
+              //  radioSS.checked = true;
+                this.isConvenio = false;
+                this.isPagto = true;
+                this.radioDisabled =true;
+                console.log(this.radioDisabled)
             }else{
                     this.listConvenio = response;
                 }
@@ -245,6 +255,11 @@ export class NovoAtendimentoComponent {
                 if (response.length > 0) {
                     this.listDependente = response
                    // this.childId = response[0].idChild
+                }else{
+                  //  this.isDependente = false;
+                    this.optDep = true;
+                    this.dependenteDisabled= true;
+                    this.optDependente = false;
                 }
 
                 this.isActive = false;
@@ -355,9 +370,14 @@ export class NovoAtendimentoComponent {
             this.isActive = true;
 
             this.service.buscaPaciente(null, data.cpf, (response) => {
+
+                console.log(response)
                 
                 if(response == null){
                     this.isActive = false;
+                    this.toastrService.warning('O CPF Informado Não Foi Encontrado','Aditi Care');
+                }
+                else if(response === 'OK'){
                     this.toastrService.warning('O CPF Informado Não Foi Encontrado','Aditi Care');
                 }
                 else{ 
@@ -483,7 +503,7 @@ export class NovoAtendimentoComponent {
             typePaymentId: data.formaPagto ?? 1,
             typeServiceId: data.tipoConsulta ?? 1,
             meetingUrl: this.dadosHorario.data === undefined ? this.dateEncaixe.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId) : this.dadosHorario.data.concat(' - ', this.userId, ' - ', startTime, ' - ', this.doctorId),
-            specialtyId: this.specialtyId ?? 1,
+            specialtyId:  this.specialtyId ?? 1,
             paymentInCreation: this.tipoPagto ?? false,
             isReturn: this.retorno ?? false ,
             dontCheckAvailable: this.encaixe ?? true,
@@ -558,8 +578,8 @@ export class NovoAtendimentoComponent {
         this.service.verificaEspecialidade(data, null, (response => {
 
             this.listTipoEspecialidade = response
-          //  this.formNovoAtendimento.controls['tipoEspecialidade'].setValue(this.listTipoEspecialidade[0].id, { onlySelf: true });
-           // this.specialtyId = this.listTipoEspecialidade[0].id;
+            this.formNovoAtendimento.controls['tipoEspecialidade'].setValue(this.listTipoEspecialidade[0].id, { onlySelf: true });
+            this.specialtyId = this.listTipoEspecialidade[0].id;
 
         }), (error) => {
             this.isActive = false;
@@ -744,7 +764,7 @@ export class NovoAtendimentoComponent {
             this.toastrService.warning('Por favor Informe o Tipo de Consulta Desejada','Aditi Care');
             this.formNovoAtendimento.controls['optEncaixe'].setValue(null);
                 }
-        else if(form.tipoEspecialidade == null){
+        else if(this.specialtyId == null){
 
             this.toastrService.warning('Por favor Informe a Especialidade Desejada','Aditi Care');
             this.formNovoAtendimento.controls['optEncaixe'].setValue(null);

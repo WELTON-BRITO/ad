@@ -42,8 +42,7 @@ export class BuscarAtendimentoComponent implements OnInit {
   currentDay2 = this.date1.getUTCDate() + 7;
   FinalMonth: any;
   FinalDay: any;
-
-
+  public isLoader: boolean = false;
 
   settings = {
     //actions: false,
@@ -220,22 +219,12 @@ export class BuscarAtendimentoComponent implements OnInit {
       this.buscarAtendimento(register, false)
     }
 
-    if (localStorage.getItem('CardTimesDisponivel') === null || localStorage.getItem('CardTimesDisponivel') === '') {
-
-      this.pesquisarConsulta(register, true)
-    } else {
-      this.pesquisarConsulta(register, false)
-    }
-
   }
 
   buscarAtendimento(data, checked) {
 
+    this.fetchData(true)
     this.isActive = true;
-    this.loader.loader
-
-    console.log(this.isActive)
-    console.log( this.loader)
 
 
     let clinica = localStorage.getItem('bway-entityId');
@@ -295,13 +284,11 @@ export class BuscarAtendimentoComponent implements OnInit {
                   clinicaId: clinica,
                   statusId: this.DefaultStatus,
                   medicoId: data.doctor.id,
-                  isConfirmed: data.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado' 
+                  isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado' 
                 }
+                
               }
-              else {
-
-                return null
-              }
+              this.fetchData(false)
 
             })
 
@@ -315,6 +302,7 @@ export class BuscarAtendimentoComponent implements OnInit {
                 `body was: ${error.error}`);
             }
             this.toastrService.danger(error.message);
+            this.fetchData(false)
 
           });
 
@@ -343,7 +331,7 @@ export class BuscarAtendimentoComponent implements OnInit {
                 clinicaId: clinica,
                 statusId: this.DefaultStatus,
                 medicoId: data.doctor.id,
-                isConfirmed: data.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado' 
+                isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado' 
               }));
 
             if (allData.length === 0) {
@@ -358,9 +346,12 @@ export class BuscarAtendimentoComponent implements OnInit {
               this.isActive = false;
               this.rowData = allData;
             }
+            this.fetchData(false)
+
           }, (error) => {
             this.isActive = false;
             this.toastrService.danger(error?.message || "Erro desconhecido.");
+            this.fetchData(false)
           });
 
         }
@@ -377,9 +368,11 @@ export class BuscarAtendimentoComponent implements OnInit {
         // Preencha os cards com os dados recuperados
         this.rowData = parsedData;
       }
+      this.fetchData(false)
+
     }
 
-    this.pesquisarConsulta(data, true)
+    this.pesquisarConsulta(data, checked)
   }
 
   confirmarHorario(data){
@@ -436,6 +429,18 @@ else{
     }
     return true;
   }
+
+  fetchData(data) {
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
 
   agendarAtendimento() {
 
@@ -530,6 +535,7 @@ else{
             this.isActive = false;
             this.rowData2 = this.tipoCard;
           }
+
         }, (error) => {
           this.isActive = false;
           this.toastrService.danger(error.error.message);
@@ -547,7 +553,10 @@ else{
         // Preencha os cards com os dados recuperados
         this.rowData2 = parsedData;
       }
+      this.fetchData(false)
+
     }
+
   }
 }
 

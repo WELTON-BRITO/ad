@@ -6,6 +6,36 @@
 
 // Arquivo: login.scss
 
+
+
+/* Estilos para o loader */
+/* Estilos para o loader */
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 16px solid rgb(114, 124, 245); /* Azul claro */
+  border-top: 16px solid rgb(57, 176, 218); /* Azul mais escuro */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  z-index: 9999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 // Estilos para o contêiner principal
 .login-container {
   display: flex;
@@ -65,11 +95,7 @@
   color: #333;
 }
 
-// Estilos para o título
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
+
 
 
 .login-container {
@@ -105,15 +131,62 @@ h2 {
 }
 
 .login-container {
-  background: linear-gradient(to bottom, #3498db, #2980b9);
-  // Outros estilos...
+  background: linear-gradient(to bottom, rgb(114, 124, 245), rgb(57, 176, 218));  // Outros estilos...
 }
 
 
+/* Estilos para o botão "Entrar" com a cor roxa do seu logo */
+.fade_8S {
+  width: 120px; /* Largura menor */
+  background-color: rgb(114, 124, 245); /* Roxo */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px; /* Espaçamento menor */
+  cursor: pointer;
+  font-size: 12px; /* Tamanho de fonte menor */
+}
 
+/* Efeito de hover para o botão */
+.fade_8S:hover {
+  background-color: rgb(57, 176, 218); /* Azul mais claro */
+}
+
+/* Estilos para o botão "Entrar" com a cor roxa do seu logo */
+.fade_9S {
+  width: 120px; /* Largura menor */
+  background-color: rgb(57, 176, 218); /* Azul mais claro */
+    color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px; /* Espaçamento menor */
+  cursor: pointer;
+  font-size: 12px; /* Tamanho de fonte menor */
+}
+
+/* Efeito de hover para o botão */
+.fade_9S:hover {
+  background-color: rgb(114, 124, 245); /* Roxo */
+
+}
+
+
+html, body {
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilos para o container de login */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}qV B
 
 html {
-  background-color: #56baed;
+  background-color: rgb(57, 176, 218);
 }
 
 body {
@@ -130,11 +203,10 @@ a {
 
 h2 {
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
-  text-transform: uppercase;
   display:inline-block;
-  margin: 40px 8px 10px 8px; 
+  margin: 5 nnnnnnnpx 8px 10px 8px; 
   color: #cccccc;
 }
 

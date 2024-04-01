@@ -40,6 +40,28 @@ b { /* used for event dates/times */
   margin-top: 27px;
 }
 
+/* Estilos para o loader */
+/* Estilos para o loader */
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 16px solid rgb(114, 124, 245); /* Azul claro */
+  border-top: 16px solid rgb(57, 176, 218); /* Azul mais escuro */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  z-index: 9999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 /* Estilos específicos para telas com largura máxima de 768px (dispositivos móveis) */
 @media screen and (max-width: 768px) {
   .button {

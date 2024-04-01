@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { LoaderService } from '../loader.service';
 
 @Component({
   selector: 'ngx-spinner',

@@ -56,18 +56,18 @@
                                                                     
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-4" *ngIf="AtendimentoDireto">
                                         <div class="form-group">
-                                            <label for="tempoAtendimento">Tempo de Atendimento (Opcional)</label>
-                                            <select class="form-control" formControlName="tempoAtendimento"
-                                                (change)="tempoAtendimento($event.target.value)">
-                                                <option value="null" selected>SELECIONE</option>
-                                                <option *ngFor="let tempoAtendimento of listTempoAtendimento"
-                                                    value="{{ tempoAtendimento.id }}">{{
-                                                      tempoAtendimento.name}}</option>
-                                            </select>
+                                          <label for="tempoAtendimento">Tempo de Atendimento (Opcional)</label>
+                                          <select class="form-control" formControlName="tempoAtendimento" (change)="tempoAtendimento($event.target.value)">
+                                            <option value="null" selected>SELECIONE</option>
+                                            <option *ngFor="let tempoAtendimento of listTempoAtendimento" value="{{ tempoAtendimento.id }}">
+                                              {{ tempoAtendimento.name }}
+                                            </option>
+                                          </select>
                                         </div>
-                                    </div>
+                                      </div>
+                                      
                                     <div class="form-group col-md-4">
                                         <div class="form-group" *ngIf="exibirDivProcedimento">
                                             <label for="tipoProcedimento">Tipo de Procedimento*</label>
@@ -83,13 +83,13 @@
                                     </div>
                                     <div class="form-row">
 
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-4" *ngIf="AtendimentoDireto">
                                         <label for="dataInicio">Informe a Data da Consulta*</label>
                                         <input class="form-control date" type="date" id="dataInicio"
                                             name="mydate" formControlName="dataInicio" maxlength="10" />
                                     </div>
                                     
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-4" *ngIf="AtendimentoDireto">
                                         <label class="encaixe">Deseja Realizar um Encaixe?*</label>
                                         <div class="p-1 row mb-lg-n1">
                                             <label class="radio-inline pl-3">
@@ -239,16 +239,18 @@
                                                     <label class="consultaDependente">Atendimento para Dependente?*</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
-                                                            <input class="mat-button" type="radio" id="radio"
-                                                                name="optDep" value="S"
-                                                                (click)="consultaDependente($event.target.value)" />
-                                                            Sim</label>
+                                                          <input class="mat-button" type="radio" id="radioS1" name="optDep" value="S"
+                                                                 [checked]="optDep === true" [disabled]="dependenteDisabled"
+                                                                 (click)="consultaDependente('S')" />
+                                                          Sim
+                                                        </label>
                                                         <label class="radio-inline pl-2">
-                                                            <input class="mat-button" type="radio" id="radio"
-                                                                name="optDep" value="N"
-                                                                (click)="consultaDependente($event.target.value)" />
-                                                            Não</label>
-                                                    </div>
+                                                          <input class="mat-button" type="radio" id="radio" name="optDep" value="N"
+                                                                 [checked]="optDep === false" [disabled]="dependenteDisabled"
+                                                                 (click)="consultaDependente('N')" />
+                                                          Não
+                                                        </label>
+                                                      </div>
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4" *ngIf="isDependente">
@@ -284,25 +286,24 @@
                                         <div class="form-row align-items-center">
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label class="consultaParticular">Consulta será Particular?</label>
-                                                    <div class="p-1 row">
-                                                        <label class="radio-inline pl-2 pl-3">
-                                                            <input class="mat-button" type="radio" id="radioSS"
-                                                                name="optPart" value="S"
-                                                                [checked]="optPart === true"
-                                                                (click)="buscaConvenio('S')" />
-                                                            Sim
-                                                        </label>
-                                                        <label class="radio-inline pl-2">
-                                                            <input class="mat-button" type="radio" id="radio"
-                                                                name="optPart" value="N"
-                                                                [checked]="optPart === false"
-                                                                (click)="buscaConvenio('N')" />
-                                                            Não
-                                                        </label>
-                                                    </div>
+                                                  <label class="consultaParticular">Consulta será Particular?</label>
+                                                  <div class="p-1 row">
+                                                    <label class="radio-inline pl-2 pl-3">
+                                                      <input class="mat-button" type="radio" id="radioSS" name="optPart" value="S"
+                                                             [checked]="optPart === true" [disabled]="radioDisabled"
+                                                             (click)="buscaConvenio('S')" />
+                                                      Sim
+                                                    </label>
+                                                    <label class="radio-inline pl-2">
+                                                      <input class="mat-button" type="radio" id="radio" name="optPart" value="N"
+                                                             [checked]="optPart === false" [disabled]="radioDisabled"
+                                                             (click)="buscaConvenio('N')" />
+                                                      Não
+                                                    </label>
+                                                  </div>
                                                 </div>
-                                                </div>
+                                              </div>
+                                              
                                                 
                                             <div class="form-group col-md-4" *ngIf="isPagto">
                                                 <label for="formaPagto">Qual será a Modalidade de Pagamento*</label>
