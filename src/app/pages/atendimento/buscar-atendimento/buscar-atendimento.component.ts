@@ -115,6 +115,7 @@ export class BuscarAtendimentoComponent implements OnInit {
 
   ngOnInit() {
 
+    this.setupCollapse();
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     localStorage.removeItem('detalhesData'); //garante que o cache foi apagado das telas posteriores
     localStorage.removeItem('draftAtendimento');//garante que o cache foi apagado das telas posteriores
@@ -558,5 +559,15 @@ else{
     }
 
   }
+
+  setupCollapse() {
+    document.querySelectorAll('[data-toggle="collapse"]').forEach(element => {
+      element.addEventListener('click', () => {
+        const target = document.querySelector(element.getAttribute('data-target'));
+        target.classList.toggle('show');
+      });
+    });
+  }
+  
 }
 

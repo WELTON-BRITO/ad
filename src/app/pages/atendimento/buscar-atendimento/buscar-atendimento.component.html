@@ -6,12 +6,21 @@
         <nb-card>
           <nb-card-body>
             <form id=“form-buscar-atendimento” [formGroup]="formBuscarAtendimento">
+              <div class="text-right">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#filtrosAtendimento" aria-expanded="false" aria-controls="filtrosAtendimento">
+                  <b class="fas fa-filter"></b> Exibir Filtros <span class="arrow">▾</span>
+                </button>
+              </div>
+              
+              
               <div class="col-md-12 col-xs-12">
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-4">
-                    <h5 class="ml-lg-n3">Atendimento</h5>
+                    <h5 class="ml-lg-n3">Agenda de Atendimento</h5>
                   </div>
                 </div>
+                <div class="collapse" id="filtrosAtendimento">
+
                 <div class="form-row align-items-center">
                   <div class="form-group col-md-4 ">
                     <div class="form-group">
@@ -52,12 +61,12 @@
                   <div class="form-group col-md-4">
                     <label for="dataInicio">Período Inicial*</label>
                     <input class="form-control date" type="date" id="dataInicio" name="Data Início" [value]="TodayDate"
-                      maxlength="10" formControlName="dataInicio" />
+                       formControlName="dataInicio" />
                   </div>
                   <div class="form-group col-md-4">
                     <label for="dataFim">Período Final*</label>
                     <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate"
-                      maxlength="10" formControlName="dataFim" />
+                   formControlName="dataFim" />
                   </div>
                   <div class="form-group col-md-4">
                     <label for="status">Situação Desejada</label>
@@ -79,7 +88,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="div-cpf">
                         <label for="cpf">CPF do Paciente</label>
@@ -90,50 +99,27 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-4">
-                    <div class="form-group pt-4">
-                      <div class="text-right">
-                        <button class="btn btn-primary mr-2 button"
-                          (click)="buscarAtendimento(formBuscarAtendimento.value,true)">
-                          Pesquisar
-                        </button>
-                        <button class="btn btn-success ml-2 button" (click)="agendarAtendimento()">
-                          Agendar Horário
-                        </button>
-                        <button class="btn btn-warning ml-2 button" (click)="BloquearAtendimento()">
-                          Bloquear Agenda
-                        </button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
               </div>
+            </div>
 
-              <h5>Legenda:</h5>
-              <div class="col-md-12 col-xs-12">
-                <div class="row">
-                  <div class="legend d-flex flex-wrap">
-                    <p class="mr-3 mb-2">
-                      <i class="fa fa-info-circle text-primary"></i> Detalhe Do Atendimento
-                    </p>
-                    <p class="mr-3 mb-2">
-                      <i class="fa fa-wifi text-success"></i> Iniciar Atendimento
-                    </p>
-                    <p class="mr-3 mb-2">
-                      <i class="fa fa-video text-danger"></i> Iniciar Video Atendimento
-                    </p>
-                    <p class="mr-3 mb-2">
-                      <i class="fa fa-key text-danger"></i> Desbloquear Horário
-                    </p>
-                    <p class="mb-2">
-                      <i class="fa fa-clock text-danger"></i> Confirmar Horário
-                    </p>
-                  </div>
+            <div class="form-group">
+              <div class="form-group pt-4">
+                <div class="text-right">
+                  <button class="btn btn-primary mr-2 button"
+                    (click)="buscarAtendimento(formBuscarAtendimento.value,true)">
+                    Pesquisar
+                  </button>
+                  <button class="btn btn-success ml-2 button" (click)="agendarAtendimento()">
+                    Agendar
+                  </button>
+                  <button class="btn btn-warning ml-2 button" (click)="BloquearAtendimento()">
+                    Bloquear
+                  </button>
                 </div>
               </div>
-              
-
+            </div>
 
               <h5>Horários Agendados:</h5>
 
@@ -175,7 +161,7 @@
                           <i class="fa fa-key"></i>
                         </button>
                         <button style="margin: 0 15px;"  class="btn btn-danger mb-2" (click)="confirmarHorario(row)"
-                        *ngIf="row.isConfirmed ==='Horário Não Confirmado'">
+                        *ngIf="row.isConfirmed ==='Não Confirmado'">
                         <i class="fa fa-clock"></i>
                       </button>
                       </div>
@@ -185,6 +171,29 @@
                 </div>
               </div>
 
+              <h5>Legenda:</h5>
+              <div class="col-md-12 col-xs-12">
+                <div class="row">
+                  <div class="legend d-flex flex-wrap">
+                    <p class="mr-3 mb-2">
+                      <i class="fa fa-info-circle text-primary"></i> Detalhe Do Atendimento
+                    </p>
+                    <p class="mr-3 mb-2">
+                      <i class="fa fa-wifi text-success"></i> Iniciar Atendimento
+                    </p>
+                    <p class="mr-3 mb-2">
+                      <i class="fa fa-video text-danger"></i> Iniciar Video Atendimento
+                    </p>
+                    <p class="mr-3 mb-2">
+                      <i class="fa fa-key text-danger"></i> Desbloquear Horário
+                    </p>
+                    <p class="mb-2">
+                      <i class="fa fa-clock text-danger"></i> Confirmar Horário
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
               <h5>Horários Disponíveis:</h5>
 
               <div class="row">
@@ -295,16 +304,3 @@
     </div>
   </div>
 </div>
-
-<div #card>
-  <div class="col-md-12 col-xs-12">
-    <div class="row" *ngIf="isActive" class="loader">
-      <div class="text-center" style="margin-top: -4460px;margin-right: 80px;">
-        <button class="btn btn-primary" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Carregando...
-        </button>
-      </div>
-    </div>
-  </div>
-</div>        

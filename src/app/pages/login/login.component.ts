@@ -178,12 +178,13 @@ BaseValidCNPJ(value) {
           this.isActive = false;
           if(error.error.message == undefined){
             this.toastrService.danger('Sistema temporariamente indisponível','Aditi Care' );
+            this.fetchData(false)
           }else{
             this.toastrService.danger(error.error.message,'Aditi Care');
+            this.fetchData(false)
           }
         });
 
-        this.fetchData(false)
       }else{
         this.toastrService.danger('Por Favor Prencha Corretamente os Campos','Aditi Care' );
         this.fetchData(false)
@@ -194,6 +195,9 @@ BaseValidCNPJ(value) {
   private saveLogin(result) {
     
     this.toastrService.success('Bem Vindo ao Portal Aditi Care!', 'Aditi Care');
+
+    this.fetchData(false)
+
 
     localStorage.clear();
     sessionStorage.clear();
@@ -245,6 +249,7 @@ BaseValidCNPJ(value) {
     }
 
    //   this.pesquisaMedico() Desativado após a inclusão dos dados  do médico da clinica no serviço de login
+
 
      this.router.navigate(['/pages/dashboard']);
 

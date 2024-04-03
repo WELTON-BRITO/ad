@@ -81,7 +81,7 @@ export class AgendaComponent implements OnInit {
       list: 'Lista',
     },
 
-    
+    /*
     windowResize: function(view) {
       if (window.innerWidth < 581) { // Supondo que 768px seja o breakpoint para dispositivos móveis
         this.changeView('timeGridDay'); // Muda para a visualização do dia
@@ -101,6 +101,26 @@ export class AgendaComponent implements OnInit {
         }
         document.querySelector('.fc-toolbar-title').removeAttribute('style');
 
+      }
+    },*/
+    
+
+    windowResize: (view) => {
+      if (window.innerWidth < 581) { // Altere esse valor de acordo com o breakpoint do seu design responsivo
+        this.calendarOptions.headerToolbar = {
+          start: '',
+          center: 'prev,next,timeGridDay',
+          end: '',
+        };
+
+
+      } else {
+        this.calendarOptions.headerToolbar = {
+          start: 'prev,next, timeGridDay',
+          center: 'title',
+          end: 'dayGridMonth,timeGridWeek,listWeek',
+        };
+       
       }
     },
    
@@ -187,6 +207,7 @@ export class AgendaComponent implements OnInit {
     eventRemove:
     */
   };
+  
 
   constructor(private changeDetector: ChangeDetectorRef,
     private dialogService: NbDialogService,
@@ -197,6 +218,8 @@ export class AgendaComponent implements OnInit {
 
   ngOnInit() {
 
+    this.windowResize();
+
       window.addEventListener('orientationchange', function() {
         var orientation = screen.orientation.type;
         if (orientation === 'portrait-primary' || orientation === 'portrait-secondary') {
@@ -206,7 +229,7 @@ export class AgendaComponent implements OnInit {
         }
       });
 
-    
+  
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
@@ -266,6 +289,7 @@ export class AgendaComponent implements OnInit {
 
     }
   }
+  
 
   async fetchData(data) {
     if(data){
@@ -278,6 +302,7 @@ export class AgendaComponent implements OnInit {
     }, 2000);
 }
 }
+
 
   buscaId(data) {
     this.medicoId = data.medico
@@ -546,5 +571,28 @@ export class AgendaComponent implements OnInit {
   BloquearAtendimento() {
     this.router.navigate(['/pages/atendimento/bloquear-atendimento']);
   }
+
+  windowResize() {
+    window.addEventListener('resize', () => this.windowResize());
+
+    if (window.innerWidth < 581) {
+      this.calendarOptions.headerToolbar = {
+        start: '',
+        center: 'prev,next,timeGridDay',
+        end: '',
+      };
+    } else {
+      this.calendarOptions.headerToolbar = {
+        start: 'prev,next, timeGridDay',
+        center: 'title',
+        end: 'dayGridMonth,timeGridWeek,listWeek',
+      };
+    }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', () => this.windowResize());
+  }
+
 
 }
