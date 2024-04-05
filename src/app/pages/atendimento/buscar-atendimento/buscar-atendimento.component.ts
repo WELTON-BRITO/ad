@@ -115,6 +115,7 @@ export class BuscarAtendimentoComponent implements OnInit {
 
   ngOnInit() {
 
+    
     this.setupCollapse();
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     localStorage.removeItem('detalhesData'); //garante que o cache foi apagado das telas posteriores
@@ -144,7 +145,7 @@ export class BuscarAtendimentoComponent implements OnInit {
 
     var time = new Date();
     var outraData = new Date();
-    outraData.setDate(time.getDate() + 7);
+    outraData.setDate(time.getDate() + 15);
     this.FinalDate = moment(outraData).format('YYYY-MM-DD')
 
     this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
@@ -561,13 +562,20 @@ else{
   }
 
   setupCollapse() {
+    const isMobile = window.innerWidth <= 768; // Define a largura máxima para dispositivos móveis
     document.querySelectorAll('[data-toggle="collapse"]').forEach(element => {
+      const target = document.querySelector(element.getAttribute('data-target'));
+      // Se for mobile, inicia com os filtros fechados
+      if (!isMobile && !target.classList.contains('show')) {
+        target.classList.add('show');
+      }
+      // Adiciona o evento de clique
       element.addEventListener('click', () => {
-        const target = document.querySelector(element.getAttribute('data-target'));
         target.classList.toggle('show');
       });
     });
   }
+
   
 }
 

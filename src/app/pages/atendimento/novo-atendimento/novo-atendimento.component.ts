@@ -6,6 +6,7 @@ import { NbToastrService } from '@nebular/theme';
 import { AtendimentoService } from '../atendimento.service';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import * as moment from 'moment';
+import { CombineLatestOperator } from 'rxjs/internal-compatibility';
 
 @Component({
     selector: 'ngx-novo-atendimento',
@@ -177,6 +178,7 @@ export class NovoAtendimentoComponent {
         this.tipoCardEncaixe = []; 
 
         if(data.data !=null){
+
             this.origem = data?.location
             this.formNovoAtendimento.controls['dataInicio'].setValue(this.formatarData(data.data), { onlySelf: true });
             this.formNovoAtendimento.controls['tipoConsulta'].setValue(1, { onlySelf: true });
@@ -184,7 +186,7 @@ export class NovoAtendimentoComponent {
             this.formNovoAtendimento.controls['optEncaixe'].setValue('N', { onlySelf: true });
             this.formNovoAtendimento.controls['horarioSelected'].setValue(data.data + ' - ' + data.horario, { onlySelf: true });
             this.horarioSelecionado = (data.data + ' - ' + data.horario);
-            document.getElementById('dataInicio').setAttribute('disabled', 'true');
+         //   document.getElementById('dataInicio').setAttribute('disabled', 'true');
 
             this.dadosHorario = data;
             this.isConfAtendimento = true;   
@@ -391,8 +393,6 @@ export class NovoAtendimentoComponent {
             this.isActive = true;
 
             this.service.buscaPaciente(null, data.cpf, (response) => {
-
-                console.log(response)
                 
                 if(response == null){
                     this.isActive = false;
@@ -453,8 +453,7 @@ export class NovoAtendimentoComponent {
         this.bloqueioSave=false;
 
     }
-
-    
+   
 
     salvar(data) {
 
@@ -471,8 +470,6 @@ export class NovoAtendimentoComponent {
             this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
             this.bloqueioSave = false;
             return false
-
-
         }
 
         if (this.dadosHorario.horario === undefined) {
@@ -483,7 +480,6 @@ export class NovoAtendimentoComponent {
             var startTime = this.dadosHorario.horario.slice(0, 5)
             var endTime = this.dadosHorario.horario.slice(8)
         }
-
 
         this.clinicId = localStorage.getItem('bway-entityId');
        
@@ -497,7 +493,6 @@ export class NovoAtendimentoComponent {
 
             const dataInicio = dataCompleta; // Exemplo de data
 
-            console.log(dataInicio)
 
             // Divide a data em partes (ano, mês, dia)
             const [dia,mes,ano ] = dataInicio.split(/[-/]/); // Utiliza regex para considerar ambos os delimitadores
@@ -519,9 +514,10 @@ export class NovoAtendimentoComponent {
                 dataCompleta = `${ano}-${mesFormatado}-${diaFormatado}`;
             }
             
+            if( this.horaFormatada == null){
 
-
-
+                this.formatarHoraData(startTime.trim());
+            }
             
         let register = {
 
@@ -553,8 +549,8 @@ export class NovoAtendimentoComponent {
             localStorage.removeItem('meuCardData'); //garante que o cache foi apagado das telas posteriores
             localStorage.removeItem('googleData'); //garante que o cache foi apagado das telas posteriores
             this.limpaForm();
-            this.previousPage();
             this.fetchData(false)
+            this.previousPage();
 
         }), (error) => {
             this.isActive = false;
@@ -783,6 +779,8 @@ export class NovoAtendimentoComponent {
 
     previousPage() {
 
+        console.log(this.origem)
+
         if (this.origem === 'agendaGoogle') {
             this.router.navigate(['/pages/visualizar-agenda/agenda'])
 
@@ -845,21 +843,8 @@ export class NovoAtendimentoComponent {
             this.toastrService.warning('Por favor Informa o Horário do Encaixe Desejado!','Aditi Care');
 
         } else {
-            const horaInicio = this.dadosHorario.horaInicio;
-            const partesHora = horaInicio.split(':');
-            const hora = parseInt(partesHora[0]);
-            const minutos = parseInt(partesHora[1]);
 
-            // Crie um objeto Date com a hora atual
-            const dataHora = new Date();
-            dataHora.setHours(hora);
-            dataHora.setMinutes(minutos);
-
-            // Adicione 1 minuto
-            dataHora.setMinutes(dataHora.getMinutes() + 1);
-
-            // Formate o resultado de volta para o formato "HH:mm"
-            this.horaFormatada = `${dataHora.getHours().toString().padStart(2, '0')}:${dataHora.getMinutes().toString().padStart(2, '0')}`;
+            this.formatarHoraData(null);
 
             this.isActive = true
             let params = new HttpParams();
@@ -890,6 +875,33 @@ export class NovoAtendimentoComponent {
             });
 
         }
+    }
+
+    formatarHoraData(data){
+
+        var horaInicio; // Defina horaInicio fora do bloco if para ter escopo no console.log
+        if(this.dadosHorario.horaInicio !== null && this.dadosHorario.horaInicio !== undefined){
+            horaInicio = this.dadosHorario.horaInicio;
+        }else{
+            horaInicio = data; // Certifique-se de que 'data' está definida e acessível neste ponto
+        }
+        
+        var partesHora = horaInicio.split(':');
+        
+        const hora = parseInt(partesHora[0]);
+        const minutos = parseInt(partesHora[1]);
+
+        // Crie um objeto Date com a hora atual
+        const dataHora = new Date();
+        dataHora.setHours(hora);
+        dataHora.setMinutes(minutos);
+
+        // Adicione 1 minuto
+        dataHora.setMinutes(dataHora.getMinutes() + 1);
+
+        // Formate o resultado de volta para o formato "HH:mm"
+        this.horaFormatada = `${dataHora.getHours().toString().padStart(2, '0')}:${dataHora.getMinutes().toString().padStart(2, '0')}`;
+
     }
 
 }

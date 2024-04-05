@@ -207,8 +207,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
             if (allData) {
               // Converta os dados de string para objeto
               const parsedData = JSON.parse(allData);
-
-              this.formConsultaPaciente.controls['detalhesCliente'].setValue(parsedData?.this.detalhesCliente ?? null);
+              this.formConsultaPaciente.controls['detalhesCliente'].setValue(parsedData.detalhesCliente ?? null);
+              this.formConsultaPaciente.controls['detalhesCliente'].setValue(parsedData?.detalhesCliente ?? null);
               this.formConsultaPaciente.controls['detalhesInterno'].setValue(parsedData?.detalhesInterno ?? null);
               this.formConsultaPaciente.controls['tempoRetorno'].setValue(parsedData?.tempoRetorno ?? null);
               this.formConsultaPaciente.controls['altura'].setValue(parsedData?.altura ?? null);
@@ -554,7 +554,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
             v_descriptionClinic = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic);
             this.hasSpecial = true;
            }else{
-            v_descriptionClinic = response?.descriptionUser;
+            v_descriptionClinic = response?.descriptionClinic;
            }
 
             // Defina o valor no controle do formulário

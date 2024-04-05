@@ -575,7 +575,9 @@ export class AgendaComponent implements OnInit {
   windowResize() {
     window.addEventListener('resize', () => this.windowResize());
 
-    if (window.innerWidth < 581) {
+    const isMobile = window.innerWidth <= 768; // Define a largura máxima para dispositivos móveis
+
+    if (isMobile) {
       this.calendarOptions.headerToolbar = {
         start: '',
         center: 'prev,next,timeGridDay',
