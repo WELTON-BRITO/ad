@@ -417,23 +417,23 @@ export class AgendaComponent implements OnInit {
               default:
                 color = 'green'; // Cor padrão (caso o status não corresponda a nenhum dos valores acima)
             }
-            if (!evento.isConfirmed && evento.name !=='Bloqueado') {
+            if (!evento.isConfirmed && evento.userName !=='Bloqueado') {
               color = 'orange';
             }
 
             return {
-              title: evento.child?.name ?? evento.user.name,
+              title: evento.childName ?? evento.userName,
               start: evento.dateService.concat('T', evento.startTime),
               end: evento.dateService.concat('T', evento.endTime),
               id: evento.id,
-              responsavel: evento.user.name,
-              medico: evento.doctor.name,
-              paciente: evento.child?.name ?? evento.user.name,
+              responsavel: evento.userName,
+              medico: evento.doctorName,
+              paciente: evento.childName ?? evento.userName,
               data: evento.dateService,
-              nameFather: evento.child?.nameFather ?? null,
-              nameMother: evento.child?.nameMother ?? null,
+              nameFather: evento.childFather ?? null,
+              nameMother: evento.childMother ?? null,
               typePayment: evento.typePayment,
-              typeService: evento.typeService,
+              typeService: evento.typeServiceName,
               status: evento.status,
               horario: evento.startTime.concat(' - ', evento.endTime),
               dados: evento,

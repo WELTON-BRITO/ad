@@ -39,6 +39,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public checkedConsulta: boolean = false;
     public hasSpecial: boolean = false;
     public html_string: any ;
+    public isLoader: boolean = false;
 
     public file: any;
     formData: FormData;
@@ -68,6 +69,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public rowData = null;
     public endDate = new Date()
     public startDate = new Date();
+    public historico = null
 
     
     constructor(private formBuilder: FormBuilder,
@@ -106,7 +108,10 @@ export class ConsultaPacienteComponent implements OnDestroy {
             patchPaciente: false,
         })
 
-        let data = history.state
+         var data = history.state
+
+         this.historico = data;
+
 
         if(localStorage.getItem('detalhesData')!==null){
             
@@ -256,16 +261,16 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.service.buscaAtendimentos(params, (response) => {
             response.forEach(data => {
                 allData.push({
-                    name: data.doctor.name,
-                    birthDate: moment(data.child.birthDate).format('DD/MM/YYYY') ?? moment(data.user.birthDate).format('DD/MM/YYYY'),
+                    name: data.doctorName,
+                    birthDate: moment(data.childBirthDate).format('DD/MM/YYYY') ?? moment(data.childBirthDate).format('DD/MM/YYYY'),
                     id: data.id,
                     dateService: data.dateService,
                     horario: data.startTime +" - "+ data.endTime,
-                    typeService: data.typeService,
-                    cellPhoneUser: data.user.cellPhone,
-                    emailUser:data.user.emailUser,
+                    typeService: data.typeServiceName,
+                    cellPhoneUser: data.userPhone,
+                    emailUser:data.userEmail,
                     federalIdUser: data.user.federalId,
-                    NameResponse: data.user.name
+                    NameResponse: data.userName
                 });
             });
 
@@ -383,12 +388,15 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isHistorico = false;
         this.checkedConsulta = true;
 
-        if(this.atendimento.patchPaciente === true){
+      /*  if(this.historico =='atendimento'){
             this.router.navigate(['/pages/atendimento/detalhe-atendimento'])
         }else {
             this.router.navigate(['/pages/gestao-paciente/paciente'])
 
-        }
+        }*/
+
+        this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+
     }
 
     public onUploadAtestado = ($event: Event, element) => {
@@ -452,17 +460,26 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         this.isSaving = true;
 
+        this.fetchData(true)
+
+
         if(data.detalhesCliente==null){
             this.toastrService.warning('Por Favor Informe dos Os Detalhes do Cliente','Aditi Care!');
             this.isSaving = false;
+            this.fetchData(false)
+
         }else
         if(data.prescricaoMedica==null){
             this.toastrService.warning('Por Favor Informe a Prescrição Médica','Aditi Care!');
             this.isSaving = false;
+            this.fetchData(false)
+
         }
         if(data.detalhesCliente==null){
             this.toastrService.warning('Por Favor Informe a Prescrição Médica','Aditi Care!');
             this.isSaving = false;
+            this.fetchData(false)
+
         }
         else{
 
@@ -494,14 +511,29 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.AlterarStatusStorage();
             localStorage.removeItem('draftAtendimento');
             localStorage.removeItem('histDetails');
+            this.fetchData(false)
             this.voltar();
         }), (error) => {
             this.isActive = false;
             this.toastrService.danger(error.message);
             this.isSaving = false;
+            this.fetchData(false)
         });
     }
     }
+
+    
+  fetchData(data) {
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
 
     AlterarStatusStorage(){
         const allData = localStorage.getItem('detalhesData')

@@ -45,7 +45,8 @@ export class DetalheAtendimentoComponent implements OnInit {
   public listClinica = null;
   public listTipoConsulta = [];
   public patchPaciente: false;
-  
+  public isLoader: boolean = false;
+ 
 
   settings = {
     //actions: false,
@@ -86,40 +87,40 @@ export class DetalheAtendimentoComponent implements OnInit {
     
     if(localStorage.getItem('detalhesData')==null){
 
-    if (data.doctor && data.doctor.name !== undefined){
+    if (data && data.doctorName !== undefined){
 
       if(data.patchPaciente !==null){
         patchPaciente: true;
       }
 
-      const dataNascimento = data.child?.birthDate ?? data.user?.birthDate ?? '20240101';
+      const dataNascimento = data.childBirthDate ?? data.user?.birthDate ?? '20240101';
       const idadePessoa = this.calcularIdade(dataNascimento) ?? null;
    
       let allData = {
-        medico: data.doctor?.name ?? null,
-        nomePaciente: data.child?.name ?? data.user?.name ?? null,
-        nomeResponsavel: data.user?.name ?? null,
+        medico: data.doctorName ?? null,
+        nomePaciente: data.childName ?? data.userName ?? null,
+        nomeResponsavel: data.userName ?? null,
         data: moment(data.dateService).format('DD/MM/YYYY'),
         horario: data.startTime.concat(' - ', data.endTime),
         formaPagamento: data?.typePayment?? null,
-        modalidade: data.typeService?? null,
+        modalidade: data.typeServiceName?? null,
         urlCall: data.meetingUrl?? null,
         status: data.status?? null,
-        especialidade: data.specialty?.name ?? null,
-        convenio: data.plan?.name ?? null,
+        especialidade: data.specialtyName ?? null,
+        convenio: data.planName ?? null,
         id: data.id?? null,
-        comprovante: data.paymentProo?? null,
-        nameFather: data.child?.nameFather ?? null,
-        nameMother: data.child?.nameMother ?? null,
-        telefone: data.user?.cellPhone ?? null,
-        email: data.user?.emailUser ?? null,
+        comprovante: data.paymentProof?? null,
+        nameFather: data.childFather ?? null,
+        nameMother: data.childMother ?? null,
+        telefone: data.userPhone ?? null,
+        email: data.userEmail ?? null,
         dateNasc: idadePessoa ?? null,
-        ultimaConsulta: data.child?.dateRegister ?? null,
-        doctorId: data.doctor?.id ?? null,
-        userId: data.user?.id ?? null,
-        idChild: data.child?.idChild ?? null,
-        sexo: data.biologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
-        tipoSanguineo: data.child?.bloodType ?? null,
+        ultimaConsulta: data.childDateRegister ?? null,
+        doctorId: data.doctorId ?? null,
+        userId: data.userId ?? null,
+        idChild: data.childId ?? null,
+        sexo: data.childBiologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
+        tipoSanguineo: data.childBloodType ?? null,
     };
         
     this.paciente = allData
@@ -165,6 +166,18 @@ if (allData) {
       .onClose.subscribe(reason => this.cancelarAtendimento(reason));
   }
 
+  fetchData(data) {
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
+
   cancelarAtendimento(reason) {
 
     if (reason != null) {
@@ -175,17 +188,24 @@ if (allData) {
           'id': this.paciente.id,
           'reasonCancellation': reason
         }
+        this.fetchData(true)
 
         this.service.cancelarAtendimento(register, (response) => {
           this.isActive = false
           this.toastrService.success('Atendimento Cancelado com Sucesso','Aditi Care!');
+          this.fetchData(false)
+
           this.location.back()
         }, (message) => {
           this.isActive = false;
           this.toastrService.danger(message);
+          this.fetchData(false)
+
         });
       } else {
         this.toastrService.danger('Preencha o Motivo de Cancelamento','Aditi Care!');
+        this.fetchData(false)
+
       }
 
     }
@@ -195,15 +215,22 @@ if (allData) {
 
     this.isActive = true
 
+    this.fetchData(true)
+
+
     this.service.aprovarPagamento(null, this.paciente.id, (response) => {
 
       this.isActive = false
       this.toastrService.success('Pagamento aprovado com sucesso','Aditi Care!');
       this.atendimento.status ='03 - Consulta Confirmada';
+      this.fetchData(false)
+
 
     }, (message) => {
       this.isActive = false;
       this.toastrService.danger(message);
+      this.fetchData(false)
+
     });
 
   }
@@ -237,6 +264,9 @@ if (allData) {
 
     let blobURL: string;
 
+    this.fetchData(true)
+
+
     this.service.visualizarAnexo(this.paciente.id, null, (response => {
       
       if (response != null) {
@@ -263,10 +293,14 @@ if (allData) {
         this.toastrService.warning('Este Atendimento Não Possui Anexo','Aditi Care!');
       }
 
+      this.fetchData(false)
 
     }), (error) => {
       this.isActive = false;
       this.toastrService.danger(error.message);
+
+      this.fetchData(false)
+
 
     });
 

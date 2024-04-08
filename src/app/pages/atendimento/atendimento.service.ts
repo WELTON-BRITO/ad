@@ -13,7 +13,7 @@ export class AtendimentoService {
   }
 
   buscaAtendimentos(data: any, successHandle: Function, erroHandle: Function) {
-    return this.httpService.doGet('/api/appointments/status/all', data, successHandle, erroHandle)
+    return this.httpService.doGet('/api/appointments/status/custom/all', data, successHandle, erroHandle)
   }
 
   buscaPagamentos(data: any, successHandle: Function, erroHandle: Function) {

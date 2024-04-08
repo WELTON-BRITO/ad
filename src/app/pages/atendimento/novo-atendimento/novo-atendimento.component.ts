@@ -779,7 +779,6 @@ export class NovoAtendimentoComponent {
 
     previousPage() {
 
-        console.log(this.origem)
 
         if (this.origem === 'agendaGoogle') {
             this.router.navigate(['/pages/visualizar-agenda/agenda'])
@@ -879,7 +878,7 @@ export class NovoAtendimentoComponent {
 
     formatarHoraData(data){
 
-        var horaInicio; // Defina horaInicio fora do bloco if para ter escopo no console.log
+        var horaInicio; // Defina horaInicio fora do bloco if para ter escopo
         if(this.dadosHorario.horaInicio !== null && this.dadosHorario.horaInicio !== undefined){
             horaInicio = this.dadosHorario.horaInicio;
         }else{

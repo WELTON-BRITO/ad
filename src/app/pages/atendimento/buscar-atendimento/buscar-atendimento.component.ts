@@ -317,22 +317,22 @@ export class BuscarAtendimentoComponent implements OnInit {
               .filter(data => data.status !== '05 - Consulta Cancelada')
               .map(data => ({
                 id: data.id,
-                medico: data.doctor.name,
-                nomeDependente: data?.child?.name,
-                nomeResponsavel: data.user.name,
+                medico: data.doctorName,
+                nomeDependente: data?.childName,
+                nomeResponsavel: data.userName,
                 data: moment(data.dateService).format('DD/MM/YYYY'),
                 horario: data.startTime.concat(' - ', data.endTime),
-                especialidade: data.specialty.name,
+                especialidade: data.specialtyName,
                 status: data.status,
                 atendimento: data,
-                modalidade: data.typeService + ' - ' + (data?.procedure?.nameProcedure ?? ''),
-                email: data.user.cellPhone,
-                telefone: data.user.emailUser,
+                modalidade: data.typeServiceName + ' - ' + (data?.procedureName ?? ''),
+            //    email: data.user.cellPhone,
+             //   telefone: data.user.emailUser,
                 dataInicio: data.dataInicio,
                 dataFim: data.dataInicio,
-                clinicaId: clinica,
+                clinicaId: data.clinicId,
                 statusId: this.DefaultStatus,
-                medicoId: data.doctor.id,
+                medicoId: data.doctorId,
                 isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado' 
               }));
 

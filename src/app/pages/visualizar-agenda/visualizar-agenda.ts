@@ -9,7 +9,7 @@ export class VisualizarAgendaService {
    constructor(private httpService: HttpService) { }
 
     buscaAtendimentos(data: any, successHandle: Function, erroHandle: Function) {
-      return this.httpService.doGet('/api/appointments/status/all', data, successHandle, erroHandle);
+      return this.httpService.doGet('/api/appointments/status/custom/all', data, successHandle, erroHandle);
     }
 
 
