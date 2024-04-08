@@ -125,8 +125,7 @@ b { /* used for event dates/times */
 
 .fc { /* the calendar root */
   margin: 0 auto;
-  height: 1224px;
-
+  height: 800px;
 }
 
 /* Oculta a barra de rolagem vertical */

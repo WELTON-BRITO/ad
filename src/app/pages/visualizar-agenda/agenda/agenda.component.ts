@@ -13,8 +13,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDetalheAtendimentoComponent } from './modal-detalhe-atendimento/modal-detalhe-atendimento.component';
 import { Router } from '@angular/router';
 
-
-
 declare var $: any;
 
 @Component({
@@ -81,49 +79,6 @@ export class AgendaComponent implements OnInit {
       list: 'Lista',
     },
 
-    /*
-    windowResize: function(view) {
-      if (window.innerWidth < 581) { // Supondo que 768px seja o breakpoint para dispositivos móveis
-        this.changeView('timeGridDay'); // Muda para a visualização do dia
-        this.calendarOptions.headerToolbar = {
-          start: '',
-          center: 'today',
-          right: '',
-        }
-        document.querySelector('.fc-toolbar-title').setAttribute('style', 'font-size: 25px');
-
-      } else {
-        this.changeView('timeGridWeek'); // Muda para a visualização do mês
-        this.calendarOptions.headerToolbar = {
-        start: 'prev,next, timeGridDay',
-         center: 'title',
-         right: 'dayGridMonth,timeGridWeek,listWeek',
-        }
-        document.querySelector('.fc-toolbar-title').removeAttribute('style');
-
-      }
-    },*/
-    
-
-    windowResize: (view) => {
-      if (window.innerWidth < 581) { // Altere esse valor de acordo com o breakpoint do seu design responsivo
-        this.calendarOptions.headerToolbar = {
-          start: '',
-          center: 'prev,next,timeGridDay',
-          end: '',
-        };
-
-
-      } else {
-        this.calendarOptions.headerToolbar = {
-          start: 'prev,next, timeGridDay',
-          center: 'title',
-          end: 'dayGridMonth,timeGridWeek,listWeek',
-        };
-       
-      }
-    },
-   
     datesSet: (info) => {
       // Verificar se a visualização atual mudou para um mês diferente
 
@@ -191,7 +146,6 @@ export class AgendaComponent implements OnInit {
       }
 
     },
-    //initialView: 'timeGridWeek',
     initialEvents: INITIAL_EVENTS,
     weekends: true,
     editable: true,
@@ -207,7 +161,6 @@ export class AgendaComponent implements OnInit {
     eventRemove:
     */
   };
-  
 
   constructor(private changeDetector: ChangeDetectorRef,
     private dialogService: NbDialogService,
@@ -220,16 +173,14 @@ export class AgendaComponent implements OnInit {
 
     this.windowResize();
 
-      window.addEventListener('orientationchange', function() {
-        var orientation = screen.orientation.type;
-        if (orientation === 'portrait-primary' || orientation === 'portrait-secondary') {
-          document.body.classList.add('force-landscape');
-        } else {
-          document.body.classList.remove('force-landscape');
-        }
-      });
-
-  
+    window.addEventListener('orientationchange', function () {
+      var orientation = screen.orientation.type;
+      if (orientation === 'portrait-primary' || orientation === 'portrait-secondary') {
+        document.body.classList.add('force-landscape');
+      } else {
+        document.body.classList.remove('force-landscape');
+      }
+    });
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
 
@@ -262,7 +213,6 @@ export class AgendaComponent implements OnInit {
     outraData2.setDate(time.getDate() - 7);
     this.StartedDate = moment(outraData2).format('YYYY-MM-DD')
 
-
     this.formAgendaAtendimento = this.formBuilder.group({
       dataInicio: [this.StartedDate, Validators.required],
       dataFim: [this.FinalDate, Validators.required],
@@ -289,20 +239,18 @@ export class AgendaComponent implements OnInit {
 
     }
   }
-  
 
   async fetchData(data) {
-    if(data){
-    // Mostra o loader
-    this.isLoader =true
-    }else{
+    if (data) {
+      // Mostra o loader
+      this.isLoader = true
+    } else {
       setTimeout(() => {
         // Oculta o loader após o atraso
-        this.isLoader =false
-    }, 2000);
-}
-}
-
+        this.isLoader = false
+      }, 2000);
+    }
+  }
 
   buscaId(data) {
     this.medicoId = data.medico
@@ -313,7 +261,6 @@ export class AgendaComponent implements OnInit {
   }
 
   handleWeekendsToggle() {
-
     const { calendarOptions } = this;
     calendarOptions.weekends = !calendarOptions.weekends;
   }
@@ -365,15 +312,13 @@ export class AgendaComponent implements OnInit {
   }
 
   handleEvents(events: EventApi[]) {
-
     this.currentEvents = events;
     this.changeDetector.detectChanges();
   }
 
-   buscarAtendimento(data, checked) {
+  buscarAtendimento(data, checked) {
 
     this.fetchData(true)
-    
 
     let params = new HttpParams();
     let clinica = localStorage.getItem('bway-entityId');
@@ -394,12 +339,12 @@ export class AgendaComponent implements OnInit {
           params = params.append('doctorId', data.medico)
         }
         let allData = []; // Crie uma variável vazia para armazenar os dados
-       
-         this.service.buscaAtendimentos(params, (response) => {
+
+        this.service.buscaAtendimentos(params, (response) => {
 
           this.isActive = false
           this.rowData = response
-          this.calendarEvents =  this.rowData.map(evento => {
+          this.calendarEvents = this.rowData.map(evento => {
             let color;
             switch (evento.status) {
               case '01 - Aguardando Aprovação':
@@ -437,7 +382,7 @@ export class AgendaComponent implements OnInit {
               status: evento.status,
               horario: evento.startTime.concat(' - ', evento.endTime),
               dados: evento,
-              isConfirmed: evento.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado', 
+              isConfirmed: evento.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado',
               patchPaciente: 'googleCalendar',
               color: color
             };
@@ -446,7 +391,6 @@ export class AgendaComponent implements OnInit {
           allData = this.calendarEvents;
 
           this.fetchData(false)
-
 
           if (allData.length === 0) {
             this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
@@ -470,13 +414,12 @@ export class AgendaComponent implements OnInit {
             console.error(
               `Backend returned code ${error.status}, ` +
               `body was: ${error.error}`);
-              this.fetchData(true)
+            this.fetchData(true)
 
           }
           this.toastrService.danger(error.error.message);
 
           this.fetchData(false)
-
 
         });
 
@@ -492,9 +435,7 @@ export class AgendaComponent implements OnInit {
         this.calendarEvents = parsedData;
       }
       this.fetchData(false)
-
     }
-
 
   }
 
@@ -578,12 +519,14 @@ export class AgendaComponent implements OnInit {
     const isMobile = window.innerWidth <= 768; // Define a largura máxima para dispositivos móveis
 
     if (isMobile) {
+      this.calendarOptions.initialView = 'timeGridDay';
       this.calendarOptions.headerToolbar = {
         start: '',
         center: 'prev,next,timeGridDay',
         end: '',
       };
     } else {
+      this.calendarOptions.initialView = 'timeGridWeek';
       this.calendarOptions.headerToolbar = {
         start: 'prev,next, timeGridDay',
         center: 'title',
