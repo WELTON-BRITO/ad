@@ -45,6 +45,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public radioValueCasa: boolean;
   public radioValueChamada: boolean;
   public checkboxValue: boolean = false;
+  public isLoader: boolean = false;
+  public id_medico: null;
+
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -56,6 +59,8 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   ngOnInit() {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
+
     this.clinic = localStorage.getItem('bway-domain');
 
     if (this.clinic == 'CLINIC') {
@@ -78,7 +83,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       qrEmergencial: [null],
       qrVideo: [null],
       qrPresencial: [null],
-      clinica: [null],
+      clinica: [this.listClinica[0], Validators.required],
       optPresencial: [null],
       optVideo: [null],
       optEmergencial: [null],
@@ -91,10 +96,23 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       checkPresencial: [null]
     })
     this.formParametrizarConsulta.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
-
-    this.pesquisaClinica(this.listMedico[0].id)
+    this.formParametrizarConsulta.controls['clinica'].setValue(this.listClinica[0].id, { onlySelf: true });
+    this.clinicaId = this.listClinica[0].id;
+    this.id_medico = this.listMedico[0].id;
 
   }
+
+  fetchData(data) {
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
 
   funcValor(event, element) {
 
@@ -149,7 +167,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         data.qrPresencial == null && data.qrVideo == null &&
         data.qrVideoChamada == null)) {
 
-      this.toastrService.danger('Preencher os campos obrigatórios!!!');
+      this.toastrService.danger('Favor Preencher os Campos Obrigatórios','Aditi Care');
 
     } else {
 
@@ -228,16 +246,21 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         items: this.listConsulta
       }
 
+      this.fetchData(true)
+
       if (this.atualizar == 0) {
 
         this.isActive = true;
         this.service.cadastrarPriceDoctor(register, (response => {
           this.isActive = false;
-          this.toastrService.success('Registro cadastrado com sucesso !!!');
+          this.toastrService.success('Registro Cadastrado com Sucesso','Aditi Care');
+          this.fetchData(false)
           this.limpaForm()
         }), (error) => {
           this.isActive = false;
           this.toastrService.danger(error.error.message);
+          this.fetchData(false)
+
         });
 
       } else {
@@ -245,12 +268,13 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.isActive = true;
         this.service.atualizarValor(register, (response => {
           this.isActive = false;
-          this.toastrService.success('Registro atualizado com sucesso !!!');
+          this.toastrService.success('Registro Cadastrado com Sucesso','Aditi Care');
+          this.fetchData(false)
           this.limpaForm()
         }), (error) => {
           this.isActive = false;
           this.toastrService.danger(error.error.message);
-          this.limpaForm()
+          this.fetchData(false)
         });
       }
     }
@@ -268,12 +292,12 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       tempoVideo: [null],
       tempoEmergencial: [null],
       tempoCasa: [null],
-      medico: [null],
+      medico: [this.id_medico, Validators.required],
       qrCasa: [null],
       qrEmergencial: [null],
       qrVideo: [null],
       qrPresencial: [null],
-      clinica: [null],
+      clinica: [this.clinicaId, Validators.required],
       optPresencial: [null],
       optVideo: [null],
       optEmergencial: [null],
@@ -285,61 +309,49 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       valorVideoChamada: [null]
     })
 
-    var checkbox = document.querySelector("#presencial");
-    if (checkbox.id == 'presencial') {
-      function ativarCheckbox(el) {
-        el.checked = false;
-      }
-      ativarCheckbox(checkbox);
-    }
-
-    var checkbox = document.querySelector("#video");
-    if (checkbox.id == 'video') {
-      function ativarCheckbox(el) {
-        el.checked = false;
-      }
-      ativarCheckbox(checkbox);
-    }
-
-    var checkbox = document.querySelector("#emergencial");
-    if (checkbox.id == 'emergencial') {
-      function ativarCheckbox(el) {
-        el.checked = false;
-      }
-      ativarCheckbox(checkbox);
-    }
-
-    var checkbox = document.querySelector("#casa");
-    if (checkbox.id == 'casa') {
-      function ativarCheckbox(el) {
-        el.checked = false;
-      }
-      ativarCheckbox(checkbox);
-    }
-
-    var checkbox = document.querySelector("#videoChamada");
-    if (checkbox.id == 'videoChamada') {
-      function ativarCheckbox(el) {
-        el.checked = false;
-      }
-      ativarCheckbox(checkbox);
-    }
+    var checkboxPresencial = document.querySelector("#presencial");
+    this.ativarCheckbox(checkboxPresencial);
+    
+    var checkboxVideo = document.querySelector("#video");
+    this.ativarCheckbox(checkboxVideo);
+    
+    var checkboxEmergencial = document.querySelector("#emergencial");
+    this.ativarCheckbox(checkboxEmergencial);
+    
+    var checkboxCasa = document.querySelector("#casa");
+    this.ativarCheckbox(checkboxCasa);
+    
+    var checkboxVideoChamada = document.querySelector("#videoChamada");
+    this.ativarCheckbox(checkboxVideoChamada);
 
   }
 
-  verificaValor(data) {
+   ativarCheckbox(el) {
+    if (el) {
+      el.checked = false;
+    } 
+  }
+
+  verificaValor() {
+
+    this.limpaForm()
 
     this.isActive = true
     let params = new HttpParams();
-    params = params.append('doctorId', data.medico)
-    params = params.append('clinicId', data.clinica)
+    params = params.append('doctorId', this.id_medico)
+    params = params.append('clinicId', this.clinicaId)
+
+    this.fetchData(true)
 
     this.service.buscaValor(params, (response) => {
       this.isActive = false;
 
+      console.log(response.length)
+
+
       if (response.length == 0) {
+
         this.atualizar = 0;
-        this.toastrService.warning('Configurar qual tipo de atendimento para o médico.');
         document.getElementById('qrPresencial').removeAttribute('disabled');
         document.getElementById('qrVideo').removeAttribute('disabled');
         document.getElementById('qrEmergencial').removeAttribute('disabled');
@@ -347,6 +359,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         document.getElementById('qrVideoChamada').removeAttribute('disabled');
 
       } else {
+
         this.atualizar = response;
         for (var i = 0; i < response.length; i++) {
 
@@ -465,8 +478,13 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
       }
 
+      this.fetchData(false)
+
+
     }, (error) => {
       this.isActive = false;
+      this.fetchData(false)
+
       if (error == undefined) {
         this.formParametrizarConsulta.controls['valorEmergencial'].setValue(null);
         this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(null);
@@ -526,21 +544,15 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
   }
 
-  pesquisaClinica(data) {
-
-    this.service.buscaClinica(data, null, (response) => {
-
-      this.listClinica = response
-      this.isActive = false
-
-    }, (error) => {
-      this.isActive = false;
-      this.toastrService.danger(error.error.message);
-    });
-
+  verificaClinica(data) {
+    this.clinicaId = data;
   }
 
-  verificaClinica(data) {
+  SelectedMedico(data){
+    this.id_medico = data;
+  }
+
+  SelectedClinica(data){
     this.clinicaId = data;
   }
 
@@ -548,9 +560,9 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
     if (data.clinica != null) {
       this.ismodalidadeConsulta = true;
-      this.verificaValor(data)
+      this.verificaValor()
     } else {
-      this.toastrService.danger('O campo clínica é obrigatório.');
+      this.toastrService.danger('Por Favor Informe a Clinica','Aditi Care');
     }
 
   }

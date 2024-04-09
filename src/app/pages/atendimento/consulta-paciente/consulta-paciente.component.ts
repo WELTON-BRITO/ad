@@ -467,20 +467,35 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.toastrService.warning('Por Favor Informe dos Os Detalhes do Cliente','Aditi Care!');
             this.isSaving = false;
             this.fetchData(false)
+            return false;
 
-        }else
+        } else
         if(data.prescricaoMedica==null){
             this.toastrService.warning('Por Favor Informe a Prescrição Médica','Aditi Care!');
             this.isSaving = false;
             this.fetchData(false)
+            return false;
 
-        }
-        if(data.detalhesCliente==null){
-            this.toastrService.warning('Por Favor Informe a Prescrição Médica','Aditi Care!');
+        } else
+        if(data.detalhesInterno==null){
+            this.toastrService.warning('Por Favor Informe os Detalhes Internos','Aditi Care!');
             this.isSaving = false;
             this.fetchData(false)
+            return false;
 
+        } else 
+        if (!this.validar_valor(data.altura) || 
+        !this.validar_valor(data.peso) || 
+        !this.validar_valor(data.circCabeca) || 
+        !this.validar_valor(data.circAbdomen) || 
+        !this.validar_valor(data.tempoRetorno)) 
+        {
+            this.toastrService.warning('Os valores de Altura, Peso OU Circunferências Não São Válidos', 'Aditi Care!');
+            this.isSaving = false;
+            this.fetchData(false);
+            return false;
         }
+    
         else{
 
         let register = {
@@ -488,15 +503,15 @@ export class ConsultaPacienteComponent implements OnDestroy {
             description: data.detalhesCliente,
             prescription: data.prescricaoMedica,  //Prescrição campo novo que vira da tela detalhes
             urlPrescription: data.urlReceita,
-            timeReturn: data.tempoRetorno,
+            timeReturn: data.tempoRetorno.replace(/,/g, '.').replace(/[^\d.]/g, ''),
             removalReport: null,
             urlRemovalReport: data.urlAtestado,
             prescriptionAttachment: this.anexoAtestado, //anexo mandar igual o da imagem
             removalAttachment: this.anexoReceita, // anexo
-            height: data.altura ? data.altura.replace(/,/g, '.') : '0',
-            weight: data.peso ? data.peso.replace(/,/g, '.') : '0',
-            headSize: data.circCabeca ? data.circCabeca.replace(/,/g, '.') : '0',
-            abdomenSize: data.circAbdomen ? data.circAbdomen.replace(/,/g, '.') : '0',
+            height: data.altura ? data.altura.replace(/,/g, '.').replace(/[^\d.]/g, '') : '0',
+            weight: data.peso ? data.peso.replace(/,/g, '.').replace(/[^\d.]/g, ''): '0',
+            headSize: data.circCabeca ? data.circCabeca.replace(/,/g, '.').replace(/[^\d.]/g, '') : '0',
+            abdomenSize: data.circAbdomen ? data.circAbdomen.replace(/,/g, '.').replace(/[^\d.]/g, '') : '0',
             descriptionClinic: data.detalhesInterno,
             descriptionUser: data.detalhesCliente,
             urlMedicalOrder: data.urlExame,
@@ -533,6 +548,25 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isLoader =false
     }, 2000);
 }
+}
+
+validar_valor(data){
+
+
+    console.log(data)
+    const valorFormatado = data.replace(/,/g, '.').replace(/[^\d.]/g, '');
+  
+    // Verifica se o valor formatado é um número decimal válido
+    if (!valorFormatado.match(/^\d+(\.\d+)?$/)) {
+        this.toastrService.warning('O valor Informado não é um Numero Válido','Aditi Care!');
+
+        console.log("errado")
+
+        return false
+    }else{
+        return true
+    }
+
 }
 
     AlterarStatusStorage(){

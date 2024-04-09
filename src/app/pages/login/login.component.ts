@@ -154,18 +154,26 @@ BaseValidCNPJ(value) {
 
     let usuario = this.formLogin.controls['login'].value.replace(/\D/g, '');
     let password = this.formLogin.controls['password'].value;
-
-    var str = usuario.length;
     
-    if(usuario !== null && password !== null && str>=11 ){
+    if (usuario !== null && usuario.length > 0 && password !== null && password.length > 0 && usuario.length >= 11) {
+ 
+    this.formatCpfCnpj(usuario);
 
-      this.formatCpfCnpj(usuario);
-
-    if (str == 11) {
+    if (usuario.length == 11) {
       this.domain = 4
+      if(!this.BaseValidCPF(usuario)){
+        this.fetchData(false)
+        return false
+      }
+
     } else {
       this.domain = 2
+      if(!this.BaseValidCNPJ(usuario)){
+        this.fetchData(false)
+        return false
+      }
     }
+ 
     this.isActive = true;
     this.service.loader
 
@@ -177,10 +185,10 @@ BaseValidCNPJ(value) {
         (error) => {    
           this.isActive = false;
           if(error.error.message == undefined){
-            this.toastrService.danger('Sistema temporariamente indisponível','Aditi Care' );
+            this.toastrService.danger('Sistema Temporariamente Indisponível','Aditi Care' );
             this.fetchData(false)
           }else{
-            this.toastrService.danger(error.error.message,'Aditi Care');
+            this.toastrService.danger('Usuário ou Senha Não Estão Corretos','Aditi Care' );
             this.fetchData(false)
           }
         });
@@ -190,6 +198,7 @@ BaseValidCNPJ(value) {
         this.fetchData(false)
 
       }
+    
   }
 
   private saveLogin(result) {

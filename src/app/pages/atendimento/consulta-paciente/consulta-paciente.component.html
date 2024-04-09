@@ -108,11 +108,11 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label for="altura">Altura do Paciente</label>
-                                            <input class="form-control" name="altura" id="altura" type="text" formControlName="altura">
+                                            <input class="form-control" name="altura" id="altura" type="text" formControlName="altura" pattern="\\d+(\\.\\d{1,2})?" title="Por favor, insira o número como 1.0 ou 1,0"  (onblur)="validar_valor(value)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="peso">Peso do Paciente</label>
-                                            <input class="form-control" name="peso" id="peso" type="text" formControlName="peso">
+                                            <input class="form-control" name="peso" id="peso" type="text" formControlName="peso" pattern="\\d+(\\.\\d{1,2})?" title="Por favor, insira o número como 1.0 ou 1,0" (onblur)="validar_valor(value)">
                                         </div>
                                         <div class="col-md-3">
                                             <label for="imc">Valor IMC</label>
@@ -124,6 +124,7 @@
                                             </button>
                                         </div>
                                     </div>
+                                    
                                     </div>
                                     <div class="form-group col-md-12">
                                         <div><label><h6>Dados Especificos de {{atendimento.especialidade}} :</h6></label></div>
