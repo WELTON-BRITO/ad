@@ -346,9 +346,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
     this.service.buscaValor(params, (response) => {
       this.isActive = false;
 
-      console.log(response.length)
-
-
       if (response.length == 0) {
 
         this.atualizar = 0;

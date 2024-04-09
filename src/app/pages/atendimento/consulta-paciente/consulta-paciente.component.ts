@@ -123,36 +123,36 @@ export class ConsultaPacienteComponent implements OnDestroy {
               this.atendimento = parsedData;
             }
 
-    }else if(data[0].tela =='atendimento' && data[0].rowData.user!=null){
+    }else if(data[0].tela =='atendimento' && data[0].rowData.userName!=null){
 
-        const dataNascimento = data[0].rowData.child?.birthDate ?? data[0].rowData.user?.birthDate ?? '20240101';
+        const dataNascimento = data[0].rowData.childBirthDate ?? data[0].rowData.childBirthDate ?? '20240101'; // to-do incluir campo de aniversario do usuario no retorno
         const idadePessoa = this.calcularIdade(dataNascimento) ?? null;
      
         let allData = {
-          medico: data[0].rowData.doctor?.name ?? null,
-          nomePaciente: data[0].rowData.child?.name ?? data[0].rowData.user?.name ?? null,
-          nomeResponsavel: data[0].rowData.user?.name ?? null,
+          medico: data[0].rowData.doctorName ?? null,
+          nomePaciente: data[0].rowData.childName ?? data[0].rowData.userName ?? null,
+          nomeResponsavel: data[0].rowData.userName ?? null,
           data: moment(data[0].rowData.dateService).format('DD/MM/YYYY'),
           horario: data[0].rowData.startTime.concat(' - ', data[0].rowData.endTime),
           formaPagamento: data[0]?.rowData.typePayment?? null,
-          modalidade: data[0].rowData.typeService?? null,
+          modalidade: data[0].rowData.typeServiceName?? null,
           urlCall: data[0].rowData.meetingUrl?? null,
           status: data[0].rowData.status?? null,
-          especialidade: data[0].rowData.specialty?.name ?? null,
-          convenio: data[0].rowData.plan?.name ?? null,
+          especialidade: data[0].rowData.specialtyName ?? null,
+          convenio: data[0].rowData.planName ?? null,
           id: data[0].rowData.id?? null,
-          comprovante: data[0].rowData.paymentProo?? null,
-          nameFather: data[0].rowData.child?.nameFather ?? null,
-          nameMother: data[0].rowData.child?.nameMother ?? null,
-          telefone: data[0].rowData.user?.cellPhone ?? null,
-          email: data[0].rowData.user?.emailUser ?? null,
+          comprovante: data[0].rowData.paymentProof?? null,
+          nameFather: data[0].rowData.childFather ?? null,
+          nameMother: data[0].rowData.childMother ?? null,
+          telefone: data[0].rowData.userPhone ?? null,
+          email: data[0].rowData.userEmail ?? null,
           dateNasc: idadePessoa ?? null,
-          ultimaConsulta: data[0].rowData.child?.dateRegister ?? null,
-          doctorId: data[0].rowData.doctor?.id ?? null,
-          userId: data[0].rowData.user?.id ?? null,
-          idChild: data[0].rowData.child?.idChild ?? null,
-          sexo: data[0].rowData.biologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
-          tipoSanguineo: data[0].rowData.child?.bloodType ?? null,
+          ultimaConsulta: data[0].rowData.childDateRegister ?? null,
+          doctorId: data[0].rowData.doctorId ?? null,
+          userId: data[0].rowData.userId ?? null,
+          idChild: data[0].rowData.childId ?? null,
+          sexo: data[0].rowData.childBiologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
+          tipoSanguineo: data[0].rowData.childBloodType ?? null,
           patchPaciente: false,
       };
            
@@ -526,6 +526,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.AlterarStatusStorage();
             localStorage.removeItem('draftAtendimento');
             localStorage.removeItem('histDetails');
+            localStorage.removeItem('meuCardData');
             this.fetchData(false)
             this.voltar();
         }), (error) => {
@@ -552,15 +553,11 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
 validar_valor(data){
 
-
-    console.log(data)
     const valorFormatado = data.replace(/,/g, '.').replace(/[^\d.]/g, '');
   
     // Verifica se o valor formatado é um número decimal válido
     if (!valorFormatado.match(/^\d+(\.\d+)?$/)) {
         this.toastrService.warning('O valor Informado não é um Numero Válido','Aditi Care!');
-
-        console.log("errado")
 
         return false
     }else{

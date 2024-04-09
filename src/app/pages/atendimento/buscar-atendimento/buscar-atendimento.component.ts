@@ -492,10 +492,12 @@ else{
   }
 
   iniciarAtendimento(data) {
+
     this.rowData = [{
       tela: 'atendimento',
       rowData: data.atendimento
     }]
+ 
     this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: this.rowData });
   }
 

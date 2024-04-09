@@ -14,8 +14,8 @@
                       </a>
                     </div>
                   </nb-card-header>
-                  <div class="form-group col-md-3">
-                    <h5 class="pt-3">Novo Paciente</h5>
+                  <div class="form-group">
+                    <h5 class="pt-3">Cadastro de Paciente / Responsável</h5>
                   </div>
                 </div>
                 <div class="form-row align-items-center">
@@ -72,12 +72,12 @@
                   </div>-->
                 </div>
                   <div class="form-row align-items-center">
-                    <h6 class="p-1">Dados Pessoais do Paciente:</h6>
+                    <h6 class="p-1">Dados Pessoais do Responsável:</h6>
                   </div>
                   <div class="col-md-12 col-xs-12 align-items-center" *ngIf="isInformacao">
                       <div class="form-row align-items-center">
                         <div class="form-group col-md-4">
-                          <label for="nome">Escolha o médico*</label>
+                          <label for="nome">Informe o Médico*</label>
                           <select class="form-control" formControlName="medico"
                             (change)="verificaMedico($event.target.value)">
                             <option value="null" selected>SELECIONE</option>
@@ -86,7 +86,7 @@
                           </select>
                         </div>
                           <div class="form-group col-md-4">
-                            <label for="nome">Nome do Paciente*</label>
+                            <label for="nome">Nome do Responsável*</label>
                             <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" />
                           </div>
                           <div class="form-group col-md-2">
@@ -95,7 +95,7 @@
                               mask="000.000.000-00" (change)="isValidCpf($event.target,formNovoPaciente.value)" />
                           </div>
                           <div class="form-group col-md-2">
-                            <label for="dateNasc">Data de nascimento*</label>
+                            <label for="dateNasc">Data de Nascimento*</label>
                             <div class="row pl-3">
                               <input class="date" type="date" id="dateNasc" name="mydate" formControlName="dateNasc"
                                 maxlength="10" (blur)="validaData($event.target.value)" />
@@ -219,11 +219,11 @@
                   </div>
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-6">
-                      <label for="nomeDep">Nome do dependente</label>
+                      <label for="nomeDep">Nome do Dependente*</label>
                       <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
                     </div>
                     <div class="form-group col-md-2">
-                      <label for="dateNascDep">Data de nascimento</label>
+                      <label for="dateNascDep">Data de Nascimento*</label>
                       <div class="row pl-3">
                         <input class="date" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
                           maxlength="10" (blur)="validaData($event.target.value)" />
@@ -235,7 +235,7 @@
                   </div>
                   <div class="form-row align-items-center">
                     <div class="form-group col-md-6">
-                      <label for="nome">Nome da Mãe</label>
+                      <label for="nome">Nome da Mãe*</label>
                       <input class="form-control" name="nomeResp01" id="nomeResp01" type="text"
                         formControlName="nomeResp01" />
                     </div>
@@ -261,7 +261,7 @@
                         mask="00.000.000-0" />
                     </div>
                     <div class="form-group col-md-3">
-                      <label class="mat-button mb-3">Sexo biologico:</label>
+                      <label class="mat-button mb-3">Sexo Biologico:</label>
                       <div class="row">
                         <label class="radio-inline mr-3 pl-3">
                           <input class="mat-button" type="radio" id="radio" name="optradio" value="M"
@@ -273,7 +273,7 @@
                       </div>
                     </div>
                     <div class="form-group col-md-2">
-                      <label for="tipoSanguineo">Tipo sanguineo</label>
+                      <label for="tipoSanguineo">Tipo Sanguineo</label>
                       <select class="form-control" formControlName="tipoSanguineo">
                         <option value="null" selected>SELECIONE</option>
                         <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.descricao }}">{{
@@ -429,19 +429,6 @@
             </form>
           </nb-card-body>
         </nb-card>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div #card>
-  <div class="col-md-12 col-xs-12">
-    <div class="row" *ngIf="isActive" class="loader">
-      <div class="text-center" style="margin-top: -360px;margin-right: 40px;">
-        <button class="btn btn-primary" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Carregando...
-        </button>
       </div>
     </div>
   </div>
