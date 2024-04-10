@@ -18,6 +18,75 @@
   }
 }
 
+.action-icon {
+  color: gray; /* Cor para ícone inativo */
+}
+
+.action-icon-active {
+  color: rgb(114, 124, 245) /* Cor para ícone ativo */
+}
+
+
+.aditi-header{
+  border-bottom: none;
+}
+.collapsed {
+  height: 0 !important; // Força o textarea a colapsar
+}
+
+#prescricaoMedica {
+  transition: height 0.5s ease;
+}
+
+.collapse-content {
+  transition: max-height 0.5s ease-in-out;
+  overflow: hidden;
+  max-height: auto; /* Ajuste conforme necessário */
+}
+
+.collapse-content.collapsed {
+  max-height: 0;
+}
+
+
+.input-medica .btn {
+  background: none;
+  border: none;
+  color: #727df5; /* Cor do ícone */
+}
+
+/* Ícone de colapsar/expandir */
+.fa-angle-down {
+  transition: transform 0.3s ease;
+}
+
+/* Rotação do ícone quando colapsado */
+.input-medica.collapsed .fa-angle-down {
+  transform: rotate(-180deg);
+}
+
+
+/* Estilos para o loader */
+/* Estilos para o loader */
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 16px solid rgb(114, 124, 245); /* Azul claro */
+  border-top: 16px solid rgb(57, 176, 218); /* Azul mais escuro */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  z-index: 9999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 :host ::ng-deep .ngx-datatable.bootstrap {
   border: 1px solid #d1d4d7;
   box-shadow: 0 1px 2px 0 rgba(50,50,50,.2);

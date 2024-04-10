@@ -92,11 +92,11 @@
 }
 
 .card-pendente {
-  background-color: #0894f142;
+  background-color: #fd220549;
   /* Outros estilos para o card cinza, se necessário */
 }
 .card-bloqueado {
-  background-color: #d613f02c;
+  background-color: #7774773f;
   /* Outros estilos para o card cinza, se necessário */
 }
 
@@ -104,6 +104,16 @@
 background-color: #07c28373;
 /* Outros estilos para o card cinza, se necessário */
 }
+
+.card-confirmada{
+  background-color: rgba(114, 125, 245, 0.452)
+  /* Outros estilos para o card cinza, se necessário */
+  }
+
+.card-finalizado{
+  background-color: #54dfb03b;
+  /* Outros estilos para o card cinza, se necessário */
+  }
 
 :host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions .btn:focus{
   outline: none !important;
@@ -148,16 +158,79 @@ background-color: #07c28373;
   100% { transform: rotate(360deg); }
 }
 
+.card-text {
+  white-space: nowrap; /* Mantém o texto em uma única linha */
+  overflow: hidden;    /* Esconde qualquer conteúdo que ultrapasse o elemento */
+  text-overflow: ellipsis; /* Adiciona reticências ao final do texto truncado */
+}
+
 
 /* Estilo para dispositivos móveis com largura de tela menor que 768px */
 @media (max-width: 820px) {
   .card {
     height: auto;
   }
+  .card-text{
+    max-width: 250px;    /* Define uma largura máxima para o nome */
+  }
 }
 
 .button {
   margin-top: 5px;
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Suaviza a transição de transformação e sombra */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Aumenta ligeiramente o tamanho do card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adiciona uma sombra para um efeito de elevação */
+}
+
+
+.cor-box {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.card-pendente {
+  background-image: linear-gradient(to right, #fd220531, #fd220515);
+}
+
+.card-bloqueado {
+  background-image: linear-gradient(to right, #77747762, #77747723);
+}
+
+.card-livre { 
+  background-image: linear-gradient(to right, #07c284d7, #07c28373);
+}
+
+.card-confirmada {
+  background-image: linear-gradient(to right, #727df573, rgba(114, 125, 245, 0.199));
+}
+
+.card-finalizado {
+  background-image: linear-gradient(to right, #54dfb1a9, #54dfb03b);
+}
+
+.legenda-container {
+  display: flex;
+  flex-wrap: nowrap; /* Impede que os itens sejam quebrados em linhas múltiplas */
+  align-items: center; /* Alinha verticalmente */
+  gap: 10px; /* Espaço entre os itens da legenda */
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center; /* Alinha verticalmente o texto e a caixa de cor */
+}
+
+.cor-box {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
 }
 
 /* Estilos específicos para telas com largura máxima de 768px (dispositivos móveis) */
@@ -265,4 +338,6 @@ nb-checkbox {
     position: relative;
 
   }
+
+
 

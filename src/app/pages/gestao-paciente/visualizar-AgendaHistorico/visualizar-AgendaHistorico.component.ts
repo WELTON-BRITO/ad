@@ -92,16 +92,16 @@ consultaHistorico(checked) {
   this.service.buscaAtendimentos(params, (response) => {
       response.forEach(data => {
           allData.push({
-              name: data.doctor.name,
-              birthDate: (data.child?.birthDate || data.user?.birthDate) ? moment(data.child?.birthDate || data.user?.birthDate).format('DD/MM/YYYY') : null,
+              name: data.doctorName,
+              birthDate: (data.childBirthDate || data.userBirthDate) ? moment(data.childBirthDate || data.userBirthDate).format('DD/MM/YYYY') : null,
               id: data.id,
               dateService: data.dateService,
               horario: data.startTime +" - "+ data.endTime,
-              typeService: data.typeService,
-              cellPhoneUser: data.user.cellPhone,
-              emailUser:data.user.emailUser,
-              federalIdUser: data.user.federalId,
-              NameResponse: data.user.name,
+              typeService: data.typeServiceName,
+              cellPhoneUser: data.userPhone,
+              emailUser:data.userEmail,
+              federalIdUser: data.userFederalId,
+              NameResponse: data.userName,
               status: data.status,
               avatar: data.avatar || this.avatar,
               

@@ -1,4 +1,5 @@
 <div class="loader" *ngIf="isLoader"></div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 col-xs-12">
@@ -13,11 +14,17 @@
                                     </a>
                                 </div>
                             </nb-card-header>
-                            <div class="form-group col-md-6">
-                                <h5 class="pt-3">Consulta do Paciente</h5>
-                            </div>
+                            <div class="form-group col-md-12 input-medica">
+                                <div class="d-flex justify-content-between align-items-center"> <!-- Utiliza flexbox para alinhamento -->
+                                  <h5>Consulta do Paciente</h5> <!-- Remove a classe pt-3 para evitar o espaçamento extra -->
+                                  <button type="button" class="btn" (click)="toggleCollapseheader('dadosPaciente')" title="Colapsar/Expandir">
+                                    <i class="fa fa-angle-down"></i>
+                                  </button>
+                                </div>
+                              </div>
+                              
                         </div>
-                        <div class="form-row align-items-center">
+                        <div class="form-row align-items-center collapse-content" id="dadosPaciente">
                             <div class="form-group col-md-6 ">
                                 <div class="form-group ">
                                     <div class="form-row">
@@ -85,16 +92,17 @@
                     <nb-card-body>
                         <nb-actions size="large" fullWidth>
                             <nb-action>
-                                <nb-icon class="action-icon" icon="file-text-outline"
-                                    (click)="consultaHistorico(true)"></nb-icon>
-                                <span>Consultar Histórico</span>
+                              <nb-icon [ngClass]="{'action-icon-active': iconeAtivo === 'historico', 'action-icon': iconeAtivo !== 'historico'}"
+                                       icon="file-text-outline" (click)="consultaHistorico(true)"></nb-icon>
+                              <span>Consultar Histórico</span>
                             </nb-action>
                             <nb-action *ngIf="atendimento.status === '03 - Consulta Confirmada' && !checkedConsulta">
-                                <nb-icon class="action-icon" icon="wifi-outline" (click)="detalhesConsulta()"></nb-icon>
-                                <span>Atendimento</span>
-                              </nb-action>
-                              
-                        </nb-actions>
+                              <nb-icon [ngClass]="{'action-icon-active': iconeAtivo === 'atendimento', 'action-icon': iconeAtivo !== 'atendimento'}"
+                                       icon="wifi-outline" (click)="detalhesConsulta()"></nb-icon>
+                              <span>Atendimento</span>
+                            </nb-action>
+                          </nb-actions>
+                          
                     </nb-card-body>
                 </nb-card>
                 <div *ngIf="isDetalhes">
@@ -102,32 +110,40 @@
                         <nb-card>
 
                             <nb-card-body>
-                                <div class="form-group col-md-12">
-                                    <div><label><h6>Dados Gerais do Paciente:</h6></label></div>
 
+                                <div class="form-group col-md-12 d-flex justify-content-between align-items-center input-medica">
+                                    <label><h6>Dados Gerais do Paciente:</h6></label>
+                                    <button type="button" class="btn" (click)="toggleCollapseheader('dadosGerais')" title="Colapsar/Expandir">
+                                      <i class="fa fa-angle-down"></i>
+                                    </button>
+                                  </div>
+
+                                  <div class="form-group col-md-12 collapse-content" id="dadosGerais">
                                     <div class="row">
-                                        <div class="col-md-3">
+                                      <div class="col-md-9">
+                                        <div class="row">
+                                          <div class="col-md-4">
                                             <label for="altura">Altura do Paciente</label>
-                                            <input class="form-control" name="altura" id="altura" type="text" formControlName="altura" pattern="\\d+(\\.\\d{1,2})?" title="Por favor, insira o número como 1.0 ou 1,0"  (onblur)="validar_valor(value)">
-                                        </div>
-                                        <div class="col-md-3">
+                                            <input class="form-control" name="altura" id="altura" type="text" formControlName="altura" pattern="\\d+(\\.\\d{1,2})?" title="Por favor, insira o número como 1.0 ou 1,0" (onblur)="validar_valor(value)">
+                                          </div>
+                                          <div class="col-md-4">
                                             <label for="peso">Peso do Paciente</label>
                                             <input class="form-control" name="peso" id="peso" type="text" formControlName="peso" pattern="\\d+(\\.\\d{1,2})?" title="Por favor, insira o número como 1.0 ou 1,0" (onblur)="validar_valor(value)">
-                                        </div>
-                                        <div class="col-md-3">
+                                          </div>
+                                          <div class="col-md-4">
                                             <label for="imc">Valor IMC</label>
                                             <input class="form-control" name="imc" id="imc" type="text" formControlName="imc" disabled />
+                                          </div>
                                         </div>
-                                        <div class="form-grou col-md-3 pt-4 text-right">
-                                            <button class="btn btn-success" (click)="calcularIMC(formConsultaPaciente)">
-                                                Calcular IMC
-                                            </button>
-                                        </div>
+                                      </div>
+                                      <div class="col-md-3 text-right">
+                                        <button class="btn btn-success" (click)="calcularIMC(formConsultaPaciente)">
+                                          Calcular IMC
+                                        </button>
+                                      </div>
                                     </div>
-                                    
-                                    </div>
-                                    <div class="form-group col-md-12">
-                                        <div><label><h6>Dados Especificos de {{atendimento.especialidade}} :</h6></label></div>
+                                  
+                                        <div style="margin-top: 10px;"><label><h6>Dados Especificos de {{atendimento.especialidade}} :</h6></label></div>
 
                                         <div class="row">
                                             <div class="col-md-3">
@@ -141,52 +157,81 @@
                                                     formControlName="circAbdomen" />
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="tempoRetorno">Prazo para Retorno (Dias) </label>
+                                                <label for="tempoRetorno">Prazo para Retorno (Dias)* </label>
                                                 <input class="form-control" name="tempoRetorno" id="tempoRetorno" type="text"
                                                     formControlName="tempoRetorno" />
                                             </div>
+                                                <div class="col-md-12 text-right">
+                                                  <button class="btn btn-warning" (click)="UltimaConsulta()">
+                                                    Buscar Última Consulta
+                                                  </button>
+                                                </div>
                                         </div>
-                                        
-                                    </div>
+                                </div>
+
+                                    
                             </nb-card-body>
                         </nb-card>
                         <nb-card>
                             <nb-card-body>
-                                <div class="form-row align-items-center">
-                                    <div class="col-lg-12">
-                                        <div class="input-medica">
-                                            <div><label><h6>Prescrição</h6></label></div>
-                                            <textarea autosize class="form-control" formControlName="prescricaoMedica"
-                                                rows="3" id="prescricaoMedica" placeholder="Informe a Prescrição médica"
-                                                [value]="" (keypress)="caracteresMedica()" maxlength="20000"
-                                                ></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamMedica}}</span></small>
-                                                quantidade máxima de caracteres</p>
-                                        </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="d-flex justify-content-between align-items-center input-medica">
+                                      <h5>Dados do Atendimento</h5>
+                                      <button type="button" class="btn" (click)="toggleCollapseheader('dadosAtendimento')" title="Colapsar/Expandir">
+                                        <i class="fa fa-angle-down"></i>
+                                      </button>
                                     </div>
-                                </div>
+                                    <!-- Início do conteúdo colapsável -->
+                                    <div id="dadosAtendimento" class="collapse-content" >
+                                      <!-- Conteúdo do atendimento, incluindo a prescrição -->
+                                      <div class="form-row align-items-center ">
+                                        <div class="col-lg-12">
+                                          <div class="inputprescricao input-medica">
+                                            <div class="d-flex justify-content-between">
+                                              <label for="prescricaoMedica"><h6>Prescrição*</h6></label>
+                                              <!-- Botão para colapsar/expandir com ícone -->
+                                              <button type="button" class="btn" (click)="toggleCollapse('prescricaoMedica')" title="Colapsar/Expandir">
+                                                <i class="fa fa-angle-down"></i>
+                                              </button>
+                                            </div>
+                                            <textarea autosize class="form-control" formControlName="prescricaoMedica"
+                                                      rows="3" id="prescricaoMedica" placeholder="Informe a Prescrição médica"
+                                                      [value]="" (keypress)="caracteresMedica()" maxlength="20000">
+                                            </textarea>
+                                            <p class="text-muted"><small><span class="caracteres" name="txtArea">{{this.tamMedica}}</span></small>
+                                              quantidade máxima de caracteres</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <!-- Outros conteúdos do atendimento aqui -->
+                                    <!-- Fim do conteúdo colapsável -->
+                                  
+                                  
                                 <!-- Exibe a primeira div quando this.hasSpecial for true -->
                                 <div *ngIf="!this.hasSpecial" class="form-row align-items-center">
                                     <div class="col-lg-12">
-                                        <div class="input-box">
-                                            <label for="detalhesInterno"><h6>Detalhes do Atendimento (Interno):</h6></label>
-                                            <textarea autosize class="form-control" rows="3"
-                                                formControlName="detalhesInterno" id="detalhesInterno"
-                                                placeholder="Informe Detalhes do Prontuario Interno. Estas Informações Não Aparecem Para os Pacientes."
-                                                (keypress)="caracteresInterno()" maxlength="20000"></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                    name="txtArea">{{this.tamInterno}}</span></small>
-                                                quantidade máxima de caracteres</p>
+                                      <div class="input-box input-medica">
+                                        <div class="d-flex justify-content-between">
+                                          <label for="detalhesInterno"><h6>Detalhes (Interno)*:</h6></label>
+                                          <button type="button" class="btn" (click)="toggleCollapse('detalhesInterno')" title="Colapsar/Expandir">
+                                            <i class="fa fa-angle-down"></i>
+                                          </button>
                                         </div>
+                                        <textarea autosize class="form-control" rows="3" formControlName="detalhesInterno" id="detalhesInterno"
+                                                  placeholder="Informe Detalhes do Prontuario Interno. Estas Informações Não Aparecem Para os Pacientes."
+                                                  (keypress)="caracteresInterno()" maxlength="20000"></textarea>
+                                        <p class="text-muted"><small><span class="caracteres" name="txtArea">{{this.tamInterno}}</span></small>
+                                          quantidade máxima de caracteres</p>
+                                      </div>
                                     </div>
-                                </div>
+                                  </div>
 
                                 <!-- Exibe a segunda div quando this.hasSpecial for false -->
                                 <div *ngIf="this.hasSpecial" class="form-row align-items-center">
                                     <div class="col-lg-12">
-                                        <div class="input">
-                                            <label for="detalhesInterno"><h6>Detalhes do Atendimento (Interno):</h6></label>
+                                        <div class="input input-medica">
+                                            <label for="detalhesInterno"><h6>Detalhes (Interno)*:</h6></label>
                                             <div [innerHtml]="html_string"></div>
                                         </div>
                                     </div>
@@ -194,37 +239,47 @@
 
                                 <div class="form-row align-items-center">
                                     <div class="col-lg-12">
-                                        <div class="input">
-                                            <label for="detalhesCliente"><h6>Detalhes do Atendimento (Cliente):</h6></label>
-                                            <textarea autosize class="form-control" rows="3"
-                                                formControlName="detalhesCliente" id="detalhesCliente" [value]=""
-                                                placeholder="Informe Detalhes do Prontuario que Serão Exibidos aos Pacientes."
-                                                (keypress)="caracteresCliente()" maxlength="20000" ></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamCliente}}</span></small>
-                                                quantidade máxima de caracteres</p>
+                                      <div class="input input-medica">
+                                        <div class="d-flex justify-content-between">
+                                          <label for="detalhesCliente"><h6>Detalhes (Cliente)*:</h6></label>
+                                          <button type="button" class="btn" (click)="toggleCollapse('detalhesCliente')" title="Colapsar/Expandir">
+                                            <i class="fa fa-angle-down"></i>
+                                          </button>
                                         </div>
+                                        <textarea autosize class="form-control" rows="3" formControlName="detalhesCliente" id="detalhesCliente"
+                                                  placeholder="Informe Detalhes do Prontuario que Serão Exibidos aos Pacientes."
+                                                  (keypress)="caracteresCliente()" maxlength="20000"></textarea>
+                                        <p class="text-muted"><small><span class="caracteres" name="txtArea">{{this.tamCliente}}</span></small>
+                                          quantidade máxima de caracteres</p>
+                                      </div>
                                     </div>
-                                </div>
-                                <div class="form-row align-items-center">
+                                  </div>
+
+                                    <div class="form-row align-items-center">
                                     <div class="col-lg-12">
-                                        <div class="input-exame">
+                                        <div class="input-exame input-medica">
+                                        <div class="d-flex justify-content-between">
                                             <label for="pedidoExame"><h6>Pedido De Exame:</h6></label>
-                                            <textarea autosize class="form-control" rows="3"
-                                                formControlName="pedidoExame" id="pedidoExame" [value]=""
-                                                placeholder="Informe Aqui os Pedidos de Exame."
-                                                (keypress)="caracteresExame()" maxlength="20000" ></textarea>
-                                            <p class="text-muted"><small><span class="caracteres"
-                                                        name="txtArea">{{this.tamExame}}</span></small>
-                                                quantidade máxima de caracteres</p>
+                                            <button type="button" class="btn" (click)="toggleCollapse('pedidoExame')" title="Colapsar/Expandir">
+                                            <i class="fa fa-angle-down"></i>
+                                            </button>
+                                        </div>
+                                        <textarea autosize class="form-control" rows="3" formControlName="pedidoExame" id="pedidoExame"
+                                                    placeholder="Informe Aqui os Pedidos de Exame."
+                                                    (keypress)="caracteresExame()" maxlength="20000"></textarea>
+                                        <p class="text-muted"><small><span class="caracteres" name="txtArea">{{this.tamExame}}</span></small>
+                                            quantidade máxima de caracteres</p>
                                         </div>
                                     </div>
+                                    </div>
                                 </div>
+                            </div>
+
                             </nb-card-body>
                         </nb-card>
                         <nb-card>
                             <nb-card-body>
-                                <div class="form-group col-md-12">
+                                <div>
                                     <h5>Dados do Anexo:</h5>
                                 </div>
                                 <div class="form-row align-items-center">

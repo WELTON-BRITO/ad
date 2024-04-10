@@ -92,4 +92,8 @@ export class AtendimentoService {
     return this.httpService.doPut('/api/appointments/' + id, data, successHandle, erroHandle)
   }
 
+  BuscarUltimaConsulta(data: any, successHandle: Function, errorHandle: Function) {
+    return this.httpService.doGet('/api/appointments/details/last', data, successHandle, errorHandle)
+  }
+
 }

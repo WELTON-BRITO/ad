@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { Observable, Subscriber } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 
+
 declare var $: any;
 @Component({
     selector: 'ngx-consulta-paciente',
@@ -23,6 +24,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
     @ViewChild("inputFileAtestado",)
     private inputFileAtestado: ElementRef;
+
+    @ViewChild('prescricaoMedica') prescricaoMedica: ElementRef;
 
     public formConsultaPaciente = null;
     public isActive = false;
@@ -40,6 +43,9 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public hasSpecial: boolean = false;
     public html_string: any ;
     public isLoader: boolean = false;
+    public isCollapsed = false;
+    public iconeAtivo: string = '';
+
 
     public file: any;
     formData: FormData;
@@ -169,6 +175,36 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
     }
 
+    toggleCollapseheader(elementId: string) {
+        const content = document.getElementById(elementId);
+        if (content) { // Verifica se o elemento existe
+          if (content.classList.contains('collapsed')) {
+            content.classList.remove('collapsed');
+          } else {
+            content.classList.add('collapsed');
+          }
+        } else {
+          console.error(`Elemento com ID '${elementId}' não foi encontrado.`);
+        }
+      }
+      
+
+    toggleCollapse(textareaId: string) {
+        const textarea = document.getElementById(textareaId);
+        if (textarea.style.height !== '0px' && textarea.style.height !== '') {
+          textarea.style.height = '0px'; // Colapsa o textarea
+        } else {
+          textarea.style.height = ''; // Remove o estilo de altura para expandir
+          textarea.style.overflow = 'hidden'; // Esconde o overflow durante a transição
+          textarea.style.height = textarea.scrollHeight + 'px'; // Define a altura para o scrollHeight do textarea
+          // Remove o estilo de overflow após a transição (opcional)
+          setTimeout(() => {
+            textarea.style.overflow = '';
+          }, 350); // Assumindo que a duração da transição é 350ms
+        }
+      }
+      
+
     limpaForm() {
 
         this.formConsultaPaciente = this.formBuilder.group({
@@ -202,6 +238,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isReceita = true;
         this.bloqueioSave= true;
         this.limpaForm()
+
+        this.iconeAtivo = 'atendimento';
         
 
         if(localStorage.getItem('draftAtendimento') !== null)
@@ -244,7 +282,16 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isAtestado = false;
         this.isReceita = false;
 
+        if (checked) {
+            this.iconeAtivo = 'historico';
+          }
+
+        this.fetchData(true)
+
+
     if (localStorage.getItem('histDetails') ===null  || checked==true || localStorage.getItem('histDetails') ==='') {
+
+
 
         let params = new HttpParams();
         params = params.append('doctorId', this.atendimento.doctorId);
@@ -269,7 +316,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
                     typeService: data.typeServiceName,
                     cellPhoneUser: data.userPhone,
                     emailUser:data.userEmail,
-                    federalIdUser: data.user.federalId,
+                    federalIdUser: data.userFederalId,
                     NameResponse: data.userName
                 });
             });
@@ -286,12 +333,17 @@ export class ConsultaPacienteComponent implements OnDestroy {
                 this.isActive = false;
                 this.rowData = allData;
             }
+
+            this.fetchData(false)
+
     
 
         }, (error) => {
             this.isActive = false;
             if (error && error.status === 400) {
                 this.toastrService.warning("Não Foram Encontradas Consultas Para Este Paciente.", 'Aditi Care');
+                this.fetchData(false)
+
             }
         });
             }else {
@@ -304,16 +356,26 @@ export class ConsultaPacienteComponent implements OnDestroy {
                   // Preencha os cards com os dados recuperados
                   this.rowData = parsedData;
                 }
+                this.fetchData(false)
+
                   }
     }
     
     salvareContinuar(data){
 
+        this.fetchData(true)
+
         this.saveData('draftAtendimento', data);
-                this.isActive = false;
+
+        this.toastrService.success('Rascunho Salvo com Sucesso', 'Aditi Care!');
+
+        this.fetchData(false);
+
+        this.isActive = false;
+
+
+
     }
-
-
 
     caracteresInterno() {
 
@@ -351,7 +413,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
     caracteresMedica() {
 
-        let inpuBox = document.querySelector(".input-medica"),
+        let inpuBox = document.querySelector(".inputprescricao"),
             textArea = inpuBox.querySelector("textarea");
         var caracteresRestantes = this.tamMedica;
 
@@ -456,6 +518,22 @@ export class ConsultaPacienteComponent implements OnDestroy {
         }
     }
 
+    processa_valores(data){
+
+        var retorno = null;
+
+        if (!isNaN(data)) {
+            // Converte para string e realiza o replace
+            retorno = String(data)
+              .replace(/,/g, '.')  // Substitui vírgulas por pontos
+              .replace(/[^\d.]/g, '');  // Remove qualquer coisa que não seja dígito ou ponto
+          
+          } else {
+            retorno = 0;
+          }
+          return retorno;
+    }
+
     salvar(data) {
 
         this.isSaving = true;
@@ -483,6 +561,14 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.fetchData(false)
             return false;
 
+        } 
+        else
+        if(data.tempoRetorno==null){
+            this.toastrService.warning('Por Favor Informe o Tempo de Retorno','Aditi Care!');
+            this.isSaving = false;
+            this.fetchData(false)
+            return false;
+
         } else 
         if (!this.validar_valor(data.altura) || 
         !this.validar_valor(data.peso) || 
@@ -490,7 +576,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
         !this.validar_valor(data.circAbdomen) || 
         !this.validar_valor(data.tempoRetorno)) 
         {
-            this.toastrService.warning('Os valores de Altura, Peso OU Circunferências Não São Válidos', 'Aditi Care!');
+            this.toastrService.warning('Os valores de Altura, Peso ou Circunferências Não São Válidos', 'Aditi Care!');
             this.isSaving = false;
             this.fetchData(false);
             return false;
@@ -498,25 +584,28 @@ export class ConsultaPacienteComponent implements OnDestroy {
     
         else{
 
+          
+
         let register = {
             serviceId: this.atendimento.id,  // id da consulta da buscar-atendimento
             description: data.detalhesCliente,
             prescription: data.prescricaoMedica,  //Prescrição campo novo que vira da tela detalhes
             urlPrescription: data.urlReceita,
-            timeReturn: data.tempoRetorno.replace(/,/g, '.').replace(/[^\d.]/g, ''),
+            timeReturn: this.processa_valores(data.timeReturn),
+            height:this.processa_valores(data.altura),
+            weight: this.processa_valores(data.peso),
+            headSize:this.processa_valores(data.circCabeca),
+            abdomenSize: this.processa_valores(data.circAbdomen),
             removalReport: null,
             urlRemovalReport: data.urlAtestado,
             prescriptionAttachment: this.anexoAtestado, //anexo mandar igual o da imagem
             removalAttachment: this.anexoReceita, // anexo
-            height: data.altura ? data.altura.replace(/,/g, '.').replace(/[^\d.]/g, '') : '0',
-            weight: data.peso ? data.peso.replace(/,/g, '.').replace(/[^\d.]/g, ''): '0',
-            headSize: data.circCabeca ? data.circCabeca.replace(/,/g, '.').replace(/[^\d.]/g, '') : '0',
-            abdomenSize: data.circAbdomen ? data.circAbdomen.replace(/,/g, '.').replace(/[^\d.]/g, '') : '0',
             descriptionClinic: data.detalhesInterno,
             descriptionUser: data.detalhesCliente,
             urlMedicalOrder: data.urlExame,
             descriptionMedicalOrder: data.pedidoExame,
         }
+       
 
         this.isActive = true;
         this.service.salvarDetalheAtendimento(register, (response => {
@@ -538,6 +627,77 @@ export class ConsultaPacienteComponent implements OnDestroy {
     }
     }
 
+    UltimaConsulta(){
+
+        this.fetchData(true)
+
+        this.isActive = true
+        let params = new HttpParams();
+
+        params = params.append('userId', this.atendimento.userId)
+        if(this.atendimento.idChild !=null){
+            params = params.append('childId',this.atendimento.idChild)
+        }
+        params = params.append('doctorId', this.atendimento.doctorId)
+       
+
+
+        this.service.BuscarUltimaConsulta(params, (response) => {
+
+            if(response?.dateRegister){
+            this.isActive = false;
+
+            let v_descriptionUser = null;
+            let v_descriptionClinic = null;
+
+           if(this.hasSpecialTags(response?.dateRegister)){
+            v_descriptionUser = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionUser)
+            this.hasSpecial = true;
+           }else{
+            v_descriptionUser = response?.descriptionUser;
+           }
+
+           if(this.hasSpecialTags(response?.descriptionClinic)){
+            v_descriptionClinic = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic)
+            this.html_string = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic);
+            v_descriptionClinic = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic);
+            this.hasSpecial = true;
+           }else{
+            v_descriptionClinic = response?.descriptionClinic;
+           }
+
+            // Defina o valor no controle do formulário
+            this.formConsultaPaciente.controls['detalhesCliente'].setValue(v_descriptionUser);
+            this.formConsultaPaciente.controls['detalhesInterno'].setValue(v_descriptionClinic);
+            this.formConsultaPaciente.controls['tempoRetorno'].setValue(response?.timeReturn ?? null);
+            this.formConsultaPaciente.controls['altura'].setValue(response?.height ?? null);
+            this.formConsultaPaciente.controls['peso'].setValue(response?.weight ?? null);
+            this.formConsultaPaciente.controls['circCabeca'].setValue(response?.headSize ?? null);
+            this.formConsultaPaciente.controls['circAbdomen'].setValue(response?.abdomenSize ?? null);
+            this.formConsultaPaciente.controls['urlReceita'].setValue(response?.urlPrescription ?? null);
+            this.formConsultaPaciente.controls['urlAtestado'].setValue(response?.urlRemovalReport ?? null);
+            this.formConsultaPaciente.controls['prescricaoMedica'].setValue(response?.prescription ?? null);
+            this.formConsultaPaciente.controls['pedidoExame'].setValue(response?.descriptionMedicalOrder ?? null);
+            this.formConsultaPaciente.controls['urlExame'].setValue(response?.urlMedicalOrder ?? null);
+
+            this.fetchData(false)
+
+            this.toastrService.success('Historico Recuperado com Sucesso','Aditi Care');
+        }else{
+            this.toastrService.warning('Não Existe Historico para Este Paciente','Aditi Care');
+            this.fetchData(false)
+
+         }
+
+        }, (error) => {
+            this.isActive = false;
+            this.toastrService.danger(error.error.message,'Aditi Care');
+            this.fetchData(false)
+
+        });
+        
+    }
+
     
   fetchData(data) {
     if(data){
@@ -553,16 +713,23 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
 validar_valor(data){
 
-    const valorFormatado = data.replace(/,/g, '.').replace(/[^\d.]/g, '');
-  
-    // Verifica se o valor formatado é um número decimal válido
-    if (!valorFormatado.match(/^\d+(\.\d+)?$/)) {
-        this.toastrService.warning('O valor Informado não é um Numero Válido','Aditi Care!');
+    console.log(data)
 
-        return false
-    }else{
-        return true
+    if (data && data !== 'undefined' && data !== '' && typeof data === 'string' && data.trim() !== '') {
+       
+        const valorFormatado = data.replace(/,/g, '.').replace(/[^\d.]/g, '');
+    
+        // Verifica se o valor formatado é um número decimal válido
+        if (!valorFormatado.match(/^\d+(\.\d+)?$/)) {
+            this.toastrService.warning('O valor informado não é um número válido', 'Aditi Care!');
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return true;
     }
+    
 
 }
 
@@ -591,6 +758,9 @@ validar_valor(data){
         this.isActive = true
         let params = new HttpParams();
         params = params.append('appointmentId', data.id)
+
+                this.fetchData(true)
+
 
         this.service.visualizarHistorico(params, (response) => {
 
@@ -634,9 +804,13 @@ validar_valor(data){
             this.formConsultaPaciente.controls['pedidoExame'].setValue(response?.descriptionMedicalOrder ?? null);
             this.formConsultaPaciente.controls['urlExame'].setValue(response?.urlMedicalOrder ?? null);
 
+            this.fetchData(false)
+
         }, (error) => {
             this.isActive = false;
             this.toastrService.danger(error.error.message);
+            this.fetchData(false)
+
         });
 
     }
