@@ -121,7 +121,12 @@ export class AgendaComponent implements OnInit {
             medico: this.medicoId !== null ? this.medicoId : this.listMedico[0].id,
           }
 
-          this.buscarAtendimento(register, true)
+          if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
+            this.buscarAtendimento(register, true)
+          } else {
+            this.buscarAtendimento(register, false)
+
+          }
           this.TodayDate = dateInicio.replace(/\//g, '-');
           this.FinalDate = dateFim.replace(/\//g, '-');
 
@@ -140,7 +145,12 @@ export class AgendaComponent implements OnInit {
           medico: this.medicoId !== null ? this.medicoId : this.listMedico[0].id,
         }
 
-        this.buscarAtendimento(register, true)
+        if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
+          this.buscarAtendimento(register, true)
+        } else {
+          this.buscarAtendimento(register, false)
+
+        }
         this.TodayDate = dateInicio.replace(/\//g, '-');
         this.FinalDate = dateFim.replace(/\//g, '-');
       }
@@ -362,7 +372,7 @@ export class AgendaComponent implements OnInit {
               default:
                 color = 'green'; // Cor padrão (caso o status não corresponda a nenhum dos valores acima)
             }
-            if (!evento.isConfirmed && evento.userName !=='Bloqueado') {
+            if (!evento.isConfirmed && evento.userName !== 'Bloqueado') {
               color = 'orange';
             }
 
