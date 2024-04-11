@@ -16,11 +16,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
   public formParametrizarConsulta = null;
   public listMedico = null;
-  public checkPresencial = null;
-  public checkVideo = null;
-  public checkEmergencial = null;
-  public checkCasa = null;
-  public checkVideoChamada = null;
   public isActive = false;
   public durationAtHome = null;
   public durationEmergency = null;
@@ -30,7 +25,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public valueInPerson = null;
   public valueInPersonEmergency = null;
   public valueRemote = null;
-  public checked = false;
   public atualizar = null;
   public listClinica = null;
   public clinicaId = null;
@@ -44,7 +38,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   public radioValueEmergencial: boolean;
   public radioValueCasa: boolean;
   public radioValueChamada: boolean;
-  public checkboxValue: boolean = false;
   public isLoader: boolean = false;
   public id_medico: null;
 
@@ -60,7 +53,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
-
     this.clinic = localStorage.getItem('bway-domain');
 
     if (this.clinic == 'CLINIC') {
@@ -103,63 +95,22 @@ export class ParametrizarConsultaComponent implements OnDestroy {
   }
 
   fetchData(data) {
-    if(data){
-    // Mostra o loader
-    this.isLoader =true
-    }else{
+    if (data) {
+      // Mostra o loader
+      this.isLoader = true
+    } else {
       setTimeout(() => {
         // Oculta o loader após o atraso
-        this.isLoader =false
-    }, 2000);
-}
-}
-
-  funcValor(event, element) {
-
-    if (element.checked == true) {
-
-      if (event == "1") {
-        this.checkPresencial = event;
-      } else if (event == "2") {
-        this.checkVideo = event;
-      } else if (event == "3") {
-        this.checkEmergencial = event
-      } else if (event == "4") {
-        this.checkCasa = event
-      } else if (event == "5") {
-        this.checkVideoChamada = event
-      }
-    } else if (element.checked == false) {
-      if (event == "1") {
-        this.checkPresencial = null;
-      } else if (event == "2") {
-        this.checkVideo = null;
-      } else if (event == "3") {
-        this.checkEmergencial = null;
-      } else if (event == "4") {
-        this.checkCasa = null
-      } else if (event == "5") {
-        this.checkVideoChamada = null
-      }
-
+        this.isLoader = false
+      }, 2000);
     }
-
   }
 
   salvar(data) {
 
-    const checkboxPresencial: any = document.getElementsByName('checkboxPresencial');
-    const checkboxVideo: any = document.getElementsByName('checkboxVideo');
-    const checkboxCasa: any = document.getElementsByName('checkboxCasa');
-    const checkboxEmergencial: any = document.getElementsByName('checkboxEmergencial');
-    const checkboxChamada: any = document.getElementsByName('checkboxChamada');
-
-    if ((checkboxPresencial[0].checked == false && checkboxChamada[0].checked == false && checkboxVideo[0].checked == false &&
-      checkboxCasa[0].checked == false && checkboxEmergencial[0].checked == false &&
-      checkboxChamada[0].checked == false) ||
-      (data.tempoPresencial == null && data.tempoCasa == null &&
-        data.tempoEmergencial == null && data.tempoVideo == null &&
-        data.tempoVideoChamada == null) ||
+    if ((data.tempoPresencial == null && data.tempoCasa == null &&
+      data.tempoEmergencial == null && data.tempoVideo == null &&
+      data.tempoVideoChamada == null) ||
       (data.valorCasa == null && data.valorEmergencial == null &&
         data.valorPresencial == null && data.valorVideo == null &&
         data.valorVideoChamada == null) ||
@@ -167,7 +118,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         data.qrPresencial == null && data.qrVideo == null &&
         data.qrVideoChamada == null)) {
 
-      this.toastrService.danger('Favor Preencher os Campos Obrigatórios','Aditi Care');
+      this.toastrService.danger('Favor Preencher os Campos Obrigatórios', 'Aditi Care');
 
     } else {
 
@@ -253,7 +204,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.isActive = true;
         this.service.cadastrarPriceDoctor(register, (response => {
           this.isActive = false;
-          this.toastrService.success('Registro Cadastrado com Sucesso','Aditi Care');
+          this.toastrService.success('Registro Cadastrado com Sucesso', 'Aditi Care');
           this.fetchData(false)
           this.limpaForm()
         }), (error) => {
@@ -268,7 +219,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.isActive = true;
         this.service.atualizarValor(register, (response => {
           this.isActive = false;
-          this.toastrService.success('Registro Cadastrado com Sucesso','Aditi Care');
+          this.toastrService.success('Registro Cadastrado com Sucesso', 'Aditi Care');
           this.fetchData(false)
           this.limpaForm()
         }), (error) => {
@@ -309,27 +260,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       valorVideoChamada: [null]
     })
 
-    var checkboxPresencial = document.querySelector("#presencial");
-    this.ativarCheckbox(checkboxPresencial);
-    
-    var checkboxVideo = document.querySelector("#video");
-    this.ativarCheckbox(checkboxVideo);
-    
-    var checkboxEmergencial = document.querySelector("#emergencial");
-    this.ativarCheckbox(checkboxEmergencial);
-    
-    var checkboxCasa = document.querySelector("#casa");
-    this.ativarCheckbox(checkboxCasa);
-    
-    var checkboxVideoChamada = document.querySelector("#videoChamada");
-    this.ativarCheckbox(checkboxVideoChamada);
-
-  }
-
-   ativarCheckbox(el) {
-    if (el) {
-      el.checked = false;
-    } 
   }
 
   verificaValor() {
@@ -366,12 +296,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['qrPresencial'].setValue(response[i].qrCode);
             this.radioValuePresencial = response[i].qrCodeBlocked;
 
-            var checkbox = document.querySelector("#presencial");
-            function ativarCheckbox(el) {
-              el.checked = true;
-            }
-            ativarCheckbox(checkbox);
-
           } else {
             document.getElementById('qrPresencial').removeAttribute('disabled');
           }
@@ -382,12 +306,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['valorVideo'].setValue(response[i].value);
             this.formParametrizarConsulta.controls['qrVideo'].setValue(response[i].qrCode);
             this.radioValueVideo = response[i].qrCodeBlocked;
-
-            var checkbox = document.querySelector("#video");
-            function ativarCheckbox(el) {
-              el.checked = true;
-            }
-            ativarCheckbox(checkbox);
 
           } else {
             document.getElementById('qrVideo').removeAttribute('disabled');
@@ -400,13 +318,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['qrEmergencial'].setValue(response[i].qrCode);
             this.radioValueEmergencial = response[i].qrCodeBlocked;
 
-            var checkbox = document.querySelector("#emergencial");
-            function ativarCheckbox(el) {
-              el.checked = true;
-            }
-            ativarCheckbox(checkbox);
-
-
           } else {
             document.getElementById('qrEmergencial').removeAttribute('disabled');
           }
@@ -418,12 +329,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['qrCasa'].setValue(response[i].qrCode);
             this.radioValueCasa = response[i].qrCodeBlocked;
 
-            var checkbox = document.querySelector("#casa");
-            function ativarCheckbox(el) {
-              el.checked = true;
-            }
-            ativarCheckbox(checkbox);
-
           } else {
             document.getElementById('qrCasa').removeAttribute('disabled');
           }
@@ -434,12 +339,6 @@ export class ParametrizarConsultaComponent implements OnDestroy {
             this.formParametrizarConsulta.controls['valorVideoChamada'].setValue(response[i].value);
             this.formParametrizarConsulta.controls['qrVideoChamada'].setValue(response[i].qrCode);
             this.radioValueChamada = response[i].qrCodeBlocked;
-
-            var checkbox = document.querySelector("#videoChamada");
-            function ativarCheckbox(el) {
-              el.checked = true;
-            }
-            ativarCheckbox(checkbox);
 
           } else {
 
@@ -487,55 +386,30 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.formParametrizarConsulta.controls['tempoEmergencial'].setValue(null);
         this.formParametrizarConsulta.controls['qrEmergencial'].setValue(null);
         this.radioValueEmergencial = null;
-        var checkbox = document.querySelector("#emergencial");
-        function ativarCheckbox(el) {
-          el.checked = false;
-        }
-        ativarCheckbox(checkbox);
       }
       if (error == undefined) {
         this.formParametrizarConsulta.controls['valorVideo'].setValue(null);
         this.formParametrizarConsulta.controls['tempoVideo'].setValue(null);
         this.formParametrizarConsulta.controls['qrVideo'].setValue(null);
         this.radioValueVideo = null;
-        var checkbox = document.querySelector("#video");
-        function ativarCheckbox(el) {
-          el.checked = false;
-        }
-        ativarCheckbox(checkbox);
       }
       if (error == undefined) {
         this.formParametrizarConsulta.controls['tempoPresencial'].setValue(null);
         this.formParametrizarConsulta.controls['valorPresencial'].setValue(null);
         this.formParametrizarConsulta.controls['qrPresencial'].setValue(null);
         this.radioValuePresencial = null
-        var checkbox = document.querySelector("#presencial");
-        function ativarCheckbox(el) {
-          el.checked = false;
-        }
-        ativarCheckbox(checkbox);
       }
       if (error == undefined) {
         this.formParametrizarConsulta.controls['tempoCasa'].setValue(null);
         this.formParametrizarConsulta.controls['valorCasa'].setValue(null);
         this.formParametrizarConsulta.controls['qrCasa'].setValue(null);
         this.radioValueCasa = null;
-        var checkbox = document.querySelector("#casa");
-        function ativarCheckbox(el) {
-          el.checked = false;
-        }
-        ativarCheckbox(checkbox);
       }
       if (error == undefined) {
         this.formParametrizarConsulta.controls['tempoVideoChamada'].setValue(null);
         this.formParametrizarConsulta.controls['valorVideoChamada'].setValue(null);
         this.formParametrizarConsulta.controls['qrVideoChamada'].setValue(null);
         this.radioValueChamada = null;
-        var checkbox = document.querySelector("#videoChamada");
-        function ativarCheckbox(el) {
-          el.checked = false;
-        }
-        ativarCheckbox(checkbox);
       }
     });
 
@@ -545,11 +419,11 @@ export class ParametrizarConsultaComponent implements OnDestroy {
     this.clinicaId = data;
   }
 
-  SelectedMedico(data){
+  SelectedMedico(data) {
     this.id_medico = data;
   }
 
-  SelectedClinica(data){
+  SelectedClinica(data) {
     this.clinicaId = data;
   }
 
@@ -559,7 +433,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
       this.ismodalidadeConsulta = true;
       this.verificaValor()
     } else {
-      this.toastrService.danger('Por Favor Informe a Clinica','Aditi Care');
+      this.toastrService.danger('Por Favor Informe a Clinica', 'Aditi Care');
     }
 
   }

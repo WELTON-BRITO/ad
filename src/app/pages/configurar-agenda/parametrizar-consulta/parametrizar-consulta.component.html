@@ -57,266 +57,192 @@
                     </div>
                   </div>
                 </div>
-                <div *ngIf="ismodalidadeConsulta">
-                  <div class="form-row align-items-center">
-                    <div class="form-group">
-                      <label class="pl-1">Selecione abaixo quais as modalidades de consultas o médico atende.</label>
-                    </div>
-                  </div>
-                  <div class="form-row align-items-center">
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <label for="nome"><span style="font-weight: bold">Tipo de Atendimento*</span></label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <label for="nome"><span style="font-weight: bold">Duração(Minutos)*</span></label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <label for="nome">
-                          <span style="font-weight: bold">Valor*</span></label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <label for="nome">
-                          <span style="font-weight: bold">QR Code*</span></label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-1" *ngIf="isBloqueio">
-                      <div class="form-group">
-                        <label for="nome">
-                          <span style="font-weight: bold">Bloqueio</span></label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-row align-items-center pl-4 mt-lg-n4">
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="presencial" name="checkboxPresencial" value="1"
-                            (click)="funcValor($event.target.value, $event.target)" />
-                          Presencial</label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoPresencial"
-                          formControlName="tempoPresencial" />
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input class="div-presencial" autocomplete="off" currencyMask
-                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                          class="form-control m-lg-n3" id="valorPresencial" formControlName="valorPresencial"
-                          placeholder="R$ 0,00" />
-                      </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <input type="text" class="form-control ml-lg-n3" id="qrPresencial"
-                          formControlName="qrPresencial" disabled />
-                      </div>
-                    </div>
-                    <div class="col-md-2" *ngIf="isBloqueio">
-                      <div class="form-group">
-                        <div class="pb-2 row">
-                          <label class="radio-inline pl-3">
-                            <input class="mat-button" type="radio" id="radio" name="optPresencial" value="true"
-                              formControlName="optPresencial" [checked]="radioValuePresencial === true"/>
-                            Sim</label>
-                          <label class="radio-inline pl-2">
-                            <input class="mat-button" type="radio" id="radio" name="optPresencial" value="false"
-                              formControlName="optPresencial" [checked]="radioValuePresencial === false"/>
-                            Não</label>
+                <div class="container" *ngIf="ismodalidadeConsulta">
+                  <div class="row">
+                    <div class="col-md-6 p-2">
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Presencial</h5>
+                          <div class="form-group">
+                            <label for="tempoPresencial">Duração (Minutos)*</label>
+                            <input type="number" min="0" max="60" class="form-control" id="tempoPresencial"
+                              formControlName="tempoPresencial">
+                          </div>
+                          <div class="form-group">
+                            <label for="valorPresencial">Valor*</label>
+                            <input class="form-control" autocomplete="off" currencyMask
+                              [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                              id="valorPresencial" formControlName="valorPresencial" placeholder="R$ 0,00">
+                          </div>
+                          <div class="form-group">
+                            <label for="qrPresencial">QR Code*</label>
+                            <input type="text" class="form-control" id="qrPresencial" formControlName="qrPresencial"
+                              disabled>
+                          </div>
+                          <div class="form-group" *ngIf="isBloqueio">
+                            <label>Bloqueio</label>
+                            <div class="pb-2 row">
+                              <label class="radio-inline pl-3">
+                                <input class="mat-button" type="radio" id="radio" name="optPresencial" value="true"
+                                  formControlName="optPresencial" [checked]="radioValuePresencial === true" />
+                                Sim</label>
+                              <label class="radio-inline pl-2">
+                                <input class="mat-button" type="radio" id="radio" name="optPresencial" value="false"
+                                  formControlName="optPresencial" [checked]="radioValuePresencial === false" />
+                                Não</label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-row align-items-center pl-4 mt-lg-n4">
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="video" name="checkboxChamada" value="2"
-                            (click)="funcValor($event.target.value, $event.target)" />
-                          Video Chamada</label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoVideo"
-                          formControlName="tempoVideo" />
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input class="div-video" autocomplete="off" currencyMask
-                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                          class="form-control m-lg-n3" id="valorVideo" formControlName="valorVideo"
-                          placeholder="R$ 0,00" />
-                      </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <input type="text" class="form-control ml-lg-n3" id="qrVideo" formControlName="qrVideo"
-                          disabled />
-                      </div>
-                    </div>
-                    <div class="col-md-2" *ngIf="isBloqueio">
-                      <div class="form-group">
-                        <div class="pb-2 row">
-                          <label class="radio-inline pl-3">
-                            <input class="mat-button" type="radio" id="radio" name="optVideo" value="true"
-                              formControlName="optVideo" [checked]="radioValueVideo === true"/>
-                            Sim</label>
-                          <label class="radio-inline pl-2">
-                            <input class="mat-button" type="radio" id="radio" name="optVideo" value="false"
-                              formControlName="optVideo" [checked]="radioValueVideo === false"/>
-                            Não</label>
+                    <div class="col-md-6 p-2">
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Video Chamada</h5>
+                          <div class="form-group">
+                            <label for="tempoVideo">Duração (Minutos)*</label>
+                            <input type="number" min="0" max="60" class="form-control" id="tempoVideo"
+                              formControlName="tempoVideo">
+                          </div>
+                          <div class="form-group">
+                            <label for="valorVideo">Valor*</label>
+                            <input class="form-control" autocomplete="off" currencyMask
+                              [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text" id="valorVideo"
+                              formControlName="valorVideo" placeholder="R$ 0,00">
+                          </div>
+                          <div class="form-group">
+                            <label for="qrVideo">QR Code*</label>
+                            <input type="text" class="form-control" id="qrVideo" formControlName="qrVideo" disabled>
+                          </div>
+                          <div class="form-group" *ngIf="isBloqueio">
+                            <label>Bloqueio</label>
+                            <div class="pb-2 row">
+                              <label class="radio-inline pl-3">
+                                <input class="mat-button" type="radio" id="radio" name="optVideo" value="true"
+                                  formControlName="optVideo" [checked]="radioValueVideo === true" />
+                                Sim</label>
+                              <label class="radio-inline pl-2">
+                                <input class="mat-button" type="radio" id="radio" name="optVideo" value="false"
+                                  formControlName="optVideo" [checked]="radioValueVideo === false" />
+                                Não</label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-row align-items-center pl-4 mt-lg-n4">
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="emergencial" name="checkboxEmergencial" value="3"
-                            (click)="funcValor($event.target.value, $event.target)" />
-                          Emergencial Presencial</label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <div class="text-right">
-                          <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoEmergencial"
-                            formControlName="tempoEmergencial" />
+                    <div class="col-md-6 p-2">
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Emergencial Presencial</h5>
+                          <div class="form-group">
+                            <label for="tempoEmergencial">Duração (Minutos)*</label>
+                            <input type="number" min="0" max="60" class="form-control" id="tempoEmergencial"
+                              formControlName="tempoEmergencial">
+                          </div>
+                          <div class="form-group">
+                            <label for="valorEmergencial">Valor*</label>
+                            <input class="form-control" autocomplete="off" currencyMask
+                              [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                              id="valorEmergencial" formControlName="valorEmergencial" placeholder="R$ 0,00">
+                          </div>
+                          <div class="form-group">
+                            <label for="qrEmergencial">QR Code*</label>
+                            <input type="text" class="form-control" id="qrEmergencial" formControlName="qrEmergencial"
+                              disabled>
+                          </div>
+                          <div class="form-group" *ngIf="isBloqueio">
+                            <label>Bloqueio</label>
+                            <div class="pb-2 row">
+                              <label class="radio-inline pl-3">
+                                <input class="mat-button" type="radio" id="radio" name="optEmergencial" value="true"
+                                  formControlName="optEmergencial" [checked]="radioValueEmergencial === true" />
+                                Sim</label>
+                              <label class="radio-inline pl-2">
+                                <input class="mat-button" type="radio" id="radio" name="optEmergencial" value="false"
+                                  formControlName="optEmergencial" [checked]="radioValueEmergencial === false" />
+                                Não</label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input class="div-emergencial" autocomplete="off" currencyMask
-                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                          class="form-control m-lg-n3" name="valorEmergencial" id="valorEmergencial"
-                          formControlName="valorEmergencial" placeholder="R$ 0,00">
-                      </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <input type="text" class="form-control ml-lg-n3" id="qrEmergencial"
-                          formControlName="qrEmergencial" disabled />
-                      </div>
-                    </div>
-                    <div class="col-md-2" *ngIf="isBloqueio">
-                      <div class="form-group">
-                        <div class="pb-2 row">
-                          <label class="radio-inline pl-3">
-                            <input class="mat-button" type="radio" id="radio" name="optEmergencial" value="true"
-                              formControlName="optEmergencial" [checked]="radioValueEmergencial === true"/>
-                            Sim</label>
-                          <label class="radio-inline pl-2">
-                            <input class="mat-button" type="radio" id="radio" name="optEmergencial" value="false"
-                              formControlName="optEmergencial" [checked]="radioValueEmergencial === false"/>
-                            Não</label>
+                    <div class="col-md-6 p-2">
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Em Casa</h5>
+                          <div class="form-group">
+                            <label for="tempoCasa">Duração (Minutos)*</label>
+                            <input type="number" min="0" max="60" class="form-control" id="tempoCasa"
+                              formControlName="tempoCasa">
+                          </div>
+                          <div class="form-group">
+                            <label for="valorCasa">Valor*</label>
+                            <input class="form-control" autocomplete="off" currencyMask
+                              [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text" id="valorCasa"
+                              formControlName="valorCasa" placeholder="R$ 0,00">
+                          </div>
+                          <div class="form-group">
+                            <label for="qrCasa">QR Code*</label>
+                            <input type="text" class="form-control" id="qrCasa" formControlName="qrCasa" disabled>
+                          </div>
+                          <div class="form-group" *ngIf="isBloqueio">
+                            <label>Bloqueio</label>
+                            <div class="pb-2 row">
+                              <label class="radio-inline pl-3">
+                                <input class="mat-button" type="radio" id="radio" name="optCasa" value="true"
+                                  formControlName="optCasa" [checked]="radioValueCasa === true" />
+                                Sim</label>
+                              <label class="radio-inline pl-2">
+                                <input class="mat-button" type="radio" id="radio" name="optCasa" value="false"
+                                  formControlName="optCasa" [checked]="radioValueCasa === false" />
+                                Não</label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-row align-items-center pl-4 mt-lg-n4">
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="casa" name="checkboxCasa" value="4"
-                            (click)="funcValor($event.target.value, $event.target)" />
-                          Em Casa</label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoCasa"
-                          formControlName="tempoCasa" />
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input class="div-casa" autocomplete="off" currencyMask
-                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                          class="form-control m-lg-n3" name="valorCasa" id="valorCasa" formControlName="valorCasa"
-                          placeholder="R$ 0,00">
-                      </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <input type="text" class="form-control ml-lg-n3" id="qrCasa" formControlName="qrCasa"
-                          disabled />
-                      </div>
-                    </div>
-                    <div class="col-md-2" *ngIf="isBloqueio">
-                      <div class="form-group">
-                        <div class="pb-2 row">
-                          <label class="radio-inline pl-3">
-                            <input class="mat-button" type="radio" id="radio" name="optCasa" value="true"
-                              formControlName="optCasa" [checked]="radioValueCasa === true"/>
-                            Sim</label>
-                          <label class="radio-inline pl-2">
-                            <input class="mat-button" type="radio" id="radio" name="optCasa" value="false"
-                              formControlName="optCasa" [checked]="radioValueCasa === false"/>
-                            Não</label>
+                    <div class="col-md-6 p-2">
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Video Chamada Emergencial</h5>
+                          <div class="form-group">
+                            <label for="tempoVideoChamada">Duração (Minutos)*</label>
+                            <input type="number" min="0" max="60" class="form-control" id="tempoVideoChamada"
+                              formControlName="tempoVideoChamada">
+                          </div>
+                          <div class="form-group">
+                            <label for="valorVideoChamada">Valor*</label>
+                            <input class="form-control" autocomplete="off" currencyMask
+                              [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
+                              id="valorVideoChamada" formControlName="valorVideoChamada" placeholder="R$ 0,00">
+                          </div>
+                          <div class="form-group">
+                            <label for="qrVideoChamada">QR Code*</label>
+                            <input type="text" class="form-control" id="qrVideoChamada" formControlName="qrVideoChamada"
+                              disabled>
+                          </div>
+                          <div class="form-group" *ngIf="isBloqueio">
+                            <label>Bloqueio</label>
+                            <div class="pb-2 row">
+                              <label class="radio-inline pl-3">
+                                <input class="mat-button" type="radio" id="radio" name="optVideoChamada" value="true"
+                                  formControlName="optVideoChamada" [checked]="radioValueChamada === true" />
+                                Sim</label>
+                              <label class="radio-inline pl-2">
+                                <input class="mat-button" type="radio" id="radio" name="optVideoChamada" value="false"
+                                  formControlName="optVideoChamada" [checked]="radioValueChamada === false" />
+                                Não</label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-row align-items-center pl-4 mt-lg-n4">
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="videoChamada" name="checkboxVideo" value="5"
-                            (click)="funcValor($event.target.value, $event.target)" />
-                          Video Chamada Emergencial
-                        </label>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input type="number" min="0" max="60" class="form-control ml-lg-n3" id="tempoVideoChamada"
-                          formControlName="tempoVideoChamada" />
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <div class="form-group">
-                        <input class="div-videoChamada" autocomplete="off" currencyMask
-                          [options]="{prefix: 'R$ ' , thousands: '.', decimal: ','}" type="text"
-                          class="form-control m-lg-n3" name="valorVideoChamada" id="valorVideoChamada"
-                          formControlName="valorVideoChamada" placeholder="R$ 0,00">
-                      </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                      <div class="form-group">
-                        <input type="text" class="form-control ml-lg-n3" id="qrVideoChamada"
-                          formControlName="qrVideoChamada" disabled />
-                      </div>
-                    </div>
-                    <div class="col-md-2" *ngIf="isBloqueio">
-                      <div class="form-group">
-                        <div class="pb-2 row">
-                          <label class="radio-inline pl-3">
-                            <input class="mat-button" type="radio" id="radio" name="optVideoChamada" value="true"
-                              formControlName="optVideoChamada" [checked]="radioValueChamada === true"/>
-                            Sim</label>
-                          <label class="radio-inline pl-2">
-                            <input class="mat-button" type="radio" id="radio" name="optVideoChamada" value="false"
-                              formControlName="optVideoChamada" [checked]="radioValueChamada === false"/>
-                            Não</label>
-                        </div>
-                      </div>
-                    </div>
+
                   </div>
                 </div>
+
+
+
               </div>
               <div class="text-right" *ngIf="ismodalidadeConsulta">
                 <button class="btn btn-success" (click)="salvar(formParametrizarConsulta.value)">
@@ -330,4 +256,3 @@
     </div>
   </div>
 </div>
-
