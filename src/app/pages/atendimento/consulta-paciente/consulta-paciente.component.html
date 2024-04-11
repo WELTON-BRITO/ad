@@ -344,6 +344,81 @@
                                     </div>
                                   
                                 </div>
+                                </nb-card-body>
+                            </nb-card>
+                            <nb-card>
+                            <nb-card-body>
+
+                                  <div>
+                                    <h5>Agendamento de Retorno:</h5>
+                                </div>
+
+                                                                    
+                                <div class="form-group align-items-center">
+                                    <label class="encaixe">Deseja Agendar o Retorno?*</label>
+                                    <div class="p-1 row mb-lg-n1">
+                                      <label class="radio-inline pl-3">
+                                        <input class="mat-button" type="radio" id="AgendarRetornoSim" name="agendarRetorno"
+                                               value="S" formControlName="agendarRetorno" (click)="agendarRetorno('S',formConsultaPaciente.value)" />
+                                        Sim
+                                      </label>
+                                      <label class="radio-inline pl-2">
+                                        <input class="mat-button" type="radio" id="AgendarRetornoNao" name="agendarRetorno"
+                                               value="N" formControlName="agendarRetorno" (click)="agendarRetorno('N',formConsultaPaciente.value)" />
+                                        Não
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                <div *ngIf="isHorario">
+                                    <div class="form-group col-md-6">
+                                        <h6 class="pt-3">Selecione o Horário da Consulta</h6>
+                                    </div>
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="card-columns">
+                                                    <div class="card"
+                                                         [ngClass]="{'card-ocupado': card.statusCard === 'Ocupado', 'card-disponivel': card.statusCard === 'Disponível'}"
+                                                         *ngFor="let card of tipoCard; let i = index;"
+                                                         >
+                                                        <div class="card-body">
+                                                            <div class="form-row align-items-center">
+                                                                <div class="col-md-2">
+                                                                    <i class="fa fa-calendar image fa-2x text-primary" aria-hidden="true"></i>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <div class="div-tamanho">
+                                                                        <label for="data" class="m-0">Data: {{ card.data }}</label>
+                                                                        <label for="data" class="m-0">Horário: {{ card.horario }}</label>
+                                                                        <br> <!-- Adicione uma quebra de linha aqui -->
+                                                                        <label>Situação: {{ card.statusCard }}</label>
+                                                                    </div>
+                                                                    <!-- Ícone ou botão para seleção (exemplo) -->
+                                                                    <button *ngIf="card.statusCard === 'Disponível'" class="btn btn-primary" (click)="confHorario(card, formConsultaPaciente.value)">Selecionar</button>                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                
+                                <div *ngIf="isConfAtendimento">
+                                    <div class="form-row align-items-center">
+                                        <div class="form-group col-md-4">
+                                            <div class="form-group">
+                                                <label for="horarioSelected">Horário Selecionado:</label>
+                                                <input class="form-control" name="horarioSelected" id="horarioSelected "
+                                                type="text" formControlName="horarioSelected" [value]="horarioSelecionado" disabled />
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+
+                            </nb-card-body>
+                        </nb-card>
+
+                        <nb-card>
+                            <nb-card-body>
                                 <div class="form-row">
                                     <div class="col-md-12">
                                       <div class="text-right" *ngIf="bloqueioSave">
@@ -359,9 +434,8 @@
                                     </div>
                                   </div>
                                   
-                                  
-                            </nb-card-body>
-                        </nb-card>
+                                </nb-card-body>
+                                </nb-card>
                     </form>
                 </div>
 

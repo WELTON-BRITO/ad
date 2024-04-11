@@ -52,17 +52,10 @@
             </form>
             <div class="col-md-12 col-xs-12">
               
-
-              <div class='form group demo-app-sidebar'>
-                <full-calendar *ngIf='calendarVisible' [options]='calendarOptions' [plugins]="calendarPlugins"
-                   [events]="calendarEvents">
-                </full-calendar>
-              </div>
-
               <h5>Legenda:</h5>
               <div class="legend d-flex flex-wrap">
                 <div class="legenda-item">
-                  <div class="cor-box" style="background-color: coral;"></div>
+                  <div class="cor-box" style="background-color: #fd2205"></div>
                   <span>Aguardando Aprovação </span>
                 </div>
                 <div class="legenda-item">
@@ -70,17 +63,29 @@
                   <span>Consulta Não Confirmada </span>
                 </div>
                 <div class="legenda-item">
-                  <div class="cor-box" style="background-color: red;"></div>
+                  <div class="cor-box" style="background-color: #fd2205"></div>
                   <span>Aguardando Pagamento </span>
                 </div>
                 <div class="legenda-item">
-                  <div class="cor-box" style="background-color: green;"></div>
+                  <div class="cor-box" style="background-color: #727df5"></div>
                   <span>Consulta Confirmada </span>
                 </div>
                 <div class="legenda-item">
-                  <div class="cor-box" style="background-color: blue;"></div>
+                  <div class="cor-box" style="background-color: #54dfb1"></div>
                   <span>Consulta Finalizada </span>
                 </div>
+
+                <div class="legenda-item">
+                  <div class="cor-box" style="background-color: #77747762"></div>
+                  <span>Horário Bloqueado </span>
+                </div>
+
+              </div>
+
+              <div class='form group demo-app-sidebar'>
+                <full-calendar *ngIf='calendarVisible' [options]='calendarOptions' [plugins]="calendarPlugins"
+                   [events]="calendarEvents">
+                </full-calendar>
               </div>
               
             </div>

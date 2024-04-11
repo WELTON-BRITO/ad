@@ -345,26 +345,33 @@ export class AgendaComponent implements OnInit {
           this.isActive = false
           this.rowData = response
           this.calendarEvents = this.rowData.map(evento => {
-            let color;
+            let color: string; // Certifique-se de declarar 'color' como uma string
+
             switch (evento.status) {
               case '01 - Aguardando Aprovação':
-                color = 'coral'; // Vermelho claro
+                color = '#fd2205';
                 break;
               case '02 - Aguardando Pagamento':
-                color = 'red'; // Amarelo claro
+                color = '#fd2205';
                 break;
               case '03 - Consulta Confirmada':
-                color = 'green'; // Verde claro
+                color = '#727df5';
                 break;
               case '04 - Consulta Finalizada':
-                color = 'blue'; // Azul claro
+                color = '#54dfb1'; 
                 break;
               default:
-                color = 'green'; // Cor padrão (caso o status não corresponda a nenhum dos valores acima)
+                color = 'green'; // Cor padrão
             }
-            if (!evento.isConfirmed && evento.userName !=='Bloqueado') {
+            
+            if (!evento.isConfirmed && evento.userName !== 'Bloqueado' && evento.status !== '04 - Consulta Finalizada') {
               color = 'orange';
             }
+            
+            if (evento.userName == 'Bloqueado') {
+              color = '#77747762';
+            }
+            
 
             return {
               title: evento.childName ?? evento.userName,

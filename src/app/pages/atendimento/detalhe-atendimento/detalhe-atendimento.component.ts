@@ -36,7 +36,11 @@ export class DetalheAtendimentoComponent implements OnInit {
     nameMother: null,
     nameFather: null,
     telefone: null,
-    email: null
+    email: null,
+    planId: null,
+    procedureId: null,
+    specialtyId: null,
+    typeServiceId: null
   };
   public showModal: boolean = false;
   public cancellationReason: string = '';
@@ -121,6 +125,10 @@ export class DetalheAtendimentoComponent implements OnInit {
         idChild: data.childId ?? null,
         sexo: data.childBiologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
         tipoSanguineo: data.childBloodType ?? null,
+        planId: data.planId,
+        procedureId: data.procedureId,
+        specialtyId: data.specialtyId,
+        typeServiceId: data.typeServiceId,
     };
         
     this.paciente = allData
@@ -223,6 +231,18 @@ if (allData) {
       this.isActive = false
       this.toastrService.success('Pagamento aprovado com sucesso','Aditi Care!');
       this.atendimento.status ='03 - Consulta Confirmada';
+
+      const allData = localStorage.getItem('detalhesData')
+
+      if (allData) {
+        // Converta os dados de string para objeto
+        const parsedData = JSON.parse(allData);
+
+        parsedData.status = '03 - Consulta Confirmada';
+
+        this.saveData('detalhesData', parsedData);
+
+      }
       this.fetchData(false)
 
 

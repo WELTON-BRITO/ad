@@ -45,6 +45,15 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public isLoader: boolean = false;
     public isCollapsed = false;
     public iconeAtivo: string = '';
+    public tipoCard = [];
+    public isHorario = false;
+    public isConfAtendimento = false;
+    public dadosHorario = null;
+    public horarioSelecionado: string;
+    public clinicId = null;
+    public doctorId = null;
+    public agendado = false;
+
 
 
     public file: any;
@@ -69,7 +78,11 @@ export class ConsultaPacienteComponent implements OnDestroy {
         telefone: null,
         email: null,
         patchPaciente: false,
-        };
+        planId: null,
+        procedureId: null,
+        specialtyId: null,
+        typeServiceId: null
+            };
     public anexoAtestado = null;
     public anexoReceita = null;
     public rowData = null;
@@ -92,11 +105,12 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         this.hasSpecial=false;
 
-
         this.formConsultaPaciente = this.formBuilder.group({
             detalhesCliente: [null],
             detalhesInterno: [null],
             tempoRetorno: [null],
+            horarioSelected: null,
+            agendarRetorno: null,
             altura: [null],
             peso: [null],
             circCabeca: [null],
@@ -111,12 +125,19 @@ export class ConsultaPacienteComponent implements OnDestroy {
             urlExame: [null],
             imc: [null],
             id: null,
-            patchPaciente: false,
+            patchPaciente: false, 
+            planId: null,
+            procedureId: null,
+            specialtyId: null,
+            typeServiceId: null,
         })
+
 
          var data = history.state
 
          this.historico = data;
+
+         console.log(data)
 
 
         if(localStorage.getItem('detalhesData')!==null){
@@ -133,7 +154,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
         const dataNascimento = data[0].rowData.childBirthDate ?? data[0].rowData.childBirthDate ?? '20240101'; // to-do incluir campo de aniversario do usuario no retorno
         const idadePessoa = this.calcularIdade(dataNascimento) ?? null;
-     
         let allData = {
           medico: data[0].rowData.doctorName ?? null,
           nomePaciente: data[0].rowData.childName ?? data[0].rowData.userName ?? null,
@@ -160,6 +180,10 @@ export class ConsultaPacienteComponent implements OnDestroy {
           sexo: data[0].rowData.childBiologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
           tipoSanguineo: data[0].rowData.childBloodType ?? null,
           patchPaciente: false,
+          planId: data[0].rowData.planId,
+          procedureId: data[0].rowData.procedureId,
+          specialtyId: data[0].rowData.specialtyId,
+          typeServiceId: data[0].rowData.typeServiceId,
       };
            
       this.atendimento = allData;
@@ -204,6 +228,21 @@ export class ConsultaPacienteComponent implements OnDestroy {
         }
       }
       
+      confHorario(data, element) {
+
+        if (this.formConsultaPaciente.get('horarioSelected')) {
+
+        this.formConsultaPaciente.controls['horarioSelected'].setValue((data.data + " - " + data.horario));
+
+        this.tipoCard = [];
+        this.dadosHorario = data;
+        this.isHorario = false;
+        this.isConfAtendimento = true;
+    } else {
+        console.error('O controle horarioSelected não foi encontrado no formulário.');
+      }
+
+    }
 
     limpaForm() {
 
@@ -224,6 +263,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
             pedidoExame: [null],
             urlExame: [null],
             imc:[null],
+            horarioSelected:[null],
+            
         })
         this.tamMedica = 20000;
         this.tamInterno = 20000;
@@ -518,6 +559,80 @@ export class ConsultaPacienteComponent implements OnDestroy {
         }
     }
 
+    agendarRetorno(data,form){
+
+        if(data==='S'){
+
+            this.fetchData(true)
+
+
+            let tempo_retorno = this.processa_valores(form.tempoRetorno);
+
+            // Verifica se 'tempo_retorno' é um número e converte se necessário
+            tempo_retorno = Number(tempo_retorno);
+
+            if (!isNaN(tempo_retorno)) {
+            var dataHora = new Date();
+
+            // Adiciona 'tempo_retorno' dias à data atual
+            dataHora.setDate(dataHora.getDate() + tempo_retorno);
+
+            // Cria 'dateEnd' como uma nova data baseada em 'dataHora'
+            var dateEnd = new Date(dataHora);
+
+            // Adiciona 7 dias a 'dateEnd'
+            dateEnd.setDate(dateEnd.getDate() + 7);
+
+            // Formata a data para 'YYYY-MM-DD'
+            const dataFormatada = dateEnd.toISOString().split('T')[0];
+            console.log(dataFormatada); // Saída da data formatada
+            } else {
+                this.toastrService.danger('O Prazo de Retorno não é um Numero Válido','Aditi Care');
+                this.fetchData(false)
+
+                return false;
+            }
+           
+
+            this.isActive = true
+            
+            let params = new HttpParams();
+            params = params.append('doctorId', this.atendimento.doctorId)
+            params = params.append('startDate', moment(dataHora).format('YYYY-MM-DD'))
+            params = params.append('endDate', moment(dateEnd).format('YYYY-MM-DD'))
+            params = params.append('typeServiceId',this.atendimento.typeServiceId)
+            
+            this.service.buscaHorario(params, (response) => {
+
+                this.tipoCard = response.times;
+                this.tipoCard = this.tipoCard.filter(function (item) {
+                return true;
+                });
+                this.tipoCard = this.tipoCard.map(data => {
+                    return {
+                        data: data.date,
+                        horario: data.startTime.concat(' - ', data.endTime),
+                        statusCard: data.status,
+                        nomePaciente: data.status
+                    }
+                })
+
+                this.isActive = false
+                this.isHorario = true;
+                this.fetchData(false)
+
+
+            }, (error) => {
+                this.isActive = false;
+                this.fetchData(false)
+
+                this.toastrService.danger(error,'Aditi Care');
+            });         
+
+            
+        }
+    }
+
     processa_valores(data){
 
         var retorno = null;
@@ -534,12 +649,19 @@ export class ConsultaPacienteComponent implements OnDestroy {
           return retorno;
     }
 
+    extrairHorarios(horarios: string[]): { data: string, horaInicio: string, horaFim: string } {
+        return {
+          data: horarios[0],
+          horaInicio: horarios[2],
+          horaFim: horarios[4]
+        };
+      }
+
     salvar(data) {
 
-        this.isSaving = true;
+     //   this.isSaving = true;
 
         this.fetchData(true)
-
 
         if(data.detalhesCliente==null){
             this.toastrService.warning('Por Favor Informe dos Os Detalhes do Cliente','Aditi Care!');
@@ -583,15 +705,57 @@ export class ConsultaPacienteComponent implements OnDestroy {
         }
     
         else{
+            
+            if(data.horarioSelected!==null && data.horarioSelected!== undefined && !this.agendado ){
 
-          
+
+                this.clinicId = localStorage.getItem('bway-entityId');
+       
+                const dataTemp = data.horarioSelected.split(" ");
+
+                let resultado = this.extrairHorarios(dataTemp);
+
+                var startTime = this.dadosHorario.horario.slice(0, 5)
+                var endTime = this.dadosHorario.horario.slice(8)
+                
+                let registerReagendamento = {
+                    doctorId: this.atendimento.doctorId,
+                    clinicId: this.clinicId,
+                    userId: this.atendimento.userId,
+                    childId: this.atendimento.idChild,
+                    dateService:this.formatarData(resultado.data),
+                    startTime: resultado.horaInicio.trim(),
+                    endTime: resultado.horaFim.trim(),
+                    healthPlanId: this.atendimento.planId,
+                    typePaymentId: 1,
+                    typeServiceId: this.atendimento.typeServiceId ?? 1,
+                    meetingUrl: this.dadosHorario.data === undefined ? resultado.data.concat(' - ', this.atendimento.userId, ' - ', resultado.horaInicio, ' - ', this.doctorId) : this.dadosHorario.data.concat(' - ', this.atendimento.userId, ' - ', resultado.horaInicio, ' - ', this.atendimento.doctorId),
+                    specialtyId:  this.atendimento.specialtyId ?? 1,
+                    paymentInCreation:false,
+                    isReturn:  false ,
+                    dontCheckAvailable: false,
+                    procedureId: this.atendimento.procedureId,
+                    customDuration: null,
+                }
+
+                this.service.salvarAgendamento(registerReagendamento, (response => {
+                    this.isActive = false;
+                    this.toastrService.success('Agendamento Realizado com Sucesso','Aditi Care!');   
+                    this.agendado = true;     
+                }), (error) => {
+                    this.isActive = false;
+                    this.toastrService.danger(error.message,'Aditi Care!');
+                    this.fetchData(false)
+                    return false;
+                });
+            }
 
         let register = {
             serviceId: this.atendimento.id,  // id da consulta da buscar-atendimento
             description: data.detalhesCliente,
             prescription: data.prescricaoMedica,  //Prescrição campo novo que vira da tela detalhes
             urlPrescription: data.urlReceita,
-            timeReturn: this.processa_valores(data.timeReturn),
+            timeReturn: this.processa_valores(data.tempoRetorno),
             height:this.processa_valores(data.altura),
             weight: this.processa_valores(data.peso),
             headSize:this.processa_valores(data.circCabeca),
@@ -605,7 +769,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
             urlMedicalOrder: data.urlExame,
             descriptionMedicalOrder: data.pedidoExame,
         }
-       
+
 
         this.isActive = true;
         this.service.salvarDetalheAtendimento(register, (response => {
@@ -620,12 +784,35 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.voltar();
         }), (error) => {
             this.isActive = false;
-            this.toastrService.danger(error.message);
+            this.toastrService.danger(error.message,'Aditi Care!');
             this.isSaving = false;
             this.fetchData(false)
         });
     }
+    
     }
+
+    formatarData(dataString) {
+        // Verifica se a string está no formato correto (dia/mês/ano)
+        const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+        const match = dataString.match(regex);
+    
+        if (!match) {
+            // A string não está no formato esperado
+            //("Formato de data inválido.");
+            return dataString; // Retorna a mesma string
+        }
+    
+        // Extrai os valores do dia, mês e ano
+        const dia = match[1];
+        const mes = match[2].padStart(2, "0"); // Garante que o mês tenha 2 dígitos
+        const ano = match[3];
+    
+        // Monta a nova string no formato desejado
+        const novaData = `${ano}-${mes}-${dia}`;
+        return novaData;
+    }
+    
 
     UltimaConsulta(){
 

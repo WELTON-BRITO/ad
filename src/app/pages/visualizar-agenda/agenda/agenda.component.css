@@ -86,8 +86,6 @@ b { /* used for event dates/times */
   }
 }
 
-
-
 /* Estilos específicos para telas com largura máxima de 768px (dispositivos móveis) */
 @media screen and (max-width: 768px) {
   .button {
@@ -154,10 +152,3 @@ b { /* used for event dates/times */
   margin-right: 10px;
   border: 1px solid #000;
 }
-/* Defina as cores para cada status */
-.cor-box.aguardando-aprovacao { background-color: coral; }
-.cor-box.aguardando-pagamento { background-color: red; }
-.cor-box.consulta-confirmada { background-color: green; }
-.cor-box.consulta-finalizada { background-color: blue; }
-.cor-box.outros-status { background-color: rgb(249, 255, 249); }
-
