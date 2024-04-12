@@ -43,6 +43,8 @@ export class BuscarAtendimentoComponent implements OnInit {
   FinalMonth: any;
   FinalDay: any;
   public isLoader: boolean = false;
+  public avatar = "assets/images/avatar.png";
+
 
   settings = {
     //actions: false,
@@ -286,7 +288,8 @@ export class BuscarAtendimentoComponent implements OnInit {
                   clinicaId: clinica,
                   statusId: this.DefaultStatus,
                   medicoId: data.doctor.id,
-                  isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado' 
+                  isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
+                  avatar: data.avatarChild ?? data.avatar ?? this.avatar
                 }
                 
               }

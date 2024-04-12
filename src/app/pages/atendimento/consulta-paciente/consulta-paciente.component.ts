@@ -53,6 +53,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
     public clinicId = null;
     public doctorId = null;
     public agendado = false;
+    public avatar = "assets/images/avatar.png";
+
 
 
 
@@ -81,7 +83,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
         planId: null,
         procedureId: null,
         specialtyId: null,
-        typeServiceId: null
+        typeServiceId: null,
+        avatar: null,
             };
     public anexoAtestado = null;
     public anexoReceita = null;
@@ -152,7 +155,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
     }else if(data[0].tela =='atendimento' && data[0].rowData.userName!=null){
 
-        const dataNascimento = data[0].rowData.childBirthDate ?? data[0].rowData.childBirthDate ?? '20240101'; // to-do incluir campo de aniversario do usuario no retorno
+        const dataNascimento = data[0].rowData.childBirthDate ?? data[0].rowData.BirthDate ?? '2024-01-01'; // to-do incluir campo de aniversario do usuario no retorno
         const idadePessoa = this.calcularIdade(dataNascimento) ?? null;
         let allData = {
           medico: data[0].rowData.doctorName ?? null,
@@ -184,6 +187,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
           procedureId: data[0].rowData.procedureId,
           specialtyId: data[0].rowData.specialtyId,
           typeServiceId: data[0].rowData.typeServiceId,
+          avatar: data[0].rowData.avatarChild ?? data[0].rowData.avatar ?? this.avatar
+
       };
            
       this.atendimento = allData;
@@ -735,8 +740,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
                     isReturn:  false ,
                     dontCheckAvailable: false,
                     procedureId: this.atendimento.procedureId,
-                    customDuration: null,
-                }
+                    customDuration: null                }
 
                 this.service.salvarAgendamento(registerReagendamento, (response => {
                     this.isActive = false;
@@ -861,11 +865,11 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.formConsultaPaciente.controls['peso'].setValue(response?.weight ?? null);
             this.formConsultaPaciente.controls['circCabeca'].setValue(response?.headSize ?? null);
             this.formConsultaPaciente.controls['circAbdomen'].setValue(response?.abdomenSize ?? null);
-            this.formConsultaPaciente.controls['urlReceita'].setValue(response?.urlPrescription ?? null);
-            this.formConsultaPaciente.controls['urlAtestado'].setValue(response?.urlRemovalReport ?? null);
+         //   this.formConsultaPaciente.controls['urlReceita'].setValue(response?.urlPrescription ?? null);
+         //   this.formConsultaPaciente.controls['urlAtestado'].setValue(response?.urlRemovalReport ?? null);
             this.formConsultaPaciente.controls['prescricaoMedica'].setValue(response?.prescription ?? null);
             this.formConsultaPaciente.controls['pedidoExame'].setValue(response?.descriptionMedicalOrder ?? null);
-            this.formConsultaPaciente.controls['urlExame'].setValue(response?.urlMedicalOrder ?? null);
+         //   this.formConsultaPaciente.controls['urlExame'].setValue(response?.urlMedicalOrder ?? null);
 
             this.fetchData(false)
 

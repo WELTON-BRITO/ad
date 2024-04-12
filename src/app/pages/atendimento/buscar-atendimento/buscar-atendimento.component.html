@@ -180,11 +180,15 @@
                     'card-confirmada': row.status === '03 - Consulta Confirmada'
                   }">
                     <div class="card-body">
+                      <!-- Div para o avatar à direita -->
+                      <div class="text-right">
+                        <img src="{{row?.avatar || this.avatar}}" style="height: 55px; border-radius: 50%; float: right;">
+                      </div>
+                      <!-- Conteúdo do texto -->
                       <h6 class="card-title">Data: {{ row?.data }}</h6>
                       <h6 class="card-title">Horário: {{ row?.horario }}</h6>
                       <p class="card-text">Paciente: {{ row?.nomeDependente || row?.nomeResponsavel }}</p>
-                      <p class="card-text">Responsável: {{
-                        row?.nomeResponsavel }}</p>
+                      <p class="card-text">Responsável: {{ row?.nomeResponsavel }}</p>
                       <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
                       <p class="card-text">Situação: {{ row?.status }}</p>
                       <p class="card-text">
@@ -193,7 +197,8 @@
                           {{ row?.isConfirmed }}
                         </span>
                       </p>
-                 <div class="text-center">
+                      <!-- Botões -->
+                      <div class="text-center">
                         <button style="margin: 0 15px;"  class="btn btn-primary mb-2" (click)="detalhes(row)"
                           *ngIf="row.nomeResponsavel !== 'Bloqueado'" title="Detalhes do Atendimento">
                           <i class="fa fa-info-circle"></i>
@@ -215,13 +220,11 @@
                         *ngIf="row.isConfirmed ==='Não Confirmado'  && row.status !== '04 - Consulta Finalizada' && row.nomeResponsavel !== 'Bloqueado'" title="Confirmar Horário">
                         <i class="fa fa-clock"></i>
                       </button>
-                      </div>
-
+                                          </div>
                     </div>
                   </div>
                 </div>
               </div>
-              
 
               <h5>Horários Disponíveis:</h5>
 

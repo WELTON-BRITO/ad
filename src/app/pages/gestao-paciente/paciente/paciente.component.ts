@@ -116,8 +116,9 @@ export class PacienteComponent implements OnInit {
       this.service.buscaPaciente(params, (response) => {
         allData = response
         .map(data => ({
-          avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatar,
-          name: data.name,
+         // avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatarChild ||  data.avatar ,
+         avatar: `data:application/pdf;base64,${data.avatarChild ?? data.avatar ?? this.avatar}`,
+         name: data.name,
           nameChild: data.nameChild,
           idChild: data.idChild,
           cellPhone: data.cellPhone,

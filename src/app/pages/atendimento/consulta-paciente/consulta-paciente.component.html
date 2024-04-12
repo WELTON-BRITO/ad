@@ -6,25 +6,28 @@
             <div class="dialog-body">
                 <nb-card>
                     <nb-card-body>
-                        <div class="form-row align-items-center">
+                        <div class="form-row">
                             <nb-card-header class="aditi-header">
-                                <div class="back-link">
-                                    <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
-                                        <nb-icon icon="arrow-back" title="voltar"></nb-icon>
-                                    </a>
-                                </div>
+                              <div class="back-link">
+                                <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+                                  <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+                                </a>
+                              </div>
                             </nb-card-header>
                             <div class="form-group col-md-12 input-medica">
-                                <div class="d-flex justify-content-between align-items-center"> <!-- Utiliza flexbox para alinhamento -->
-                                  <h5>Consulta do Paciente</h5> <!-- Remove a classe pt-3 para evitar o espaçamento extra -->
-                                  <button type="button" class="btn" (click)="toggleCollapseheader('dadosPaciente')" title="Colapsar/Expandir">
-                                    <i class="fa fa-angle-down"></i>
-                                  </button>
-                                </div>
+                              <div class="d-flex align-items-center"> <!-- Removida a classe 'justify-content-between' -->
+                                <h5>Consulta do Paciente</h5> <!-- Texto alinhado à esquerda -->
+                                <!-- Avatar alinhado à direita com 'ml-auto' -->
+                                <img src="{{atendimento?.avatar || this.avatar}}" class="ml-auto" style="height: 55px; width: 55px; border-radius: 50%;">
+                                <button type="button" class="btn" (click)="toggleCollapseheader('dadosPaciente')" title="Colapsar/Expandir">
+                                  <i class="fa fa-angle-down"></i>
+                                </button>
                               </div>
-                              
-                        </div>
+                            </div>
+                          </div>
+                          
                         <div class="form-row align-items-center collapse-content" id="dadosPaciente">
+
                             <div class="form-group col-md-6 ">
                                 <div class="form-group ">
                                     <div class="form-row">
