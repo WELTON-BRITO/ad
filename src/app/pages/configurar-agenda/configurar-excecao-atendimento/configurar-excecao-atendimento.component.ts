@@ -75,8 +75,19 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
     this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
 
-    this.verificaMedico(this.listMedico[0].id);
-    //this.params = this.params.append('clinicId', this.listClinica[0].id)
+    if (this.listMedico && this.listMedico.length > 0) {
+      this.verificaMedico(this.listMedico[0].id);
+    } else {
+      console.error('A lista de médicos está vazia ou não definida!');
+     this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
+    
+    {
+            setTimeout(() => {
+                this.router.navigate(['/login']);
+            }, 3000); // 3000 milissegundos = 3 segundos
+        }
+    }
+        //this.params = this.params.append('clinicId', this.listClinica[0].id)
     this.pesquisaClinica(this.listClinica[0].id)
     this.formExcecaoAtendimento = this.formBuilder.group({
       dataExcecao: [null],

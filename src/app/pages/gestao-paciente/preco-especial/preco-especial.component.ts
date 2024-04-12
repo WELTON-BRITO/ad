@@ -51,6 +51,19 @@ export class PrecoEspecialComponent implements OnDestroy {
     this.atendimento.name = this.history.name;
     this.atendimento.id = this.history.id;
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+
+    if (this.listMedico && this.listMedico.length > 0) {
+    } else {
+      console.error('A lista de médicos está vazia ou não definida!');
+     this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
+    
+    {
+            setTimeout(() => {
+                this.router.navigate(['/login']);
+            }, 3000); // 3000 milissegundos = 3 segundos
+        }
+    }
+
     this.clinic = localStorage.getItem('bway-domain');
 
     this.formPrecoEspecial = this.formBuilder.group({

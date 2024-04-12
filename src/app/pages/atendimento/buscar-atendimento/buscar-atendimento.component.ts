@@ -120,6 +120,18 @@ export class BuscarAtendimentoComponent implements OnInit {
     
     this.setupCollapse();
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+
+    if (this.listMedico && this.listMedico.length > 0) {
+    } else {
+      console.error('A lista de médicos está vazia ou não definida!');
+     this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
+    
+    {
+            setTimeout(() => {
+                this.router.navigate(['/login']);
+            }, 3000); // 3000 milissegundos = 3 segundos
+        }
+    }
     localStorage.removeItem('detalhesData'); //garante que o cache foi apagado das telas posteriores
     localStorage.removeItem('draftAtendimento');//garante que o cache foi apagado das telas posteriores
 
@@ -289,7 +301,7 @@ export class BuscarAtendimentoComponent implements OnInit {
                   statusId: this.DefaultStatus,
                   medicoId: data.doctor.id,
                   isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
-                  avatar: data.avatarChild ?? data.avatar ?? this.avatar
+                  avatar: this.getAvatar(data)
                 }
                 
               }
@@ -329,14 +341,15 @@ export class BuscarAtendimentoComponent implements OnInit {
                 status: data.status,
                 atendimento: data,
                 modalidade: data.typeServiceName + ' - ' + (data?.procedureName ?? ''),
-            //    email: data.user.cellPhone,
-             //   telefone: data.user.emailUser,
+                email: data.userPhone,
+                telefone: data.userEmail,
                 dataInicio: data.dataInicio,
                 dataFim: data.dataInicio,
                 clinicaId: data.clinicId,
                 statusId: this.DefaultStatus,
                 medicoId: data.doctorId,
-                isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado' 
+                isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
+                avatar: this.getAvatar(data)
               }));
 
             if (allData.length === 0) {
@@ -380,24 +393,43 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.pesquisarConsulta(data, checked)
   }
 
+  getAvatar(data) {
+    if (data.childAvatar || data.userAvatar) {
+      return `data:image/png;base64,${data.childAvatar ?? data.userAvatar}`;
+    } else {
+      // Retorna o caminho para a imagem padrão
+      return this.avatar
+    }
+  }
+  
+
   confirmarHorario(data){
    
     this.isActive = true
+
+    this.fetchData(true)
+
  
     this.service.confirmarConsulta(data.id,'true', (response) => {
       this.isActive = false
       this.toastrService.success('Atendimento Confirmado com Sucesso', 'Aditi Care!');
       data.isConfirmed = 'Horário Confirmado';
+      this.fetchData(false)
+
     }, (message) => {
       if(message.code ===200){
       this.toastrService.success('Atendimento Confirmado com Sucesso', 'Aditi Care!');
       data.isConfirmed = 'Horário Confirmado';
+      this.fetchData(false)
+
 
     }
 else{
   this.toastrService.danger('Ocorreu um Erro ao Confirmar o Horário, tente novamente mais tarde', 'Aditi Care!');
 }
       this.isActive = false;
+      this.fetchData(false)
+
     });
   }
 
@@ -462,12 +494,18 @@ else{
       'reasonCancellation': 'Botão Cancelar'
     }
 
+    this.fetchData(true)
+
     this.service.cancelarAtendimento(register, (response) => {
       this.isActive = false
       this.toastrService.success('Atendimento Cancelado com Sucesso', 'Aditi Care!');
+      this.fetchData(false)
+
     }, (message) => {
       this.isActive = false;
       this.toastrService.danger(message);
+      this.fetchData(false)
+
     });
   }
 

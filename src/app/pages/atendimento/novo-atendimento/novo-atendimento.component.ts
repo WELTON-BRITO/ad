@@ -145,7 +145,20 @@ export class NovoAtendimentoComponent {
 
         let data = history.state
         this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
-        this.verificaMedico(this.listMedico[0].id);
+                
+        if (this.listMedico && this.listMedico.length > 0) {
+            this.verificaMedico(this.listMedico[0].id);
+          } else {
+            console.error('A lista de médicos está vazia ou não definida!');
+           this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
+          
+          {
+                  setTimeout(() => {
+                      this.router.navigate(['/login']);
+                  }, 3000); // 3000 milissegundos = 3 segundos
+              }
+          }
+
         this.pagamento();
         this.formNovoAtendimento = this.formBuilder.group({
             medico: [this.listMedico[0]],

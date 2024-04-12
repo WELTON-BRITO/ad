@@ -54,6 +54,19 @@ export class FilaEsperaComponent {
     ngOnInit() {
 
         this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+
+        if (this.listMedico && this.listMedico.length > 0) {
+          } else {
+            console.error('A lista de médicos está vazia ou não definida!');
+           this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
+          
+          {
+                  setTimeout(() => {
+                      this.router.navigate(['/login']);
+                  }, 3000); // 3000 milissegundos = 3 segundos
+              }
+          }
+
         //this.verificaMedico(this.listMedico[0].id);
         this.buscarEspecialidade();
 

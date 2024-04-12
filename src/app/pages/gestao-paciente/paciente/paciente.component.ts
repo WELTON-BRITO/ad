@@ -20,6 +20,7 @@ export class PacienteComponent implements OnInit {
   public listMedico = null;
   public isActive = false;
   public avatar = "assets/images/avatar.png";
+  public isLoader: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -30,6 +31,18 @@ export class PacienteComponent implements OnInit {
   ngOnInit() {
 
     this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+
+    if (this.listMedico && this.listMedico.length > 0) {
+    } else {
+      console.error('A lista de médicos está vazia ou não definida!');
+     this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
+    
+    {
+            setTimeout(() => {
+                this.router.navigate(['/login']);
+            }, 3000); // 3000 milissegundos = 3 segundos
+        }
+    }
 
     this.formPaciente = this.formBuilder.group({
       cpf: [null],
@@ -56,6 +69,15 @@ export class PacienteComponent implements OnInit {
 
   }
 
+  getAvatar(data) {
+    if (data.avatarChild || data.avatar) {
+      return `data:image/png;base64,${data.avatarChild ?? data.avatar}`;
+    } else {
+      // Retorna o caminho para a imagem padrão
+      return this.avatar
+    }
+  }
+  
   ValidarUsuario(data,form){
 
     if(form.cpf == null && data === 'N'){
@@ -87,6 +109,8 @@ export class PacienteComponent implements OnInit {
 
   pesquisaGeral(data,checked) {
 
+    this.fetchData(true)
+
     if(localStorage.getItem('meuPaciente') ===null  || checked==true || localStorage.getItem('meuPaciente') ===''){
 
       localStorage.removeItem('meuPaciente'); //garante que o cache foi apagado das telas posteriores
@@ -111,13 +135,13 @@ export class PacienteComponent implements OnInit {
 
     if ((data.cpf != null) || (data.medico != 'null')) {
 
+
       this.isActive = true;
       let allData = []; // Crie uma variável vazia para armazenar os dados
       this.service.buscaPaciente(params, (response) => {
         allData = response
         .map(data => ({
-         // avatar: data.avatar == null || data.avatar == "" ? this.avatar : 'data:application/pdf;base64,' + data.avatarChild ||  data.avatar ,
-         avatar: `data:application/pdf;base64,${data.avatarChild ?? data.avatar ?? this.avatar}`,
+         avatar: this.getAvatar(data),
          name: data.name,
           nameChild: data.nameChild,
           idChild: data.idChild,
@@ -132,25 +156,32 @@ export class PacienteComponent implements OnInit {
           birthDateChild:  data.birthDateChild,
           birthDate:  data.birthDate,
                         }));
+         this.fetchData(false)
 
   if (allData.length === 0) {
       this.toastrService.warning("Não Foram Encontradas Usuários", 'Aditi Care');
       this.saveData('meuPaciente', null);
       this.isActive = false;
       this.rowData = null;
+
   } else {
       this.saveData('meuPaciente', allData);
       this.isActive = false;
       this.rowData = allData;
+
   }
 
       }, (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
+        this.fetchData(false)
+
       });
 
     } else {
       this.toastrService.warning('O campos médico ou CPF são obrigatórios!!!');
+      this.fetchData(false)
+
     }
 
   }else {
@@ -164,6 +195,8 @@ export class PacienteComponent implements OnInit {
     // Preencha os cards com os dados recuperados
     this.rowData = parsedData;
     }
+    this.fetchData(false)
+
     }
 
   }
@@ -207,4 +240,17 @@ export class PacienteComponent implements OnInit {
   buscaHistorico(data) {
     this.router.navigateByUrl('/pages/gestao-paciente/historico', { state: data });
   }
+
+  fetchData(data) {
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
+
 }

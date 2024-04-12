@@ -1,3 +1,4 @@
+<div class="loader" *ngIf="isLoader"></div>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12 col-xs-12">
@@ -10,7 +11,7 @@
               </div>
               <div class="form-row align-items-center">
                 <div class="form-group col-md-3">
-                  <label for="nome">Escolha o médico*</label>
+                  <label for="nome">Escolha o Médico*</label>
                   <select class="form-control" formControlName="medico">
                     <option value="null" selected>SELECIONE</option>
                     <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
@@ -59,12 +60,12 @@
                         <div class="row">
                             <div class="col-md-4" *ngFor="let row of rowData">
                                 <nb-card>
-                                    <nb-card-body>
+                                    <nb-card-body class="card">
                                         <div class="text-center">
                                             <img src="{{row.avatar}}" style="height: 55px; border-radius: 50%;">
                                         </div>
                                         <p class="card-text">Paciente: {{ row?.nameChild || row.name }}</p>
-                                        <p class="card-text" *ngIf="row?.nameChild && row?.name">Nome Responsável: {{ row?.name }}</p>
+                                        <p class="card-text">Nome Responsável: {{ row?.name }}</p>
                                         <p class="card-text">Telefone: {{ row.cellPhone }}</p>
                                         <p class="card-text">Email: {{ row.email  }}</p>
                                         <p class="card-text">CPF: {{ row.federalId  }}</p>
