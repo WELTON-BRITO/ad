@@ -57,7 +57,7 @@ export class AgendaComponent implements OnInit {
     //height: 1000,
     themeSystem: 'bootstrap',
     slotMinTime: '06:00',
-    slotMaxTime: '23:00',
+    slotMaxTime: '23:59',
     timeZone: 'local', // Fuso horário local
     slotLabelFormat: { hour: 'numeric', minute: '2-digit', omitZeroMinute: false },
     plugins: [
@@ -250,7 +250,7 @@ export class AgendaComponent implements OnInit {
     }
   }
 
-  async fetchData(data) {
+  fetchData(data) {
     if (data) {
       // Mostra o loader
       this.isLoader = true

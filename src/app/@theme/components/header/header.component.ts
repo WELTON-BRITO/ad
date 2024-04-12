@@ -25,25 +25,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   themes = [
     {
       value: 'default',
-      name: 'Light',
+      name: 'Tema - Claro',
     },
     {
       value: 'dark',
-      name: 'Dark',
+      name: 'Tema - Dark',
     },
     {
       value: 'cosmic',
-      name: 'Cosmic',
+      name: 'Tema - Cosmic',
     },
     {
       value: 'corporate',
-      name: 'Corporate',
+      name: 'Tema - Negócios',
     },
   ];
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Sair' } ];
+  userMenu = [ { title: 'Sair', } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,

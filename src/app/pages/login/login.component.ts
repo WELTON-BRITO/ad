@@ -207,7 +207,6 @@ BaseValidCNPJ(value) {
 
     this.fetchData(false)
 
-
     localStorage.clear();
     sessionStorage.clear();
     localStorage.setItem('Authorization', 'Bearer ' + result.token);
@@ -215,7 +214,7 @@ BaseValidCNPJ(value) {
     localStorage.setItem('bway-domain', result.domain);
     localStorage.setItem('bway-entityId', result.entityId);
     localStorage.setItem('bway-enterprise-name', result.name);
-    localStorage.setItem('bway-user', result.federalId);
+    localStorage.setItem('bway-user', this.formatCpfCnpj(result.federalId));
 
     if (result.domain == 'CLINIC') {
     

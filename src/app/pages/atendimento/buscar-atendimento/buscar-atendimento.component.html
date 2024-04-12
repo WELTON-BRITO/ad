@@ -7,18 +7,16 @@
           <nb-card-body>
             <form id=“form-buscar-atendimento” [formGroup]="formBuscarAtendimento">
               <div class="text-right">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#filtrosAtendimento" aria-expanded="false" aria-controls="filtrosAtendimento">
+                <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#filtrosAtendimento" aria-expanded="false" aria-controls="filtrosAtendimento">
                   <b class="fas fa-filter"></b> Exibir Filtros <span class="arrow">▾</span>
                 </button>
               </div>
               
-              
+              <div class="form-group">
+                <h5>Atendimentos</h5>
+              </div>
+
               <div class="col-md-12 col-xs-12">
-                <div class="form-row align-items-center">
-                  <div class="form-group col-md-4">
-                    <h5 class="ml-lg-n3">Agenda de Atendimento</h5>
-                  </div>
-                </div>
                 <div class="collapse" id="filtrosAtendimento">
 
                 <div class="form-row align-items-center">
@@ -109,7 +107,7 @@
                 <div class="text-right">
                   <button class="btn btn-primary mr-2 button"
                     (click)="buscarAtendimento(formBuscarAtendimento.value,true)">
-                    Pesquisar
+                    Buscar
                   </button>
                   <button class="btn btn-success ml-2 button" (click)="agendarAtendimento()">
                     Agendar
@@ -122,7 +120,7 @@
             </div>
 
             
-            <h5>Legenda Ícones:</h5>
+            <h5>Ícones:</h5>
             <div class="col-md-12 col-xs-12">
               <div class="row">
                 <div class="legend d-flex flex-wrap">
@@ -145,23 +143,22 @@
               </div>
             </div>
 
-            
-            <div class="legenda">
-              <h5>Legenda de Atendimentos:</h5>
-              <div class="legenda-container">
-                <div class="legenda-item">
+            <div class="legenda col-xs-12">
+              <h5>Atendimentos:</h5>
+              <div class="legenda-container row">
+                <div class="legenda-item col-md-3 col-xs-12">
                   <div class="cor-box card-pendente"></div>
                   <span>Pagamento Pendente</span>
                 </div>
-                <div class="legenda-item">
+                <div class="legenda-item col-md-3 col-xs-12">
                   <div class="cor-box card-bloqueado"></div>
                   <span>Horário Bloqueado</span>
                 </div>
-                <div class="legenda-item">
+                <div class="legenda-item col-md-3 col-xs-12">
                   <div class="cor-box card-confirmada"></div>
                   <span>Consulta Confirmada</span>
                 </div>
-                <div class="legenda-item">
+                <div class="legenda-item col-md-3 col-xs-12">
                   <div class="cor-box card-finalizado"></div>
                   <span>Consulta Finalizada</span>
                 </div>
@@ -169,6 +166,8 @@
             </div>
             
             
+            
+                        
               <h5>Horários Agendados:</h5>
 
               <div class="row">

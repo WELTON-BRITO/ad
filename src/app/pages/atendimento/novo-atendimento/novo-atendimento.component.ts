@@ -711,7 +711,7 @@ export class NovoAtendimentoComponent {
 
             }, (error) => {
                 this.isActive = false;
-                this.toastrService.danger(error);
+                this.toastrService.danger(error.error.message,'Aditi Care');
             });
         }
     }

@@ -6,7 +6,7 @@
         <nb-card>
           <nb-card-body>
             <div class="form-group col-md-4">
-              <h5 class="ml-lg-n3">Calendario de Atendimento</h5>
+              <h5 class="ml-lg-n3">Calendário </h5>
             </div>
             <form id=“form-buscar-atendimento” [formGroup]="formAgendaAtendimento">
               <div class="col-md-12 col-xs-12">
@@ -21,22 +21,11 @@
                         </option>
                       </select>
                     </div>
-                    <!--
-                    <div class="form-group col-md-2">
-                      <label for="dataInicio">Período Inicial*</label>
-                      <input class="form-control date" type="date" id="dataInicio" name="Data Início" [value]="TodayDate"
-                        maxlength="10" formControlName="dataInicio" />
-                    </div>
-                    <div class="form-group col-md-2">
-                      <label for="dataFim">Período Final*</label>
-                      <input class="form-control date" type="date" id="dataFim" name="Data Fim" [value]="FinalDate"
-                        maxlength="10" formControlName="dataFim" />
-                    </div>
-                    -->
-                    <div class="form-group col-md-4 ml-auto">
-                      <div class="text-right mb-3">
+
+                    <div class="form-group col-md-4">
+                      <div class="text-right">
                       <button class="btn btn-primary mr-2 button" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
-                        Pesquisar
+                        Buscar
                       </button>
                       <button class="btn btn-success mr-2 button" (click)="agendarAtendimento()">
                         Agendar

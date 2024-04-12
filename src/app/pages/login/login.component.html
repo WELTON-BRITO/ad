@@ -2,13 +2,13 @@
 <div class="loader" *ngIf="isLoader"></div>
 
 <div class="login-container">
-  <div class="login-form ">
+  <div class="login-form">
       <div class="logo-container">
-          <img src="assets/images/login_aditi.png" alt="User Icon" class="login-icon">
+          <img src="assets/images/login_aditi.png" alt="User Icon" class="login-icon fadeInDown">
       </div>
-      <h2>Informe Seu CPF / CNPJ e a Senha</h2>
-      <form class="login" method="post" name="login" id="login" [formGroup]="formLogin">
-        <input type="text" formControlName="login" id="login" class="login-input"
+      <h2>Informe Seu CPF / CNPJ e Senha</h2>
+      <form class="login fadeInDown login-input" method="post" name="login" id="loginForm" [formGroup]="formLogin">
+        <input type="text" formControlName="login" id="loginInput" class="login-input"
         placeholder="Informe seu CPF/CNPJ" maxlength="18" autocomplete="off"
         (blur)="formatCpfCnpj(formLogin.get('login').value)">
     
@@ -21,7 +21,7 @@
                   aria-hidden="true"></i>
               </button>
 
-              <button type="submit" class="fade_8S" name="login" id="login" (click)="login()">Entrar</button>
+              <button type="submit" class="fade_8S" name="login" id="loginButton" (click)="login()">Entrar</button>
             </form>
       <div class="login-links">
           <button class="fade_9S" (click)="recuperarSenha()">Resetar Senha</button>

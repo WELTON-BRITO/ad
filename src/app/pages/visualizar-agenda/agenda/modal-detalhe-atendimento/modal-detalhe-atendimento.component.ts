@@ -22,6 +22,7 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
   public formDetalheAtendimento = null;
   public detalheConsulta = null;
   public status = null;
+  public isLoader: boolean = false;
   public atendimento = {
     medico: null,
     paciente: null,
@@ -90,22 +91,40 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
 
   }
 
+  fetchData(data) {
+    if (data) {
+      // Mostra o loader
+      this.isLoader = true
+    } else {
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader = false
+      }, 2000);
+    }
+  }
+
   confirmarHorario(data){
-   
+
+    this.fetchData(true)
     this.isActive = true
- 
+
     this.service.confirmarConsulta(data.id,'true', (response) => {
       this.isActive = false
       this.toastrService.success('Atendimento Confirmado com Sucesso', 'Aditi Care!');
       data.isConfirmed = 'Horário Confirmado';
+      this.fetchData(false)
+
     }, (message) => {
       if(message.code ===200){
       this.toastrService.success('Atendimento Confirmado com Sucesso', 'Aditi Care!');
       data.isConfirmed = 'Horário Confirmado';
-
+      this.fetchData(false)
     }
 else{
+  
   this.toastrService.danger('Ocorreu um Erro ao Confirmar o Horário, tente novamente mais tarde', 'Aditi Care!');
+  this.fetchData(false)
+
 }
       this.isActive = false;
     });
@@ -135,13 +154,18 @@ else{
       'id': data.id,
       'reasonCancellation': 'Botão Cancelar'
     }
+    this.fetchData(true)
 
     this.service.cancelarAtendimento(register, (response) => {
       this.isActive = false
       this.toastrService.success('Atendimento Desbloqueado com Sucesso', 'Aditi Care!');
+      this.fetchData(false)
+
     }, (message) => {
       this.isActive = false;
       this.toastrService.danger(message);
+      this.fetchData(false)
+
     });
   }
 

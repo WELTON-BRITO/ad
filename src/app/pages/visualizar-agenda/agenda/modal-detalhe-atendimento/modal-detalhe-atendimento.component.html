@@ -1,3 +1,5 @@
+<div class="loader" *ngIf="isLoader"></div>
+
 <div #card>
   <nb-card>
     <nb-card-body>
@@ -73,25 +75,25 @@
                     <nb-icon class="action-icon" icon="wifi-outline"></nb-icon>
                     <span class="action-label">Iniciar Video Atendimento</span>
                   </nb-action>
-            
-                  <nb-action  *ngIf="atendimento.nomeResponsavel !== 'Bloqueado'"
+                
+                  <nb-action *ngIf="atendimento.nomeResponsavel !== 'Bloqueado'"
                              (click)="abrirConsulta()" title="Atualizar prontuário">
                     <nb-icon class="action-icon" icon="file-outline"></nb-icon>
                     <span class="action-label">Detalhes</span>
                   </nb-action>
-
-                  <nb-action  *ngIf="atendimento.isConfirmed ==='Horário Não Confirmado' && atendimento.nomeResponsavel !== 'Bloqueado'"
-                  (click)="confirmarHorario(atendimento)" title="Confirmar Atendimento">
+                
+                  <nb-action *ngIf="atendimento.isConfirmed === 'Horário Não Confirmado' && atendimento.nomeResponsavel !== 'Bloqueado'"
+                             (click)="confirmarHorario(atendimento)" title="Confirmar Atendimento">
                     <nb-icon class="action-icon" icon="clock-outline"></nb-icon>
                     <span class="action-label">Confirmar Atendimento</span>
                   </nb-action>
-
+                
                   <nb-action *ngIf="atendimento.nomeResponsavel === 'Bloqueado'" (click)="desbloquear(atendimento)" title="Confirmar Atendimento">
                     <nb-icon class="action-icon" icon="file-outline"></nb-icon>
                     <span class="action-label">Desbloquear</span>
                   </nb-action>
-                  
                 </nb-actions>
+                
               </nb-card-body>
             </nb-card>
             

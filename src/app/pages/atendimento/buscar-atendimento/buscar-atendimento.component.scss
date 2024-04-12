@@ -215,17 +215,20 @@ background-color: #07c28373;
   background-image: linear-gradient(to right, #54dfb1a9, #54dfb03b);
 }
 
+/* Ajuste a largura do contêiner conforme necessário */
 .legenda-container {
   display: flex;
-  flex-wrap: nowrap; /* Impede que os itens sejam quebrados em linhas múltiplas */
+  flex-wrap: wrap; /* Permite que os itens sejam quebrados em linhas múltiplas */
   align-items: center; /* Alinha verticalmente */
   gap: 10px; /* Espaço entre os itens da legenda */
 }
 
 .legenda-item {
+  flex: 1; /* Distribui o espaço disponível igualmente entre os itens */
   display: flex;
   align-items: center; /* Alinha verticalmente o texto e a caixa de cor */
 }
+
 
 .cor-box {
   width: 20px;

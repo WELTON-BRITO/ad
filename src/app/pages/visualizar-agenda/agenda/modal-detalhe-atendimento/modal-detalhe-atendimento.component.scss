@@ -26,6 +26,39 @@ input[type=button], input[type=submit], input[type=reset]  {
     height: 50;
   }
 
+  /* Estilize os ícones */
+.action-icon {
+  font-size: 24px; /* Tamanho do ícone */
+  color: #007bff; /* Cor do ícone (azul) */
+  transition: color 0.3s; /* Efeito de transição ao passar o mouse */
+}
+
+/* Efeito de hover nos ícones */
+.action-icon:hover {
+  color: #ff5500; /* Nova cor ao passar o mouse (laranja) */
+}
+
+
+  /* Estilos para o loader */
+/* Estilos para o loader */
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 16px solid rgb(114, 124, 245); /* Azul claro */
+  border-top: 16px solid rgb(57, 176, 218); /* Azul mais escuro */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  z-index: 9999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 .time_consulta{
     float:left;
