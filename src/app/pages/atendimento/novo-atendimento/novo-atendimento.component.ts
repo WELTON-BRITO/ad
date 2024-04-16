@@ -909,7 +909,7 @@ export class NovoAtendimentoComponent {
         dataHora.setMinutes(minutos);
 
         // Adicione 1 minuto
-        dataHora.setMinutes(dataHora.getMinutes() + 1);
+      // dataHora.setMinutes(dataHora.getMinutes() + 1); Retirado após correção do backend
 
         // Formate o resultado de volta para o formato "HH:mm"
         this.horaFormatada = `${dataHora.getHours().toString().padStart(2, '0')}:${dataHora.getMinutes().toString().padStart(2, '0')}`;

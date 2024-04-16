@@ -69,9 +69,11 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       assimSaude: [null],
       hpVida: [null],
       preventSenior: [null],
+      cemig: [null],
+      cassi: [null],
+
     })
     this.formParametrizarPlano.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true }); // use the id of the first medico
-
 
   }
   
@@ -98,6 +100,12 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       } else if (event == "8") {
         this.formParametrizarPlano.controls['hpVida'].setValue(event);
       }
+      else if (event == "10") {
+        this.formParametrizarPlano.controls['cemig'].setValue(event);
+      }
+      else if (event == "11") {
+        this.formParametrizarPlano.controls['cassi'].setValue(event);
+      }
 
     } else if (element.checked == false) {
       if (event == "1") {
@@ -119,6 +127,12 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       } else if (event == "8") {
         this.formParametrizarPlano.controls['hpVida'].setValue(null);
       }
+      else if (event == "10") {
+        this.formParametrizarPlano.controls['cemig'].setValue(null);
+      }
+      else if (event == "11") {
+        this.formParametrizarPlano.controls['cassi'].setValue(null);
+      }
 
       this.removerConvenio(event)
     }
@@ -135,7 +149,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
   salvar(data) {
 
     var checkbox_items = new Array(data.unimed, data.sulAmerica, data.norteDame, data.bradescoSaude,
-      data.amil, data.portoSeguro, data.assimSaude, data.hpVida, data.preventSenior);
+      data.amil, data.portoSeguro, data.assimSaude, data.hpVida, data.preventSenior, data.cemig, data.cassi);
 
     function retornaConvenio(value) {
       return value;
@@ -161,7 +175,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
 
     if ((data.amil != null) || (data.assimSaude != null) || (data.bradescoSaude != null) || (data.hpVida != null)
       || (data.norteDame != null) || (data.portoSeguro != null) || (data.preventSenior != null)
-      || (data.sulAmerica != null) || (data.unimed != null)) {
+      || (data.sulAmerica != null) || (data.unimed != null)|| (data.cemig != null)|| (data.cassi != null)) {
 
       let register = {
 
@@ -204,6 +218,8 @@ export class ParametrizarPlanoComponent implements OnDestroy {
         assimSaude: [null],
         hpVida: [null],
         preventSenior: [null],
+        cemig: [null],
+        cassi: [null],
       })
       this.plano = 'R'
     }
@@ -289,6 +305,20 @@ export class ParametrizarPlanoComponent implements OnDestroy {
         }
         ativarCheckbox(checkbox);
       }
+      var checkbox = document.querySelector("#cemig");
+      if (checkbox.id == 'cemig') {
+        function ativarCheckbox(el) {
+          el.checked = false;
+        }
+        ativarCheckbox(checkbox);
+      }
+      var checkbox = document.querySelector("#cassi");
+      if (checkbox.id == 'cassi') {
+        function ativarCheckbox(el) {
+          el.checked = false;
+        }
+        ativarCheckbox(checkbox);
+      }
 
       for (var i = 0; i < response.length; i++) {
 
@@ -364,6 +394,22 @@ export class ParametrizarPlanoComponent implements OnDestroy {
           ativarCheckbox(checkbox);
           this.formParametrizarPlano.controls['preventSenior'].setValue(response[i].id);
         }
+        if (response[i].id == "10") {
+          var checkbox = document.querySelector("#cemig");
+          function ativarCheckbox(el) {
+            el.checked = true;
+          }
+          ativarCheckbox(checkbox);
+          this.formParametrizarPlano.controls['cemig'].setValue(response[i].id);
+        }
+        if (response[i].id == "11") {
+          var checkbox = document.querySelector("#cassi");
+          function ativarCheckbox(el) {
+            el.checked = true;
+          }
+          ativarCheckbox(checkbox);
+          this.formParametrizarPlano.controls['cassi'].setValue(response[i].id);
+        }
 
       }
     }
@@ -389,6 +435,8 @@ export class ParametrizarPlanoComponent implements OnDestroy {
       assimSaude: [null],
       hpVida: [null],
       preventSenior: [null],
+      cemig: [null],
+      cassi: [null],
     })
 
     var checkbox = document.querySelector("#unimed");
@@ -449,6 +497,20 @@ export class ParametrizarPlanoComponent implements OnDestroy {
     }
     var checkbox = document.querySelector("#preventSenior");
     if (checkbox.id == 'preventSenior') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#cemig");
+    if (checkbox.id == 'cemig') {
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    var checkbox = document.querySelector("#cassi");
+    if (checkbox.id == 'cassi') {
       function ativarCheckbox(el) {
         el.checked = false;
       }
