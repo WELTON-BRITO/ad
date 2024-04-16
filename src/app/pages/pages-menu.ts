@@ -57,13 +57,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
     hidden: false,
     children: [
       {
-        title: 'Buscar Pacientes',
+        title: 'Consultar Pacientes',
         link: '/pages/gestao-paciente/paciente',
       },
     ]
   },
   {
-    title: 'Configurações de Atendimento',
+    title: 'Configurar Atendimentos',
     icon: 'settings-outline',
     link: '/pages/configurar-agenda',
     data: ['USER','DOCTOR','CLINIC'],
@@ -74,19 +74,19 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/configurar-agenda/configurar-dia-atendimento',
       },*/ 
       {
-        title: 'Configurar Horários',
+        title: 'Horários de Atendimento',
         link: '/pages/configurar-agenda/visualizar-dia-atendimento',
       },    
       {
-        title: 'Configurar Valores',
+        title: 'Valores dos Atendimentos',
         link: '/pages/configurar-agenda/parametrizar-consulta',
       },
       {
-        title: 'Configurar Planos de Saúde',
+        title: 'Planos de Saúde',
         link: '/pages/configurar-agenda/parametrizar-plano',
       },
       {
-        title: 'Configurar Exceção de Horários',
+        title: 'Exceção de Dias/Horários',
         link: '/pages/configurar-agenda/configurar-excecao-atendimento',
       }, 
      /* {
@@ -103,7 +103,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     hidden: true,
     children: [
       {
-        title: 'Médicos da Clínica',
+        title: 'Visualizar Médicos da Clínica',
         link: '/pages/configurar-clinica/list-medico',
       },
       {

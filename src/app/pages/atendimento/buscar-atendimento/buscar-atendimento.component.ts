@@ -237,6 +237,12 @@ export class BuscarAtendimentoComponent implements OnInit {
 
   }
 
+  AnteciparAtendimento(){
+
+    this.router.navigate(['/pages/atendimento/antecipar-atendimento']);
+
+  }
+
   buscarAtendimento(data, checked) {
 
     this.fetchData(true)

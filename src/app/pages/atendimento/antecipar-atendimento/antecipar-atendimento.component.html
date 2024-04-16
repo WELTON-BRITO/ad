@@ -1,0 +1,104 @@
+<div class="loader" *ngIf="isLoader"></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <div class="dialog-body">
+        <nb-card>
+          <nb-card-body>
+            <form id=“form-buscar-atendimento” [formGroup]="formBuscarAtendimento">
+              
+              <div class="form-group">
+                <h5>Fila de Prioridades de Reagendamentos</h5>
+              </div>
+
+              <div class="col-md-12 col-xs-12">
+                <div>
+
+                <div class="form-row align-items-center">
+                  <div class="form-group col-md-4 ">
+                    <div class="form-group">
+                      <label for="medico">Informe o Médico* </label>
+                      <select class="form-control" id="medico" formControlName="medico">
+                        <option value="{{ listMedico }}" selected>Selecione o Médico</option>
+                        <option *ngFor="let medico of listMedico" [value]="medico.id">
+                          <!-- use value instead of ngValue -->
+                          {{ medico.ID }} {{ medico.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <div class="div-clinica">
+                        <label for="clinica">Informe a Clínica*</label>
+                        <select class="form-control" formControlName="clinica">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let clinica of listClinica" value="{{ clinica.id }}">{{
+                            clinica.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <div class="text-right">
+                        <button class="btn btn-primary mr-2 button"
+                          (click)="buscarAntecipacoes(formBuscarAtendimento.value)">
+                          Buscar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+              <h5>Fila:</h5>
+
+              <div class="row">
+                <div class="col-md-4" *ngFor="let row of rowData">
+                  <div class="card mb-3" [ngClass]="{
+                    'card-pendente': row.status === '02 - Aguardando Pagamento',
+                    'card-bloqueado': row.nomeResponsavel === 'Bloqueado',
+                    'card-finalizado': row.status === '04 - Consulta Finalizada',
+                    'card-confirmada': row.status === '03 - Consulta Confirmada'
+                  }">
+                    <div class="card-body">
+                      <!-- Div para o avatar à direita -->
+                      <div class="text-right">
+                        <img src="{{row?.avatar || this.avatar}}" style="height: 55px; border-radius: 50%; float: right;">
+                      </div>
+                      <!-- Conteúdo do texto -->
+                      <h6 class="card-title">Data: {{ row?.data }}</h6>
+                      <h6 class="card-title">Horário: {{ row?.horario }}</h6>
+                      <p class="card-text">Paciente: {{ row?.nomeDependente || row?.nomeResponsavel }}</p>
+                      <p class="card-text">Responsável: {{ row?.nomeResponsavel }}</p>
+                      <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
+                      <p class="card-text">Situação: {{ row?.status }}</p>
+                      <p class="card-text">
+                        Consulta Confirmada:
+                        <span [style.font-weight]="row?.isConfirmed === 'Confirmado' ? 'bold' : 'bold'" [style.color]="row?.isConfirmed === 'Confirmado' ? 'green' : 'red'">
+                          {{ row?.isConfirmed }}
+                        </span>
+                      </p>
+                      <!-- Botões -->
+                      <div class="text-center">
+                        <button style="margin: 0 15px;"  class="btn btn-primary mb-2" (click)="editarConsulta(row)"
+                          title="Reagendar">
+                          <i class="fa fa-info-circle"></i>
+                        </button>
+
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

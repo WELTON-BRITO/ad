@@ -18,8 +18,7 @@ export class reagendarAtendimentoComponent {
     public isActive = false;
     public specialtyId = null;
     public listTipoEspecialidade = null;
-
-  
+    public isLoader: boolean = false;
     public doctorId = null;
     public clinicId = null;
     public isConfAtendimento = false;
@@ -51,7 +50,8 @@ export class reagendarAtendimentoComponent {
                       this.router.navigate(['/login']);
                   }, 3000); // 3000 milissegundos = 3 segundos
               }
-          }        this.verificaEspecialidade(this.doctorId);
+          }        
+          this.verificaEspecialidade(this.doctorId);
         this.formNovoAtendimento = this.formBuilder.group({
             medico: [this.listMedico[0]],
             dataAtendimento: null,
@@ -76,6 +76,8 @@ export class reagendarAtendimentoComponent {
 
     }
     salvar(data) {
+        this.fetchData(true)
+
         this.clinicId = localStorage.getItem('bway-entityId');
 
         let register = {
@@ -88,12 +90,16 @@ export class reagendarAtendimentoComponent {
 
         this.service.updateTimeAppointments(data.idAppointment,register, (response => {
             this.isActive = false;
+            this.fetchData(false)
+
             this.toastrService.success('Realizado Reagendamento Com Sucesso','Aditi Care!');
             this.limpaForm();
             this.previousPage();
         }), (error) => {
             this.isActive = false;
-            this.toastrService.danger(error.error.message);
+            this.toastrService.danger(error.error.message,'Aditi Care');
+            this.fetchData(false)
+
         });
         
     }
@@ -125,33 +131,54 @@ export class reagendarAtendimentoComponent {
 
     verificaEspecialidade(data) {
         
+        this.fetchData(true)
 
         this.service.verificaEspecialidade(data, null, (response => {
 
             this.listTipoEspecialidade = response
-
+            this.fetchData(false)
 
         }), (error) => {
             this.isActive = false;
             this.toastrService.danger(error.error.message);
+            this.fetchData(false)
+
         });
 
+    }
+
+    fetchData(data) {
+        if(data){
+        // Mostra o loader
+        this.isLoader =true
+        }else{
+          setTimeout(() => {
+            // Oculta o loader após o atraso
+            this.isLoader =false
+        }, 2000);
+    }
     }
       
     pesquisarHorario(data) {
         this.isConfAtendimento = false;
-        
+        this.fetchData(true)
 
         if (data.dataAtendimento == null ) {
-            this.toastrService.warning('Por favor Informa a Data Desejada!');
+            this.toastrService.warning('Por favor Informa a Data Desejada!','Aditi Care');
+            this.fetchData(false)
+            return false
         } 
         else if(data.horarioInicial == null || data.horarioFinal == null ){
 
-            this.toastrService.warning('Por favor Informa o Horário do Bloqueio Desejado!');
+            this.toastrService.warning('Por favor Informa o Horário do Bloqueio Desejado!','Aditi Care');
+            this.fetchData(false)
+            return false
 
         } else if(data.tipoEspecialidade == null ){
 
-            this.toastrService.warning('Por favor Informe o tipo de Especialidade!');
+            this.toastrService.warning('Por favor Informe o tipo de Especialidade!','Aditi Care');
+            this.fetchData(false)
+            return false
         }
           else {
 
@@ -165,18 +192,22 @@ export class reagendarAtendimentoComponent {
             this.service.timeAvailable(params, (response) => {
                 this.isConfAtendimento = false;
                 this.isActive = false
+                this.fetchData(false)
                 if(response.value ==true){
                     this.isConfAtendimento = true;
-                    this.toastrService.success(response.message);
+                    this.toastrService.success(response.message,'Aditi Care');
 
                     // this.formNovoAtendimento.controls['horarioSelected'].setValue((data.dataInicio + " - " +this.dadosHorario.horaInicio + " - " + this.dadosHorario.horaFim ));
                 }
                 else{
                     this.isConfAtendimento = false;
-                  this.toastrService.warning(response.message);
+                  this.toastrService.warning(response.message,'Aditi Care');
+                  this.fetchData(false)
                 }
             }, (error) => {
-                this.toastrService.danger(error.message);
+                this.toastrService.danger(error.message,'Aditi Care');
+                this.fetchData(false)
+
             });
 
         }

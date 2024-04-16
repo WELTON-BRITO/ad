@@ -63,9 +63,7 @@ export class NovoAtendimentoComponent {
     public optDependente: boolean = false;
     public isLoader: boolean = false;
     public horaFormatada= null;
-
-
-
+    public antecipada: boolean = false;
 
     public tipoCardEncaixe: any[] = [{
         id: '',
@@ -182,6 +180,7 @@ export class NovoAtendimentoComponent {
             tempoAtendimento: null,
             horarioSelected: null,
             optDependente: null,
+            optRetorno: null,
           });
           
         this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
@@ -205,21 +204,26 @@ export class NovoAtendimentoComponent {
             this.isConfAtendimento = true;   
             this.encaixe=true;   
             this.AtendimentoDireto=false; 
-
     }
 
     }
 
     pagamento() {
+        this.fetchData(true)
+
         this.isActive = true
         this.service.buscaPagamentos(null, (response) => {
 
             this.listPagto = response
             this.isActive = false
+            this.fetchData(false)
+
 
         }, (error) => {
             this.isActive = false;
             this.toastrService.danger(error.error.message);
+            this.fetchData(false)
+
         });
 
     }
@@ -299,15 +303,19 @@ export class NovoAtendimentoComponent {
                 }
 
                 this.isActive = false;
+                this.fetchData(false)
+
             }, (error) => {
                 this.isActive = false;
                 this.toastrService.danger(error.error.message);
+                this.fetchData(false)
             });
 
         } else {
             this.toastrService.danger('O CPF deve ser Informado','Aditi Care');
-        }
+            this.fetchData(false)
 
+        }
 
     }
 
@@ -328,6 +336,8 @@ export class NovoAtendimentoComponent {
             tipoEspecialidade: [null],
             telefoneResponsavel:null,
             emailResponsavel:null,
+            optRetorno:null,
+            optAntecipada: null,
         })
 
     }
@@ -380,8 +390,6 @@ export class NovoAtendimentoComponent {
         return novaData;
     }
     
-    
-
     qdadeCaracteres() {
 
         let inpuBox = document.querySelector(".input-box"),
@@ -400,6 +408,8 @@ export class NovoAtendimentoComponent {
     }
 
     pesquisaPaciente(data) {
+
+        this.fetchData(true)
 
         if (data.cpf != null) {
 
@@ -425,14 +435,17 @@ export class NovoAtendimentoComponent {
                     this.buscaDependente(this.userId)
                     this.isConvenio =false;}
 
-               
             }, (error) => {
                 this.isActive = false;
                 this.toastrService.danger(error.message);
+                this.fetchData(false)
+
             });
 
         } else {
             this.toastrService.danger('O campo CPF deve ser Preenchido','Aditi Care');
+            this.fetchData(false)
+
         }
 
     }
@@ -481,6 +494,12 @@ export class NovoAtendimentoComponent {
 
         if (this.specialtyId == null) {
             this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
+            this.bloqueioSave = false;
+            return false
+        }
+
+        if (this.antecipada == null) {
+            this.toastrService.warning('Deve ser Informado se Deseja Antecipar a Consulta','Aditi Care');
             this.bloqueioSave = false;
             return false
         }
@@ -551,6 +570,7 @@ export class NovoAtendimentoComponent {
             dontCheckAvailable: this.encaixe ?? true,
             procedureId: this.tipoProcedimento,
             customDuration: data.tempoAtendimento,
+            anticipateService: this.antecipada ?? false,
         }
 
         this.isActive = true;
@@ -577,7 +597,6 @@ export class NovoAtendimentoComponent {
                 this.bloqueioSave = false;
             }, 3000); // 3000 milissegundos = 3 segundos
         }
-
     }
 
     
@@ -787,6 +806,20 @@ export class NovoAtendimentoComponent {
             document.getElementById('radioSim').removeAttribute('checked');
             this.formNovoAtendimento.controls['consPagto'].setValue(null);
             this.retorno = false
+        }
+    }
+
+    consultaAntecipada(data) {
+
+        if (data === 'S') {
+           // document.getElementById('radioSim').setAttribute('checked', 'true');
+         //   document.getElementById('radioNao').setAttribute('disabled', 'true');
+            this.antecipada = true
+            this.bloqueioSave=false;
+        } else {
+         //   document.getElementById('radioNao').removeAttribute('disabled');
+         //   document.getElementById('radioSim').removeAttribute('checked');
+            this.antecipada = false
         }
     }
 

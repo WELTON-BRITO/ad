@@ -274,6 +274,12 @@ export class AgendaComponent implements OnInit {
     }
   }
 
+  AnteciparAtendimento(){
+
+    this.router.navigate(['/pages/atendimento/antecipar-atendimento']);
+
+  }
+
   buscaId(data) {
     this.medicoId = data.medico
   }

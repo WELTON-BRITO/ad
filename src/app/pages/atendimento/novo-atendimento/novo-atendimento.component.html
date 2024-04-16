@@ -269,6 +269,25 @@
                                         <div class="form-row align-items-center">
                                             <div class="col-md-3">
                                                 <div class="form-group">
+                                                    <label class="consultaAntecipada">Paciente Deseja Antecipar Data?</label>
+                                                    <div class="p-1 row">
+                                                        <label class="radio-inline pl-2 pl-3">
+                                                            <input class="mat-button" type="radio" id="radioAntecipada"
+                                                                name="optAntecipada" value="S"
+                                                                (click)="consultaAntecipada($event.target.value)" />
+                                                            Sim</label>
+                                                        <label class="radio-inline pl-2">
+                                                            <input class="mat-button" type="radio" id="radioAntecipada"
+                                                                name="optAntecipada" value="N"
+                                                                (click)="consultaAntecipada($event.target.value)" />
+                                                            Não</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row align-items-center">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
                                                     <label class="consultaRetorno">Consulta de Retorno?</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">

@@ -16,6 +16,10 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/appointments/status/custom/all', data, successHandle, erroHandle)
   }
 
+  buscaAntecipacoes(data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doGet('/api/appointments/anticipate', data, successHandle, erroHandle)
+  }
+
   buscaPagamentos(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/configuration/payment/all', data, successHandle, erroHandle)
   }

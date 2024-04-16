@@ -19,6 +19,7 @@ import { FilaEsperaComponent } from "./fila-espera/fila-espera.component";
 import { AgendarConsultaComponent } from "./agendar-consulta/agendar-consulta.component";
 import { bloquearAtendimentoComponent } from "./bloquear-atendimento/bloquear-atendimento.component";
 import { reagendarAtendimentoComponent } from "./reagendar/reagendar-atendimento.component";
+import { AnteciparAtendimentoComponent } from "./antecipar-atendimento/antecipar-atendimento.component";
 
 
 
@@ -58,6 +59,7 @@ import { reagendarAtendimentoComponent } from "./reagendar/reagendar-atendimento
     AgendarConsultaComponent,
     bloquearAtendimentoComponent,
     reagendarAtendimentoComponent,
+    AnteciparAtendimentoComponent,
   ],  
 })
 export class AtendimentoModule { }
