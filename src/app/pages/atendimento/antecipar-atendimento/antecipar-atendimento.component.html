@@ -77,13 +77,8 @@
                       <p class="card-text">Responsável: {{ row?.nomeResponsavel }}</p>
                       <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
                       <p class="card-text">Situação: {{ row?.status }}</p>
-                      <p class="card-text">
-                        Consulta Confirmada:
-                        <span [style.font-weight]="row?.isConfirmed === 'Confirmado' ? 'bold' : 'bold'" [style.color]="row?.isConfirmed === 'Confirmado' ? 'green' : 'red'">
-                          {{ row?.isConfirmed }}
-                        </span>
-                      </p>
-                      <!-- Botões -->
+                      <p class="card-text">Email: {{ row?.email }}</p>
+                      <p class="card-text">Telefone: {{ row?.telefone }}</p>
                       <div class="text-center">
                         <button style="margin: 0 15px;"  class="btn btn-primary mb-2" (click)="editarConsulta(row)"
                           title="Reagendar">
