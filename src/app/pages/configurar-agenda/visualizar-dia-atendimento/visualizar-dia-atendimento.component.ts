@@ -71,9 +71,9 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   ngOnInit() {
 
     document.getElementById('bntConfig').setAttribute('disabled', 'true');
-    this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
+    this.listClinica = JSON.parse(localStorage.getItem('bway-clinica'));
 
-    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
 
     if (this.listMedico && this.listMedico.length > 0) {
     } else {

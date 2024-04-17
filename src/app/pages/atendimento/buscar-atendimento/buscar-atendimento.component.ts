@@ -119,7 +119,7 @@ export class BuscarAtendimentoComponent implements OnInit {
 
     
     this.setupCollapse();
-    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
 
     if (this.listMedico && this.listMedico.length > 0) {
     } else {
@@ -162,7 +162,7 @@ export class BuscarAtendimentoComponent implements OnInit {
     outraData.setDate(time.getDate() + 15);
     this.FinalDate = moment(outraData).format('YYYY-MM-DD')
 
-    this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
+    this.listClinica = JSON.parse(localStorage.getItem('bway-clinica'));
 
     this.listTipoConsulta = [
       {

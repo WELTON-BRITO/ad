@@ -50,7 +50,7 @@ export class PrecoEspecialComponent implements OnDestroy {
     this.atendimento.cpf = this.history.federalId;
     this.atendimento.name = this.history.name;
     this.atendimento.id = this.history.id;
-    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
 
     if (this.listMedico && this.listMedico.length > 0) {
     } else {

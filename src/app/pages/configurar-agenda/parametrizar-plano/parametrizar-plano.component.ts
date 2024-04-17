@@ -43,7 +43,7 @@ export class ParametrizarPlanoComponent implements OnDestroy {
   ngOnDestroy() { }
   ngOnInit() {
 
-    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+    this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
     
     if (this.listMedico && this.listMedico.length > 0) {
       this.verificaMedico(this.listMedico[0].id);

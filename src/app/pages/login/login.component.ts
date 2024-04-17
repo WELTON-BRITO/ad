@@ -223,16 +223,16 @@ BaseValidCNPJ(value) {
     this.listMedico = result.doctors
     var b = this.listMedico
     b = JSON.stringify(b);
-    sessionStorage.setItem('bway-medico', b);
-    var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+    localStorage.setItem('bway-medico', b);
+    var c = JSON.parse(localStorage.getItem('bway-medico'));
     this.isActive = false;
 
     //Preenchendo os dados do combo da Clinica
     this.listClinica = [ { id: result.entityId, name: result.name }]
     var b = this.listClinica
     b = JSON.stringify(b);
-    sessionStorage.setItem('bway-clinica', b);
-    var c = JSON.parse(sessionStorage.getItem('bway-clinica'));
+    localStorage.setItem('bway-clinica', b);
+    var c = JSON.parse(localStorage.getItem('bway-clinica'));
     this.isActive = false;
 
     }else if (result.domain == 'DOCTOR') {
@@ -241,8 +241,8 @@ BaseValidCNPJ(value) {
     this.listMedico = [ { id: result.entityId, name: result.name }]
     var b = this.listMedico
     b = JSON.stringify(b);
-    sessionStorage.setItem('bway-medico', b);
-    var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+    localStorage.setItem('bway-medico', b);
+    var c = JSON.parse(localStorage.getItem('bway-medico'));
     this.isActive = false;
 
      //Preenchendo os dados do combo da Clinica
@@ -250,8 +250,8 @@ BaseValidCNPJ(value) {
      this.listClinica = result.clinics
      var b = this.listClinica
      b = JSON.stringify(b);
-     sessionStorage.setItem('bway-clinica', b);
-     var c = JSON.parse(sessionStorage.getItem('bway-clinica'));
+     localStorage.setItem('bway-clinica', b);
+     var c = JSON.parse(localStorage.getItem('bway-clinica'));
      this.isActive = false;
 
     }
@@ -280,7 +280,7 @@ BaseValidCNPJ(value) {
         var b = this.listMedico
         b = JSON.stringify(b);
         sessionStorage.setItem('bway-medico', b);
-        var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+        var c = JSON.parse(localStorage.getItem('bway-medico'));
         this.isActive = false;
       }, (error) => {
         this.isActive = false;
@@ -298,7 +298,7 @@ BaseValidCNPJ(value) {
         var b = this.listMedico
         b = JSON.stringify(b);
         sessionStorage.setItem('bway-medico', b);
-        var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+        var c = JSON.parse(localStorage.getItem('bway-medico'));
         this.isActive = false;
       }, (error) => {
         this.isActive = false;

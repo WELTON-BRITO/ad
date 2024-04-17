@@ -35,7 +35,7 @@ export class ImportarHistoricoComponent implements OnInit {
 
         if (this.paciente.name !== null && this.paciente.name !== undefined) {
             // Se o nome não for nulo nem indefinido, execute o código aqui
-            this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
+            this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
 
             if (this.listMedico && this.listMedico.length > 0) {
             } else {

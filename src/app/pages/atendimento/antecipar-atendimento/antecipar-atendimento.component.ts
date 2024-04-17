@@ -88,8 +88,8 @@ export class AnteciparAtendimentoComponent implements OnInit {
 
   ngOnInit() {
 
-    this.listMedico = JSON.parse(sessionStorage.getItem('bway-medico'));
-    this.listClinica = JSON.parse(sessionStorage.getItem('bway-clinica'));
+    this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
+    this.listClinica = JSON.parse(localStorage.getItem('bway-clinica'));
 
     if (this.listMedico && this.listMedico.length > 0) {
     } else {
