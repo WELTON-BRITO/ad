@@ -231,7 +231,7 @@ export class ParametrizarConsultaComponent implements OnDestroy {
         this.isActive = true;
         this.service.atualizarValor(register, (response => {
           this.isActive = false;
-          this.toastrService.success('Registro Cadastrado com Sucesso', 'Aditi Care');
+          this.toastrService.success('Registro Atualizado com Sucesso', 'Aditi Care');
           this.fetchData(false)
           this.limpaForm()
         }), (error) => {

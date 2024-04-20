@@ -29,6 +29,8 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
   public clinicaId = null;
   public doctorId = null;
   public horariosPorDia: string[][] = [];
+  public isLoader: boolean = false;
+
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -96,7 +98,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
     this.formVisualizarDiaAtendimento.controls['clinica'].setValue(this.listClinica[0].id, { onlySelf: true }); // use the id of the first clinica
 
-    this.verificaHorario(null)
+   // this.verificaHorario(null)
   }
 
   configAtendimento(data) {
@@ -111,7 +113,7 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
   verificaHorario(data) {
 
-    this.isActive = true
+   // this.isActive = true
     this.rowData = [];
     let params = new HttpParams();
 
@@ -126,7 +128,11 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
       if (this.clinicaId != null) {
       params = params.append('clinicId', data.clinica)
     }
+
+    this.fetchData(true)
+
     this.service.agendaDoctor(params, (response: any[]) => {
+
       if (response.length !== 0) {
         this.rowData = response;
     
@@ -144,21 +150,42 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
             this.horariosPorDia[diaSemana].push(horario);
           }
         });
-    
+      
         // Remove a posição 0 do array
         this.horariosPorDia.shift();
     
         this.isActive = false;
+        this.fetchData(false)
+
+          }else{
+            this.toastrService.danger('Este Médico Ainda não Possui Horários Cadastrados','Aditi Care');
+            this.isActive = false
+            this.fetchData(false)
+
           }
            
     }, (error) => {
       this.isActive = false;
-      this.toastrService.danger(error.error.message);
+      this.toastrService.danger(error.error.message,'Aditi Care');
+      this.fetchData(false)
+
     });
     
     document.getElementById('bntConfig').removeAttribute('disabled');
 
   }
+
+  fetchData(data) {
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
 
   // No seu componente TypeScript (por exemplo, agenda.component.ts)
 getDiaSemana(diaSemana: number): string {
@@ -189,19 +216,28 @@ deletarHorario(horario: string) {
   var id =partes[0];
 
   this.isActive = true;
+
+  this.fetchData(true)
+
   
   this.service.delete(id, (response => {
     this.isActive = false;
     this.toastrService.success('Horário Removido Com Sucesso','Aditi Care!');
     this.verificaHorario(null);
+    this.fetchData(false)
+
   }), (error) => {
 
     if(error==='OK'){
     this.isActive = false;
     this.toastrService.success('Horário Removido Com Sucesso','Aditi Care!');
+    this.fetchData(false)
+
   }else{
     this.isActive = false;
     this.toastrService.danger(error.error.message);
+    this.fetchData(false)
+
   }
 
   });
@@ -242,16 +278,25 @@ deletarHorario(horario: string) {
 
   verificaEspecialidade(data) {
 
+    this.fetchData(true)
+
+
     this.service.verificaEspecialidade(data.medico, null, (response => {
       if (response != null) {
         this.router.navigateByUrl('/pages/configurar-agenda/configurar-dia-atendimento', { state: data });
+        this.fetchData(false)
+
       } else {
         this.toastrService.danger('O Médico Não Possui Especialidade Cadastrada, Realize o Cadastro');
+        this.fetchData(false)
+
       }
 
     }), (error) => {
       this.isActive = false;
       this.toastrService.danger(error.error.message);
+      this.fetchData(false)
+
 
     });
 
