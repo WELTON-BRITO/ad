@@ -269,7 +269,12 @@ export class AgendarConsultaComponent {
 
     salvar(data) {
 
-        this.clinicId = localStorage.getItem('bway-entityId');
+        const clinic = localStorage.getItem('bway-clinica');
+        if (clinic) {
+          const clinicObj = JSON.parse(clinic);
+          this.clinicId = clinicObj[0].id;
+        }
+
 
         if (this.validaCampos(data)) {
 

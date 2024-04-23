@@ -816,8 +816,12 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
                 let Available = false;
 
-                this.clinicId = localStorage.getItem('bway-entityId');
-       
+                const clinic = localStorage.getItem('bway-clinica');
+                if (clinic) {
+                  const clinicObj = JSON.parse(clinic);
+                  this.clinicId = clinicObj[0].id;
+                }
+               
                 const dataTemp = data.horarioSelected.split(" ");
 
                 let resultado = this.extrairHorarios(dataTemp);

@@ -38,6 +38,36 @@
   100% { transform: rotate(360deg); }
 }
 
+// styles.scss (or your custom SCSS file)
+
+hr {
+  border-top: 1px solid #10369eaf; /* Cor da linha divisória */
+  margin-top: 15px; /* Espaçamento acima da linha */
+  margin-bottom: 15px; /* Espaçamento abaixo da linha */
+}
+
+.custom-card {
+  background-color: #0b52df48; /* Set your desired background color */
+  max-width: 150px;
+  margin-top: 20px;
+  //margin-bottom: 20px;
+
+  .mat-card-content {
+    justify-content: center; /* Center the content vertically */
+    align-items: center; /* Center the content horizontally */
+    display: flex;
+    flex-direction: column; /* Align text and button vertically */
+    padding: 1rem; /* Add padding as needed */
+    margin-top: 10px;
+    border: 20px solid #0b52df86;
+    border-radius: 20px;
+    max-width: 220px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: none
+  }
+}
+
 :host ::ng-deep .ngx-datatable.bootstrap {
   border: 1px solid #d1d4d7;
   box-shadow: 0 1px 2px 0 rgba(50,50,50,.2);

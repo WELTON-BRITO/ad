@@ -400,13 +400,16 @@ export class BuscarAtendimentoComponent implements OnInit {
   }
 
   getAvatar(data) {
-    if (data.childAvatar || data.userAvatar) {
-      return `data:image/png;base64,${data.childAvatar ?? data.userAvatar}`;
+    // Verifica se childAvatar ou userAvatar são strings não vazias
+    if ((data.childAvatar && data.childAvatar.trim() !== '') || (data.userAvatar && data.userAvatar.trim() !== '')) {
+      // Retorna a imagem em base64, preferindo childAvatar sobre userAvatar
+      return `data:image/png;base64,${data.childAvatar.trim() || data.userAvatar.trim()}`;
     } else {
       // Retorna o caminho para a imagem padrão
-      return this.avatar
+      return this.avatar;
     }
   }
+  
   
 
   confirmarHorario(data){

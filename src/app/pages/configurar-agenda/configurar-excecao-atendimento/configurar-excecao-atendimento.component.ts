@@ -245,7 +245,7 @@ export class ConfigurarExcecaoAtendimentoComponent implements OnDestroy {
       this.doctorId = data
       this.params = this.params.append('doctorId', data)
     } else {
-      this.toastrService.danger('Preencher o campo obrigatório!!!');
+      this.toastrService.danger('Preencher o campo obrigatório!!!','Aditi Care!');
     }
 
   }

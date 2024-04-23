@@ -157,38 +157,31 @@
                                 </div>
                             </div>
 
-                                <div *ngIf="isHorario">
-                                    <div class="form-group col-md-6">
-                                        <h6 class="pt-3">Selecione o Horário da Consulta</h6>
+                            <div *ngIf="isHorario">
+                                <div class="form-group col-md-4">
+                                  <h6 class="pt-3">Selecione o Horário da Consulta</h6>
+                                </div>
+                                <div class="modal-content">
+                                  <div class="modal-body">
+                                    <div class="row">
+                                      <div class="col-md-2" *ngFor="let card of tipoCard; let i = index;">
+                                        <mat-card class="custom-card">
+                                          <mat-card-content>
+                                            <p>Data: {{ card.data }}</p>
+                                            <p>Horário: {{ card.horario }}</p>
+                                            <p>Situação: {{ card.statusCard }}</p>
+                                            <button *ngIf="card.statusCard === 'Disponível'" class="btn btn-primary" (click)="confHorario(card, formNovoAtendimento.value)">Selecionar</button>                                             </mat-card-content>
+                                        </mat-card>
+                                        <!-- Adiciona uma linha divisória após cada sexto card -->
+                                        <div *ngIf="(i + 1) % 6 === 0 && i !== tipoCard.length - 1" class="col-md-12"><hr></div>
+                                      </div>
                                     </div>
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <div class="card-columns">
-                                                    <div class="card"
-                                                         [ngClass]="{'card-ocupado': card.statusCard === 'Ocupado', 'card-disponivel': card.statusCard === 'Disponível'}"
-                                                         *ngFor="let card of tipoCard; let i = index;"
-                                                         >
-                                                        <div class="card-body">
-                                                            <div class="form-row align-items-center">
-                                                                <div class="col-md-2">
-                                                                    <i class="fa fa-calendar image fa-2x text-primary" aria-hidden="true"></i>
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    <div class="div-tamanho">
-                                                                        <label for="data" class="m-0">Data: {{ card.data }}</label>
-                                                                        <label for="data" class="m-0">Horário: {{ card.horario }}</label>
-                                                                        <br> <!-- Adicione uma quebra de linha aqui -->
-                                                                        <label>Situação: {{ card.statusCard }}</label>
-                                                                    </div>
-                                                                    <!-- Ícone ou botão para seleção (exemplo) -->
-                                                                    <button *ngIf="card.statusCard === 'Disponível'" class="btn btn-primary" (click)="confHorario(card, formNovoAtendimento.value)">Selecionar</button>                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>                                
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              
+                                                            
                                 <div *ngIf="isConfAtendimento">
                                     <div class="form-row align-items-center">
                                         <div class="form-group col-md-4">
@@ -265,9 +258,7 @@
                                                         {{pagto.name}}</option>
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="form-row align-items-center">
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label class="consultaAntecipada">Paciente Deseja Antecipar Data?</label>
                                                     <div class="p-1 row">
@@ -285,27 +276,9 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="form-row align-items-center">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="consultaRetorno">Consulta de Retorno?</label>
-                                                    <div class="p-1 row">
-                                                        <label class="radio-inline pl-2 pl-3">
-                                                            <input class="mat-button" type="radio" id="radioRetorno"
-                                                                name="optRetorno" value="S"
-                                                                (click)="consultaRetorno($event.target.value)" />
-                                                            Sim</label>
-                                                        <label class="radio-inline pl-2">
-                                                            <input class="mat-button" type="radio" id="radioRetorno"
-                                                                name="optRetorno" value="N"
-                                                                (click)="consultaRetorno($event.target.value)" />
-                                                            Não</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-row align-items-center">
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                   <label class="consultaParticular">Consulta será Particular?</label>
                                                   <div class="p-1 row">
@@ -324,9 +297,9 @@
                                                   </div>
                                                 </div>
                                               </div>
-                                              
-                                                
-                                            <div class="form-group col-md-4" *ngIf="isPagto">
+                                                         
+                                              <div class="col-md-4">
+                                            <div class="form-group" *ngIf="isPagto">
                                                 <label for="formaPagto">Qual será a Modalidade de Pagamento*</label>
                                                 <select class="form-control" formControlName="formaPagto">
                                                     <option value="null" selected>SELECIONE</option>
@@ -334,6 +307,7 @@
                                                         pagto.description}}</option>
                                                 </select>
                                             </div>
+                                        </div>
                                             <div class="form-group col-md-4" *ngIf="isConvenio">
                                                 <label for="formaConvenio">Informe o Convênio*</label>
                                                 <select class="form-control" formControlName="formaConvenio">
@@ -358,6 +332,23 @@
                                                             <input class="mat-button" type="radio" id="radioNao"
                                                                 name="radio" value="N"
                                                                 (click)="consultaPaga($event.target.value)" />
+                                                            Não</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="consultaRetorno">Consulta de Retorno?</label>
+                                                    <div class="p-1 row">
+                                                        <label class="radio-inline pl-2 pl-3">
+                                                            <input class="mat-button" type="radio" id="radioRetorno"
+                                                                name="optRetorno" value="S"
+                                                                (click)="consultaRetorno($event.target.value)" />
+                                                            Sim</label>
+                                                        <label class="radio-inline pl-2">
+                                                            <input class="mat-button" type="radio" id="radioRetorno"
+                                                                name="optRetorno" value="N"
+                                                                (click)="consultaRetorno($event.target.value)" />
                                                             Não</label>
                                                     </div>
                                                 </div>

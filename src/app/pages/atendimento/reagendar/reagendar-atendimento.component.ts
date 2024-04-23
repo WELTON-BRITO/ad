@@ -78,7 +78,12 @@ export class reagendarAtendimentoComponent {
     salvar(data) {
         this.fetchData(true)
 
-        this.clinicId = localStorage.getItem('bway-entityId');
+        const clinic = localStorage.getItem('bway-clinica');
+        if (clinic) {
+          const clinicObj = JSON.parse(clinic);
+          this.clinicId = clinicObj[0].id;
+        }
+
 
         let register = {
 

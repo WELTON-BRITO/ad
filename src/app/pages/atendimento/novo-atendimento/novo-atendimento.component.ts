@@ -295,9 +295,11 @@ export class NovoAtendimentoComponent {
                 if (response.length > 0) {
                     this.listDependente = response
                    // this.childId = response[0].idChild
+                   this.dependenteDisabled = false;
+
                 }else{
                   //  this.isDependente = false;
-                    this.optDep = true;
+                    this.optDep = false;
                     this.dependenteDisabled= true;
                     this.optDependente = false;
                 }
@@ -434,6 +436,7 @@ export class NovoAtendimentoComponent {
                     this.formNovoAtendimento.controls['emailResponsavel'].setValue(response.emailUser);
                     this.buscaDependente(this.userId)
                     this.isConvenio =false;}
+                    this.fetchData(false)
 
             }, (error) => {
                 this.isActive = false;
@@ -483,11 +486,15 @@ export class NovoAtendimentoComponent {
 
     salvar(data) {
 
+        this.fetchData(true)
+
+
         this.bloqueioSave = true;
 
         if(this.isPagto == true && data.formaPagto == null){
             this.toastrService.warning('A Forma de Pagamento Deve ser Informada','Aditi Care');
             this.bloqueioSave = false;
+            this.fetchData(false)
             return false
         }
         
@@ -495,12 +502,14 @@ export class NovoAtendimentoComponent {
         if (this.specialtyId == null) {
             this.toastrService.warning('O Tipo da Especialidade deve ser Informado','Aditi Care');
             this.bloqueioSave = false;
+            this.fetchData(false)
             return false
         }
 
         if (this.antecipada == null) {
             this.toastrService.warning('Deve ser Informado se Deseja Antecipar a Consulta','Aditi Care');
             this.bloqueioSave = false;
+            this.fetchData(false)
             return false
         }
 
@@ -513,7 +522,11 @@ export class NovoAtendimentoComponent {
             var endTime = this.dadosHorario.horario.slice(8)
         }
 
-        this.clinicId = localStorage.getItem('bway-entityId');
+        const clinic = localStorage.getItem('bway-clinica');
+        if (clinic) {
+          const clinicObj = JSON.parse(clinic);
+          this.clinicId = clinicObj[0].id;
+        }
        
         if(data.horarioSelected !== undefined)
         {
@@ -581,6 +594,7 @@ export class NovoAtendimentoComponent {
             this.toastrService.success('Cadastrado Realizado com Sucesso','Aditi Care!');
             localStorage.removeItem('meuCardData'); //garante que o cache foi apagado das telas posteriores
             localStorage.removeItem('googleData'); //garante que o cache foi apagado das telas posteriores
+            this.fetchData(false)
             this.limpaForm();
             this.fetchData(false)
             this.previousPage();
@@ -589,7 +603,6 @@ export class NovoAtendimentoComponent {
             this.isActive = false;
             this.toastrService.danger(error.message);
             this.fetchData(false)
-
         });
 
         {
@@ -700,6 +713,9 @@ export class NovoAtendimentoComponent {
 
     pesquisarConsulta(data) {
 
+        this.fetchData(true)
+
+
         let date = new Date(data.dataInicio)
         date.setDate(date.getDate() + 6)
 
@@ -740,10 +756,14 @@ export class NovoAtendimentoComponent {
 
                 this.isActive = false
                 this.isHorario = true;
+                this.fetchData(false)
+
 
             }, (error) => {
                 this.isActive = false;
                 this.toastrService.danger(error.error.message,'Aditi Care');
+                this.fetchData(false)
+
             });
         }
     }
@@ -879,6 +899,9 @@ export class NovoAtendimentoComponent {
 
         this.dadosHorario = form;
 
+        this.fetchData(true)
+
+
         this.isConfAtendimento = false;
         if (data.dataInicio == null ) {
             this.toastrService.warning('Por favor Informa a Data Desejada!','Aditi Care');
@@ -909,14 +932,16 @@ export class NovoAtendimentoComponent {
                     this.isConfAtendimento = true;
                     this.toastrService.success('O Horário Informado Está Disponível','Aditi Care');
                     this.formNovoAtendimento.controls['horarioSelected'].setValue((data.dataInicio + " - " +this.dadosHorario.horaInicio + " - " + this.dadosHorario.horaFim ));
+                    this.fetchData(false)
                 }
                 else{
                     this.isConfAtendimento = false;
                     this.toastrService.warning('O Horário Informado não Está Disponível','Aditi Care');
-
+                    this.fetchData(false)
                 }
             }, (error) => {
                 this.toastrService.danger(error.message);
+                this.fetchData(false)
             });
 
         }
