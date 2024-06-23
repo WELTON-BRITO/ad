@@ -65,6 +65,7 @@ export class HistoricoComponent implements OnInit {
               sexo: data.biologicalSex === 'M' ? 'Masculino' : 'Feminino' ?? null,
               tipoSanguineo: 'Sigiloso',
               patchPaciente: true,
+              findhistorico: true,
           };
                  
           this.saveData('detalhesData', allData);

@@ -48,7 +48,7 @@ export class DetalheAtendimentoComponent implements OnInit {
   public clinicaId = null;
   public listClinica = null;
   public listTipoConsulta = [];
-  public patchPaciente: false;
+  public patchPaciente:  boolean = false;
   public isLoader: boolean = false;
  
 
@@ -93,8 +93,8 @@ export class DetalheAtendimentoComponent implements OnInit {
 
     if (data && data.doctorName !== undefined){
 
-      if(data.patchPaciente !==null){
-        patchPaciente: true;
+      if(data.patchPaciente == true){
+        this.patchPaciente= true;
       }
 
       const dataNascimento = data.childBirthDate ?? data.user?.birthDate ?? '20240101';
@@ -129,6 +129,7 @@ export class DetalheAtendimentoComponent implements OnInit {
         procedureId: data.procedureId,
         specialtyId: data.specialtyId,
         typeServiceId: data.typeServiceId,
+        patchPaciente: data.patchPaciente,
     };
         
     this.paciente = allData
@@ -153,6 +154,10 @@ if (allData) {
 
   // Preencha os cards com os dados recuperados
   this.paciente = parsedData;
+
+  if(this.paciente.patchPaciente == true){
+    this.patchPaciente= true;
+  }
 }
   }
   }
@@ -267,14 +272,20 @@ if (allData) {
 
   previousPage() {
 
+    const rowData = [{
+      medico: this.paciente.doctorId
+    }]
+ 
+    console.log(this.patchPaciente)
+
     if(this.patchPaciente){
       localStorage.removeItem('detalhesData');
       localStorage.removeItem('histDetails');
-      this.router.navigate(['/pages/visualizar-agenda/agenda'])
+      this.router.navigate(['/pages/visualizar-agenda/agenda'], { state: rowData });
       }else {
       localStorage.removeItem('detalhesData');
       localStorage.removeItem('histDetails');
-      this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+      this.router.navigate(['/pages/atendimento/buscar-atendimento'], { state: rowData });
 
   }
 

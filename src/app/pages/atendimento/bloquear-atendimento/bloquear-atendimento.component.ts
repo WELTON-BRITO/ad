@@ -19,11 +19,11 @@ export class bloquearAtendimentoComponent {
     public isActive = false;
     public specialtyId = null;
     public listTipoEspecialidade = null;
-
-  
     public doctorId = null;
     public clinicId = null;
     public isConfAtendimento = false;
+    public patchPaciente = null;
+    public rowData = [];
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
@@ -32,6 +32,12 @@ export class bloquearAtendimentoComponent {
     }
 
     ngOnInit() {
+
+        let data = history.state
+
+        if(data && data.patchPaciente){
+            this.patchPaciente = data.patchPaciente
+        }
 
         this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
         
@@ -57,7 +63,31 @@ export class bloquearAtendimentoComponent {
             horarioSelected: null,
             tipoEspecialidade: [null],}
             )
-        this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+
+            if(data.medico!=null){
+
+                this.doctorId = data.medico;
+                          
+                this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data.medico)].id, { onlySelf: true });
+    
+            }else{
+                this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    
+            }
+
+
+    }
+
+    findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
+
+        var x;
+        
+        for (let i = 0; i < listMedico.length; i++) {
+            if (listMedico[i].id == targetId) {
+                x = i;     
+            }
+        }
+        return x;
     }
 
     limpaForm() {
@@ -125,7 +155,19 @@ export class bloquearAtendimentoComponent {
     }
 
     previousPage() {
-        this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+
+        this.rowData = [{
+            medico: this.doctorId
+          }]
+
+        if (this.patchPaciente == true) {
+            this.router.navigate(['/pages/visualizar-agenda/agenda'], { state:   this.rowData })
+
+        }else{
+            this.router.navigate(['/pages/atendimento/buscar-atendimento'], { state: this.rowData })
+
+        }
+
     }
 
     especialidade(data) {

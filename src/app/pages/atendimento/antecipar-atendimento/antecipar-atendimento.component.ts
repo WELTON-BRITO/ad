@@ -42,6 +42,8 @@ export class AnteciparAtendimentoComponent implements OnInit {
   FinalDay: any;
   public isLoader: boolean = false;
   public avatar = "assets/images/avatar.png";
+  public patchPaciente = null;
+
 
 
   settings = {
@@ -88,6 +90,11 @@ export class AnteciparAtendimentoComponent implements OnInit {
 
   ngOnInit() {
 
+    let data = history.state
+    if(data && data.patchPaciente){
+        this.patchPaciente = data.patchPaciente
+    }
+
     this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
     this.listClinica = JSON.parse(localStorage.getItem('bway-clinica'));
 
@@ -110,18 +117,58 @@ export class AnteciparAtendimentoComponent implements OnInit {
     });
 
 
+    
+    if(data.medico!=null){
+
+      this.doctorId = data.medico;
+                
+      this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data.medico)].id, { onlySelf: true });
+
+  }else{
     this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+
+  }
+
     this.formBuscarAtendimento.controls['clinica'].setValue(this.listClinica[0].id, { onlySelf: true }); // use the id of the first clinica
 
     var initData = [];
     this.rowData = initData;
 
     let register = {
-      medico: this.listMedico[0].id,
+      medico:  this.doctorId,
       clinicaId: this.listClinica[0].id,
     }
       this.buscarAntecipacoes(register)
   }
+
+  previousPage() {
+
+    this.rowData = [{
+      medico: this.doctorId
+    }]
+
+  if (this.patchPaciente == true) {
+      this.router.navigate(['/pages/visualizar-agenda/agenda'], { state:   this.rowData })
+
+  }else{
+      this.router.navigate(['/pages/atendimento/buscar-atendimento'], { state: this.rowData })
+
+  }
+  
+
+}
+
+  findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
+
+    var x;
+    
+    for (let i = 0; i < listMedico.length; i++) {
+        if (listMedico[i].id == targetId) {
+            x = i;     
+        }
+    }
+    return x;
+}
 
 
   buscarAntecipacoes(data) {

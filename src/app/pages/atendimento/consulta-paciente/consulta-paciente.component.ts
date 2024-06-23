@@ -93,6 +93,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
         specialtyId: null,
         typeServiceId: null,
         avatar: null,
+        findhistorico: null,
             };
     public anexoAtestado = null;
     public anexoReceita = null;
@@ -141,15 +142,13 @@ export class ConsultaPacienteComponent implements OnDestroy {
             procedureId: null,
             specialtyId: null,
             typeServiceId: null,
+            findhistorico: null,
         })
 
 
          var data = history.state
 
          this.historico = data;
-
-         console.log(data)
-
 
         if(localStorage.getItem('detalhesData')!==null){
             
@@ -195,7 +194,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
           procedureId: data[0].rowData.procedureId,
           specialtyId: data[0].rowData.specialtyId,
           typeServiceId: data[0].rowData.typeServiceId,
-          avatar: data[0].rowData.avatarChild ?? data[0].rowData.avatar ?? this.avatar
+          avatar: data[0].rowData.avatarChild ?? data[0].rowData.avatar ?? this.avatar,
+          findhistorico: false
 
       };
            
@@ -243,9 +243,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
       pesquisarHorario(data,form) {
 
-        console.log(data)
-        console.log(form)
-
         this.dadosHorario = form;
 
         if(data.tempoRetorno == null ){
@@ -274,7 +271,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
             // Formata a data para 'YYYY-MM-DD'
             const dataFormatada = dateEnd.toISOString().split('T')[0];
-            console.log(dataFormatada); // Saída da data formatada
             } else {
                 this.toastrService.danger('O Prazo de Retorno não é um Numero Válido','Aditi Care');
                 this.fetchData(false)
@@ -351,7 +347,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
             // Formata a data para 'YYYY-MM-DD'
             const dataFormatada = dateEnd.toISOString().split('T')[0];
-            console.log(dataFormatada); // Saída da data formatada
             } else {
                 this.toastrService.danger('O Prazo de Retorno não é um Numero Válido','Aditi Care');
                 this.fetchData(false)
@@ -1017,8 +1012,6 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
 validar_valor(data){
 
-    console.log(data)
-
     if (data && data !== 'undefined' && data !== '' && typeof data === 'string' && data.trim() !== '') {
        
         const valorFormatado = data.replace(/,/g, '.').replace(/[^\d.]/g, '');
@@ -1132,9 +1125,10 @@ validar_valor(data){
 
         localStorage.removeItem('histDetails');
 
+        console.log(this.atendimento)
+        console.log(this.atendimento.patchPaciente)
 
-
-        if(this.atendimento.patchPaciente === true){
+        if(this.atendimento.findhistorico === true){
             this.router.navigate(['/pages/gestao-paciente/paciente'])
 
         }else {

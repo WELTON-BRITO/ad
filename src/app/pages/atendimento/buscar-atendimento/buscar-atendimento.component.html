@@ -109,13 +109,13 @@
                     (click)="buscarAtendimento(formBuscarAtendimento.value,true)">
                     Buscar
                   </button>
-                  <button class="btn btn-success ml-2 button" (click)="agendarAtendimento()">
+                  <button class="btn btn-success ml-2 button" (click)="agendarAtendimento(formBuscarAtendimento.value)">
                     Agendar
                   </button>
-                  <button class="btn btn-warning ml-2 button" (click)="BloquearAtendimento()">
+                  <button class="btn btn-warning ml-2 button" (click)="BloquearAtendimento(formBuscarAtendimento.value)">
                     Bloquear
                   </button>
-                  <button class="btn btn-danger ml-2 button" (click)="AnteciparAtendimento()">
+                  <button class="btn btn-danger ml-2 button" (click)="AnteciparAtendimento(formBuscarAtendimento.value)">
                     Fila
                   </button>
                 </div>

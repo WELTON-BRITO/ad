@@ -7,6 +7,7 @@ import { HttpParams } from "@angular/common/http";
 import * as moment from 'moment';
 import { CPFValidator } from "../../shared/validators/CPFValidator";
 import { LoaderService } from '../../shared/component/spinner/loarder/loader.service';
+import { dA } from '@fullcalendar/core/internal-common';
 
 
 @Component({
@@ -121,6 +122,9 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.setupCollapse();
     this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
 
+    let data = history.state
+
+
     if (this.listMedico && this.listMedico.length > 0) {
     } else {
       console.error('A lista de médicos está vazia ou não definida!');
@@ -133,7 +137,7 @@ export class BuscarAtendimentoComponent implements OnInit {
         }
     }
     localStorage.removeItem('detalhesData'); //garante que o cache foi apagado das telas posteriores
-    localStorage.removeItem('draftAtendimento');//garante que o cache foi apagado das telas posteriores
+   // localStorage.removeItem('draftAtendimento');//garante que o cache foi apagado das telas posteriores
 
     if (this.currentMonth < 10) {
       this.FinalMonth = "0" + this.currentMonth;
@@ -206,8 +210,6 @@ export class BuscarAtendimentoComponent implements OnInit {
       tipoConsulta: [this.listTipoConsulta[0], Validators.required]
     });
 
-
-    this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
     this.formBuscarAtendimento.controls['clinica'].setValue(this.listClinica[0].id, { onlySelf: true }); // use the id of the first clinica
     this.formBuscarAtendimento.controls['tipoConsulta'].setValue(this.listTipoConsulta[0].id, { onlySelf: true }); // use the id of the first clinica
     this.formBuscarAtendimento.controls['status'].setValue(this.tipo[0].status, { onlySelf: true }); // use the id of the first clinica
@@ -219,6 +221,17 @@ export class BuscarAtendimentoComponent implements OnInit {
 
     var initData = [];
     this.rowData = initData;
+
+    if(data && data[0] && data[0].medico != null){
+
+      this.doctorId = data[0].medico;
+
+      this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data[0].medico)].id, { onlySelf: true });
+      
+  }else{
+    this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+
+  }
 
     let register = {
       dataInicio: this.TodayDate,
@@ -237,9 +250,21 @@ export class BuscarAtendimentoComponent implements OnInit {
 
   }
 
-  AnteciparAtendimento(){
+  findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
 
-    this.router.navigate(['/pages/atendimento/antecipar-atendimento']);
+    var x;
+    
+    for (let i = 0; i < listMedico.length; i++) {
+        if (listMedico[i].id == targetId) {
+            x = i;     
+        }
+    }
+    return x;
+}
+
+  AnteciparAtendimento(data){
+
+    this.router.navigate(['/pages/atendimento/antecipar-atendimento'], { state: data });
 
   }
 
@@ -254,7 +279,7 @@ export class BuscarAtendimentoComponent implements OnInit {
     if (localStorage.getItem('meuCardData') === null || checked == true || localStorage.getItem('meuCardData') === '') {
       this.saveData('meuCardData', '');
       localStorage.removeItem('detalhesData');
-      localStorage.removeItem('draftAtendimento');
+//      localStorage.removeItem('draftAtendimento');
 
       this.isActive = true
       let params = new HttpParams();
@@ -391,6 +416,11 @@ export class BuscarAtendimentoComponent implements OnInit {
 
         // Preencha os cards com os dados recuperados
         this.rowData = parsedData;
+
+        this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,this.rowData[0].medicoId)].id, { onlySelf: true });
+
+        this.doctorId = this.rowData[0].medicoId
+
       }
       this.fetchData(false)
 
@@ -400,15 +430,20 @@ export class BuscarAtendimentoComponent implements OnInit {
   }
 
   getAvatar(data) {
-    // Verifica se childAvatar ou userAvatar são strings não vazias
-    if ((data.childAvatar && data.childAvatar.trim() !== '') || (data.userAvatar && data.userAvatar.trim() !== '')) {
-      // Retorna a imagem em base64, preferindo childAvatar sobre userAvatar
-      return `data:image/png;base64,${data.childAvatar.trim() || data.userAvatar.trim()}`;
+    // Armazena os valores trimados em variáveis temporárias
+    const childAvatarTrimmed = data.childAvatar ? data.childAvatar.trim() : '';
+    const userAvatarTrimmed = data.userAvatar ? data.userAvatar.trim() : '';
+
+    // Verifica se as variáveis temporárias são strings não vazias
+    if (childAvatarTrimmed !== '' || userAvatarTrimmed !== '') {
+        // Retorna a imagem em base64, preferindo childAvatar sobre userAvatar
+        return `data:image/png;base64,${childAvatarTrimmed || userAvatarTrimmed}`;
     } else {
-      // Retorna o caminho para a imagem padrão
-      return this.avatar;
+        // Retorna o caminho para a imagem padrão
+        return this.avatar;
     }
-  }
+}
+
   
   
 
@@ -488,9 +523,9 @@ else{
 }
 }
 
-  agendarAtendimento() {
+  agendarAtendimento(data) {
 
-    this.router.navigate(['/pages/atendimento/novo-atendimento']);
+    this.router.navigate(['/pages/atendimento/novo-atendimento'], { state: data });
 
   }
 
@@ -522,8 +557,8 @@ else{
     this.router.navigateByUrl('/pages/atendimento/novo-atendimento', { state: data });
   }
 
-  BloquearAtendimento() {
-    this.router.navigate(['/pages/atendimento/bloquear-atendimento']);
+  BloquearAtendimento(data) {
+    this.router.navigate(['/pages/atendimento/bloquear-atendimento'], { state: data });
   }
 
   detalhes(data) {
@@ -573,12 +608,15 @@ else{
         params = params.append('typeServiceId', data.tipo ?? 1)
 
         this.service.buscaHorario(params, (response) => {
+          var medico = response.doctor.id
           this.tipoCard = response.times.filter(item => item.status === 'Disponível')
             .map(data => ({
               data: moment(data.date).format('DD/MM/YYYY'),
               horario: `${data.startTime} - ${data.endTime}`,
               status: 'Disponível',
+              medico: medico
             }));
+            
 
           if (this.tipoCard.length === 0) {
             // this.toastrService.warning("Não Existem Horários Livres Para Estes Dias", 'Aditi Care');

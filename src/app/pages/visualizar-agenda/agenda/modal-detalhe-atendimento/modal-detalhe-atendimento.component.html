@@ -77,7 +77,7 @@
                   </nb-action>
                 
                   <nb-action *ngIf="atendimento.nomeResponsavel !== 'Bloqueado'"
-                             (click)="abrirConsulta()" title="Atualizar prontuário">
+                             (click)="abrirConsulta(atendimento)" title="Atualizar prontuário">
                     <nb-icon class="action-icon" icon="file-outline"></nb-icon>
                     <span class="action-label">Detalhes</span>
                   </nb-action>

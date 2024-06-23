@@ -183,6 +183,9 @@ export class AgendaComponent implements OnInit {
 
     this.windowResize();
 
+    localStorage.removeItem('detalhesData'); //garante que o cache foi apagado das telas posteriores
+
+
     window.addEventListener('orientationchange', function () {
       var orientation = screen.orientation.type;
       if (orientation === 'portrait-primary' || orientation === 'portrait-secondary') {
@@ -252,6 +255,7 @@ export class AgendaComponent implements OnInit {
       dataInicio: this.StartedDate,
       dataFim: this.FinalDate,
       medico: this.listMedico[0].id,
+
     }
 
     if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
@@ -274,9 +278,10 @@ export class AgendaComponent implements OnInit {
     }
   }
 
-  AnteciparAtendimento(){
+  AnteciparAtendimento(data){
+    data.patchPaciente = true;
 
-    this.router.navigate(['/pages/atendimento/antecipar-atendimento']);
+    this.router.navigate(['/pages/atendimento/antecipar-atendimento'], { state: data });
 
   }
 
@@ -468,11 +473,28 @@ export class AgendaComponent implements OnInit {
 
         // Preencha os cards com os dados recuperados
         this.calendarEvents = parsedData;
+
+        this.formAgendaAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,this.calendarEvents[0].dados.doctorId)].id, { onlySelf: true });
+
+        this.medicoId = this.calendarEvents[0].dados.doctorId
+
       }
       this.fetchData(false)
     }
 
   }
+
+  findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
+
+    var x;
+    
+    for (let i = 0; i < listMedico.length; i++) {
+        if (listMedico[i].id == targetId) {
+            x = i;     
+        }
+    }
+    return x;
+}
 
   validaCampo(data) {
 
@@ -511,9 +533,11 @@ export class AgendaComponent implements OnInit {
     const storedData = localStorage.getItem(key);
     return storedData ? JSON.parse(storedData) : null;
   }
-  agendarAtendimento() {
+  agendarAtendimento(data) {
 
-    this.router.navigate(['/pages/atendimento/novo-atendimento']);
+    data.patchPaciente = true;
+
+    this.router.navigate(['/pages/atendimento/novo-atendimento'], { state: data });;
 
   }
 
@@ -541,11 +565,13 @@ export class AgendaComponent implements OnInit {
   }
 
   AgendaDefinida(data) {
+    data.patchPaciente = true;
     this.router.navigateByUrl('/pages/atendimento/novo-atendimento', { state: data });
   }
 
-  BloquearAtendimento() {
-    this.router.navigate(['/pages/atendimento/bloquear-atendimento']);
+  BloquearAtendimento(data) {
+    data.patchPaciente = true;
+    this.router.navigate(['/pages/atendimento/bloquear-atendimento'], { state: data })
   }
 
   windowResize() {

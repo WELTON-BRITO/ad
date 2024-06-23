@@ -62,8 +62,9 @@ export class NovoAtendimentoComponent {
     public dependenteDisabled: boolean = false;
     public optDependente: boolean = false;
     public isLoader: boolean = false;
-    public horaFormatada= null;
+    public horaFormatada = null;
     public antecipada: boolean = false;
+    public patchPaciente = null;
 
     public tipoCardEncaixe: any[] = [{
         id: '',
@@ -142,6 +143,10 @@ export class NovoAtendimentoComponent {
     ngOnInit() {
 
         let data = history.state
+        if(data && data.patchPaciente){
+            this.patchPaciente = data.patchPaciente
+        }
+
         this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
                 
         if (this.listMedico && this.listMedico.length > 0) {
@@ -182,14 +187,28 @@ export class NovoAtendimentoComponent {
             optDependente: null,
             optRetorno: null,
           });
-          
-        this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+
+
+        if(data.medico!=null){
+
+            this.doctorId = data.medico;
+
+                  
+            this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data.medico)].id, { onlySelf: true });
+
+        }else{
+            this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+
+        }
+
         this.formNovoAtendimento.controls['tipoConsulta'].setValue(this.listTipoConsulta[0].id, { onlySelf: true });
         this.buscaConvenio(false);
 
         this.tipoCardEncaixe = []; 
 
         if(data.data !=null){
+
+            console.log(data)
 
             this.origem = data?.location
             this.formNovoAtendimento.controls['dataInicio'].setValue(this.formatarData(data.data), { onlySelf: true });
@@ -206,6 +225,18 @@ export class NovoAtendimentoComponent {
             this.AtendimentoDireto=false; 
     }
 
+    }
+
+    findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
+
+        var x;
+        
+        for (let i = 0; i < listMedico.length; i++) {
+            if (listMedico[i].id == targetId) {
+                x = i;     
+            }
+        }
+        return x;
     }
 
     pagamento() {
@@ -846,11 +877,15 @@ export class NovoAtendimentoComponent {
     previousPage() {
 
 
-        if (this.origem === 'agendaGoogle') {
-            this.router.navigate(['/pages/visualizar-agenda/agenda'])
+        this.rowData = [{
+            medico: this.doctorId
+          }]
+
+        if (this.patchPaciente == true) {
+            this.router.navigate(['/pages/visualizar-agenda/agenda'], { state:   this.rowData })
 
         }else{
-            this.router.navigate(['/pages/atendimento/buscar-atendimento'])
+            this.router.navigate(['/pages/atendimento/buscar-atendimento'], { state: this.rowData })
 
         }
     }

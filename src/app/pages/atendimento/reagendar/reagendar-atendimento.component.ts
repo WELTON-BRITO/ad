@@ -33,6 +33,8 @@ export class reagendarAtendimentoComponent {
 
         let data = history.state
 
+        console.log(data)
+
         if(data.id == null){
             this.previousPage();
         }
@@ -41,17 +43,17 @@ export class reagendarAtendimentoComponent {
         
         if (this.listMedico && this.listMedico.length > 0) {
             this.verificaMedico(this.listMedico[0].id);
-          } else {
+        } else {
             console.error('A lista de médicos está vazia ou não definida!');
-           this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
-          
-          {
-                  setTimeout(() => {
-                      this.router.navigate(['/login']);
-                  }, 3000); // 3000 milissegundos = 3 segundos
-              }
-          }        
-          this.verificaEspecialidade(this.doctorId);
+        this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
+      
+      {
+              setTimeout(() => {
+                  this.router.navigate(['/login']);
+              }, 3000); // 3000 milissegundos = 3 segundos
+          }
+      }    
+
         this.formNovoAtendimento = this.formBuilder.group({
             medico: [this.listMedico[0]],
             dataAtendimento: null,
@@ -62,7 +64,34 @@ export class reagendarAtendimentoComponent {
             tipoEspecialidade: [null],
             idAppointment: data.id}
             )
-        this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+      
+          if(data.doctorId !=null){
+
+            this.doctorId = data.doctorId;
+      
+            this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data.doctorId)].id, { onlySelf: true });
+            
+        }else{
+            this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+
+            this.doctorId = this.listMedico[0].id;
+        }
+
+            this.verificaEspecialidade(this.doctorId);
+
+
+    }
+
+    findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
+
+        var x;
+        
+        for (let i = 0; i < listMedico.length; i++) {
+            if (listMedico[i].id == targetId) {
+                x = i;     
+            }
+        }
+        return x;
     }
 
     limpaForm() {
@@ -121,6 +150,7 @@ export class reagendarAtendimentoComponent {
     }
 
     previousPage() {
+
         this.router.navigate(['/pages/atendimento/detalhe-atendimento'])
     }
 

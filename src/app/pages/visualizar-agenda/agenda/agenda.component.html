@@ -27,13 +27,13 @@
                       <button class="btn btn-primary mr-2 button" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
                         Buscar
                       </button>
-                      <button class="btn btn-success mr-2 button" (click)="agendarAtendimento()">
+                      <button class="btn btn-success mr-2 button" (click)="agendarAtendimento(formAgendaAtendimento.value)">
                         Agendar
                       </button>
-                      <button class="btn btn-warning button" (click)="BloquearAtendimento()">
+                      <button class="btn btn-warning button" (click)="BloquearAtendimento(formAgendaAtendimento.value)">
                         Bloquear
                       </button>
-                      <button class="btn btn-danger ml-2 button" (click)="AnteciparAtendimento()">
+                      <button class="btn btn-danger ml-2 button" (click)="AnteciparAtendimento(formAgendaAtendimento.value)">
                         Fila
                       </button>
                     </div>
