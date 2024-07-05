@@ -1,0 +1,186 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <nb-card class="inline-form-card">
+        <nb-card-body>
+          <form id="form-cadastro" [formGroup]="formCadastroMedico">
+            <div class="col-md-12 col-xs-12">
+              <div class="form-row align-items-center">
+                <div class="col-md-1">
+                  <div class="align-self-start">
+                    <img class="cadastro d-none d-sm-block" src="assets/images/linhas_cadastro.png" />
+                  </div>
+                </div>
+                <div class="col-md-10 mb-auto">
+                  <div *ngIf="isInfoGerais">
+                    <div class="form-group">
+                      <h6>Bem Vindo a Aditi Care, preencha os seus dados para realizarmos o seu cadastro </h6>
+                    </div>
+                    <div class="form-group">
+                      <div class="text-left">
+                        <b>{{ this.title }}</b>
+                      </div>
+                    </div>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-6">
+                        <label for="nome">Nome completo*</label>
+                        <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" />
+                      </div>
+                      <div class="col-md-3">
+                        <label for="cpf">CPF*</label>
+                        <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
+                          mask="000.000.000-00" maxlength="14"
+                          (change)="isValidCpf($event.target, formCadastroMedico.value)" />
+                        <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
+                          {{this.msgErro}} <br /><br />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="crm">Celular*</label>
+                        <input class="form-control" name="crm" id="crm" type="text" formControlName="crm" />
+                      </div>
+                    </div>
+                    <div class="form-group row pl-3">
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label for="dataNascimento">Data de Nascimento*</label>
+                          <input class="form-control date" class="form-control" type="date" id="dateNasc" name="mydate"
+                            formControlName="dataNascimento" maxlength="10" />
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <label class="mat-button">Sexo biologico*</label>
+                        <div class="row">
+                          <label class="radio-inline pl-2 pl-3">
+                            <input class="mat-button" type="radio" id="radio" name="optradio" value="M"
+                              (click)="viewdiv($event.target.value)">
+                            Masculino</label>
+                          <label class="radio-inline pl-2">
+                            <input class="mat-button" type="radio" id="radio" name="optradio" value="F"
+                              (click)="viewdiv($event.target.value)">
+                            Feminino</label>
+                        </div>
+
+                      </div>
+                      
+                    </div>
+
+                  </div>
+    
+                    <div class="form-group row pl-3">
+                      <div class="col-md-4">
+                        <label for="email">E-mail</label>
+                        <input class="form-control" name="email" id="email" type="text" formControlName="email"
+                               maxlength="50" autocomplete="new-password" />
+                      </div>
+                      <div class="col-md-4">
+                        <label for="confirmaEmail">Confirma e-mail</label>
+                        <input class="form-control" name="confirmaEmail" id="confirmaEmail" type="text"
+                               formControlName="confirmaEmail" maxlength="50" autocomplete="new-password"
+                               (change)="verificarEmail(formCadastroMedico.value)" />
+                      </div>
+                    </div>                  
+                    <div class="form-group row pl-3">
+                      <div class="col-md-4">
+                        <label for="senha">Informe uma Senha</label>
+                        <input class="form-control" name="senha" id="senha" formControlName="senha" autocomplete="new-password"
+                          type="{{showPass ? 'text' : 'password' }}" />
+                        <button type="button" class="btn-transparent" (click)="toggleShowPass()">
+                          <i class="fa" [ngStyle]="{'color': '#757474'}"
+                            [ngClass]="{'fa-eye': showPass, 'fa-eye-slash': !showPass}" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="confirmaSenha">Confirmar Senha</label>
+                        <input class="form-control" name="confirmaSenha" id="confirmaSenha"
+                          formControlName="confirmaSenha" maxlength="50"
+                          (change)="verificarPassWord(formCadastroMedico.value)"
+                          type="{{showPassw ? 'text' : 'password' }}" />
+                        <button type="button" class="btn-transparent" (click)="toggleShow()">
+                          <i class="fa" [ngStyle]="{'color': '#757474'}"
+                            [ngClass]="{'fa-eye': showPassw, 'fa-eye-slash': !showPassw}" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-4">
+                        <div class="form-check-inline">
+                          <input type="checkbox" class="form-check-input" id="aceitoTermo" name="grupo"
+                            formControlName="aceitoTermo" value="" /> Li e aceito
+                          <a class="a-termo p-1" href="http://aditi.care.saude.ws/termo_medico.pdf" target="_blank"> os
+                            Termos e condições* </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="container mt-5">
+                      <h2>Stripe Checkout</h2>
+                      <div class="row mt-5">
+                        <div class="col-md-4">
+                          <button (click)="pay(20)" class="btn btn-primary btn-block">Pay $20</button>
+                        </div>
+                        <div class="col-md-4">
+                          <button (click)="pay(30)" class="btn btn-success btn-block">Pay $30</button>
+                        </div>
+                        <div class="col-md-4">
+                          <button (click)="pay(50)" class="btn btn-info btn-block">Pay $50</button>
+                        </div>    
+                      </div>
+                      <p class="mt-5">
+                          Try it out using the test card number <b>4242 4242 4242 4242</b>, a random three-digit CVC number, any expiration date in the future, and a random five-digit U.S. ZIP code.
+                      </p>
+                    </div>
+
+                </div>
+
+                <form action="/charge" method="post" id="payment-form">
+                  <div class="form-row">
+                      <label for="card-element">
+                          Credit or debit card
+                      </label>
+                      <div id="card-element">
+                          <!-- a Stripe Element will be inserted here. -->
+                      </div>
+                      <!-- Used to display form errors -->
+                      <div id="card-errors" role="alert"></div>
+                  </div>
+                  <input type="submit" class="submit" value="Submit Payment">
+              </form>
+
+                <div *ngIf="isContato">
+                  <div class="form-group">
+                    <h6>Contato</h6>
+                  </div>
+                  <!DOCTYPE html>
+<html>
+  <head>
+    <title>Buy cool new product</title>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <section>
+      <div class="product">
+        <img src="https://i.imgur.com/EHyR2nP.png" alt="The cover of Stubborn Attachments" />
+        <div class="description">
+          <h3>Stubborn Attachments</h3>
+          <h5>$20.00</h5>
+        </div>
+      </div>
+      <button class="btn btn-success m-2" (click)="createCheckoutSession()">
+        Pagar
+      </button>
+    </section>
+  </body>
+</html>                </div>
+
+                <div class="col-md-1">
+                  <div class="align-self-start">
+                    <img class="cadastro d-none d-sm-block" src="assets/images/linhas_cadastro.png" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>

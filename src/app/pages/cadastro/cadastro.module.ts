@@ -21,6 +21,7 @@ import { CadastroMedicoComponent } from './cadastro-medico/cadastro-medico.compo
 import { NgxMaskModule } from 'ngx-mask';
 import { ToastrComponent } from '../shared/component/toastr/toastr.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { CadastroWebComponent } from './cadastro-web/cadastro-web.component';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     ToastrComponent,
     CadastroComponent,    
     CadastroMedicoComponent,
-    CadastroClinicaComponent      
+    CadastroClinicaComponent,
+    CadastroWebComponent      
   ],
 })
 export class CadastroModule { }

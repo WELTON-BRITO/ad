@@ -40,6 +40,7 @@ import { SolicitarSenhaRoutingModule } from './pages/solicitar-senha/solicitar-s
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { SpinnerComponent } from './spinner/spinner.component';
 
+
 @NgModule({
   declarations: [AppComponent, SpinnerComponent],
   imports: [
@@ -74,7 +75,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
     AutosizeModule,
     SolicitarSenhaModule,
     SolicitarSenhaRoutingModule,
-    FullCalendarModule
+    FullCalendarModule,
    ],
   providers:    [
     { provide: LOCALE_ID, useValue: 'pt' },

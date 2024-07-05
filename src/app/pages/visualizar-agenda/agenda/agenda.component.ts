@@ -98,7 +98,7 @@ export class AgendaComponent implements OnInit {
           var dataFim = new Date(startDate);
 
           // Subtrair 7 dias da data original
-          var dataMenosSeteDias = new Date(dataInicio.getTime() - (7 * 24 * 60 * 60 * 1000));
+          var dataMenosSeteDias = new Date(dataInicio.getTime() - (30 * 24 * 60 * 60 * 1000));
           // Extrair os componentes da nova data
           var ano = dataMenosSeteDias.getFullYear();
           var mes = (dataMenosSeteDias.getMonth() + 1).toString().padStart(2, '0'); // Adiciona um zero à esquerda, se necessário
@@ -107,7 +107,7 @@ export class AgendaComponent implements OnInit {
           var dateInicio = ano + '/' + mes + '/' + dia;
 
           // Subtrair 7 dias da data original
-          var dataMais30Dias = new Date(dataFim.getTime() + (30 * 24 * 60 * 60 * 1000));
+          var dataMais30Dias = new Date(dataFim.getTime() + (90 * 24 * 60 * 60 * 1000));
           // Extrair os componentes da nova data
           var ano = dataMais30Dias.getFullYear();
           var mes = (dataMais30Dias.getMonth() + 1).toString().padStart(2, '0'); // Adiciona um zero à esquerda, se necessário
@@ -121,12 +121,12 @@ export class AgendaComponent implements OnInit {
             medico: this.medicoId !== null ? this.medicoId : this.listMedico[0].id,
           }
 
-          if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
+    //      if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
             this.buscarAtendimento(register, true)
-          } else {
-            this.buscarAtendimento(register, false)
+   //       } else {
+          //  this.buscarAtendimento(register, false)
 
-          }
+   //       }
           this.TodayDate = dateInicio.replace(/\//g, '-');
           this.FinalDate = dateFim.replace(/\//g, '-');
 
@@ -145,12 +145,12 @@ export class AgendaComponent implements OnInit {
           medico: this.medicoId !== null ? this.medicoId : this.listMedico[0].id,
         }
 
-        if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
+        //if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
           this.buscarAtendimento(register, true)
-        } else {
-          this.buscarAtendimento(register, false)
+      //  } else {
+       //   this.buscarAtendimento(register, false)
 
-        }
+      //  }
         this.TodayDate = dateInicio.replace(/\//g, '-');
         this.FinalDate = dateFim.replace(/\//g, '-');
       }
@@ -231,11 +231,11 @@ export class AgendaComponent implements OnInit {
 
     var time = new Date();
     var outraData = new Date();
-    outraData.setDate(time.getDate() + 7);
+    outraData.setDate(time.getDate() + 90);
     this.FinalDate = moment(outraData).format('YYYY-MM-DD')
 
     var outraData2 = new Date();
-    outraData2.setDate(time.getDate() - 7);
+    outraData2.setDate(time.getDate() - 90);
     this.StartedDate = moment(outraData2).format('YYYY-MM-DD')
 
     this.formAgendaAtendimento = this.formBuilder.group({
@@ -258,12 +258,12 @@ export class AgendaComponent implements OnInit {
 
     }
 
-    if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
+    //if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
       this.buscarAtendimento(register, true)
-    } else {
-      this.buscarAtendimento(register, false)
+   // } else {
+  //    this.buscarAtendimento(register, false)
 
-    }
+   // }
   }
 
   fetchData(data) {

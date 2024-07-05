@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { CadastroComponent } from './cadastro.component';
 import { CadastroClinicaComponent } from './cadastro-clinica/cadastro-clinica.component';
 import { CadastroMedicoComponent } from './cadastro-medico/cadastro-medico.component';
+import { CadastroWebComponent } from './cadastro-web/cadastro-web.component';
+
 
 const routes: Routes = [{
   path: '',
@@ -26,5 +28,7 @@ export class CadastroRoutingModule { }
 export const routedComponents = [
   CadastroComponent,  
   CadastroMedicoComponent,
-  CadastroClinicaComponent
+  CadastroClinicaComponent,
+  CadastroWebComponent
+
 ];

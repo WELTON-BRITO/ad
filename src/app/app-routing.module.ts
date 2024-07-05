@@ -11,6 +11,7 @@ import {
 import { LoginComponent } from './pages/login/login.component';
 import { AuthCustomComponent } from './pages/auth/auth-custom.component';
 import { CadastroClinicaComponent } from './pages/cadastro/cadastro-clinica/cadastro-clinica.component';
+import { CadastroWebComponent } from './pages/cadastro/cadastro-web/cadastro-web.component';
 import { CadastroMedicoComponent } from './pages/cadastro/cadastro-medico/cadastro-medico.component';
 import { CadastroComponent } from './pages/cadastro/cadastro.component';
 import { SolicitarSenhaComponent } from './pages/solicitar-senha/solicitar-senha.component';
@@ -61,6 +62,16 @@ export const routes: Routes = [
       {
         path: '',
         component: CadastroClinicaComponent,
+      }
+    ]
+  },
+  {
+    path: 'cadastro-web',    
+    component: AuthCustomComponent,
+    children: [
+      {
+        path: '',
+        component: CadastroWebComponent,
       }
     ]
   },

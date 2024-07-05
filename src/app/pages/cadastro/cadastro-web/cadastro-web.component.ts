@@ -1,22 +1,24 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CadastroMedicoService } from './cadastro-medico.service';
+import { CadastrowebService } from './cadastro-web.service';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
 import { Observable, Subscriber } from 'rxjs';
 import { co } from '@fullcalendar/core/internal-common';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import { SearchZipCodeService } from '../../shared/services/searchZipCode.services';
 import { HttpClient } from '@angular/common/http';
-
+import { switchMap } from 'rxjs/operators';
+import { StripeService } from 'ngx-stripe';
+import {loadStripe} from '@stripe/stripe-js';
 
 @Component({
-  selector: 'ngx-cadastro-medico',
-  styleUrls: ['./cadastro-medico.component.scss'],
-  templateUrl: './cadastro-medico.component.html',
+  selector: 'ngx-cadastro-web',
+  styleUrls: ['./cadastro-web.component.scss'],
+  templateUrl: './cadastro-web.component.html',
 })
 
-export class CadastroMedicoComponent implements OnInit {
+export class CadastroWebComponent implements OnInit {
 
   public formCadastroMedico = null;
   public isInfoGerais = true;
@@ -38,19 +40,22 @@ export class CadastroMedicoComponent implements OnInit {
   showPassw = false;
   public title = 'Por favor insira os seus dados para darmos inicio ao seu cadastro.';
   public titleClinica = 'Por favor informe a baixo todas as clinicas em que você trabalha para que possa gerenciar os seus horários de atendimento em cada uma delas. Ao informar os dados clique no botão adicionar, caso trabalhe em mais de uma, repita o processo até informar todas as que desejar.'
-
+  public handler:any = null;
 
   
   constructor(private formBuilder: FormBuilder,
     private router: Router,
-    private service: CadastroMedicoService,
+    private service: CadastrowebService,
     private serviceCep: SearchZipCodeService,
     private toastrService: NbToastrService,
-    private http: HttpClient) {
+    //private stripeService: StripeService,
+    private http: HttpClient,) {
   }
   ngOnDestroy() { }
 
   ngOnInit() {
+
+   this.loadStripe();
 
     localStorage.setItem('Authorization', '1');
     this.buscaEstado();
@@ -91,23 +96,58 @@ export class CadastroMedicoComponent implements OnInit {
 
   }
 
+
   viewdiv(data) {
     this.sexo = data;
   }
 
-  createCheckoutSession() {
-    const priceId = '10.99'; // Replace with your actual Price ID
-    const url = 'http://localhost:4200/#/cadastro-web';
+  
 
-    this.http.post(url, { price: priceId }).subscribe(
-      (session: any) => {
-        window.location.href = session.url;
-      },
-      (error) => {
-        console.error('Error creating checkout session:', error);
+  loadStripe() {
+     
+    if(!window.document.getElementById('stripe-script')) {
+      var s = window.document.createElement("script");
+      s.id = "stripe-script";
+      s.type = "text/javascript";
+      s.src = "https://checkout.stripe.com/checkout.js";
+      s.onload = () => {
+        this.handler = (<any>window).StripeCheckout.configure({
+          key: 'sk_test_51OmbcPCNxbEXx03wA92S5oRRaR3BWXo5UpCOF3VLzVjFpypRDZzDF7NsBd0I7FPhBkxeREb4MnTFaFBkb3kmWchS00pNcmIQ3H',
+          locale: 'auto',
+          token: function (token: any) {
+            // You can access the token ID with `token.id`.
+            // Get the token ID to your server-side code for use.
+            console.log(token)
+            alert('Payment Success!!');
+          }
+        });
       }
-    );
+       
+      window.document.body.appendChild(s);
+    }
   }
+
+
+  pay(amount) {    
+ 
+    var handler = (<any>window).StripeCheckout.configure({
+      key: 'pk_test_51OmbcPCNxbEXx03w4FVZk3PetEgifbt66VHyZnhu9N5CN6l2Hk9RpDAjr1FfZq5wXeZ4q9B0AgroBJICIPwRHuHN00pasZVGWb',
+      locale: 'auto',
+      token: function (token: any) {
+        // You can access the token ID with `token.id`.
+        // Get the token ID to your server-side code for use.
+        console.log(token)
+        alert('Token Created!!');
+      }
+    });
+ 
+    handler.open({
+      name: 'Demo Site',
+      description: '2 widgets',
+      amount: amount * 100
+    });
+ 
+}
 
   dadosPessoais(data) {
 
@@ -414,6 +454,21 @@ export class CadastroMedicoComponent implements OnInit {
       return true;
     }
   }
+
+  createCheckoutSession() {
+    const priceId = '10.99'; // Replace with your actual Price ID
+    const url = 'http://localhost:4200/#/cadastro-web';
+
+    this.http.post(url, { price: priceId }).subscribe(
+      (session: any) => {
+        window.location.href = session.url;
+      },
+      (error) => {
+        console.error('Error creating checkout session:', error);
+      }
+    );
+  }
+
 
   proximo(data) {
 
