@@ -1,3 +1,5 @@
+<div class="loader" *ngIf="isLoader"></div>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12 col-xs-12">
@@ -19,78 +21,69 @@
                   </div>
                 </div>
                
-                <div class="form-row align-items-center">
-                  <h6 class="p-1">Dados do Responsável:</h6>
-                </div>                       
-
-
-                  <div class="col-md-12">
-
-                  <div class="form-row align-items-center">
-                    <p class="card-text mb-0"><strong>Nome Responsável:</strong> {{ NewowData.name }}</p>
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="p-1">Dados do Responsável:</h6>
                   </div>
-                  <div class="form-row align-items-center">
+                  <div class="card-body">
+                    <p class="card-text mb-0"><strong>Responsável:</strong> {{ NewowData.name }}</p>
                     <p class="card-text mb-0"><strong>Telefone:</strong> {{ NewowData.cellPhone }}</p>
-                  </div>
-                  <div class="form-row align-items-center">
                     <p class="card-text mb-0"><strong>Email:</strong> {{ NewowData.email }}</p>
-                  </div>
-                  <div class="form-row align-items-center">
                     <p class="card-text mb-0"><strong>CPF:</strong> {{ NewowData.federalId }}</p>
                   </div>
                 </div>
-                            
-                <div class="form-row align-items-center">
-                  <h6 class="p-1">Dados do Dependente:</h6>
-                </div>                       
-
-                <div class="form-row align-items-center">
-                  <div class="form-group col-md-4">
-                    <label for="nomeDep">Nome do Dependente*</label>
-                    <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
+                         
+                <div class="card" style="margin-top: 10px;">
+                  <div class="card-header">
+                    <h6 class="p-1">Dados do Dependente:</h6>
                   </div>
-                  <div class="form-group col-md-4">
-                    <label for="dateNascDep">Data de Nascimento*</label>
-                    <input class="form-control" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
-                      maxlength="10" (blur)="validaData($event.target.value)" />
-                  </div>
-                  <div class="form-group col-md-4 ali align-items-center">
-                    <label class="mat-button mb-3">Sexo Biológico*</label>
-                    <div class="row">
-                      <label class="radio-inline mr-3 pl-3">
-                        <input class="mat-button" type="radio" id="radio" name="optradio" value="M"
-                          (click)="viewdiv($event.target.value)">
-                        Masculino
-                      </label>
-                      <label class="radio-inline">
-                        <input class="mat-button" type="radio" id="radio" name="optradio" value="F"
-                          (click)="viewdiv($event.target.value)"> Feminino
-                      </label>
+                  <div class="card-body">
+                    <div class="form-row">
+                      <div class="form-group col-md-4">
+                        <label for="nomeDep">Nome do Dependente*</label>
+                        <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="dateNascDep">Data de Nascimento*</label>
+                        <input class="form-control" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
+                          maxlength="10" (blur)="validaData($event.target.value)" />
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label for="cpfDep">CPF*</label>
+                        <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
+                          value="cpfDep" mask="000.000.000-00" (change)="isValidCpf($event.target,formDependente.value)" />
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label class="mat-button mb-3">Sexo Biológico*</label>
+                        <div class="row">
+                          <label class="radio-inline mr-3 pl-3">
+                            <input class="mat-button" type="radio" id="radioM" name="optradio" value="M"
+                              (click)="viewdiv('M')"> Masculino
+                          </label>
+                          <label class="radio-inline">
+                            <input class="mat-button" type="radio" id="radioF" name="optradio" value="F"
+                              (click)="viewdiv('F')"> Feminino
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label for="rgDep">RG</label>
+                        <input class="form-control" name="rgDep" id="rgDep" type="text" formControlName="rgDep"
+                          mask="00.000.000-0" />
+                      </div>
+                      <div class="form-group col-md-2">
+                        <label for="tipoSanguineo">Tipo Sanguíneo</label>
+                        <select class="form-control" formControlName="tipoSanguineo">
+                          <option value="null" selected>SELECIONE</option>
+                          <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.descricao }}">
+                            {{ tipoSanguineo.descricao }}
+                          </option>
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
-                              
-                <div class="form-row align-items-center">
-                  <div class="form-group col-md-3">
-                    <label for="cpfDep">CPF (Opcional)</label>
-                    <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
-                      value="cpfDep" mask="000.000.000-00" (change)="isValidCpf($event.target,formDependente.value)" />
-                  </div>
-                  <div class="form-group col-md-3">
-                    <label for="rgDep">RG (Opcional)</label>
-                    <input class="form-control" name="rgDep" id="rgDep" type="text" formControlName="rgDep"
-                      mask="00.000.000-0" />
-                  </div>
-                  <div class="form-group col-md-2">
-                    <label for="tipoSanguineo">Tipo Sanguineo (Opcional)</label>
-                    <select class="form-control" formControlName="tipoSanguineo">
-                      <option value="null" selected>SELECIONE</option>
-                      <option *ngFor="let tipoSanguineo of listSanguino" value="{{ tipoSanguineo.descricao }}">{{
-                        tipoSanguineo.descricao}}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+                
               <div class="form-row align-items-center pt-5 modal-footer">
                 <div class="form-group col-md-2 mr-lg-n4">
                   <div class="form-group">
@@ -101,6 +94,8 @@
                   </div>
                 </div>
               </div>
+            </div>
+
             </form>
           </nb-card-body>
           <nb-card-body *ngIf="isVisualizar">

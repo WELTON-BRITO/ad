@@ -39,7 +39,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                 <!-- <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="btn_clinica">
                         <button nbButton outline status="primary" type="button" id="contato"
@@ -48,7 +48,7 @@
                             icon="email-outline"></nb-icon> Contato</button>
                       </div>
                     </div>
-                  </div>
+                  </div>-->
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="btn_clinica">
@@ -71,10 +71,10 @@
                     </div>
                   </div>-->
                 </div>
-                  <div class="form-row align-items-center">
-                    <h6 class="p-1">Dados Pessoais do Responsável:</h6>
-                  </div>
                   <div class="col-md-12 col-xs-12 align-items-center" *ngIf="isInformacao">
+                    <div class="form-row align-items-center">
+                      <h6 class="p-1">Dados Pessoais:</h6>
+                    </div>
                       <div class="form-row align-items-center">
                         <div class="form-group col-md-4">
                           <label for="nome">Informe o Médico*</label>
@@ -86,7 +86,7 @@
                           </select>
                         </div>
                           <div class="form-group col-md-4">
-                            <label for="nome">Nome do Responsável*</label>
+                            <label for="nome">Nome*</label>
                             <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" />
                           </div>
                           <div class="form-group col-md-2">
@@ -96,37 +96,37 @@
                           </div>
                           <div class="form-group col-md-2">
                             <label for="dateNasc">Data de Nascimento*</label>
-                            <div class="row pl-3">
-                              <input class="date" type="date" id="dateNasc" name="mydate" formControlName="dateNasc"
-                                maxlength="10" (blur)="validaData($event.target.value)" />
-                            </div>
+                            <input class="form-control" type="date" id="dateNasc" name="mydate" formControlName="dateNasc"
+                              maxlength="10" (blur)="validaData($event.target.value)" />
                           </div>
                         </div>
                     
-                        <div class="form-row align-items-center">
+                        <div class="form-row">
+     
                           <div class="form-group col-md-4">
                             <label>Sexo Biológico*</label>
                             <div class="d-flex align-items-center">
                               <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="radioM" name="optradio" value="M" (click)="viewdiv($event.target.value)">
+                                <input class="form-check-input" type="radio" id="radioM" name="optradio" value="M" (click)="viewdiv('M')">
                                 <label class="form-check-label" for="radioM">Masculino</label>
                               </div>
                               <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="radioF" name="optradio" value="F" (click)="viewdiv($event.target.value)">
+                                <input class="form-check-input" type="radio" id="radioF" name="optradio" value="F" (click)="viewdiv('F')">
                                 <label class="form-check-label" for="radioF">Feminino</label>
                               </div>
                             </div>
                           </div>
-                          <div class="form-group col-md-4 d-flex align-items-center">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input" id="imgem" name="imgem" formControlName="imgem" (change)="converterImagem($event, $event.target)">
-                              <label class="custom-file-label" for="imgem">Escolher arquivo</label>
+                            <div class="form-group col-md-4">
+                              <label for="celular">Celular*</label>
+                              <input class="form-control" name="celular" id="celular" type="text" formControlName="celular"
+                                mask="(00) 0 0000-0000 || (00) 0000-0000" />
                             </div>
-                            <div *ngIf="this.avatar" class="col-md-4">
-                              <img class="rounded-circle img-fluid" src="{{ this.avatar }}" alt="User Icon" style="height: 80px;" />
-                            </div>
+                            <div class="form-group col-md-4">
+                              <label for="email">E-mail*</label>
+                              <input class="form-control" name="email" id="email" type="text" formControlName="email" />
                           </div>
                         </div>
+                        
                 </div>
                 <div *ngIf="isLocalizacao">
                   <div class="form-row align-items-center">
@@ -200,40 +200,27 @@
                   <div class="form-row align-items-center">
                     <h6 class="p-1">Informações Gerais</h6>
                   </div>
-                  <div class="form-group row pl-3">
-                    <div class="col-md-5">
-                      <div class="align-self-start">
-                        <img src="{{this.avatarDep }}" style="height: 80px;" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-row align-items-center">
-                    <div class="form-group row">
-                      <div class="col-md-12">
-                        <label for="imagemDep">Adicione sua foto</label>
-                        <input class="form-control-file media-body" name="imagemDep" id="imagemDep" type="file"
-                          formControlName="imagemDep" (change)="converterImagem($event, $event.target)"
-                          value="imagemDep" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-row align-items-center">
+
+                  <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="nomeDep">Nome do Dependente*</label>
                       <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                       <label for="dateNascDep">Data de Nascimento*</label>
                       <div class="row pl-3">
                         <input class="date" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
                           maxlength="10" (blur)="validaData($event.target.value)" />
                       </div>
-                      <div *ngIf="showMsgErro" class="link-text pt-2" style="color: #dc3545;">
-                        {{this.msgErro}} <br />
-                      </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="cpfDep">CPF*</label>
+                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
+                        value="cpfDep" mask="000.000.000-00"
+                        (change)="isValidCpf($event.target,formNovoPaciente.value)" />
                     </div>
                   </div>
-                  <div class="form-row align-items-center">
+                  <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="nome">Nome da Mãe*</label>
                       <input class="form-control" name="nomeResp01" id="nomeResp01" type="text"
@@ -245,21 +232,7 @@
                         formControlName="nomeResp02" />
                     </div>
                   </div>
-                  <div class="form-row align-items-center">
-                    <div class="form-group col-md-3">
-                      <label for="cpfDep">CPF</label>
-                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
-                        value="cpfDep" mask="000.000.000-00"
-                        (change)="isValidCpf($event.target,formNovoPaciente.value)" />
-                      <div *ngIf="showMsgErroCpfDep" class="link-text pt-2" style="color: #dc3545;">
-                        {{this.msgErroCpf}} <br />
-                      </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                      <label for="rgDep">RG</label>
-                      <input class="form-control" name="rgDep" id="rgDep" type="text" formControlName="rgDep"
-                        mask="00.000.000-0" />
-                    </div>
+                  <div class="form-row">
                     <div class="form-group col-md-3">
                       <label class="mat-button mb-3">Sexo Biologico:</label>
                       <div class="row">

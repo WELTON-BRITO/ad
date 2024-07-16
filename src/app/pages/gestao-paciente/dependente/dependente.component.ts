@@ -38,6 +38,8 @@ export class DependenteComponent implements OnDestroy {
   public nameMae = null;
   public NewowData: any = {};
   public avatar = "assets/images/avatar.png";
+  public isLoader: boolean = false;
+
 
 
   constructor(private formBuilder: FormBuilder,
@@ -129,6 +131,8 @@ export class DependenteComponent implements OnDestroy {
       params = params.append('userId', this.history.data.id)
   
       this.isActive = true;
+      this.fetchData(true)
+
   
       this.service.visualizarDependente(params, (response) => {
   
@@ -159,11 +163,14 @@ export class DependenteComponent implements OnDestroy {
             status: data.status || null,
           }
         })
-        
+        this.fetchData(false)
+
   
       }, (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
+        this.fetchData(false)
+
       });
 
       
@@ -298,13 +305,16 @@ export class DependenteComponent implements OnDestroy {
     var regExpEspaco = /^\s+|\s+$/g;  //Expressão regular para retirar espaços em branco.
 
     if (stringData.length != 10) {
-      this.showMsgErro = true;
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formDependente.get('dateNascDep').setValue(null);
       return false;
     }
 
     let splitData = stringData.split('-');
 
     if (splitData.length != 3) {
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formDependente.get('dateNascDep').setValue(null);
       return false;
     }
 
@@ -313,6 +323,8 @@ export class DependenteComponent implements OnDestroy {
     splitData[2] = splitData[2].replace(regExpEspaco, '');
 
     if ((splitData[0].length != 4) || (splitData[1].length != 2) || (splitData[2].length != 2)) {
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formDependente.get('dateNascDep').setValue(null);
       return false;
     }
 
@@ -323,15 +335,17 @@ export class DependenteComponent implements OnDestroy {
     var hoje = new Date();
 
     if (novaData > hoje) {
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formDependente.get('dateNascDep').setValue(null);
       return false;
     }
 
     if ((novaData.getDate() != dia) || (novaData.getMonth() != mes) || (novaData.getFullYear() != ano)) {
-      this.showMsgErro = true;
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formDependente.get('dateNascDep').setValue(null);
       return false;
     }
     else {
-      this.showMsgErro = false;
       return true;
     }
 
@@ -341,13 +355,18 @@ export class DependenteComponent implements OnDestroy {
 
     if (element.id === 'cpf') {
       if (!CPFValidator.isValidCPF(data.cpf)) {
-        this.toastrService.danger('Cpf Informado é Inválido','Aditi Care');
+        this.toastrService.danger('O Cpf Informado não é Inválido','Aditi Care');
+        this.formDependente.get('cpfDep').setValue(null); // Clear the value
+
         return false;
+      return false;
       }
       return true;
     } else if (element.id === 'cpfDep') {
       if (!CPFValidator.isValidCPF(data.cpfDep)) {
-        this.toastrService.danger('Cpf Informado é Inválido','Aditi Care');
+        this.toastrService.danger('O Cpf Informado não é Inválido','Aditi Care');
+        this.formDependente.get('cpfDep').setValue(null); // Clear the value
+
         return false;
       }
       return true;
@@ -356,6 +375,9 @@ export class DependenteComponent implements OnDestroy {
   }
 
   cadastrarPaciente(data) {
+
+    this.fetchData(true)
+
     
     let register = {
       name: data.nomeDep,
@@ -366,27 +388,26 @@ export class DependenteComponent implements OnDestroy {
       biologicalSex: this.sexo,
       birthCountry: null,
       birthDate: data.dateNascDep,
-      ufId: this.history.data.uf,
-      cityId: this.history.data.city,
+      ufId: this.history.data.uf || 1,
+      cityId: this.history.data.city || 317020,
       bloodType: data.tipoSanguineo,
       avatar: this.avatar,
       userId: this.history.data.id
     }
 
-    if ((data.nomeDep != null) && (data.nameMother != null || this.history.data.name != null ) && (data.dateNascDep != null) && (this.sexo != null)) {
-
-      this.isActive = true;
+    if ((data.nomeDep != null) && (data.nameMother != null || this.history.data.name != null ) && (data.dateNascDep != null) && (this.sexo != null)&& (data.cpfDep != null)) {
 
       this.service.cadastrarDependente(register, (response => {
-        this.isActive = false;
+        this.fetchData(false)
+
         this.toastrService.success('Inclusão Realizada com Sucesso','Aditi Care');
-        this.limpaForm()
+        this.previousPage()
       }), (error) => {
-        this.isActive = false;
+        this.fetchData(false)
         this.toastrService.danger(error.error.message);
       });
     } else {
-      this.isActive = false;
+      this.fetchData(false)
       this.toastrService.danger('Preencher Preencher os Campos Obrigatorio','Aditi Care');
     }
 
@@ -416,4 +437,16 @@ export class DependenteComponent implements OnDestroy {
   previousPage() {
     this.router.navigate(['/pages/gestao-paciente/paciente'])
   }
+
+  fetchData(data) {
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
 }

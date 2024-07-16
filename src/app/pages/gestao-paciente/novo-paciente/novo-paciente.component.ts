@@ -46,6 +46,7 @@ export class NovoPacienteComponent implements OnDestroy {
   public showMsgErroCpfDep = false;
   public imgFile = null;
   public uploadForm = null;
+  public sexoSelecionado: string = '';
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -161,6 +162,9 @@ export class NovoPacienteComponent implements OnDestroy {
 
   tipoFormulario(data) {
 
+    this.formNovoPaciente.get('cpf').setValue(this.sexoSelecionado); // Clear the value
+    this.formNovoPaciente.get('cpfDep').setValue(this.sexoSelecionado); // Clear the value
+    
     if (data === 'informacao') {
 
       this.isInformacao = true;
@@ -170,6 +174,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.isProximo = true;
       this.isCadastrar = false;
       this.isVoltar = false;
+      
     } else if (data === 'localizacao') {
 
       this.isInformacao = false;
@@ -226,10 +231,10 @@ export class NovoPacienteComponent implements OnDestroy {
 
       this.isInformacao = false;
       this.isLocalizacao = false;
-      this.isContato = true;
-      this.isAddDependente = false;
-      this.isProximo = true;
-      this.isCadastrar = false;
+      this.isContato = false;
+      this.isAddDependente = true;
+      this.isProximo = false;
+      this.isCadastrar = true;
       this.isVoltar = true;
 
     } else if (data.isContato == true) {
@@ -422,7 +427,7 @@ export class NovoPacienteComponent implements OnDestroy {
       this.toastrService.danger('O campo email é obrigatório!!!','Aditi Care!');
     } else if (this.sexo === null) {
       this.toastrService.danger('O campo sexo biologico é obrigatório!!!','Aditi Care!');
-    } else if ((data.nomeDep != null) && (data.dateNascDep === null)) {
+    } else if ((data.nomeDep != null) && (data.dateNascDep === null) && (data.cpfDep != null)) {
       this.toastrService.danger('Os campos do dependente são obrigatórios!!!','Aditi Care!');
     } else if (this.showMsgErroCpf === true || this.showMsgErroCpfDep === true) {
       this.toastrService.danger('O campo cpf inválido!!!','Aditi Care!');
@@ -450,6 +455,8 @@ export class NovoPacienteComponent implements OnDestroy {
 
   viewdiv(data) {
     this.sexo = data;
+    this.sexoSelecionado = data;
+
   }
 
   limparForm() {
@@ -556,19 +563,23 @@ export class NovoPacienteComponent implements OnDestroy {
     });
   }
 
+  
   validaData(stringData) {
 
     var regExpCaracter = /[^\d]/;     //Expressão regular para procurar caracter não-numérico.
     var regExpEspaco = /^\s+|\s+$/g;  //Expressão regular para retirar espaços em branco.
 
     if (stringData.length != 10) {
-      this.showMsgErro = true;
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formNovoPaciente.get('dateNasc').setValue(null);
       return false;
     }
 
     let splitData = stringData.split('-');
 
     if (splitData.length != 3) {
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formNovoPaciente.get('dateNasc').setValue(null);
       return false;
     }
 
@@ -577,6 +588,8 @@ export class NovoPacienteComponent implements OnDestroy {
     splitData[2] = splitData[2].replace(regExpEspaco, '');
 
     if ((splitData[0].length != 4) || (splitData[1].length != 2) || (splitData[2].length != 2)) {
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formNovoPaciente.get('dateNasc').setValue(null);
       return false;
     }
 
@@ -587,15 +600,17 @@ export class NovoPacienteComponent implements OnDestroy {
     var hoje = new Date();
 
     if (novaData > hoje) {
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formNovoPaciente.get('dateNasc').setValue(null);
       return false;
     }
 
     if ((novaData.getDate() != dia) || (novaData.getMonth() != mes) || (novaData.getFullYear() != ano)) {
-      this.showMsgErro = true;
+      this.toastrService.danger('A Data Informada não é valida','Aditi Care');
+      this.formNovoPaciente.get('dateNasc').setValue(null);
       return false;
     }
     else {
-      this.showMsgErro = false;
       return true;
     }
 
@@ -605,17 +620,20 @@ export class NovoPacienteComponent implements OnDestroy {
 
     if (element.id === 'cpf') {
       if (!CPFValidator.isValidCPF(data.cpf)) {
-        this.showMsgErroCpf = true;
+        this.toastrService.danger('O Cpf Informado não é Inválido','Aditi Care');
+        this.formNovoPaciente.get('cpf').setValue(null); // Clear the value
+
         return false;
+      return false;
       }
-      this.showMsgErroCpf = false;
       return true;
-    } else if (element.id === 'cpfDep') {
+    } else if (element.id === 'cpf') {
       if (!CPFValidator.isValidCPF(data.cpfDep)) {
-        this.showMsgErroCpfDep = true;
+        this.toastrService.danger('O Cpf Informado não é Inválido','Aditi Care');
+        this.formNovoPaciente.get('cpf').setValue(null); // Clear the value
+
         return false;
       }
-      this.showMsgErroCpfDep = false;
       return true;
     }
 

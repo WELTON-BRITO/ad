@@ -57,7 +57,7 @@ export class CadastroWebComponent implements OnInit {
 
    this.loadStripe();
 
-    localStorage.setItem('Authorization', '1');
+    //localStorage.setItem('Authorization', '1');
     this.buscaEstado();
     this.buscaEspecialidade();
     this.formCadastroMedico = this.formBuilder.group({

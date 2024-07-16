@@ -71,9 +71,12 @@
                                         <p class="card-text">CPF: {{ row.federalId  }}</p>
     
                                         <div class="datatable-body-box-actions">
-                                          <button class="btn home-icon pt-4" (click)="cadastrar(row)" title="Cadastrar dependente">
-                                            <i class="fas fa-user-plus" aria-label="Cadastrar dependente"></i>
-                                          </button>
+                                          <button class="btn home-icon pt-4"
+                                          [disabled]="row?.nameChild"
+                                          (click)="cadastrar(row)"
+                                          title="Cadastrar dependente">
+                                    <i class="fas fa-user-plus" aria-label="Cadastrar dependente"></i>
+                                  </button>
                                           <button style="margin: 0 15px;" class="btn home-icon pt-4"
                                                   (click)="visualizar(row)"
                                                   title="Visualizar dependente">

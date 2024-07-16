@@ -44,7 +44,7 @@ export class HttpService {
             successHandle(err);
             this.loadingBarService.complete();
           }
-          else if (parseInt(err.status) == 500) {
+          else if (parseInt(err.status) == 500 ||parseInt(err.status) == 401 ) {
 
             {
              setTimeout(() => {
@@ -78,6 +78,15 @@ export class HttpService {
   private getErrorMessage(err: any): any {
 
     if (parseInt(err.status) >= 400 && parseInt(err.status) < 500) {
+      console.log(parseInt(err.status))
+      if (parseInt(err.status) == 401) {
+
+        {
+         setTimeout(() => {
+             this.router.navigate(['/login']);
+         }, 3000); // 3000 milissegundos = 3 segundos
+     }
+ }
       if (err.error.errors && err.error.errors.length > 0) {
         let errMessage = "";
         if (err.error.errors[0].simpleUserMessage) {
@@ -101,7 +110,6 @@ export class HttpService {
         }, 3000); // 3000 milissegundos = 3 segundos
     }
 }
-
     else {
       return { message: 'Erro não verificado.', status: err.status };
     }
