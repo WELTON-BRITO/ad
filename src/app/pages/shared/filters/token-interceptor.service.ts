@@ -22,8 +22,13 @@ export class TokenInterceptorService implements HttpInterceptor {
 
   getHeaderToken() {
     const token = localStorage.getItem('Authorization');
+    if(token == null || token ==''){
+      const token = sessionStorage.getItem('Authorization');
+    }
+
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Authorization' , token);
     return headers;
   }
+
 }

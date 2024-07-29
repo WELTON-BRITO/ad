@@ -47,6 +47,8 @@ export class NovoPacienteComponent implements OnDestroy {
   public imgFile = null;
   public uploadForm = null;
   public sexoSelecionado: string = '';
+  public isLoader: boolean = false;
+
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
@@ -120,7 +122,7 @@ export class NovoPacienteComponent implements OnDestroy {
             }, 3000); // 3000 milissegundos = 3 segundos
         }
     }
-        this.buscaEstado();
+    this.buscaEstado();
     this.buscaConvenio();
     this.formNovoPaciente = this.formBuilder.group({
       medico: [this.listMedico[0], Validators.required],
@@ -296,46 +298,88 @@ export class NovoPacienteComponent implements OnDestroy {
 
   buscaEstado() {
 
+    this.fetchData(true)
+
+
     this.service.buscaEstado(null, (response) => {
+
+      this.fetchData(false)
+
 
       this.listEstado = response
     }, (error) => {
       this.toastrService.danger(error.error.message);
+      this.fetchData(false)
+
     });
 
   }
 
   buscaCep(data) {
 
+    this.fetchData(true)
+
+
     this.serviceCep.buscaCep(data.cep, null, (response) => {
 
       this.formNovoPaciente.controls['endereco'].setValue(response.logradouro.replace('Rua', '').replace('Avenida', '').trim());
       this.formNovoPaciente.controls['bairro'].setValue(response.bairro.trim());
 
+      this.fetchData(false)
+
+
     }, (error) => {
       this.toastrService.danger(error.error.message);
+      this.fetchData(false)
+
     });
   }
 
   buscaCidade(data) {
 
+    this.fetchData(true)
+
+
     this.service.buscaCidade(null, data, (response) => {
 
       this.listCidade = response
 
+      this.fetchData(false)
+
+
     }, (error) => {
       this.toastrService.danger(error.error.message);
+      this.fetchData(false)
+
     });
   }
 
+  fetchData(data) {
+    if(data){
+    // Mostra o loader
+    this.isLoader =true
+    }else{
+      setTimeout(() => {
+        // Oculta o loader após o atraso
+        this.isLoader =false
+    }, 2000);
+}
+}
+
   buscaConvenio() {
+
+    this.fetchData(true)
 
     this.service.buscaConvenio(null, (response) => {
 
       this.listConvenio = response
 
+      this.fetchData(false)
+
     }, (error) => {
       this.toastrService.danger(error.error.message);
+      this.fetchData(false)
+
     });
 
   }
@@ -435,17 +479,19 @@ export class NovoPacienteComponent implements OnDestroy {
 
       this.isActive = true;
 
+      this.fetchData(true)
+
+
       this.service.salvarPaciente(this.register, (response => {
-        this.isActive = false;
+        this.fetchData(false)
         this.toastrService.success('Registro Realizado com Sucesso !!!','Aditi Care!');
-        this.limparForm()
         this.previousPage()
       }), (error) => {
         this.isActive = false;
         this.toastrService.danger(error.error.message);
+        this.fetchData(false)
+
       });
-
-
     }
   }
 
@@ -627,10 +673,10 @@ export class NovoPacienteComponent implements OnDestroy {
       return false;
       }
       return true;
-    } else if (element.id === 'cpf') {
+    } else if (element.id === 'cpfDep') {
       if (!CPFValidator.isValidCPF(data.cpfDep)) {
         this.toastrService.danger('O Cpf Informado não é Inválido','Aditi Care');
-        this.formNovoPaciente.get('cpf').setValue(null); // Clear the value
+        this.formNovoPaciente.get('cpfDep').setValue(null); // Clear the value
 
         return false;
       }

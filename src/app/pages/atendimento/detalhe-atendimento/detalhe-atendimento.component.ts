@@ -276,8 +276,6 @@ if (allData) {
       medico: this.paciente.doctorId
     }]
  
-    console.log(this.patchPaciente)
-
     if(this.patchPaciente){
       localStorage.removeItem('detalhesData');
       localStorage.removeItem('histDetails');
@@ -286,7 +284,6 @@ if (allData) {
       localStorage.removeItem('detalhesData');
       localStorage.removeItem('histDetails');
       this.router.navigate(['/pages/atendimento/buscar-atendimento'], { state: rowData });
-
   }
 
   }

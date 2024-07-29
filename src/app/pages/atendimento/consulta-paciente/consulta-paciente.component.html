@@ -188,7 +188,7 @@
                                     <!-- Início do conteúdo colapsável -->
                                     <div id="dadosAtendimento" class="collapse-content" >
                                       <!-- Conteúdo do atendimento, incluindo a prescrição -->
-                                      <div class="form-row align-items-center ">
+                                      <div class="form-row align-items-center">
                                         <div class="col-lg-12">
                                           <div class="inputprescricao input-medica">
                                             <div class="d-flex justify-content-between">
@@ -199,14 +199,19 @@
                                               </button>
                                             </div>
                                             <textarea autosize class="form-control" formControlName="prescricaoMedica"
-                                                      rows="3" id="prescricaoMedica" placeholder="Informe a Prescrição médica"
-                                                      [value]="" (keypress)="caracteresMedica()" maxlength="20000">
-                                            </textarea>
-                                            <p class="text-muted"><small><span class="caracteres" name="txtArea">{{this.tamMedica}}</span></small>
-                                              quantidade máxima de caracteres</p>
+                                            rows="3" id="prescricaoMedica" placeholder="Informe a Prescrição médica"
+                                            (input)="htmldecodeHexadecimalString($event.target, $event.target.value)" maxlength="20000"></textarea>
+                                  
+                                            <p class="text-muted">
+                                              <small>
+                                                <span class="caracteres" name="txtArea">{{ tamMedica }}</span>
+                                              </small>
+                                              quantidade máxima de caracteres
+                                            </p>
                                           </div>
                                         </div>
                                       </div>
+                                      
                                       <!-- Outros conteúdos do atendimento aqui -->
                                     <!-- Fim do conteúdo colapsável -->
                                   
@@ -221,9 +226,9 @@
                                             <i class="fa fa-angle-down"></i>
                                           </button>
                                         </div>
-                                        <textarea autosize class="form-control" rows="3" formControlName="detalhesInterno" id="detalhesInterno"
-                                                  placeholder="Informe Detalhes do Prontuario Interno. Estas Informações Não Aparecem Para os Pacientes."
-                                                  (keypress)="caracteresInterno()" maxlength="20000"></textarea>
+                                        <textarea autosize class="form-control" formControlName="detalhesInterno"
+                                        rows="3" id="detalhesInterno" placeholder="Informe Detalhes do Prontuario Interno. Estas Informações Não Aparecem Para os Pacientes."
+                                        (input)="htmldecodeHexadecimalString($event.target, $event.target.value)" maxlength="20000"></textarea>
                                         <p class="text-muted"><small><span class="caracteres" name="txtArea">{{this.tamInterno}}</span></small>
                                           quantidade máxima de caracteres</p>
                                       </div>
@@ -249,9 +254,9 @@
                                             <i class="fa fa-angle-down"></i>
                                           </button>
                                         </div>
-                                        <textarea autosize class="form-control" rows="3" formControlName="detalhesCliente" id="detalhesCliente"
-                                                  placeholder="Informe Detalhes do Prontuario que Serão Exibidos aos Pacientes."
-                                                  (keypress)="caracteresCliente()" maxlength="20000"></textarea>
+                                        <textarea autosize class="form-control" formControlName="detalhesCliente"
+                                        rows="3" id="detalhesCliente" placeholder="Informe Detalhes do Prontuario que Serão Exibidos aos Pacientes."
+                                        (input)="htmldecodeHexadecimalString($event.target, $event.target.value)" maxlength="20000"></textarea>
                                         <p class="text-muted"><small><span class="caracteres" name="txtArea">{{this.tamCliente}}</span></small>
                                           quantidade máxima de caracteres</p>
                                       </div>
@@ -267,9 +272,9 @@
                                             <i class="fa fa-angle-down"></i>
                                             </button>
                                         </div>
-                                        <textarea autosize class="form-control" rows="3" formControlName="pedidoExame" id="pedidoExame"
-                                                    placeholder="Informe Aqui os Pedidos de Exame."
-                                                    (keypress)="caracteresExame()" maxlength="20000"></textarea>
+                                        <textarea autosize class="form-control" formControlName="pedidoExame"
+                                        rows="3" id="pedidoExame" placeholder="Informe Aqui os Pedidos de Exame."
+                                        (input)="htmldecodeHexadecimalString($event.target, $event.target.value)" maxlength="20000"></textarea>
                                         <p class="text-muted"><small><span class="caracteres" name="txtArea">{{this.tamExame}}</span></small>
                                             quantidade máxima de caracteres</p>
                                         </div>

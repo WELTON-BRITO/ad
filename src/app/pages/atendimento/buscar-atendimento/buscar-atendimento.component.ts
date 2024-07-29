@@ -359,6 +359,7 @@ export class BuscarAtendimentoComponent implements OnInit {
           params = params.append('doctorId', data.medicoId ?? data.medico);
           let allData = []; // Crie uma variável vazia para armazenar os dados
           this.service.buscaAtendimentos(params, (response) => {
+            console.log(response)
             allData = response
               .filter(data => data.status !== '05 - Consulta Cancelada')
               .map(data => ({
@@ -372,8 +373,8 @@ export class BuscarAtendimentoComponent implements OnInit {
                 status: data.status,
                 atendimento: data,
                 modalidade: data.typeServiceName + ' - ' + (data?.procedureName ?? ''),
-                email: data.userPhone,
-                telefone: data.userEmail,
+                email: data.userEmail,
+                telefone: data.userPhone,
                 dataInicio: data.dataInicio,
                 dataFim: data.dataInicio,
                 clinicaId: data.clinicId,
@@ -381,7 +382,7 @@ export class BuscarAtendimentoComponent implements OnInit {
                 medicoId: data.doctorId,
                 isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
                 avatar: this.getAvatar(data)
-              }));
+                            }));
 
             if (allData.length === 0) {
               this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');

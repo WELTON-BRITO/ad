@@ -457,9 +457,9 @@ export class ConsultaPacienteComponent implements OnDestroy {
             if (allData) {
               // Converta os dados de string para objeto
               const parsedData = JSON.parse(allData);
-              this.formConsultaPaciente.controls['detalhesCliente'].setValue(parsedData.detalhesCliente ?? null);
-              this.formConsultaPaciente.controls['detalhesCliente'].setValue(parsedData?.detalhesCliente ?? null);
-              this.formConsultaPaciente.controls['detalhesInterno'].setValue(parsedData?.detalhesInterno ?? null);
+              this.formConsultaPaciente.controls['detalhesCliente'].setValue(this.decodeHexadecimalString(parsedData.detalhesCliente ?? null));
+              this.formConsultaPaciente.controls['detalhesCliente'].setValue(this.decodeHexadecimalString(parsedData?.detalhesCliente ?? null));
+              this.formConsultaPaciente.controls['detalhesInterno'].setValue(this.decodeHexadecimalString(parsedData?.detalhesInterno ?? null));
               this.formConsultaPaciente.controls['tempoRetorno'].setValue(parsedData?.tempoRetorno ?? null);
               this.formConsultaPaciente.controls['altura'].setValue(parsedData?.altura ?? null);
               this.formConsultaPaciente.controls['peso'].setValue(parsedData?.peso ?? null);
@@ -467,8 +467,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
               this.formConsultaPaciente.controls['circAbdomen'].setValue(parsedData?.circAbdomen ?? null);
               this.formConsultaPaciente.controls['urlReceita'].setValue(parsedData?.urlReceita ?? null);
               this.formConsultaPaciente.controls['urlAtestado'].setValue(parsedData?.urlAtestado ?? null);
-              this.formConsultaPaciente.controls['prescricaoMedica'].setValue(parsedData?.prescricaoMedica ?? null);
-              this.formConsultaPaciente.controls['pedidoExame'].setValue(parsedData?.pedidoExame ?? null);
+              this.formConsultaPaciente.controls['prescricaoMedica'].setValue(this.decodeHexadecimalString(parsedData?.prescricaoMedica ?? null));
+              this.formConsultaPaciente.controls['pedidoExame'].setValue(this.decodeHexadecimalString(parsedData?.pedidoExame ?? null));
               this.formConsultaPaciente.controls['urlExame'].setValue(parsedData?.urlExame ?? null);
 
             }
@@ -859,11 +859,10 @@ export class ConsultaPacienteComponent implements OnDestroy {
 
             }
 
-
         let register = {
             serviceId: this.atendimento.id,  // id da consulta da buscar-atendimento
-            description: data.detalhesCliente,
-            prescription: data.prescricaoMedica,  //Prescrição campo novo que vira da tela detalhes
+            description: this.decodeHexadecimalString(data.detalhesCliente),
+            prescription: this.decodeHexadecimalString(data.prescricaoMedica),  //Prescrição campo novo que vira da tela detalhes
             urlPrescription: data.urlReceita,
             timeReturn: this.processa_valores(data.tempoRetorno),
             height:this.processa_valores(data.altura),
@@ -874,15 +873,13 @@ export class ConsultaPacienteComponent implements OnDestroy {
             urlRemovalReport: data.urlAtestado,
             prescriptionAttachment: this.anexoAtestado, //anexo mandar igual o da imagem
             removalAttachment: this.anexoReceita, // anexo
-            descriptionClinic: data.detalhesInterno,
-            descriptionUser: data.detalhesCliente,
+            descriptionClinic: this.decodeHexadecimalString(data.detalhesInterno),
+            descriptionUser: this.decodeHexadecimalString(data.detalhesCliente),
             urlMedicalOrder: data.urlExame,
-            descriptionMedicalOrder: data.pedidoExame,
+            descriptionMedicalOrder: this.decodeHexadecimalString(data.pedidoExame),
         }
 
-        this.isActive = true;
         this.service.salvarDetalheAtendimento(register, (response => {
-            this.isActive = false;
             this.toastrService.success('Prontuario Cadastrado com Sucesso','Aditi Care!');
             this.checkedConsulta=true;
             this.AlterarStatusStorage();
@@ -900,9 +897,38 @@ export class ConsultaPacienteComponent implements OnDestroy {
         this.isSaving = false;
         this.fetchData(false) 
     }
-   
-    
     }
+
+     decodeHexadecimalString(encodedString: string): string {
+        try {
+          const decodedString = decodeURIComponent(encodedString);
+          return decodedString;
+        } catch (error) {
+          console.error('Erro ao decodificar a sequência:', error);
+          return ''; // Retorna uma string vazia em caso de erro
+        }
+      }
+
+      htmldecodeHexadecimalString(element: HTMLTextAreaElement, encodedString: string): void {
+        try {
+       
+         const decodedString = decodeURIComponent(encodedString);
+      
+      
+          if (element.id === 'prescricaoMedica') {
+            this.formConsultaPaciente.get('prescricaoMedica')?.setValue(decodedString);
+          }else   if (element.id === 'detalhesInterno') {
+            this.formConsultaPaciente.get('detalhesInterno')?.setValue(decodedString);
+          } else   if (element.id === 'detalhesCliente') {
+            this.formConsultaPaciente.get('detalhesCliente')?.setValue(decodedString);
+          }  else   if (element.id === 'pedidoExame') {
+            this.formConsultaPaciente.get('pedidoExame')?.setValue(decodedString);
+          }
+        } catch (error) {
+          console.error('Erro ao decodificar a sequência:', error);
+        }
+      }
+      
 
     formatarData(dataString) {
         // Verifica se a string está no formato correto (dia/mês/ano)
@@ -1124,9 +1150,6 @@ validar_valor(data){
     previousPage() {
 
         localStorage.removeItem('histDetails');
-
-        console.log(this.atendimento)
-        console.log(this.atendimento.patchPaciente)
 
         if(this.atendimento.findhistorico === true){
             this.router.navigate(['/pages/gestao-paciente/paciente'])

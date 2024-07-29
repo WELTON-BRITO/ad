@@ -216,6 +216,13 @@ BaseValidCNPJ(value) {
     localStorage.setItem('bway-enterprise-name', result.name);
     localStorage.setItem('bway-user', this.formatCpfCnpj(result.federalId));
 
+    sessionStorage.setItem('Authorization', 'Bearer ' + result.token);
+    sessionStorage.setItem('bway-logged-date', new Date().toString());
+    sessionStorage.setItem('bway-domain', result.domain);
+    sessionStorage.setItem('bway-entityId', result.entityId);
+    sessionStorage.setItem('bway-enterprise-name', result.name);
+    sessionStorage.setItem('bway-user', this.formatCpfCnpj(result.federalId));
+
     if (result.domain == 'CLINIC') {
     
     //Preenchendo os dados do combo do list do médico
@@ -224,7 +231,10 @@ BaseValidCNPJ(value) {
     var b = this.listMedico
     b = JSON.stringify(b);
     localStorage.setItem('bway-medico', b);
+    sessionStorage.setItem('bway-medico', b);
     var c = JSON.parse(localStorage.getItem('bway-medico'));
+    var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+
     this.isActive = false;
 
     //Preenchendo os dados do combo da Clinica
@@ -232,7 +242,10 @@ BaseValidCNPJ(value) {
     var b = this.listClinica
     b = JSON.stringify(b);
     localStorage.setItem('bway-clinica', b);
+    sessionStorage.setItem('bway-clinica', b);
     var c = JSON.parse(localStorage.getItem('bway-clinica'));
+    var c = JSON.parse(sessionStorage.getItem('bway-clinica'));
+
     this.isActive = false;
 
     }else if (result.domain == 'DOCTOR') {
@@ -242,7 +255,10 @@ BaseValidCNPJ(value) {
     var b = this.listMedico
     b = JSON.stringify(b);
     localStorage.setItem('bway-medico', b);
+    sessionStorage.setItem('bway-medico', b);
     var c = JSON.parse(localStorage.getItem('bway-medico'));
+    var c = JSON.parse(sessionStorage.getItem('bway-medico'));
+
     this.isActive = false;
 
      //Preenchendo os dados do combo da Clinica
@@ -251,7 +267,9 @@ BaseValidCNPJ(value) {
      var b = this.listClinica
      b = JSON.stringify(b);
      localStorage.setItem('bway-clinica', b);
+     sessionStorage.setItem('bway-clinica', b);
      var c = JSON.parse(localStorage.getItem('bway-clinica'));
+     var c = JSON.parse(sessionStorage.getItem('bway-clinica'));
      this.isActive = false;
 
     }
