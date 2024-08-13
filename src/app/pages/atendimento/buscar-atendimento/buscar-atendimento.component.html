@@ -20,18 +20,18 @@
                 <div class="collapse" id="filtrosAtendimento">
 
                 <div class="form-row align-items-center">
-                  <div class="form-group col-md-4 ">
+                  <div class="form-group col-md-4">
                     <div class="form-group">
-                      <label for="medico">Informe o Médico* </label>
-                      <select class="form-control" id="medico" formControlName="medico">
-                        <option value="{{ listMedico }}" selected>Selecione o Médico</option>
-                        <option *ngFor="let medico of listMedico" [value]="medico.id">
-                          <!-- use value instead of ngValue -->
-                          {{ medico.ID }} {{ medico.name }}
-                        </option>
-                      </select>
+                        <label for="medico">Informe o Médico* </label>
+                        <select class="form-control" id="medico" formControlName="medico">
+                            <option value="" selected>Selecione o Médico</option>
+                            <option *ngFor="let medico of listMedico" [value]="medico.id">
+                               {{ medico.name }}
+                            </option>
+                        </select>
                     </div>
-                  </div>
+                </div>
+                
                   <div class="form-group col-md-4">
                     <div class="form-group">
                       <div class="div-clinica">
@@ -122,7 +122,7 @@
               </div>
             </div>
 
-            
+            <div *ngIf="isSearch">
             <h5>Ícones:</h5>
             <div class="col-md-12 col-xs-12">
               <div class="row">
@@ -173,7 +173,9 @@
                         
               <h5>Horários Agendados:</h5>
 
-              <div class="row">
+              </div>
+
+              <div class="row" *ngIf="isSearch">
                 <div class="col-md-4" *ngFor="let row of rowData">
                   <div class="card mb-3" [ngClass]="{
                     'card-pendente': row.status === '02 - Aguardando Pagamento',
@@ -190,10 +192,14 @@
                       <h6 class="card-title">Data: {{ row?.data }}</h6>
                       <h6 class="card-title">Horário: {{ row?.horario }}</h6>
                       <p class="card-text">Paciente: {{ row?.nomeDependente || row?.nomeResponsavel }}</p>
-                      <p class="card-text">Responsável: {{ row?.nomeResponsavel }}</p>
+                      <p class="card-text" *ngIf="row?.nomeDependente">Responsável: {{ row?.nomeResponsavel }}</p>
+                      <p class="card-text" *ngIf="!row?.nomeDependente"> </p> <!-- Mantém a quebra de linha -->
                       <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
                       <p class="card-text">Situação: {{ row?.status }}</p>
                       <p class="card-text">Telefone: {{ row?.telefone }}</p>
+                      <p class="card-text">Valor Consulta: R$ {{ row?.valorConsulta }}</p>
+                      
+
                       <p class="card-text">
                         Consulta Confirmada:
                         <span [style.font-weight]="row?.isConfirmed === 'Confirmado' ? 'bold' : 'bold'" [style.color]="row?.isConfirmed === 'Confirmado' ? 'green' : 'red'">
@@ -211,13 +217,19 @@
                           <i class="fa fa-wifi"></i>
                         </button>
                         <button style="margin: 0 15px;"  class="btn btn-danger mb-2" (click)="videoAtendimento(row)"
-                          *ngIf="row && row.atendimento.meetingUrl !== null && row.atendimento.status === '03 - Consulta Confirmada'" title="Inicio Video Atendimento">
+                          *ngIf="row && row.atendimento.meetingUrl !== null" title="Inicio Video Atendimento">
                           <i class="fa fa-video"></i>
                         </button>
                         <button style="margin: 0 15px;" class="btn btn-warning mb-2" (click)="desbloquear(row)"
                         *ngIf="row.nomeResponsavel === 'Bloqueado' && row.status !== '04 - Consulta Finalizada'" title="Desbloquear Horário">
                         <i class="fa fa-key"></i>
                       </button>
+                      
+                      <button style="margin: 0 15px;" class="btn btn-warning mb-2" (click)="notaFiscal(row)"
+                      *ngIf="row.status == '04 - Consulta Finalizada'" title="Dados da Nota">
+                <i class="fa fa-money-bill-alt"></i>
+              </button>
+              
 
                         <button style="margin: 0 15px;"  class="btn btn-danger mb-2" (click)="confirmarHorario(row)"
                         *ngIf="row.isConfirmed ==='Não Confirmado'  && row.status !== '04 - Consulta Finalizada' && row.nomeResponsavel !== 'Bloqueado'" title="Confirmar Horário">
@@ -229,6 +241,7 @@
                 </div>
               </div>
 
+              <div *ngIf="isSearch">
               <h5>Horários Disponíveis:</h5>
 
               <div class="row">
@@ -257,7 +270,7 @@
                   </div>
                 </ng-template>
               </div>
-              
+            </div>
               <!--
               <div class="form-row">
                 <div class="form-group col-md-12">

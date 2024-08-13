@@ -49,6 +49,8 @@ export class AgendaComponent implements OnInit {
   public StartedDate: any;
   public medicoId = null;
   public isLoader: boolean = false;
+  public isSearch = false; 
+
 
 
   calendarOptions: CalendarOptions = {
@@ -122,7 +124,7 @@ export class AgendaComponent implements OnInit {
           }
 
     //      if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
-            this.buscarAtendimento(register, true)
+           // this.buscarAtendimento(register, true)
    //       } else {
           //  this.buscarAtendimento(register, false)
 
@@ -146,7 +148,7 @@ export class AgendaComponent implements OnInit {
         }
 
         //if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
-          this.buscarAtendimento(register, true)
+        //  this.buscarAtendimento(register, true)
       //  } else {
        //   this.buscarAtendimento(register, false)
 
@@ -182,6 +184,8 @@ export class AgendaComponent implements OnInit {
   ngOnInit() {
 
     this.windowResize();
+
+    localStorage.removeItem('meuCardData'); //garante que o cache foi apagado das telas posteriores
 
     localStorage.removeItem('detalhesData'); //garante que o cache foi apagado das telas posteriores
 
@@ -231,26 +235,22 @@ export class AgendaComponent implements OnInit {
 
     var time = new Date();
     var outraData = new Date();
-    outraData.setDate(time.getDate() + 90);
+    outraData.setDate(time.getDate() + 30);
     this.FinalDate = moment(outraData).format('YYYY-MM-DD')
 
     var outraData2 = new Date();
-    outraData2.setDate(time.getDate() - 90);
+    outraData2.setDate(time.getDate() - 30);
     this.StartedDate = moment(outraData2).format('YYYY-MM-DD')
 
     this.formAgendaAtendimento = this.formBuilder.group({
       dataInicio: [this.StartedDate, Validators.required],
       dataFim: [this.FinalDate, Validators.required],
-      medico: [this.listMedico[0], Validators.required],
+      medico: [''],
 
     });
 
-    this.formAgendaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
-    this.listMedico.push({
-      id: '9999999',
-      name: 'Todos'
-    })
-
+   // this.formAgendaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+ 
     let register = {
       dataInicio: this.StartedDate,
       dataFim: this.FinalDate,
@@ -259,7 +259,7 @@ export class AgendaComponent implements OnInit {
     }
 
     //if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
-      this.buscarAtendimento(register, true)
+    //  this.buscarAtendimento(register, true)
    // } else {
   //    this.buscarAtendimento(register, false)
 
@@ -322,11 +322,12 @@ export class AgendaComponent implements OnInit {
 
     // Formate a data no formato DD/MM/YYYY
     const dataFormatada = `${dia}/${mes}/${ano}`;
+    
 
     let data = {
       data: dataFormatada,
       horario: horaInicio + ' -  ' + horaFim,
-      medicoId: selected,
+      medico:  this.medicoId,
       status: "Disponível",
       location: "agendaGoogle",
     }
@@ -368,6 +369,7 @@ export class AgendaComponent implements OnInit {
 
       if (this.validaCampo(data)) {
 
+
         if (data.medico != '9999999') {
           params = params.append('doctorId', data.medico)
         }
@@ -405,6 +407,8 @@ export class AgendaComponent implements OnInit {
               color = '#77747762';
             }
             
+            this.isSearch=true;
+
 
             return {
               title: evento.childName ?? evento.userName,
@@ -438,7 +442,14 @@ export class AgendaComponent implements OnInit {
             this.calendarEvents = [];
             this.rowData = [];
           } else {
-            this.saveData('googleData', allData);
+
+            if(!this.isMobile()){
+                
+              const compressedData = JSON.stringify(allData);
+              localStorage.setItem('googleData', compressedData);
+            }
+
+
             this.isActive = false;
             this.calendarEvents = allData;
             this.rowData = allData;
@@ -463,6 +474,10 @@ export class AgendaComponent implements OnInit {
 
         });
 
+      }else{
+        this.isSearch=false;
+        this.fetchData(false)
+
       }
 
     } else {
@@ -484,6 +499,19 @@ export class AgendaComponent implements OnInit {
 
   }
 
+  isMobile() {
+    const userAgent = navigator.userAgent
+    
+    // Verifica se o userAgent corresponde a dispositivos móveis
+    if (/android/i.test(userAgent)) {
+        return true;
+    }
+    if (/iPad|iPhone|iPod/.test(userAgent)) {
+        return true;
+    }
+    return false;
+  }
+
   findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
 
     var x;
@@ -497,17 +525,24 @@ export class AgendaComponent implements OnInit {
 }
 
   validaCampo(data) {
+    
+    console.log(data)
+
 
     if (data.medico == null) {
-      this.toastrService.danger('O campo médico é obrigatório!!!');
+      this.toastrService.danger('O campo médico é obrigatório','Aditi Care');
+      return false
+    }
+    if (data.medico == "") {
+      this.toastrService.danger('O campo médico é obrigatório','Aditi Care');
       return false
     }
     if (data.dataInicio == null) {
-      this.toastrService.danger('A data início do período é obrigatória!!!');
+      this.toastrService.danger('A data início do período é obrigatória','Aditi Care');
       return false
     }
     if (data.dataFim == null) {
-      this.toastrService.danger('A data fim do período é obrigatória!!!');
+      this.toastrService.danger('A data fim do período é obrigatória','Aditi Care');
       return false
     }
 

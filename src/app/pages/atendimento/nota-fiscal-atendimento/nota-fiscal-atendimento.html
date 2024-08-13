@@ -1,0 +1,115 @@
+<div class="loader" *ngIf="isLoader"></div>
+<div class="container-fluid">
+  <nb-card>
+    <nb-card-header class="aditi-header">
+      <div class="back-link">
+        <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+          <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+        </a>
+      </div>
+      <h5>Detalhes do Atendimento</h5>
+    </nb-card-header>
+
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="dialog-body">
+                <nb-card>
+                    <nb-card-body>
+                        <form id="formNovoPaciente" [formGroup]="formNovoPaciente">
+                            <div class="col-md-12 col-xs-12 align-items-center">
+                                <div class="form-row align-items-center">
+                                  <h6 class="p-1">Dados Emissão da Nota Fiscal:</h6>
+                                </div>
+                                  <div class="form-row align-items-center">
+                                      <div class="form-group col-md-4">
+                                        <label for="nome">Nome*</label>
+                                        <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" />
+                                      </div>
+                                      <div class="form-group col-md-2">
+                                        <label for="CPF">CPF*</label>
+                                        <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf" value="cpf"
+                                          mask="000.000.000-00" (change)="isValidCpf($event.target,formNovoPaciente.value)" />
+                                      </div>
+                                    </div>
+                                    
+                              <div class="form-row align-items-center">
+                                <h6 class="p-1">Localização</h6>
+                              </div>
+                              <div class="form-row align-items-center">
+                                <div class="form-group col-md-3">
+                                  <label for="CEP">CEP*</label>
+                                  <input class="form-control" name="cep" id="cep" type="text" formControlName="cep" mask="00000-000"
+                                    (blur)="buscaCep(formNovoPaciente.value)" />
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="endereco">Endereço*</label>
+                                    <input class="form-control" name="endereco" id="endereco" type="text"
+                                      formControlName="endereco" />
+                                  </div>
+                                <div class="form-group col-md-1">
+                                  <label for="numero">N°*</label>
+                                  <input class="form-control" name="numero" id="numero" type="text" formControlName="numero" />
+                                </div>
+                               
+                              </div>
+                              <div class="form-row align-items-center">
+                                <div class="form-group col-md-4">
+                                    <label for="complemento">Complemento</label>
+                                    <input class="form-control" name="complemento" id="complemento" type="text"
+                                      formControlName="complemento" />
+                                  </div>
+                                <div class="form-group col-md-4">
+                                  <label for="bairro">Bairro*</label>
+                                  <input class="form-control" name="bairro" id="bairro" type="text" formControlName="bairro" />
+                                </div>
+                              </div>
+                              <div class="form-row align-items-center">
+                                <div class="form-group col-md-4">
+                                  <label for="estado">Estado*</label>
+                                  <select class="form-control" formControlName="estado" (change)="buscaCidade($event.target.value)">
+                                    <option value="null" selected>SELECIONE</option>
+                                    <option *ngFor="let estado of listEstado" value="{{ estado.id }}">{{
+                                      estado.description }}</option>
+                                  </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                  <label for="cidade">Cidade*</label>
+                                  <select class="form-control" formControlName="cidade">
+                                    <option value="null" selected>SELECIONE</option>
+                                    <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{
+                                      cidade.description}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-row align-items-center">
+                                <h6 class="p-1">Contato</h6>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-4">
+                                  <label for="celular">Celular*</label>
+                                  <input class="form-control" name="celular" id="celular" type="text" formControlName="celular"
+                                         mask="(00) 0 0000-0000 || (00) 0000-0000" />
+                                </div>
+                                <div class="form-group col-md-4">
+                                  <label for="email">E-mail*</label>
+                                  <input class="form-control" name="email" id="email" type="text" formControlName="email" />
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-12 text-right">
+                                  <button type="button" id="cadastrar" class="btn btn-success btn-sm"
+                                          (click)="CadastrarNota(formNovoPaciente.value)">Cadastrar</button>
+                                </div>
+                              </div>
+                              
+                              
+                            </div>
+
+                        </form>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+  </nb-card>
+</div>

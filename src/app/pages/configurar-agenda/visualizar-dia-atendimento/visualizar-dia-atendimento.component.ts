@@ -121,7 +121,10 @@ export class VisualizarDiaAtendimentoComponent implements OnDestroy {
 
     if (data && data.medico !== null) {
       params = params.append('doctorId', data.medico);
-  } else {
+  } if (this.doctorId !== null){
+    params = params.append('doctorId',this.doctorId);
+  } 
+  else {
       params = params.append('doctorId', this.formVisualizarDiaAtendimento.value.medico.id || this.listMedico[0].id);
   }
 
@@ -215,27 +218,23 @@ deletarHorario(horario: string) {
 
   var id =partes[0];
 
-  this.isActive = true;
-
   this.fetchData(true)
-
   
   this.service.delete(id, (response => {
     this.isActive = false;
     this.toastrService.success('Horário Removido Com Sucesso','Aditi Care!');
+
     this.verificaHorario(null);
     this.fetchData(false)
 
   }), (error) => {
 
     if(error==='OK'){
-    this.isActive = false;
     this.toastrService.success('Horário Removido Com Sucesso','Aditi Care!');
     this.fetchData(false)
 
   }else{
-    this.isActive = false;
-    this.toastrService.danger(error.error.message);
+    this.toastrService.danger(error.message);
     this.fetchData(false)
 
   }

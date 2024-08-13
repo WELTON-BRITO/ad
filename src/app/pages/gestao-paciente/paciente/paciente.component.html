@@ -7,52 +7,38 @@
           <form id="form-paciente" [formGroup]="formPaciente">
             <div class="col-md-12 col-xs-12">
               <div class="form-group col-md-4">
-                <h5 class="ml-lg-n3">Consulta de Paciente</h5>
+                  <h5 class="ml-lg-n3">Consulta de Paciente</h5>
               </div>
               <div class="form-row align-items-center">
-                <div class="form-group col-md-3">
-                  <label for="nome">Escolha o Médico*</label>
-                  <select class="form-control" formControlName="medico">
-                    <option value="null" selected>SELECIONE</option>
-                    <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
-                      medico.name}}</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-2">
-                  <label for="cpf">CPF</label>
-                  <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf"
-                    placeholder="CPF do Paciente" />
-                </div>
-                <div class="form-group col-md-2">
-                  <label for="nome">Nome do Paciente</label>
-                  <input class="form-control" name="nome" id="nome" type="text" formControlName="nome"
-                    placeholder="Nome do Paciente" />
-                </div>
-                <div class="form-group col-md-2">
-                  <label class="consultaPaciente">Usuário já é Paciente?</label>
-                  <div class="p-1 row">
-                    <label class="radio-inline pl-2 pl-3">
-                      <input class="mat-button" type="radio" formControlName="optPart" value="S" (change)="ValidarUsuario($event.target.value,formPaciente.value)" [checked]="formPaciente.controls.optPart.value === 'S'"> Sim
-                    </label>
-                    <label class="radio-inline pl-2">
-                      <input class="mat-button" type="radio" formControlName="optPart" value="N" (change)="ValidarUsuario($event.target.value,formPaciente.value)" [checked]="formPaciente.controls.optPart.value === 'N'"> Não
-                    </label>
+                  <div class="form-group col-md-3">
+                      <label for="medico">Informe o Médico </label>
+                      <select class="form-control" id="medico" formControlName="medico">
+                          <option value="" selected>Selecione o Médico</option>
+                          <option *ngFor="let medico of listMedico" [value]="medico.id">
+                              {{ medico.name }}
+                          </option>
+                      </select>
                   </div>
-                </div>
-                
-                <div class="form-group col-md-3 pl-5">
-                  <div class="text-right">
-                    <button class="btn btn-primary m-2 mb-lg-n1" (click)="pesquisaGeral(formPaciente.value,true)">
-                      Pesquisar
-                    </button>
-                    <button class="btn btn-success m-2 mb-lg-n1" (click)="novoPaciente()">
-                      Cadastrar Paciente
-                    </button>
+                  <div class="form-group col-md-3">
+                      <label for="cpf">CPF</label>
+                      <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf" placeholder="CPF do Paciente" />
                   </div>
-                </div>
+                  <div class="form-group col-md-3">
+                      <label for="nome">Nome do Paciente</label>
+                      <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" placeholder="Nome do Paciente" />
+                  </div>
+                  <div class="form-group col-md-3 text-right">
+                      <button class="btn btn-primary m-2" (click)="pesquisaGeral(formPaciente.value, true)">
+                          Pesquisar
+                      </button>
+                      <button class="btn btn-success m-2" (click)="novoPaciente()">
+                          Cadastrar Paciente
+                      </button>
+                  </div>
               </div>
-              <br>
-              <br>
+          </div>
+          
+          <div class="col-md-12 col-xs-12">
 
               <div class="form-row align-items-center">
                 <div class="form-group col-md-12">
@@ -65,14 +51,16 @@
                                             <img src="{{row.avatar}}" style="height: 55px; border-radius: 50%;">
                                         </div>
                                         <p class="card-text">Paciente: {{ row?.nameChild || row.name }}</p>
-                                        <p class="card-text">Nome Responsável: {{ row?.name }}</p>
-                                        <p class="card-text">Telefone: {{ row.cellPhone }}</p>
-                                        <p class="card-text">Email: {{ row.email  }}</p>
-                                        <p class="card-text">CPF: {{ row.federalId  }}</p>
+                                        <p class="card-text" *ngIf="row?.nameChild">Nome Responsável: {{ row?.name }}</p>
+                                        <p class="card-text" *ngIf="!row?.nameChild"> </p> <!-- Mantém a quebra de linha -->
+                                        <p class="card-text">Telefone: {{ row.cellPhone }}</p> 
+                                        <p class="card-text">Email: {{ row.email }}</p>
+                                        <p class="card-text">CPF: {{ row.federalId }}</p>
+                                        
+                                        
     
                                         <div class="datatable-body-box-actions">
                                           <button class="btn home-icon pt-4"
-                                          [disabled]="row?.nameChild"
                                           (click)="cadastrar(row)"
                                           title="Cadastrar dependente">
                                     <i class="fas fa-user-plus" aria-label="Cadastrar dependente"></i>
@@ -88,8 +76,8 @@
                                           <button class="btn home-icon pt-4" (click)="buscaHistorico(row)" title="Visualizar histórico">
                                             <i class="fas fa-history" aria-label="Visualizar histórico"></i>
                                           </button>
-                                          <button class="btn home-icon pt-4" (click)="buscaAgenda(row)" title="Visualizar Agenda">
-                                            <i class="fas fa-list" aria-label="Visualizar Agenda"></i>
+                                          <button class="btn home-icon pt-4" (click)="notaFiscal(row)" title="Dados da Nota">
+                                            <i class="fa fa-money-bill-alt" aria-label="Dados da Nota"></i>
                                           </button>
                                         </div>
                                                                                 

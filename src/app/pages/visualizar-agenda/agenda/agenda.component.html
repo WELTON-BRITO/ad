@@ -8,20 +8,18 @@
             <div class="form-group col-md-4">
               <h5 class="ml-lg-n3">Calendário </h5>
             </div>
-            <form id=“form-buscar-atendimento” [formGroup]="formAgendaAtendimento">
+            <form id="form-buscar-atendimento" [formGroup]="formAgendaAtendimento">
               <div class="col-md-12 col-xs-12">
                   <div class="form-row">
-                    <div class="form-group col-md-3">
-                      <label for="medico">Escolha o médico*</label>
-                      <select class="form-control" id="medico" formControlName="medico" (change)="buscaId(formAgendaAtendimento.value)">
-                        <option value="{{ listMedico }}" selected>Selecione o Médico</option>
-                        <option *ngFor="let medico of listMedico" [value]="medico.id">
-                          <!-- use value instead of ngValue -->
-                          {{ medico.ID }} {{ medico.name }}
-                        </option>
-                      </select>
-                    </div>
-
+                      <div class="form-group col-md-3">
+                          <label for="medico">Escolha o médico*</label>
+                          <select class="form-control" id="medico" formControlName="medico" (change)="buscaId(formAgendaAtendimento.value)">
+                              <option value="" selected>Selecione o Médico</option>
+                              <option *ngFor="let medico of listMedico" [value]="medico.id">
+                                  {{ medico.name }}
+                              </option>
+                          </select>
+                      </div>
                     <div class="form-group col-md-4">
                       <div class="text-right">
                       <button class="btn btn-primary mr-2 button" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
@@ -42,7 +40,7 @@
                   
               </div>
             </form>
-            <div class="col-md-12 col-xs-12">
+            <div class="col-md-12 col-xs-12" *ngIf="isSearch">
               
               <h5>Legenda:</h5>
               <div class="legend d-flex flex-wrap">

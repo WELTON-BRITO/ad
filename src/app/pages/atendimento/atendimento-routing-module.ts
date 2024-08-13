@@ -11,6 +11,7 @@ import { AgendarConsultaComponent } from "./agendar-consulta/agendar-consulta.co
 import { bloquearAtendimentoComponent } from "./bloquear-atendimento/bloquear-atendimento.component";
 import { reagendarAtendimentoComponent } from "./reagendar/reagendar-atendimento.component";
 import { AnteciparAtendimentoComponent } from "./antecipar-atendimento/antecipar-atendimento.component";
+import { notaFiscalComponent } from "./nota-fiscal-atendimento/nota-fiscal-atendimento";
 
 
 const routes: Routes = [{
@@ -53,6 +54,10 @@ const routes: Routes = [{
     {
       path: 'antecipar-atendimento',
       component: AnteciparAtendimentoComponent,
+    },
+    {
+      path: 'nota-fiscal-atendimento',
+      component: notaFiscalComponent,
     }
   ],
 

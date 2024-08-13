@@ -45,6 +45,8 @@ export class BuscarAtendimentoComponent implements OnInit {
   FinalDay: any;
   public isLoader: boolean = false;
   public avatar = "assets/images/avatar.png";
+  public valorConsulta = 0;
+  public isSearch = false; 
 
 
   settings = {
@@ -136,7 +138,9 @@ export class BuscarAtendimentoComponent implements OnInit {
             }, 3000); // 3000 milissegundos = 3 segundos
         }
     }
-    localStorage.removeItem('detalhesData'); //garante que o cache foi apagado das telas posteriores
+    localStorage.removeItem('googleData');
+    localStorage.removeItem('detalhesData');
+
    // localStorage.removeItem('draftAtendimento');//garante que o cache foi apagado das telas posteriores
 
     if (this.currentMonth < 10) {
@@ -203,7 +207,7 @@ export class BuscarAtendimentoComponent implements OnInit {
       dataInicio: [this.TodayDate, Validators.required],
       dataFim: [this.FinalDate, Validators.required],
       nome: [null],
-      medico: [this.listMedico[0], Validators.required],
+      medico: [''],
       clinica: [this.listClinica[0], Validators.required],
       cpf: [null],
       status: [this.tipo[0], Validators.required],
@@ -226,10 +230,10 @@ export class BuscarAtendimentoComponent implements OnInit {
 
       this.doctorId = data[0].medico;
 
-      this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data[0].medico)].id, { onlySelf: true });
+      //this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data[0].medico)].id, { onlySelf: true });
       
   }else{
-    this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    //this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
   }
 
@@ -241,12 +245,30 @@ export class BuscarAtendimentoComponent implements OnInit {
       status: this.DefaultStatus,
       tipo: this.tipo[0].id ?? 1,
     }
+
     if (localStorage.getItem('meuCardData') === null || localStorage.getItem('meuCardData') === '') {
+      this.isSearch=false;
+    }else{
+      this.isSearch=true;
+
+      if (data && data.forceUpdate === true) {
+        this.buscarAtendimento(register, true);
+    } else {
+        this.buscarAtendimento(register, false);
+    }
+    
+
+    }
+   
+   /* if (localStorage.getItem('meuCardData') === null || localStorage.getItem('meuCardData') === '') {
 
       this.buscarAtendimento(register, true)
     } else {
       this.buscarAtendimento(register, false)
     }
+      */
+
+    
 
   }
 
@@ -271,14 +293,13 @@ export class BuscarAtendimentoComponent implements OnInit {
   buscarAtendimento(data, checked) {
 
     this.fetchData(true)
-    this.isActive = true;
-
-
+    this.isActive = true;   
+    
     let clinica = localStorage.getItem('bway-entityId');
 
     if (localStorage.getItem('meuCardData') === null || checked == true || localStorage.getItem('meuCardData') === '') {
-      this.saveData('meuCardData', '');
-      localStorage.removeItem('detalhesData');
+        localStorage.removeItem('meuCardData');
+        localStorage.removeItem('detalhesData');
 //      localStorage.removeItem('draftAtendimento');
 
       this.isActive = true
@@ -307,59 +328,10 @@ export class BuscarAtendimentoComponent implements OnInit {
 
       if (this.validaCampo(data)) {
 
-        if (data.medico == '9999999') {
-
-          params = params.append('clinicId', clinica)
-
-          this.service.buscaAtendimentos(params, (response) => {
-            this.isActive = false
-            this.rowData = response
-            this.rowData = this.rowData.map(data => {
-
-              if (data.status != "05 - Consulta Cancelada") {
-                return {
-                  medico: data.doctor.name,
-                  nome: data.child == null ? data.user.name : data.child.name,
-                  data: moment(data.dateService).format('DD/MM/YYYY'),
-                  horario: data.startTime.concat(' - ', data.endTime),
-                  especialidade: data.specialty.name,
-                  status: data.status,
-                  atendimento: data,
-                  modalidade: data.typeService,
-                  dataInicio: this.formBuscarAtendimento.dataInicio,
-                  dataFim: this.formBuscarAtendimento.dataInicio,
-                  clinicaId: clinica,
-                  statusId: this.DefaultStatus,
-                  medicoId: data.doctor.id,
-                  isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
-                  avatar: this.getAvatar(data)
-                }
-                
-              }
-              this.fetchData(false)
-
-            })
-
-          }, (error) => {
-            this.isActive = false;
-            if (error.error instanceof ErrorEvent) {
-              console.error('An error occurred:', error.error.message);
-            } else {
-              console.error(
-                `Backend returned code ${error.status}, ` +
-                `body was: ${error.error}`);
-            }
-            this.toastrService.danger(error.message);
-            this.fetchData(false)
-
-          });
-
-        } else {
-
           params = params.append('doctorId', data.medicoId ?? data.medico);
           let allData = []; // Crie uma variável vazia para armazenar os dados
           this.service.buscaAtendimentos(params, (response) => {
-            console.log(response)
+                                       
             allData = response
               .filter(data => data.status !== '05 - Consulta Cancelada')
               .map(data => ({
@@ -381,20 +353,33 @@ export class BuscarAtendimentoComponent implements OnInit {
                 statusId: this.DefaultStatus,
                 medicoId: data.doctorId,
                 isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
-                avatar: this.getAvatar(data)
+                avatar: this.getAvatar(data),
+                valorConsulta: this.valorConsulta,
+
                             }));
 
             if (allData.length === 0) {
               this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
-              this.saveData('meuCardData', null);
-              this.saveData('detalhesData', null);
-              this.saveData('histDetails', null);
+              this.isSearch=false;
+              localStorage.removeItem('googleData');
+              localStorage.removeItem('meuCardData');
+              localStorage.removeItem('detalhesData');
+              localStorage.removeItem('histDetails');
               this.isActive = false;
               this.rowData = null;
             } else {
-              this.saveData('meuCardData', allData);
+
+              if(!this.isMobile()){
+                
+                const compressedData = JSON.stringify(allData);
+                localStorage.setItem('meuCardData', compressedData);
+              }
+
+
+
               this.isActive = false;
               this.rowData = allData;
+              this.isSearch=true;
             }
             this.fetchData(false)
 
@@ -404,7 +389,11 @@ export class BuscarAtendimentoComponent implements OnInit {
             this.fetchData(false)
           });
 
-        }
+        
+      }else{
+        this.isSearch=false;
+        this.fetchData(false)
+
       }
 
     } else {
@@ -430,6 +419,35 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.pesquisarConsulta(data, checked)
   }
 
+  isMobile() {
+    const userAgent = navigator.userAgent
+    
+    // Verifica se o userAgent corresponde a dispositivos móveis
+    if (/android/i.test(userAgent)) {
+        return true;
+    }
+    if (/iPad|iPhone|iPod/.test(userAgent)) {
+        return true;
+    }
+    return false;
+  }
+  notaFiscal(data) {
+
+    this.router.navigate(['/pages/atendimento/nota-fiscal-atendimento'], { state: data });
+
+  }
+
+  isLocalStorageAvailable() {
+    try {
+        const testKey = 'test';
+        localStorage.setItem(testKey, '1');
+        localStorage.removeItem(testKey);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+  
   getAvatar(data) {
     // Armazena os valores trimados em variáveis temporárias
     const childAvatarTrimmed = data.childAvatar ? data.childAvatar.trim() : '';
@@ -480,7 +498,7 @@ else{
 
   validaCampo(data) {
 
-    if (data.medico == null) {
+    if (data.medico == null || data.medico =='' ) {
       this.toastrService.danger('O campo Médico é Obrigatório', 'Aditi Care');
       return false
     }
@@ -525,6 +543,7 @@ else{
 }
 
   agendarAtendimento(data) {
+
 
     this.router.navigate(['/pages/atendimento/novo-atendimento'], { state: data });
 
@@ -634,6 +653,8 @@ else{
           this.toastrService.danger(error.error.message);
         });
 
+      }else{
+        this.isSearch=false;
       }
     } else {
 

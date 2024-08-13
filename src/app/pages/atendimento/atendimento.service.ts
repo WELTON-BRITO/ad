@@ -12,6 +12,11 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/specialty/all', data, successHandle, erroHandle)
   }
 
+  buscaValor(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/doctor/price/exclusive', data, successHandle, erroHandle)
+  }
+
+
   buscaAtendimentos(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/appointments/status/custom/all', data, successHandle, erroHandle)
   }
@@ -27,6 +32,10 @@ export class AtendimentoService {
   buscaConvenio(id:any, data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/healthPlan/doctor/' + id, data, successHandle, erroHandle)
   } 
+
+  buscaPacienteSearch(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/patient/custom/all', data, successHandle, erroHandle)
+  }
   
   buscaDependente(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doGet('/api/child/all', data, successHandle, erroHandle)
@@ -38,6 +47,10 @@ export class AtendimentoService {
  
   salvarAgendamento(data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doPost('/api/appointments', data, successHandle, erroHandle)
+  }
+
+  salvardadosNota(data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doPost('/api/userDataInvoice', data, successHandle, erroHandle)
   }
 
   buscaHorario(data: any, successHandle: Function, erroHandle: Function) {
@@ -92,12 +105,31 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/appointments/timeAvailable', data, successHandle, erroHandle)
   }
 
+  ValidateNFS(data, userId:any,successHandle: Function, errorHandle: Function){
+    return this.httpService.doGet('api/userDataInvoice/user/' + userId,  data, successHandle, errorHandle)
+  }
+
+  UpdateNFS(data, userId:any, successHandle: Function, errorHandle: Function){
+    return this.httpService.doPut('/api/userDataInvoice/' + userId,  data, successHandle, errorHandle)
+  }
+  
   updateTimeAppointments(id: any, data: any, successHandle: Function, erroHandle: Function) {
     return this.httpService.doPut('/api/appointments/' + id, data, successHandle, erroHandle)
   }
 
   BuscarUltimaConsulta(data: any, successHandle: Function, errorHandle: Function) {
     return this.httpService.doGet('/api/appointments/details/last', data, successHandle, errorHandle)
+  }
+
+  buscaEstado(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/uf/all', data, successHandle, erroHandle)
+  }
+
+  buscaCidade(data, ufId:any,successHandle: Function, errorHandle: Function){
+    return this.httpService.doGet('/api/city/uf/' + ufId + '/all',  data, successHandle, errorHandle)
+  }
+  buscaCep(cep: any, data: any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGetCep('/ws/' + cep  + '/json/', data, successHandle, erroHandle);
   }
 
 }

@@ -21,18 +21,17 @@
               <div class="col-md-12 col-xs-12">
                 <div>
                 <div class="form-row align-items-center">
-                  <div class="form-group col-md-4 ">
+                  <div class="form-group col-md-4">
                     <div class="form-group">
-                      <label for="medico">Informe o Médico* </label>
-                      <select class="form-control" id="medico" formControlName="medico">
-                        <option value="{{ listMedico }}" selected>Selecione o Médico</option>
-                        <option *ngFor="let medico of listMedico" [value]="medico.id">
-                          <!-- use value instead of ngValue -->
-                          {{ medico.ID }} {{ medico.name }}
-                        </option>
-                      </select>
+                        <label for="nome">Informe o Médico*</label>
+                        <select class="form-control" formControlName="medico"
+                            (change)="verificaMedico($event.target.value)">
+                            <option value="null" selected>SELECIONE</option>
+                            <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
+                                medico.name}}</option>
+                        </select>
                     </div>
-                  </div>
+                </div>
                   <div class="form-group col-md-4">
                     <div class="form-group">
                       <div class="div-clinica">

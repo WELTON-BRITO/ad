@@ -22,6 +22,7 @@ export class reagendarAtendimentoComponent {
     public doctorId = null;
     public clinicId = null;
     public isConfAtendimento = false;
+    public return = null;
 
     constructor(private formBuilder: FormBuilder,
         private router: Router,
@@ -33,7 +34,7 @@ export class reagendarAtendimentoComponent {
 
         let data = history.state
 
-        console.log(data)
+        console.log('dentro do reagendar'+data)
 
         if(data.id == null){
             this.previousPage();
@@ -55,7 +56,7 @@ export class reagendarAtendimentoComponent {
       }    
 
         this.formNovoAtendimento = this.formBuilder.group({
-            medico: [this.listMedico[0]],
+            medico: [''],
             dataAtendimento: null,
             horarioInicial: null,
             horarioFinal: null,
@@ -65,11 +66,11 @@ export class reagendarAtendimentoComponent {
             idAppointment: data.id}
             )
       
-          if(data.doctorId !=null){
-
-            this.doctorId = data.doctorId;
+            if (data && (data.doctorId !== null || (data.atendimento && data.atendimento.doctorId))) {
+            
+            this.doctorId = data.doctorId ?? data.atendimento.doctorId ;
       
-            this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data.doctorId)].id, { onlySelf: true });
+            this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico, this.doctorId)].id, { onlySelf: true });
             
         }else{
             this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
@@ -150,8 +151,13 @@ export class reagendarAtendimentoComponent {
     }
 
     previousPage() {
-
-        this.router.navigate(['/pages/atendimento/detalhe-atendimento'])
+        
+        this.return = [{
+            forceUpdate: true,
+            medico:  this.doctorId
+          }]
+       
+          this.router.navigateByUrl('/pages/atendimento/buscar-atendimento', { state: this.return });
     }
 
     especialidade(data) {

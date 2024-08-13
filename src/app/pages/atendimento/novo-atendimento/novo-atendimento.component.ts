@@ -19,7 +19,7 @@ export class NovoAtendimentoComponent {
     public listMedico = null;
     public isActive = false;
     public listPagto = null;
-    public listDependente = null;
+    public listDependente: any[] = []; // sua lista de dependentes
     public listTipoEspecialidade = null;
     public listTipoProcedimento = null;
     public listTempoAtendimento  = null;
@@ -28,6 +28,7 @@ export class NovoAtendimentoComponent {
     public isConvenio = false;
     public isPagto = false;
     public isDependente = false;
+    public isbuscarNome = false;
     public tamanho: number = 2000;
     public msgErro = 'CPF inválido!!!';
     public showMsgErro = false;
@@ -65,6 +66,8 @@ export class NovoAtendimentoComponent {
     public horaFormatada = null;
     public antecipada: boolean = false;
     public patchPaciente = null;
+    public avatar = "assets/images/avatar.png";
+
 
     public tipoCardEncaixe: any[] = [{
         id: '',
@@ -150,7 +153,7 @@ export class NovoAtendimentoComponent {
         this.listMedico = JSON.parse(localStorage.getItem('bway-medico'));
                 
         if (this.listMedico && this.listMedico.length > 0) {
-            this.verificaMedico(this.listMedico[0].id);
+         //   this.verificaMedico(this.listMedico[0].id);
           } else {
             console.error('A lista de médicos está vazia ou não definida!');
            this.toastrService.warning('Sua Sessão foi Encerrada, Efetue um Novo Login','Aditi Care');
@@ -186,6 +189,7 @@ export class NovoAtendimentoComponent {
             horarioSelected: null,
             optDependente: null,
             optRetorno: null,
+            nome: null,
           });
 
 
@@ -193,8 +197,12 @@ export class NovoAtendimentoComponent {
 
             this.doctorId = data.medico;
 
-                  
-            this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data.medico)].id, { onlySelf: true });
+            const posicao = this.findPositionById(this.listMedico, this.doctorId)
+
+            this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[posicao].id, { onlySelf: true });
+
+            this.verificaEspecialidade(this.doctorId);
+
 
         }else{
             this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
@@ -202,13 +210,13 @@ export class NovoAtendimentoComponent {
         }
 
         this.formNovoAtendimento.controls['tipoConsulta'].setValue(this.listTipoConsulta[0].id, { onlySelf: true });
+
         this.buscaConvenio(false);
 
         this.tipoCardEncaixe = []; 
 
         if(data.data !=null){
 
-            console.log(data)
 
             this.origem = data?.location
             this.formNovoAtendimento.controls['dataInicio'].setValue(this.formatarData(data.data), { onlySelf: true });
@@ -229,14 +237,13 @@ export class NovoAtendimentoComponent {
 
     findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
 
-        var x;
-        
         for (let i = 0; i < listMedico.length; i++) {
+
             if (listMedico[i].id == targetId) {
-                x = i;     
+                return i;
             }
         }
-        return x;
+        return 0;
     }
 
     pagamento() {
@@ -283,6 +290,8 @@ export class NovoAtendimentoComponent {
             this.isConvenio = true;
             this.isPagto = false;
 
+            if(this.doctorId !== null){
+
             this.service.buscaConvenio(this.doctorId, null, (response) => {
                 this.isActive = false;
                 if (response.length === 0){
@@ -308,6 +317,7 @@ export class NovoAtendimentoComponent {
                 this.fetchData(false)
 
             });
+        }
         }
     }
 
@@ -484,6 +494,15 @@ export class NovoAtendimentoComponent {
 
     }
 
+    getAvatar(data) {
+        if (data.avatarChild || data.avatar) {
+          return `data:image/png;base64,${data.avatarChild ?? data.avatar}`;
+        } else {
+          // Retorna o caminho para a imagem padrão
+          return this.avatar
+        }
+      }
+
     isValidCpf(data) {
 
         if(this.validaCampo(data)){
@@ -491,14 +510,64 @@ export class NovoAtendimentoComponent {
         this.listDependente = [];
         this.isDependente = false;
 
+        if(data.nome == null){
+
         if (!CPFValidator.isValidCPF(data.cpf)) {
             this.isDadosAtendimento = false;
             this.formNovoAtendimento.controls['nomeResponsavel'].setValue(null);
             this.toastrService.warning('O campo CPF Não é valido!','Aditi Care');
             return false;
         }
+
         this.pesquisaPaciente(data)
         return true;
+
+    }else{
+
+        let params = new HttpParams();
+        params = params.append('name', data.nome)
+        let allData = []; // Crie uma variável vazia para armazenar os dados
+
+        this.service.buscaPacienteSearch(params, (response) => {
+            allData = response
+            .map(data => ({
+             avatar: this.getAvatar(data),
+             name: data.name,
+              nameChild: data.nameChild,
+              idChild: data.idChild,
+              cellPhone: data.cellPhone,
+              email: data.emailUser,
+              federalId: data.federalId,
+              id: data.idUser  ,
+              city: data.idCityUser ,
+              uf: data.idUfUser,
+              userChildren: data.idUserChildren,
+              doctorId: data.idDoctor,
+              birthDateChild:  data.birthDateChild,
+              birthDate:  data.birthDate,
+                            }));
+
+             this.fetchData(false)
+    
+      if (allData.length === 0) {
+          this.toastrService.warning("Não Foram Encontradas Usuários", 'Aditi Care');
+          this.isActive = false;
+          this.rowData = null;
+    
+      } else {
+          this.isActive = false;
+          this.rowData = allData;
+          this.isbuscarNome =true;
+    
+      }
+    
+          }, (error) => {
+            this.isActive = false;
+            this.toastrService.danger(error.error.message);
+            this.fetchData(false)
+          });
+    }
+
     }
     }
 
@@ -650,7 +719,9 @@ export class NovoAtendimentoComponent {
         for (var i = 0; i < this.listMedico.length; i++) {
 
             if (data == this.listMedico[i].id) {
-                this.doctorId = this.listMedico[i].id
+
+              this.doctorId = this.listMedico[i].id
+         
             }
         }
 
@@ -682,6 +753,8 @@ export class NovoAtendimentoComponent {
     }
 
     verificaEspecialidade(data) {
+
+        console.log(data)
 
         this.service.verificaEspecialidade(data, null, (response => {
 
@@ -797,6 +870,8 @@ export class NovoAtendimentoComponent {
 
             });
         }
+        this.fetchData(false)
+
     }
 
     validaCampo(data) {
@@ -823,6 +898,47 @@ export class NovoAtendimentoComponent {
         }
 
         return true
+    }
+
+    SelecionarPaciente(data){
+
+        this.fetchData(true)
+        
+        this.userId =  data.id
+        this.isDadosAtendimento=true;
+        this.formNovoAtendimento.controls['nomeResponsavel'].setValue(data.name);
+        this.formNovoAtendimento.controls['telefoneResponsavel'].setValue(data.cellPhone);
+        this.formNovoAtendimento.controls['emailResponsavel'].setValue(data.email);
+        this.isConvenio = false;
+        this.isbuscarNome =false;
+
+        if(data.idChild !== null){
+
+        this.childId = data.idChild;
+
+     //   this.buscaDependente(data.id);
+
+        this.optDep= true;  
+        this.isDependente = true;
+
+         //const position = this.findPositionById(this.listDependente, this.childId);
+
+         this.listDependente.push({
+            id: 0,
+            idChild:0,
+            name: data.nameChild
+          })
+
+          this.formNovoAtendimento.controls['incluirDep'].setValue(this.listDependente[0].id, { onlySelf: true });
+        
+          this.formNovoAtendimento.controls['incluirDep'].setValue(this.listDependente[0].idChild, { onlySelf: true });
+          
+          
+        }  
+          
+          
+
+        this.fetchData(false)
     }
 
     confHorario(data, element) {

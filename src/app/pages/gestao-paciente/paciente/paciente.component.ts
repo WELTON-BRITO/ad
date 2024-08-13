@@ -46,23 +46,23 @@ export class PacienteComponent implements OnInit {
 
     this.formPaciente = this.formBuilder.group({
       cpf: [null],
-      medico: [this.listMedico[0], Validators.required],
-      optPart: "S",
+      medico: [''],
+      optPart: "N",
       nome: null,
     })
 
-    this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    //this.formPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
     let registe = {
       cpf: null,
       medico: this.listMedico[0].id,
-      optPart: "S",
+      optPart: "N",
       nome: null,
     }
 
     if(localStorage.getItem('meuPaciente') ===null || localStorage.getItem('meuPaciente') ==='') {
 
-      this.pesquisaGeral(registe,true)
+     // this.pesquisaGeral(registe,true)
     }else{
       this.pesquisaGeral(registe,false)
     }
@@ -107,6 +107,12 @@ export class PacienteComponent implements OnInit {
 
   }
 
+  notaFiscal(data) {
+
+    this.router.navigate(['/pages/atendimento/nota-fiscal-atendimento'], { state: data });
+
+  }
+
   pesquisaGeral(data,checked) {
 
     this.fetchData(true)
@@ -117,11 +123,7 @@ export class PacienteComponent implements OnInit {
 
     let params = new HttpParams();
 
-    if(data.optPart == null){
-      this.toastrService.warning('O Campo Usuário é Paciente Deve ser Informado','Aditi Care');
-    }
-
-    if (data.medico != null && data.optPart == 'S') {
+    if (data.medico != null && data.medico) {
       params = params.append('doctorId', data.medico)
     }
     if (data.cpf != null && data.cpf) {
@@ -133,8 +135,10 @@ export class PacienteComponent implements OnInit {
     }
 
 
-    if ((data.cpf != null) || (data.medico != 'null')) {
-
+    if (data.cpf !== null && data.cpf !== undefined || 
+      data.medico !== null && data.medico !== undefined || 
+      data.nome !== null && data.nome !== undefined) {
+        
 
       this.isActive = true;
       let allData = []; // Crie uma variável vazia para armazenar os dados
@@ -160,12 +164,19 @@ export class PacienteComponent implements OnInit {
 
   if (allData.length === 0) {
       this.toastrService.warning("Não Foram Encontradas Usuários", 'Aditi Care');
+
+      
       this.saveData('meuPaciente', null);
       this.isActive = false;
       this.rowData = null;
 
   } else {
-      this.saveData('meuPaciente', allData);
+
+    if(!this.isMobile()){
+      const compressedData = JSON.stringify(allData);
+      localStorage.setItem('meuPaciente', compressedData);
+    }
+
       this.isActive = false;
       this.rowData = allData;
 
@@ -179,7 +190,7 @@ export class PacienteComponent implements OnInit {
       });
 
     } else {
-      this.toastrService.warning('O campos médico ou CPF são obrigatórios!!!');
+      this.toastrService.warning('Informe algum dos campos para a Pesquisa','Aditi Care');
       this.fetchData(false)
 
     }
@@ -200,6 +211,20 @@ export class PacienteComponent implements OnInit {
     }
 
   }
+
+  isMobile() {
+    const userAgent = navigator.userAgent
+    
+    // Verifica se o userAgent corresponde a dispositivos móveis
+    if (/android/i.test(userAgent)) {
+        return true;
+    }
+    if (/iPad|iPhone|iPod/.test(userAgent)) {
+        return true;
+    }
+    return false;
+  }
+
 
    // Salva os dados no LocalStorage
    saveData(key: string, data: any): void {

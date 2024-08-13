@@ -20,6 +20,7 @@ import { AgendarConsultaComponent } from "./agendar-consulta/agendar-consulta.co
 import { bloquearAtendimentoComponent } from "./bloquear-atendimento/bloquear-atendimento.component";
 import { reagendarAtendimentoComponent } from "./reagendar/reagendar-atendimento.component";
 import { AnteciparAtendimentoComponent } from "./antecipar-atendimento/antecipar-atendimento.component";
+import { notaFiscalComponent } from "./nota-fiscal-atendimento/nota-fiscal-atendimento";
 
 
 
@@ -60,6 +61,7 @@ import { AnteciparAtendimentoComponent } from "./antecipar-atendimento/antecipar
     bloquearAtendimentoComponent,
     reagendarAtendimentoComponent,
     AnteciparAtendimentoComponent,
+    notaFiscalComponent,
   ],  
 })
 export class AtendimentoModule { }

@@ -458,7 +458,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
               // Converta os dados de string para objeto
               const parsedData = JSON.parse(allData);
               this.formConsultaPaciente.controls['detalhesCliente'].setValue(this.decodeHexadecimalString(parsedData.detalhesCliente ?? null));
-              this.formConsultaPaciente.controls['detalhesCliente'].setValue(this.decodeHexadecimalString(parsedData?.detalhesCliente ?? null));
+              this.formConsultaPaciente.controls['prescricaoMedica'].setValue(this.decodeHexadecimalString(parsedData?.prescricaoMedica ?? null));
               this.formConsultaPaciente.controls['detalhesInterno'].setValue(this.decodeHexadecimalString(parsedData?.detalhesInterno ?? null));
               this.formConsultaPaciente.controls['tempoRetorno'].setValue(parsedData?.tempoRetorno ?? null);
               this.formConsultaPaciente.controls['altura'].setValue(parsedData?.altura ?? null);
@@ -905,7 +905,7 @@ export class ConsultaPacienteComponent implements OnDestroy {
           return decodedString;
         } catch (error) {
           console.error('Erro ao decodificar a sequência:', error);
-          return ''; // Retorna uma string vazia em caso de erro
+          return encodedString; // Retorna uma string vazia em caso de erro
         }
       }
 
@@ -989,11 +989,11 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.hasSpecial = true;
            }else{
             v_descriptionClinic = response?.descriptionClinic;
+            this.formConsultaPaciente.controls['detalhesInterno'].setValue(this.decodeHexadecimalString(v_descriptionClinic));
            }
 
             // Defina o valor no controle do formulário
-            this.formConsultaPaciente.controls['detalhesCliente'].setValue(v_descriptionUser);
-            this.formConsultaPaciente.controls['detalhesInterno'].setValue(v_descriptionClinic);
+            this.formConsultaPaciente.controls['detalhesCliente'].setValue(this.decodeHexadecimalString(v_descriptionUser));
             this.formConsultaPaciente.controls['tempoRetorno'].setValue(response?.timeReturn ?? null);
             this.formConsultaPaciente.controls['altura'].setValue(response?.height ?? null);
             this.formConsultaPaciente.controls['peso'].setValue(response?.weight ?? null);
@@ -1001,8 +1001,8 @@ export class ConsultaPacienteComponent implements OnDestroy {
             this.formConsultaPaciente.controls['circAbdomen'].setValue(response?.abdomenSize ?? null);
          //   this.formConsultaPaciente.controls['urlReceita'].setValue(response?.urlPrescription ?? null);
          //   this.formConsultaPaciente.controls['urlAtestado'].setValue(response?.urlRemovalReport ?? null);
-            this.formConsultaPaciente.controls['prescricaoMedica'].setValue(response?.prescription ?? null);
-            this.formConsultaPaciente.controls['pedidoExame'].setValue(response?.descriptionMedicalOrder ?? null);
+            this.formConsultaPaciente.controls['prescricaoMedica'].setValue(this.decodeHexadecimalString(response?.prescription ?? null));
+            this.formConsultaPaciente.controls['pedidoExame'].setValue(this.decodeHexadecimalString(response?.descriptionMedicalOrder ?? null));
          //   this.formConsultaPaciente.controls['urlExame'].setValue(response?.urlMedicalOrder ?? null);
 
             this.fetchData(false)
@@ -1111,11 +1111,13 @@ validar_valor(data){
             this.hasSpecial = true;
            }else{
             v_descriptionClinic = response?.descriptionClinic;
-           }
+            this.html_string = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic);
 
+           }
+           
             // Defina o valor no controle do formulário
-            this.formConsultaPaciente.controls['detalhesCliente'].setValue(v_descriptionUser);
-            this.formConsultaPaciente.controls['detalhesInterno'].setValue(v_descriptionClinic);
+            this.formConsultaPaciente.controls['detalhesCliente'].setValue(this.decodeHexadecimalString(v_descriptionUser));
+            this.formConsultaPaciente.controls['detalhesInterno'].setValue(this.decodeHexadecimalString(v_descriptionClinic));
             this.formConsultaPaciente.controls['tempoRetorno'].setValue(response?.timeReturn ?? null);
             this.formConsultaPaciente.controls['altura'].setValue(response?.height ?? null);
             this.formConsultaPaciente.controls['peso'].setValue(response?.weight ?? null);
@@ -1123,8 +1125,8 @@ validar_valor(data){
             this.formConsultaPaciente.controls['circAbdomen'].setValue(response?.abdomenSize ?? null);
             this.formConsultaPaciente.controls['urlReceita'].setValue(response?.urlPrescription ?? null);
             this.formConsultaPaciente.controls['urlAtestado'].setValue(response?.urlRemovalReport ?? null);
-            this.formConsultaPaciente.controls['prescricaoMedica'].setValue(response?.prescription ?? null);
-            this.formConsultaPaciente.controls['pedidoExame'].setValue(response?.descriptionMedicalOrder ?? null);
+            this.formConsultaPaciente.controls['prescricaoMedica'].setValue(this.decodeHexadecimalString(response?.prescription ?? null));
+            this.formConsultaPaciente.controls['pedidoExame'].setValue(this.decodeHexadecimalString(response?.descriptionMedicalOrder ?? null));
             this.formConsultaPaciente.controls['urlExame'].setValue(response?.urlMedicalOrder ?? null);
 
             this.fetchData(false)

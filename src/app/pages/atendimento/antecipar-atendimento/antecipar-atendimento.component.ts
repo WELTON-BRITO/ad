@@ -125,7 +125,7 @@ export class AnteciparAtendimentoComponent implements OnInit {
       this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[this.findPositionById(this.listMedico,data.medico)].id, { onlySelf: true });
 
   }else{
-    this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    this.toastrService.warning('Informe o Médico','Aditi Care');
 
   }
 
@@ -138,7 +138,7 @@ export class AnteciparAtendimentoComponent implements OnInit {
       medico:  this.doctorId,
       clinicaId: this.listClinica[0].id,
     }
-      this.buscarAntecipacoes(register)
+      //this.buscarAntecipacoes(register)
   }
 
   previousPage() {
@@ -173,6 +173,8 @@ export class AnteciparAtendimentoComponent implements OnInit {
 
   buscarAntecipacoes(data) {
 
+    if (data.medicoId !== null || data.medicoId !== '' || data.medicoId !== undefined || this.doctorId !== null) {
+  
      this.fetchData(true)
      this.isActive = true;
 
@@ -180,12 +182,13 @@ export class AnteciparAtendimentoComponent implements OnInit {
       let params = new HttpParams();
 
       params = params.append('clinicId', data.clinicaId ?? data.clinica ?? 1);
-      params = params.append('doctorId', data.medicoId ?? data.medico);
+      params = params.append('doctorId', data.medicoId ?? data.medico ??  this.doctorId);
 
       let allData = []; // Crie uma variável vazia para armazenar os dados
           this.service.buscaAntecipacoes(params, (response) => {
             allData = response
-              .map(data => ({
+            .filter(data => data.status == '02 - Aguardando Pagamento' || data.status == '03 - Consulta Confirmada' ) // Filtra os registros com statusId iguais a 02 - Aguardando Pagamento e 03 - Consulta Confirmada
+            .map(data => ({
                 id: data.id,
                 medico: data.doctorName,
                 nomeDependente: data?.childName,
@@ -205,7 +208,7 @@ export class AnteciparAtendimentoComponent implements OnInit {
                 medicoId: data.doctorId,
                 isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
                 avatar: this.getAvatar(data)
-              }));
+            }));
 
             if (allData.length === 0) {
               this.toastrService.warning("Não Foram Encontradas Solicitações de Antecipações Para Este Médico.", 'Aditi Care');
@@ -223,9 +226,21 @@ export class AnteciparAtendimentoComponent implements OnInit {
             this.toastrService.danger(error?.message || "Erro desconhecido.",'Aditi Care');
             this.fetchData(false)
           }); 
-
+        }else{
+          this.toastrService.warning('Informe o Médico','Aditi Care');
+        }
   }
+  verificaMedico(data) {
 
+    for (var i = 0; i < this.listMedico.length; i++) {
+
+        if (data == this.listMedico[i].id) {
+
+          this.doctorId = this.listMedico[i].id     
+        }
+    }
+  }
+  
   getAvatar(data) {
     if (data.childAvatar || data.userAvatar) {
       return `data:image/png;base64,${data.childAvatar ?? data.userAvatar}`;
@@ -236,7 +251,6 @@ export class AnteciparAtendimentoComponent implements OnInit {
   }
 
   editarConsulta(data) {
-    console.log(data)
     this.router.navigateByUrl('/pages/atendimento/reagendar-atendimento', { state:  data });
   }
   
