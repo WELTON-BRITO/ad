@@ -37,6 +37,20 @@ b { /* used for event dates/times */
   }
 }
 
+
+@media (max-width: 820px) {
+  .form-group {
+    width: 100%;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+
+}
+
+
 .button {
   margin-top: 27px;
 }

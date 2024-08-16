@@ -218,11 +218,6 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.formBuscarAtendimento.controls['tipoConsulta'].setValue(this.listTipoConsulta[0].id, { onlySelf: true }); // use the id of the first clinica
     this.formBuscarAtendimento.controls['status'].setValue(this.tipo[0].status, { onlySelf: true }); // use the id of the first clinica
 
-    this.listMedico.push({
-      id: '9999999',
-      name: 'Todos'
-    })
-
     var initData = [];
     this.rowData = initData;
 
@@ -244,6 +239,12 @@ export class BuscarAtendimentoComponent implements OnInit {
       clinicaId: this.listClinica[0].id,
       status: this.DefaultStatus,
       tipo: this.tipo[0].id ?? 1,
+    }
+
+    if(this.isMobile() ||  localStorage.getItem('bway-domain') == 'DOCTOR'){
+
+    this.formBuscarAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    data.forceUpdate === true
     }
 
     if (localStorage.getItem('meuCardData') === null || localStorage.getItem('meuCardData') === '') {
@@ -286,7 +287,15 @@ export class BuscarAtendimentoComponent implements OnInit {
 
   AnteciparAtendimento(data){
 
-    this.router.navigate(['/pages/atendimento/antecipar-atendimento'], { state: data });
+    if(data.medico ==null || data.medico ==""){
+      this.toastrService.warning('Por Favor Informe o médico', 'Aditi Care');
+    
+    }else{
+      this.router.navigate(['/pages/atendimento/antecipar-atendimento'], { state: data });
+    
+    }
+
+
 
   }
 
@@ -369,7 +378,7 @@ export class BuscarAtendimentoComponent implements OnInit {
               this.rowData = null;
             } else {
 
-              if(!this.isMobile()){
+              if(!this.isMobile() ||  localStorage.getItem('bway-domain') !== 'DOCTOR'){
                 
                 const compressedData = JSON.stringify(allData);
                 localStorage.setItem('meuCardData', compressedData);
@@ -420,17 +429,25 @@ export class BuscarAtendimentoComponent implements OnInit {
   }
 
   isMobile() {
-    const userAgent = navigator.userAgent
+    const userAgent = navigator.userAgent.toLowerCase();
+    
+    console.log(userAgent);
     
     // Verifica se o userAgent corresponde a dispositivos móveis
     if (/android/i.test(userAgent)) {
         return true;
     }
-    if (/iPad|iPhone|iPod/.test(userAgent)) {
+    if (/ipad|iphone|ipod/.test(userAgent)) {
+        return true;
+    }
+    // Verifica se é um dispositivo macOS
+    if (/macintosh|mac os x/.test(userAgent) && 'ontouchend' in document) {
         return true;
     }
     return false;
-  }
+}
+
+
   notaFiscal(data) {
 
     this.router.navigate(['/pages/atendimento/nota-fiscal-atendimento'], { state: data });
@@ -544,8 +561,13 @@ else{
 
   agendarAtendimento(data) {
 
+if(data.medico ==null || data.medico ==""){
+  this.toastrService.warning('Por Favor Informe o médico', 'Aditi Care');
 
-    this.router.navigate(['/pages/atendimento/novo-atendimento'], { state: data });
+}else{
+  this.router.navigate(['/pages/atendimento/novo-atendimento'], { state: data });
+
+}
 
   }
 
@@ -578,7 +600,14 @@ else{
   }
 
   BloquearAtendimento(data) {
-    this.router.navigate(['/pages/atendimento/bloquear-atendimento'], { state: data });
+
+    if(data.medico ==null || data.medico ==""){
+      this.toastrService.warning('Por Favor Informe o médico', 'Aditi Care');
+    
+    }else{
+      this.router.navigate(['/pages/atendimento/bloquear-atendimento'], { state: data });
+    
+    }
   }
 
   detalhes(data) {
@@ -678,6 +707,8 @@ else{
     document.querySelectorAll('[data-toggle="collapse"]').forEach(element => {
       const target = document.querySelector(element.getAttribute('data-target'));
       // Se for mobile, inicia com os filtros fechados
+
+      target.classList.add('show');
       if (!isMobile && !target.classList.contains('show')) {
         target.classList.add('show');
       }

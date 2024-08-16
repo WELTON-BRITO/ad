@@ -1,43 +1,42 @@
 <div class="loader" *ngIf="isLoader"></div>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-12 col-xs-12">
+    <div class="col-12">
       <div class="dialog-body">
         <nb-card>
           <nb-card-body>
-            <div class="form-group col-md-4">
-              <h5 class="ml-lg-n3">Calendário </h5>
+            <div class="form-group">
+              <h5 class="ml-lg-n3">Calendário</h5>
             </div>
             <form id="form-buscar-atendimento" [formGroup]="formAgendaAtendimento">
-              <div class="col-md-12 col-xs-12">
-                  <div class="form-row">
-                      <div class="form-group col-md-3">
-                          <label for="medico">Escolha o médico*</label>
-                          <select class="form-control" id="medico" formControlName="medico" (change)="buscaId(formAgendaAtendimento.value)">
-                              <option value="" selected>Selecione o Médico</option>
-                              <option *ngFor="let medico of listMedico" [value]="medico.id">
-                                  {{ medico.name }}
-                              </option>
-                          </select>
-                      </div>
-                    <div class="form-group col-md-4">
-                      <div class="text-right">
-                      <button class="btn btn-primary mr-2 button" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
+              <div class="col-12">
+                <div class="form-row">
+                  <div class="form-group col-md-6 col-12">
+                    <label for="medico">Escolha o médico*</label>
+                    <select class="form-control" id="medico" formControlName="medico" (change)="buscaId(formAgendaAtendimento.value)">
+                      <option value="" selected>Selecione o Médico</option>
+                      <option *ngFor="let medico of listMedico" [value]="medico.id">
+                        {{ medico.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-12 col-12">
+                    <div class="text-center">
+                      <button class="btn btn-primary mr-2 mb-2" (click)="buscarAtendimento(formAgendaAtendimento.value,true)">
                         Buscar
                       </button>
-                      <button class="btn btn-success mr-2 button" (click)="agendarAtendimento(formAgendaAtendimento.value)">
+                      <button class="btn btn-success mr-2 mb-2" (click)="agendarAtendimento(formAgendaAtendimento.value)">
                         Agendar
                       </button>
-                      <button class="btn btn-warning button" (click)="BloquearAtendimento(formAgendaAtendimento.value)">
+                      <button class="btn btn-warning mr-2 mb-2" (click)="BloquearAtendimento(formAgendaAtendimento.value)">
                         Bloquear
                       </button>
-                      <button class="btn btn-danger ml-2 button" (click)="AnteciparAtendimento(formAgendaAtendimento.value)">
-                        Fila
+                      <button class="btn btn-danger mb-2" (click)="AnteciparAtendimento(formAgendaAtendimento.value)">
+                        Espera
                       </button>
                     </div>
                   </div>
-                  </div>
-                  
+                </div>
               </div>
             </form>
             <div class="col-md-12 col-xs-12" *ngIf="isSearch">

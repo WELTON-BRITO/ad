@@ -9,19 +9,18 @@
                         <form id="form-novo-atendimento" [formGroup]="formNovoAtendimento">
                             <div class="col-md-12 col-xs-12">
                                 <div class="form-row align-items-center">
-                                    <nb-card-header class="aditi-header">
                                         <div class="back-link">
                                             <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
                                                 <nb-icon icon="arrow-back" title="voltar"></nb-icon>
                                             </a>
                                         </div>
-                                    </nb-card-header>
-                                    <div class="form-group col-md-6">
-                                        <h5 class="pt-3">Agendar Atendimento</h5>
-                                    </div>
+                                        <div class="form-group col-md-6">
+                                            <h5 class="pt-3">Agendamento</h5>
+                                        </div>
                                 </div>
+                           
                                 <div class="form-row align-items-center">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-5">
                                         <div class="form-group">
                                             <label for="nome">Informe o Médico*</label>
                                             <select class="form-control" formControlName="medico"
@@ -34,7 +33,7 @@
                                     </div>
                                     <div class="form-group col-md-4">
                                         <div class="form-group">
-                                            <label for="tipoConsulta">Tipo de Consulta*</label>
+                                            <label for="tipoConsulta">Modalidade Consulta*</label>
                                             <select class="form-control" formControlName="tipoConsulta"
                                                 (change)="ValidaTipoConsulta($event.target.value)">
                                                 <option value="null" selected>SELECIONE</option>
@@ -43,9 +42,9 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <div class="form-group">
-                                            <label for="tipoEspecialidade">Tipo de Especialidade*</label>
+                                            <label for="tipoEspecialidade">Especialidade*</label>
                                             <select class="form-control" formControlName="tipoEspecialidade"
                                                 (change)="especialidade($event.target.value)">
                                                 <option value="null" selected>SELECIONE</option>
@@ -58,9 +57,9 @@
                                                                     
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-4" *ngIf="AtendimentoDireto">
+                                    <div class="form-group col-md-5" *ngIf="AtendimentoDireto">
                                         <div class="form-group">
-                                          <label for="tempoAtendimento">Tempo de Atendimento (Opcional)</label>
+                                          <label for="tempoAtendimento">Definir Tempo</label>
                                           <select class="form-control" formControlName="tempoAtendimento" (change)="tempoAtendimento($event.target.value)">
                                             <option value="null" selected>SELECIONE</option>
                                             <option *ngFor="let tempoAtendimento of listTempoAtendimento" value="{{ tempoAtendimento.id }}">
@@ -84,35 +83,31 @@
                                     </div>
                                     </div>
                                     <div class="form-row">
-
-                                    <div class="form-group col-md-4" *ngIf="AtendimentoDireto">
-                                        <label for="dataInicio">Informe a Data da Consulta*</label>
-                                        <input class="form-control date" type="date" id="dataInicio"
-                                            name="mydate" formControlName="dataInicio" maxlength="10" />
-                                    </div>
-                                    
-                                    <div class="form-group col-md-4" *ngIf="AtendimentoDireto">
-                                        <label class="encaixe">Deseja Realizar um Encaixe?*</label>
-                                        <div class="p-1 row mb-lg-n1">
+                                        <div class="form-group col-md-5 col-12" *ngIf="AtendimentoDireto">
+                                          <label for="dataInicio">Data da Consulta*</label>
+                                          <input class="form-control date" type="date" id="dataInicio" name="mydate" formControlName="dataInicio" maxlength="10" />
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 col-12" *ngIf="AtendimentoDireto">
+                                          <label class="encaixe">Realizar Encaixe?*</label>
+                                          <div class="p-1 row mb-lg-n1">
                                             <label class="radio-inline pl-3">
-                                                <input class="mat-button" type="radio" id="optEncaixe" name="optEncaixe"
-                                                    value="S" formControlName="optEncaixe" (click)="buscarEncaixe($event.target.value,formNovoAtendimento.value)" />
-                                                Sim
+                                              <input class="mat-button" type="radio" id="optEncaixe" name="optEncaixe" value="S" formControlName="optEncaixe" (click)="buscarEncaixe($event.target.value, formNovoAtendimento.value)" />
+                                              Sim
                                             </label>
                                             <label class="radio-inline pl-2">
-                                                <input class="mat-button" type="radio" id="optEncaixe" name="optEncaixe"
-                                                    value="N" formControlName="optEncaixe" (click)="buscarEncaixe($event.target.value,formNovoAtendimento.value)" />
-                                                Não
+                                              <input class="mat-button" type="radio" id="optEncaixe" name="optEncaixe" value="N" formControlName="optEncaixe" (click)="buscarEncaixe($event.target.value, formNovoAtendimento.value)" />
+                                              Não
                                             </label>
+                                          </div>
                                         </div>
-                                    </div>
-
-                                    <div class="form-group col-md-4 text-right" *ngIf="isEncaixe">
-                                    <button class="btn btn-primary m-4" (click)="pesquisarConsulta(formNovoAtendimento.value)">
+                                      
+                                        <div class="form-group col-md-3 col-12 text-md-right text-center" *ngIf="isEncaixe">
+                                          <button class="btn btn-primary m-4" (click)="pesquisarConsulta(formNovoAtendimento.value)">
                                             Pesquisar
-                                        </button>
-                                    </div>
-                                
+                                          </button>
+                                        </div>
+                                                            
                                 <div class="form-row align-items-center mt-lg-n4">
                                     <div *ngIf="isEncaixe1">
                                         <nb-card-body>
@@ -158,22 +153,19 @@
                             </div>
 
                             <div *ngIf="isHorario">
-                                <div class="form-group col-md-4">
                                   <h6 class="pt-3">Selecione o Horário da Consulta</h6>
-                                </div>
                                 <div class="modal-content">
                                   <div class="modal-body">
                                     <div class="row">
-                                      <div class="col-md-2" *ngFor="let card of tipoCard; let i = index;">
-                                        <mat-card class="custom-card">
+                                      <div class="col-md-4 col-sm-6 mb-4" *ngFor="let card of tipoCard; let i = index;">
+                                        <mat-card [ngClass]="{'custom-card': true, 'unavailable-card': card.statusCard !== 'Disponível'}">
                                           <mat-card-content>
                                             <p>Data: {{ card.data }}</p>
                                             <p>Horário: {{ card.horario }}</p>
                                             <p>Situação: {{ card.statusCard }}</p>
-                                            <button *ngIf="card.statusCard === 'Disponível'" class="btn btn-primary" (click)="confHorario(card, formNovoAtendimento.value)">Selecionar</button>                                             </mat-card-content>
+                                            <button *ngIf="card.statusCard === 'Disponível'" class="btn btn-primary" (click)="confHorario(card, formNovoAtendimento.value)">Selecionar</button>
+                                          </mat-card-content>
                                         </mat-card>
-                                        <!-- Adiciona uma linha divisória após cada sexto card -->
-                                        <div *ngIf="(i + 1) % 6 === 0 && i !== tipoCard.length - 1" class="col-md-12"><hr></div>
                                       </div>
                                     </div>
                                   </div>
@@ -186,7 +178,7 @@
                                     <div class="form-row align-items-center">
                                         <div class="form-group col-md-3">
                                             <div class="form-group">
-                                                <label for="horarioSelected">Horário Selecionado:</label>
+                                                <label for="horarioSelected">Horário:</label>
                                                 <input class="form-control" name="horarioSelected" id="horarioSelected "
                                                 type="text" formControlName="horarioSelected" [value]="horarioSelecionado" disabled />
                                             </div>
@@ -194,7 +186,7 @@
                                     
                                         <div class="form-group col-md-3">
                                             <div class="form-group">
-                                                <label for="nomeResponsavel">Informe o CPF do Paciente/Responsável*</label>
+                                                <label for="nomeResponsavel">Buscar por CPF</label>
                                                 <input class="form-control" name="cpf" id="cpf" type="text"
                                                     formControlName="cpf" mask="000.000.000-00" maxlength="14"
                                                     placeholder="000.000.000-00" />
@@ -203,9 +195,9 @@
 
                                         <div class="form-group col-md-3">
                                             <div class="form-group">
-                                                <label for="nomeResponsavel">Informe o Nome do Paciente/Responsável*</label>
+                                                <label for="nomeResponsavel">Buscar por Nome*</label>
                                                 <input class="form-control" name="nome" id="nome" type="text"
-                                                    formControlName="nome" placeholder="Informe o Nome para Consulta"/>
+                                                    formControlName="nome" placeholder="Nome"/>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-3 text-right">
@@ -228,8 +220,6 @@
                                                     <p class="card-text">Email: {{ row.email }}</p>
                                                     <p class="card-text">CPF: {{ row.federalId }}</p>
                                                     
-                                                    
-                
                                                     <div class="datatable-body-box-actions">
                                                         <button class="btn btn-success" size="small" (click)="SelecionarPaciente(row)">
                                                             Selecionar
@@ -241,17 +231,17 @@
                                         <div class="form-group col-md-12" *ngIf="isDadosAtendimento">
                                             <div class="form-row">
                                                 <div class="form-group col-md-4">
-                                                    <label for="nomeResponsavel">Nome do Paciente/Responsável</label>
+                                                    <label for="nomeResponsavel">Nome</label>
                                                     <input class="form-control" name="nomeResponsavel" id="nomeResponsavel"
                                                         type="text" formControlName="nomeResponsavel" disabled />
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <label for="telefoneResponsavel">Telefone Paciente/Responsável</label>
+                                                    <label for="telefoneResponsavel">Telefone</label>
                                                     <input class="form-control" name="telefoneResponsavel" id="telefoneResponsavel"
                                                         type="text" formControlName="telefoneResponsavel" disabled />
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <label for="emailResponsavel">Email Paciente/Responsável</label>
+                                                    <label for="emailResponsavel">Email</label>
                                                     <input class="form-control" name="emailResponsavel" id="emailResponsavel"
                                                         type="text" formControlName="emailResponsavel" disabled />
                                                 </div>
@@ -293,7 +283,7 @@
                                             
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label class="consultaAntecipada">Paciente Deseja Antecipar Data?</label>
+                                                    <label class="consultaAntecipada">Antecipar Atendimento?</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radioAntecipada"
@@ -313,7 +303,7 @@
                                         <div class="form-row align-items-center">
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                  <label class="consultaParticular">Consulta será Particular?</label>
+                                                  <label class="consultaParticular">Consulta Particular?</label>
                                                   <div class="p-1 row">
                                                     <label class="radio-inline pl-2 pl-3">
                                                       <input class="mat-button" type="radio" id="radioSS" name="optPart" value="S"
@@ -333,7 +323,7 @@
                                                          
                                               <div class="col-md-4">
                                             <div class="form-group" *ngIf="isPagto">
-                                                <label for="formaPagto">Qual será a Modalidade de Pagamento*</label>
+                                                <label for="formaPagto">Forma de Pagamento*</label>
                                                 <select class="form-control" formControlName="formaPagto">
                                                     <option value="null" selected>SELECIONE</option>
                                                     <option *ngFor="let pagto of listPagto" value="{{ pagto.id }}">{{
@@ -342,7 +332,7 @@
                                             </div>
                                         </div>
                                             <div class="form-group col-md-4" *ngIf="isConvenio">
-                                                <label for="formaConvenio">Informe o Convênio*</label>
+                                                <label for="formaConvenio">Nome do Convênio*</label>
                                                 <select class="form-control" formControlName="formaConvenio">
                                                     <option value="null" selected>SELECIONE</option>
                                                     <option *ngFor="let convenio of listConvenio"
@@ -354,7 +344,7 @@
                                         <div class="form-row align-items-center">
                                             <div class="form-group col-md-4">
                                                 <div class="form-group">
-                                                    <label class="consultaPaga">Consulta Já esta Paga?</label>
+                                                    <label class="consultaPaga">Consulta Paga?</label>
                                                     <div class="p-1 row">
                                                         <label class="radio-inline pl-2 pl-3">
                                                             <input class="mat-button" type="radio" id="radioSim"
@@ -385,10 +375,11 @@
                                                             Não</label>
                                                     </div>
                                                 </div>
+                                                
                                             </div>
                                             <div class="form-group col-md-12 mt-lg-n4">
                                                 <div class="input-box">
-                                                    <label for="detalhes">Detalhes sobre a Consulta:</label>
+                                                    <label for="detalhes">Observação:</label>
                                                     <textarea class="form-control" rows="3" formControlName="consPagto"
                                                         id="consPagto" [value]="null" (keypress)="qdadeCaracteres()"
                                                         maxlength="2000" disabled></textarea>

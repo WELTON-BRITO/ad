@@ -235,7 +235,7 @@ export class AgendaComponent implements OnInit {
 
     var time = new Date();
     var outraData = new Date();
-    outraData.setDate(time.getDate() + 30);
+    outraData.setDate(time.getDate() + 90);
     this.FinalDate = moment(outraData).format('YYYY-MM-DD')
 
     var outraData2 = new Date();
@@ -249,14 +249,23 @@ export class AgendaComponent implements OnInit {
 
     });
 
-   // this.formAgendaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
- 
     let register = {
       dataInicio: this.StartedDate,
       dataFim: this.FinalDate,
       medico: this.listMedico[0].id,
 
     }
+
+
+    if(this.isMobile() ||  localStorage.getItem('bway-domain') == 'DOCTOR'){
+
+      this.formAgendaAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+      this.buscarAtendimento(register, true)
+    }
+
+   // 
+ 
+   
 
     //if (localStorage.getItem('googleData') === null || localStorage.getItem('googleData') === '') {
     //  this.buscarAtendimento(register, true)
@@ -279,9 +288,17 @@ export class AgendaComponent implements OnInit {
   }
 
   AnteciparAtendimento(data){
-    data.patchPaciente = true;
 
-    this.router.navigate(['/pages/atendimento/antecipar-atendimento'], { state: data });
+    if(data.medico ==null || data.medico ==""){
+      this.toastrService.warning('Por Favor Informe o médico', 'Aditi Care');
+    
+    }else{
+      data.patchPaciente = true;
+
+      this.router.navigate(['/pages/atendimento/antecipar-atendimento'], { state: data });
+      
+    }
+
 
   }
 
@@ -369,10 +386,8 @@ export class AgendaComponent implements OnInit {
 
       if (this.validaCampo(data)) {
 
-
-        if (data.medico != '9999999') {
-          params = params.append('doctorId', data.medico)
-        }
+        params = params.append('doctorId', data.medico)
+        
         let allData = []; // Crie uma variável vazia para armazenar os dados
 
         this.service.buscaAtendimentos(params, (response) => {
@@ -443,12 +458,11 @@ export class AgendaComponent implements OnInit {
             this.rowData = [];
           } else {
 
-            if(!this.isMobile()){
+            if(!this.isMobile() ||  localStorage.getItem('bway-domain') !== 'DOCTOR'){
                 
               const compressedData = JSON.stringify(allData);
-              localStorage.setItem('googleData', compressedData);
+          //    localStorage.setItem('googleData', compressedData);
             }
-
 
             this.isActive = false;
             this.calendarEvents = allData;
@@ -500,17 +514,24 @@ export class AgendaComponent implements OnInit {
   }
 
   isMobile() {
-    const userAgent = navigator.userAgent
+    const userAgent = navigator.userAgent.toLowerCase();
+    
+    console.log(userAgent);
     
     // Verifica se o userAgent corresponde a dispositivos móveis
     if (/android/i.test(userAgent)) {
         return true;
     }
-    if (/iPad|iPhone|iPod/.test(userAgent)) {
+    if (/ipad|iphone|ipod/.test(userAgent)) {
+        return true;
+    }
+    // Verifica se é um dispositivo macOS
+    if (/macintosh|mac os x/.test(userAgent) && 'ontouchend' in document) {
         return true;
     }
     return false;
-  }
+}
+
 
   findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
 
@@ -570,9 +591,17 @@ export class AgendaComponent implements OnInit {
   }
   agendarAtendimento(data) {
 
-    data.patchPaciente = true;
+ 
+    if(data.medico ==null || data.medico ==""){
+      data.patchPaciente = true;
+      this.toastrService.warning('Por Favor Informe o médico', 'Aditi Care');
+    
+    }else{
+      this.router.navigate(['/pages/atendimento/novo-atendimento'], { state: data });;
+    
+    }
 
-    this.router.navigate(['/pages/atendimento/novo-atendimento'], { state: data });;
+
 
   }
 
@@ -605,8 +634,17 @@ export class AgendaComponent implements OnInit {
   }
 
   BloquearAtendimento(data) {
-    data.patchPaciente = true;
-    this.router.navigate(['/pages/atendimento/bloquear-atendimento'], { state: data })
+  
+    if(data.medico ==null || data.medico ==""){
+      this.toastrService.warning('Por Favor Informe o médico', 'Aditi Care');
+    
+    }else{
+      data.patchPaciente = true;
+
+      this.router.navigate(['/pages/atendimento/bloquear-atendimento'], { state: data })
+    
+    }
+
   }
 
   windowResize() {

@@ -206,7 +206,8 @@ export class NovoAtendimentoComponent {
 
         }else{
             this.formNovoAtendimento.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
-
+            this.verificaEspecialidade(this.listMedico[0].id);
+            this.doctorId=this.listMedico[0].id
         }
 
         this.formNovoAtendimento.controls['tipoConsulta'].setValue(this.listTipoConsulta[0].id, { onlySelf: true });
@@ -754,8 +755,6 @@ export class NovoAtendimentoComponent {
 
     verificaEspecialidade(data) {
 
-        console.log(data)
-
         this.service.verificaEspecialidade(data, null, (response => {
 
             this.listTipoEspecialidade = response
@@ -772,9 +771,9 @@ export class NovoAtendimentoComponent {
     ValidaTipoConsulta(data) {
                 if (data == 6) {
                     this.exibirDivProcedimento = true;
+                    this.verificaprocedimento(this.doctorId);
             }else {
                 this.exibirDivProcedimento = false;
-
             }
 
     }
@@ -790,14 +789,23 @@ export class NovoAtendimentoComponent {
     }
 
     verificaprocedimento(data) {
+
+        this.fetchData(true)
+
         this.service.verificaProcedimento(data, null, (response => {
 
 
             this.listTipoProcedimento = response
 
+            this.fetchData(false)
+
+
         }), (error) => {
             this.isActive = false;
             this.toastrService.danger(error.error.message);
+
+            this.fetchData(false)
+
 
         });
 
@@ -1084,6 +1092,7 @@ export class NovoAtendimentoComponent {
                     this.toastrService.success('O Horário Informado Está Disponível','Aditi Care');
                     this.formNovoAtendimento.controls['horarioSelected'].setValue((data.dataInicio + " - " +this.dadosHorario.horaInicio + " - " + this.dadosHorario.horaFim ));
                     this.fetchData(false)
+                    this.isEncaixe1 = false;
                 }
                 else{
                     this.isConfAtendimento = false;

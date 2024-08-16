@@ -172,7 +172,7 @@ export class PacienteComponent implements OnInit {
 
   } else {
 
-    if(!this.isMobile()){
+    if(!this.isMobile() ||  localStorage.getItem('bway-domain') !== 'DOCTOR'){
       const compressedData = JSON.stringify(allData);
       localStorage.setItem('meuPaciente', compressedData);
     }
@@ -211,19 +211,25 @@ export class PacienteComponent implements OnInit {
     }
 
   }
-
   isMobile() {
-    const userAgent = navigator.userAgent
+    const userAgent = navigator.userAgent.toLowerCase();
+    
+    console.log(userAgent);
     
     // Verifica se o userAgent corresponde a dispositivos móveis
     if (/android/i.test(userAgent)) {
         return true;
     }
-    if (/iPad|iPhone|iPod/.test(userAgent)) {
+    if (/ipad|iphone|ipod/.test(userAgent)) {
+        return true;
+    }
+    // Verifica se é um dispositivo macOS
+    if (/macintosh|mac os x/.test(userAgent) && 'ontouchend' in document) {
         return true;
     }
     return false;
-  }
+}
+
 
 
    // Salva os dados no LocalStorage
