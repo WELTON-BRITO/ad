@@ -147,34 +147,50 @@
                                     </div>
                                   
                                         <div style="margin-top: 10px;"><label><h6>Dados Especificos de {{atendimento.especialidade}} :</h6></label></div>
-
+                                  
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="circCabeca">Circunferência da Cabeça</label>
-                                                <input class="form-control" name="circCabeca" id="circCabeca" type="text"
-                                                    formControlName="circCabeca" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="circAbdomen">Circunferência Abdominal</label>
-                                                <input class="form-control" name="circAbdomen" id="circAbdomen" type="text"
-                                                    formControlName="circAbdomen" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="tempoRetorno">Prazo para Retorno (Dias)* </label>
-                                                <input class="form-control" name="tempoRetorno" id="tempoRetorno" type="text"
-                                                    formControlName="tempoRetorno" />
-                                            </div>
-                                                <div class="col-md-12 text-right">
-                                                  <button class="btn btn-warning" (click)="UltimaConsulta()">
-                                                    Buscar Última Consulta
-                                                  </button>
-                                                </div>
-                                        </div>
+                                          <div class="col-md-3">
+                                              <label for="circCabeca">Circunferência da Cabeça</label>
+                                              <input class="form-control" name="circCabeca" id="circCabeca" type="text" formControlName="circCabeca" />
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label for="circAbdomen">Circunferência Abdominal</label>
+                                              <input class="form-control" name="circAbdomen" id="circAbdomen" type="text" formControlName="circAbdomen" />
+                                          </div>
+                                          <div class="col-md-3">
+                                              <label for="tempoRetorno">Prazo para Retorno (Dias)* </label>
+                                              <input class="form-control" name="tempoRetorno" id="tempoRetorno" type="text" formControlName="tempoRetorno" />
+                                          </div>
+                                          <div class="col-md-3 d-flex justify-content-end align-items-end">
+                                              <button class="btn btn-warning btn-sm mr-2" (click)="UltimaConsulta()">
+                                                  Buscar Última Consulta
+                                              </button>
+                                              <button class="btn btn-success btn-sm" (click)="ChartCrescimento(formConsultaPaciente.value)">
+                                                  Gráfico de Crescimento
+                                              </button>
+                                          </div>
+                                      </div>
+                                      
+                                      
                                 </div>
 
                                     
                             </nb-card-body>
                         </nb-card>
+                        <nb-card>
+                          <nb-card-body>
+                              <div class="form-group col-md-12">
+                                  <canvas #heightChartCanvas id="canvas" class="half-width"></canvas>
+                              </div>
+                      
+                              <div class="form-group col-md-12">
+                                  <canvas #weightChartCanvas id="peso" class="half-width"></canvas>
+                              </div>
+                          </nb-card-body>
+                      </nb-card>
+                      
+                      
+
                         <nb-card>
                             <nb-card-body>
 

@@ -8,6 +8,9 @@ import { ConfigurarExcecaoAtendimentoComponent } from './configurar-excecao-aten
 import { ParametrizarPlanoComponent } from './parametrizar-plano/parametrizar-plano.component';
 import { GerarQrCodeComponent } from './gerar-qr-code/gerar-qr-code.component';
 import { ParametrizarConsultaComponent } from './parametrizar-consulta/parametrizar-consulta.component';
+import { CadastrarTemplatesComponent } from '../configurar-agenda/cadastrar-templates/cadastrar-templates';
+import { ConfigurarTemplatesComponent } from '../configurar-agenda/configurar-templates/configurar-templates';
+
 
 const routes: Routes = [{
   path: '',
@@ -36,6 +39,14 @@ const routes: Routes = [{
     {
       path: 'parametrizar-consulta',
       component: ParametrizarConsultaComponent,
+    }, 
+    {
+      path: 'cadastrar-templates',
+      component: CadastrarTemplatesComponent,
+    }, 
+    {
+      path: 'configurar-templates',
+      component: ConfigurarTemplatesComponent,
     }, 
   ],
 

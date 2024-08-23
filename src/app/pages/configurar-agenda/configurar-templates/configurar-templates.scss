@@ -1,0 +1,196 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  ::ng-deep router-outlet + * {
+    display: block;
+    animation: fade 1s;
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+:host ::ng-deep .ngx-datatable.bootstrap {
+  border: 1px solid #d1d4d7;
+  box-shadow: 0 1px 2px 0 rgba(50,50,50,.2);
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-header .datatable-header-cell {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-right: 1px solid #e8e8e8;
+  text-align: center;
+}
+
+:host ::ng-deep .datatable-icon-up:before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-style: normal;
+  content: "\f0de";
+}
+
+:host ::ng-deep .datatable-icon-down:before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-style: normal;
+  content: "\f0dd";
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-row {
+  border-top: 1px solid #d1d4d7;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-row :hover {
+  background: #d6e6fb;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-cell {
+  font-size: 12px;
+  padding: 3px 12px;
+  border-right: 1px solid #e8e8e8;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-cell.datatable-body-cell-label span {
+  line-height: 25px;
+}
+
+.datatable-row-odd {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions {
+  text-align: center !important;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions input[type='checkbox']{
+  line-height: 25px !important;
+  font-size: 20px !important;
+  border: none !important;
+  margin: 10px !important;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions a{
+  line-height: 25px !important;
+  font-size: 20px !important;
+  cursor: pointer !important;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions .btn{
+  line-height: 25px !important;
+  font-size: 20px !important;
+  cursor: pointer !important;
+  border: none !important;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions .btn:focus{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-box-actions .btn:hover{
+  text-decoration: none;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-footer {
+  background: #fcfcfc;
+  border-top:  solid #d1d4d7;
+  color: #000000;
+  overflow-y: hidden;
+}
+
+:host ::ng-deep  .ngx-datatable.bootstrap .datatable-footer .page-count {
+  width: 300px;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li {
+  margin: 10px 0px;
+  &:not(.disabled) {
+    &.active,
+    &:hover {
+      a {
+        background-color: rgb(0, 0, 0);
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-cell .datatable-tree-button  {
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-cell .datatable-tree-button
+ .datatable-icon-up::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-style: normal;
+   content: "\f077";
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body .datatable-body-cell .datatable-tree-button
+ .datatable-icon-down::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-style: normal;
+  content: "\f078";
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-footer .datatable-pager a{
+  background: #2545d6;
+}
+
+//scrollbar color chrome,safari
+:host ::ng-deep .ngx-datatable.scroll-horz .datatable-body::-webkit-scrollbar-thumb{
+  background: rgb(61, 61, 61);
+}
+
+.datatable-body-box-actions a{
+  line-height: 25px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+nb-checkbox {
+    margin-bottom: 1rem;
+  }
+
+  .form-inline [fullWidth] {
+    flex: 1;
+  }
+
+  .form-inline > * {
+    margin: 0 1.5rem 1.5rem 0;
+  }
+
+  nb-card.inline-form-card nb-card-body {
+    padding-bottom: 0;
+  }
+
+@include nb-install-component() {
+
+    display: block;
+    flex: 1;
+    position: relative;
+
+  }
+
+  .div-tamanho{
+    font-size: 12px;
+    text-align: left;
+  }
+
+  .image{
+    color: rgb(0, 255, 255);
+  }

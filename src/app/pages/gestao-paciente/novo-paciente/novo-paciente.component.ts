@@ -300,7 +300,6 @@ export class NovoPacienteComponent implements OnDestroy {
 
     this.fetchData(true)
 
-
     this.service.buscaEstado(null, (response) => {
 
       this.fetchData(false)
@@ -315,10 +314,15 @@ export class NovoPacienteComponent implements OnDestroy {
 
   }
 
+  nameMae(data){
+
+    this.formNovoPaciente.controls['nomeResp01'].setValue(data.trim());
+
+  }
+
   buscaCep(data) {
 
     this.fetchData(true)
-
 
     this.serviceCep.buscaCep(data.cep, null, (response) => {
 
@@ -326,7 +330,6 @@ export class NovoPacienteComponent implements OnDestroy {
       this.formNovoPaciente.controls['bairro'].setValue(response.bairro.trim());
 
       this.fetchData(false)
-
 
     }, (error) => {
       this.toastrService.danger(error.error.message);
@@ -386,65 +389,63 @@ export class NovoPacienteComponent implements OnDestroy {
 
   cadastrarPaciente(data) {
 
+    const trimOrEmpty = (value) => (value ? value.trim() : '');
+
     if (data.nomeDep != null) {
-
-      this.register = {
-        doctorId: this.doctorId,
-        user: {
-          name: data.nome,
-          birthDate: data.dateNasc,
-          cellPhone: data.celular,
-          email: data.email,
-          avatar: this.imagem,
-          cityId: data.cidade,
-          ufId: data.estado,
-          zipCode: data.cep,
-          street: data.bairro,
-          neighborhood: data.endereco,
-          number: data.numero,
-          complement: data.complemento,
-          password: 'Teste@21*19',
-          federalId: data.cpf,
-        },
-        child: {
-          name: data.nomeDep,
-          nameMother: data.nomeResp01,
-          nameFather: data.nomeResp02,
-          cpf: data.cpfDep,
-          rg: data.rgDep,
-          biologicalSex: this.sexo,
-          birthCountry: null,
-          birthDate: data.dateNascDep,
-          ufId: data.estado,
-          cityId: data.cidade,
-          bloodType: data.tipoSanguineo,
-          avatar: this.imagemDep,
-          userId: null,
-        }
-      }
-
+        this.register = {
+            doctorId: this.doctorId,
+            user: {
+                name:  this.capitalizeWords(trimOrEmpty(data.nome)),
+                birthDate: data.dateNasc,
+                cellPhone: this.formatPhoneNumber(data.celular),
+                email: this.capitalizeWords(trimOrEmpty(data.email)),
+                avatar: null,
+                cityId: data.cidade,
+                ufId: data.estado,
+                zipCode: data.cep,
+                street: data.bairro,
+                neighborhood: this.capitalizeWords(trimOrEmpty(data.endereco)),
+                number: data.numero,
+                complement: data.complemento,
+                password: 'Aditi@21*19',
+                federalId: data.cpf,
+            },
+            child: {
+                name: trimOrEmpty(data.nomeDep),
+                nameMother: this.capitalizeWords(trimOrEmpty(data.nomeResp01)),
+                nameFather: this.capitalizeWords(trimOrEmpty(data.nomeResp02)),
+                cpf: data.cpfDep,
+                rg: data.rgDep,
+                biologicalSex: this.sexo,
+                birthCountry: null,
+                birthDate: data.dateNascDep,
+                ufId: data.estado,
+                cityId: data.cidade,
+                bloodType: data.tipoSanguineo,
+                avatar: null,
+                userId: null,
+            }
+        };
     } else {
-
-      this.register = {
-        doctorId: this.doctorId,
-        user: {
-          name: data.nome,
-          birthDate: data.dateNasc,
-          cellPhone: data.celular,
-          email: data.email,
-          avatar: this.imagem,
-          cityId: data.cidade,
-          ufId: data.estado,
-          zipCode: data.cep,
-          street: data.bairro,
-          neighborhood: data.endereco,
-          number: data.numero,
-          complement: data.complemento,
-          password: 'Teste@21*19',
-          federalId: data.cpf,
-        }
-
-      }
+        this.register = {
+            doctorId: this.doctorId,
+            user: {
+                name: this.capitalizeWords(trimOrEmpty(data.nome)),
+                birthDate: data.dateNasc,
+                cellPhone: this.formatPhoneNumber(data.celular),
+                email: this.capitalizeWords(trimOrEmpty(data.email)),
+                avatar: null,
+                cityId: data.cidade,
+                ufId: data.estado,
+                zipCode: data.cep,
+                street: data.bairro,
+                neighborhood: this.capitalizeWords(trimOrEmpty(data.endereco)),
+                number: data.numero,
+                complement: data.complemento,
+                password: 'Aditi@21*19',
+                federalId: data.cpf,
+            }
+        };
     }
 
     if (data.nome === null) {
@@ -493,7 +494,30 @@ export class NovoPacienteComponent implements OnDestroy {
 
       });
     }
+    this.fetchData(false)
+
   }
+
+  formatPhoneNumber(phoneNumber: string): string {
+    // Remove todos os caracteres não numéricos
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+
+    // Verifica se o número tem 11 dígitos (com o nono dígito)
+    const match = cleaned.match(/^(\d{2})(\d{5})(\d{4})$/);
+
+    if (match) {
+        return `(${match[1]}) ${match[2]}-${match[3]}`;
+    }
+
+    // Verifica se o número tem 10 dígitos (sem o nono dígito)
+    const matchOldFormat = cleaned.match(/^(\d{2})(\d{4})(\d{4})$/);
+
+    if (matchOldFormat) {
+        return `(${matchOldFormat[1]}) ${matchOldFormat[2]}-${matchOldFormat[3]}`;
+    }
+
+    return phoneNumber; // Retorna o número original se não corresponder aos formatos esperados
+}
 
   verificaMedico(data) {
     this.doctorId = data
@@ -503,6 +527,14 @@ export class NovoPacienteComponent implements OnDestroy {
     this.sexo = data;
     this.sexoSelecionado = data;
 
+  }
+
+
+  capitalizeWords(name: string | null | undefined): string {
+    if (!name) {
+        return ''; // Retorna uma string vazia se o valor for null ou undefined
+    }
+    return name.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
   }
 
   limparForm() {

@@ -200,9 +200,9 @@ export class notaFiscalComponent {
             {
               "userId": this.userid,
               "federalId": data.cpf,
-              "name": data.nome,
-              "phone": data.celular,
-              "email": data.email
+              "name": data.nome.trim(),
+              "phone": data.celular.trim(),
+              "email": data.email.trim()
             }
 
 

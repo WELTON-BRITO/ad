@@ -345,9 +345,9 @@ export class BuscarAtendimentoComponent implements OnInit {
               .filter(data => data.status !== '05 - Consulta Cancelada')
               .map(data => ({
                 id: data.id,
-                medico: data.doctorName,
-                nomeDependente: data?.childName,
-                nomeResponsavel: data.userName,
+                medico: this.capitalizeWords(data.doctorName),
+                nomeDependente:  this.capitalizeWords(data?.childName),
+                nomeResponsavel:  this.capitalizeWords(data.userName),
                 data: moment(data.dateService).format('DD/MM/YYYY'),
                 horario: data.startTime.concat(' - ', data.endTime),
                 especialidade: data.specialtyName,
@@ -355,7 +355,7 @@ export class BuscarAtendimentoComponent implements OnInit {
                 atendimento: data,
                 modalidade: data.typeServiceName + ' - ' + (data?.procedureName ?? ''),
                 email: data.userEmail,
-                telefone: data.userPhone,
+                telefone: this.formatPhoneNumber(data.userPhone),
                 dataInicio: data.dataInicio,
                 dataFim: data.dataInicio,
                 clinicaId: data.clinicId,
@@ -363,13 +363,13 @@ export class BuscarAtendimentoComponent implements OnInit {
                 medicoId: data.doctorId,
                 isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
                 avatar: this.getAvatar(data),
-                valorConsulta: this.valorConsulta,
+                valorConsulta: data.priceSpecific,
 
                             }));
 
             if (allData.length === 0) {
               this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
-              this.isSearch=false;
+              this.isSearch=true;
               localStorage.removeItem('googleData');
               localStorage.removeItem('meuCardData');
               localStorage.removeItem('detalhesData');
@@ -453,6 +453,35 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.router.navigate(['/pages/atendimento/nota-fiscal-atendimento'], { state: data });
 
   }
+  
+  formatPhoneNumber(phoneNumber: string): string {
+    // Remove todos os caracteres não numéricos
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+
+    // Verifica se o número tem 11 dígitos (com o nono dígito)
+    const match = cleaned.match(/^(\d{2})(\d{5})(\d{4})$/);
+
+    if (match) {
+        return `(${match[1]}) ${match[2]}-${match[3]}`;
+    }
+
+    // Verifica se o número tem 10 dígitos (sem o nono dígito)
+    const matchOldFormat = cleaned.match(/^(\d{2})(\d{4})(\d{4})$/);
+
+    if (matchOldFormat) {
+        return `(${matchOldFormat[1]}) ${matchOldFormat[2]}-${matchOldFormat[3]}`;
+    }
+
+    return phoneNumber; // Retorna o número original se não corresponder aos formatos esperados
+}
+
+capitalizeWords(name: string | null | undefined): string {
+  if (!name) {
+      return ''; // Retorna uma string vazia se o valor for null ou undefined
+  }
+  return name.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+}
+
 
   isLocalStorageAvailable() {
     try {
@@ -640,6 +669,9 @@ if(data.medico ==null || data.medico ==""){
   }
   pesquisarConsulta(data, checked) {
 
+    this.fetchData(true)
+
+
     if (localStorage.getItem('CardTimesDisponivel') === null || checked == true || localStorage.getItem('CardTimesDisponivel') === '') {
       localStorage.removeItem('CardTimesDisponivel');
 
@@ -680,10 +712,14 @@ if(data.medico ==null || data.medico ==""){
         }, (error) => {
           this.isActive = false;
           this.toastrService.danger(error.error.message);
+          this.fetchData(false)
+
         });
 
       }else{
         this.isSearch=false;
+        this.fetchData(false)
+
       }
     } else {
 

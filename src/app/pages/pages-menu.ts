@@ -89,6 +89,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Exceção de Dias/Horários',
         link: '/pages/configurar-agenda/configurar-excecao-atendimento',
       }, 
+      {
+        title: 'Cadastrar Templates',
+        link: '/pages/configurar-agenda/cadastrar-templates',
+      }, 
      /* {
         title: 'Configurar QR Code',
         link: '/pages/configurar-agenda/gerar-qr-code',

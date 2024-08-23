@@ -27,6 +27,9 @@ import { ParametrizarConsultaComponent } from './parametrizar-consulta/parametri
 import { VisualizarDiaAtendimentoService } from './visualizar-dia-atendimento/visualizar-dia-atendimento.service';
 import { EncriptyUtilService } from '../shared/services/encripty-util.services';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { CadastrarTemplatesComponent } from '../configurar-agenda/cadastrar-templates/cadastrar-templates';
+import { ConfigurarTemplatesComponent } from '../configurar-agenda/configurar-templates/configurar-templates';
+
 
 @NgModule({
   imports: [
@@ -58,7 +61,9 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     ConfigurarExcecaoAtendimentoComponent,
     GerarQrCodeComponent,
     ParametrizarPlanoComponent,
-    ParametrizarConsultaComponent
+    ParametrizarConsultaComponent,
+    CadastrarTemplatesComponent,
+    ConfigurarTemplatesComponent
   ],
   providers: [
     VisualizarDiaAtendimentoComponent,
