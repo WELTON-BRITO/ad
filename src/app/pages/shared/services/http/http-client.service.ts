@@ -78,7 +78,6 @@ export class HttpService {
   private getErrorMessage(err: any): any {
 
     if (parseInt(err.status) >= 400 && parseInt(err.status) < 500) {
-      console.log(parseInt(err.status))
       if (parseInt(err.status) == 401) {
 
         {
@@ -184,20 +183,30 @@ export class HttpService {
     params: any,
     successHandle: Function,
     errorHandle?: Function
-  ) {
+) {
     this.loadingBarService.reset();
     this.loadingBarService.start();
 
     let url = this.urlBase + path;
-    let message: string = null;
     if (params == null) params = {};
 
-    return this.responsecallback(
-      this.http.get(url, { params, observe: "response" }),
-      successHandle,
-      errorHandle
+    this.http.get(url, { params, observe: "response" }).subscribe(
+        (response: any) => {
+            this.loadingBarService.complete();
+            if (response.status === 200 && response.body) {
+                successHandle(response.body);
+            } else {
+                errorHandle(response);
+            }
+        },
+        (error: any) => {
+            this.loadingBarService.complete();
+            errorHandle(error);
+        }
     );
-  }
+}
+
+
 
   public doGetCep(
     path: string,

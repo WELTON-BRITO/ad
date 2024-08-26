@@ -431,7 +431,6 @@ export class BuscarAtendimentoComponent implements OnInit {
   isMobile() {
     const userAgent = navigator.userAgent.toLowerCase();
     
-    console.log(userAgent);
     
     // Verifica se o userAgent corresponde a dispositivos móveis
     if (/android/i.test(userAgent)) {

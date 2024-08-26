@@ -105,6 +105,14 @@ export class AtendimentoService {
     return this.httpService.doGet('/api/appointments/timeAvailable', data, successHandle, erroHandle)
   }
 
+  GetTemplates(doctorId:any,successHandle: Function, errorHandle: Function){
+    return this.httpService.doGet('/api/doctor/' + doctorId + '/doctorTemplate', successHandle, errorHandle)
+  }
+
+  HistoryChats(data: any, successHandle: Function, erroHandle: Function) {
+    return this.httpService.doGet('api/appointments/details/child/custom', data, successHandle, erroHandle)
+  }
+
   ValidateNFS(data, userId:any,successHandle: Function, errorHandle: Function){
     return this.httpService.doGet('api/userDataInvoice/user/' + userId,  data, successHandle, errorHandle)
   }

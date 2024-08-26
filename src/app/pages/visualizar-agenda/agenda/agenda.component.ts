@@ -515,9 +515,7 @@ export class AgendaComponent implements OnInit {
 
   isMobile() {
     const userAgent = navigator.userAgent.toLowerCase();
-    
-    console.log(userAgent);
-    
+        
     // Verifica se o userAgent corresponde a dispositivos móveis
     if (/android/i.test(userAgent)) {
         return true;
@@ -547,8 +545,6 @@ export class AgendaComponent implements OnInit {
 
   validaCampo(data) {
     
-    console.log(data)
-
 
     if (data.medico == null) {
       this.toastrService.danger('O campo médico é obrigatório','Aditi Care');

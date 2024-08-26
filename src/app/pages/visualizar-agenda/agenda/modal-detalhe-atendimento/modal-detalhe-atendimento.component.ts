@@ -76,8 +76,6 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
 
   ngOnInit() {
 
-
-    console.log(this.dados)
     this.atendimento.medico = this.dados._def.extendedProps.medico,
       this.atendimento.paciente = this.dados._def.extendedProps.paciente,
       this.atendimento.data = moment(this.dados._def.extendedProps.data).format('DD/MM/YYYY'),
@@ -137,8 +135,6 @@ else{
   }
 
   abrirConsulta(data) {
-
-    console.log(data)
 
     let rowData =  this.dados._def.extendedProps.dados;
     rowData.patchPaciente = true;

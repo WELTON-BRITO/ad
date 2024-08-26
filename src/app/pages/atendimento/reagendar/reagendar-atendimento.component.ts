@@ -34,8 +34,6 @@ export class reagendarAtendimentoComponent {
 
         let data = history.state
 
-        console.log('dentro do reagendar'+data)
-
         if(data.id == null){
             this.previousPage();
         }

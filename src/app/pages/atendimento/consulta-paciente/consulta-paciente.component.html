@@ -114,7 +114,7 @@
 
                             <nb-card-body>
 
-                                <div class="form-group col-md-12 d-flex justify-content-between align-items-center input-medica">
+                                <div class="form-group col-md -12 d-flex justify-content-between align-items-center input-medica">
                                     <label><h6>Dados Gerais do Paciente:</h6></label>
                                     <button type="button" class="btn" (click)="toggleCollapseheader('dadosGerais')" title="Colapsar/Expandir">
                                       <i class="fa fa-angle-down"></i>
@@ -125,23 +125,27 @@
                                     <div class="row">
                                       <div class="col-md-9">
                                         <div class="row">
-                                          <div class="col-md-4">
-                                            <label for="altura">Altura do Paciente</label>
-                                            <input class="form-control" name="altura" id="altura" type="text" formControlName="altura" pattern="\\d+(\\.\\d{1,2})?" title="Por favor, insira o número como 1.0 ou 1,0" (onblur)="validar_valor(value)">
+                                          <div class="col-md-3">
+                                            <label for="altura">Altura (CM)</label>
+                                            <input class="form-control" name="altura" id="altura" type="text" formControlName="altura" pattern="\\d+(\\.\\d{1,2})?" title="Exemplo 86" (onblur)="validar_valor(value)">
                                           </div>
-                                          <div class="col-md-4">
-                                            <label for="peso">Peso do Paciente</label>
+                                          <div class="col-md-3">
+                                            <label for="peso">Peso (kg)</label>
                                             <input class="form-control" name="peso" id="peso" type="text" formControlName="peso" pattern="\\d+(\\.\\d{1,2})?" title="Por favor, insira o número como 1.0 ou 1,0" (onblur)="validar_valor(value)">
                                           </div>
-                                          <div class="col-md-4">
-                                            <label for="imc">Valor IMC</label>
+                                          <div class="col-md-3">
+                                            <label for="imc">Valor</label>
                                             <input class="form-control" name="imc" id="imc" type="text" formControlName="imc" disabled />
+                                          </div>
+                                          <div class="col-md-3">
+                                            <label for="faixaIMC">Resultado</label>
+                                            <input class="form-control" name="faixaIMC" id="faixaIMC" type="text" formControlName="faixaIMC" disabled />
                                           </div>
                                         </div>
                                       </div>
                                       <div class="col-md-3 text-right">
                                         <button class="btn btn-success" (click)="calcularIMC(formConsultaPaciente)">
-                                          Calcular IMC
+                                          IMC
                                         </button>
                                       </div>
                                     </div>
@@ -150,47 +154,61 @@
                                   
                                         <div class="row">
                                           <div class="col-md-3">
-                                              <label for="circCabeca">Circunferência da Cabeça</label>
+                                              <label for="circCabeca">Circ. Craniana</label>
                                               <input class="form-control" name="circCabeca" id="circCabeca" type="text" formControlName="circCabeca" />
                                           </div>
                                           <div class="col-md-3">
-                                              <label for="circAbdomen">Circunferência Abdominal</label>
+                                              <label for="circAbdomen">Circ. Abdominal</label>
                                               <input class="form-control" name="circAbdomen" id="circAbdomen" type="text" formControlName="circAbdomen" />
                                           </div>
                                           <div class="col-md-3">
-                                              <label for="tempoRetorno">Prazo para Retorno (Dias)* </label>
+                                              <label for="tempoRetorno">Retorno (Dias)* </label>
                                               <input class="form-control" name="tempoRetorno" id="tempoRetorno" type="text" formControlName="tempoRetorno" />
                                           </div>
                                           <div class="col-md-3 d-flex justify-content-end align-items-end">
                                               <button class="btn btn-warning btn-sm mr-2" (click)="UltimaConsulta()">
-                                                  Buscar Última Consulta
-                                              </button>
-                                              <button class="btn btn-success btn-sm" (click)="ChartCrescimento(formConsultaPaciente.value)">
-                                                  Gráfico de Crescimento
+                                                  Última Consulta
                                               </button>
                                           </div>
                                       </div>
+                                      <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-12 d-flex justify-content-end">
+                                            <button class="btn btn-success btn-primary me-2" (click)="ChartCrescimento(formConsultaPaciente.value)">
+                                                Gerar Percentil
+                                            </button>
+                                            <button class="btn btn-success btn-warning" (click)="ChartCrescimentoZ(formConsultaPaciente.value)">
+                                                Gerar Z-Score
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
                                       
                                       
-                                </div>
 
+</div>
                                     
                             </nb-card-body>
                         </nb-card>
                         <nb-card>
                           <nb-card-body>
-                              <div class="form-group col-md-12">
-                                  <canvas #heightChartCanvas id="canvas" class="half-width"></canvas>
-                              </div>
-                      
-                              <div class="form-group col-md-12">
-                                  <canvas #weightChartCanvas id="peso" class="half-width"></canvas>
-                              </div>
-                          </nb-card-body>
-                      </nb-card>
-                      
-                      
+                            <div class="form-group col-md-12 d-flex justify-content-between align-items-center input-medica">
+                              <label><h6>Gráficos de Evolução:</h6></label>
+                              <button type="button" class="btn" (click)="toggleCollapseheader('grafico')" title="Colapsar/Expandir">
+                                <i class="fa fa-angle-down"></i>
+                              </button>
+                            </div>
+                            <div id="grafico">
+                                <canvas #heightZChartCanvas id="canvas" class="half-width" style="margin-bottom: 5px;"></canvas>
+                                <canvas #weightZChartCanvas id="peso" class="half-width" style="margin-top: 5px;"></canvas>      
+                                <canvas #circunferenciaCanvas id="circunferencia" class="half-width" style="margin-top: 5px;"></canvas>
+                                <canvas #heightChartCanvas id="canvas" class="half-width" style="margin-bottom: 5px;"></canvas>
+                                <canvas #weightChartCanvas id="peso" class="half-width" style="margin-top: 5px;"></canvas>
+                                <canvas #pesoChartCanvas id="pesoChartCanvas" class="half-width" style="margin-top: 5px;"></canvas>
+                            </div>
 
+                          </nb-card-body>
+                        </nb-card>
+                        
                         <nb-card>
                             <nb-card-body>
 
@@ -204,11 +222,22 @@
                                     <!-- Início do conteúdo colapsável -->
                                     <div id="dadosAtendimento" class="collapse-content" >
                                       <!-- Conteúdo do atendimento, incluindo a prescrição -->
-                                      <div class="form-row align-items-center">
+                                      <div class="form-row">
                                         <div class="col-lg-12">
                                           <div class="inputprescricao input-medica">
                                             <div class="d-flex justify-content-between">
                                               <label for="prescricaoMedica"><h6>Prescrição*</h6></label>
+                                              <div class="form-group col-md-6">
+                                                <div class="form-group">
+                                                    <label for="nome">Modelos de Prescrição</label>
+                                                    <select class="form-control" formControlName="prescricao"
+                                                        (change)="onTemplateChange($event.target.value,'prescricao')">
+                                                        <option value="null" selected>SELECIONE</option>
+                                                        <option *ngFor="let prescricao of listPrescricao; let i = index" [value]="i">{{ prescricao.title }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
                                               <!-- Botão para colapsar/expandir com ícone -->
                                               <button type="button" class="btn" (click)="toggleCollapse('prescricaoMedica')" title="Colapsar/Expandir">
                                                 <i class="fa fa-angle-down"></i>
@@ -284,6 +313,16 @@
                                         <div class="input-exame input-medica">
                                         <div class="d-flex justify-content-between">
                                             <label for="pedidoExame"><h6>Pedido De Exame:</h6></label>
+                                            <div class="form-group col-md-6">
+                                              <div class="form-group">
+                                                  <label for="nome">Modelos de Pedidos</label>
+                                                  <select class="form-control" formControlName="pedido"
+                                                      (change)="onTemplateChange($event.target.value,'pedido')">
+                                                      <option value="null" selected>SELECIONE</option>
+                                                      <option *ngFor="let pedido of listExames; let i = index" [value]="i">{{ pedido.title }}</option>
+                                                  </select>
+                                              </div>
+                                          </div>
                                             <button type="button" class="btn" (click)="toggleCollapse('pedidoExame')" title="Colapsar/Expandir">
                                             <i class="fa fa-angle-down"></i>
                                             </button>
@@ -493,6 +532,38 @@
 
                             </nb-card-body>
                         </nb-card>
+
+                        <nb-card>
+                          <nb-card-body>
+                              <div class="form-row">
+                                  <div class="col-md-12">
+                                    <div class="text-left" *ngIf="bloqueioSave">
+
+
+                                      <div>
+                                        <h5>Emissão de Nota Fiscal:</h5>
+                                    </div>
+                                    <label class="encaixe">Emitir Nota Fiscal?*</label>
+                                    <div class="d-flex align-items-center">
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="EmitirNotaFiscalSim" name="emitirNotaFiscal" value="S" formControlName="emitirNotaFiscal" (click)="emitirNotaFiscal('S',formConsultaPaciente.value)">
+                                        <label class="form-check-label" for="EmitirNotaFiscalSim">Sim</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="EmitirNotaFiscalNao" name="emitirNotaFiscal" value="N" formControlName="emitirNotaFiscal" (click)="emitirNotaFiscal('N',formConsultaPaciente.value)">
+                                        <label class="form-check-label" for="EmitirNotaFiscalNao">Não</label>
+                                      </div>
+                                    </div>
+                                    
+                                    
+                                  </div>
+                                </div>
+                                </div>
+                                
+                              </nb-card-body>
+                              </nb-card>
+
+                        
 
                         <nb-card>
                             <nb-card-body>
