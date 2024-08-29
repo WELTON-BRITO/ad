@@ -182,7 +182,7 @@ export class AgendaComponent implements OnInit {
     private toastrService: NbToastrService,
     private formBuilder: FormBuilder,
     private router: Router,) { }
-
+ 
   ngOnInit() {
 
     this.windowResize();
