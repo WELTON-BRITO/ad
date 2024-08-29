@@ -28,86 +28,88 @@
                           
                         <div class="form-row align-items-center collapse-content" id="dadosPaciente">
 
-                            <div class="form-group col-md-6 ">
-                                <div class="form-group ">
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Nome do Paciente:</label></div>
-                                        <label>{{atendimento.nomePaciente}} </label>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Tempo de Vida:</label></div>
-                                        <label>{{atendimento.dateNasc}} </label>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Data do Atendimento:</label></div>
-                                        <label>{{atendimento.data}} {{atendimento.horario}} </label>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Especialidade da Consulta:</label></div>
-                                        <label>{{atendimento.especialidade}} </label>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Nome da Mãe:</label></div>
-                                        <label>{{atendimento.nameMother}} </label>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Nome do Pai:</label></div>
-                                        <label>{{atendimento.nameFather}} </label>
-                                    </div>
+                          <div class="form-group col-md-6">
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="mr-2"><label><strong>Nome do Paciente:</strong></label></div>
+                                    <label>{{atendimento.nomePaciente}}</label>
                                 </div>
-                            </div>
-                            <div class="form-group col-md-6 ">
-                                <div class="form-group ">
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Data da Última Consulta:</label></div>
-                                        <label>{{atendimento.ultimaConsulta}} </label>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Modalidade:</label></div>
-                                        <label>{{atendimento.modalidade}} </label>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Sexo:</label>
-                                        </div>
-                                        <label>{{atendimento.sexo}} </label>
-                                        <div class="mr-2"><label></label></div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Grupo Sanguineo:</label></div>
-                                        <label>{{atendimento.tipoSanguineo}} </label>
-                                        <div class="mr-2"><label></label>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Telefone Paciente:</label></div>
-                                        <label>{{atendimento.telefone}} </label>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="mr-2"><label>Email Paciente:</label></div>
-                                        <label>{{atendimento.email}} </label>
-                                    </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label><strong>Tempo de Vida:</strong></label></div>
+                                    <label>{{atendimento.dateNasc}}</label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label><strong>Data do Atendimento:</strong></label></div>
+                                    <label>{{atendimento.data}} {{atendimento.horario}}</label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label><strong>Especialidade da Consulta:</strong></label></div>
+                                    <label>{{atendimento.especialidade}}</label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label><strong>Nome da Mãe:</strong></label></div>
+                                    <label>{{atendimento.nameMother}}</label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label><strong>Nome do Pai:</strong></label></div>
+                                    <label>{{atendimento.nameFather}}</label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="mr-2"><label><strong>Consulta de Retorno:</strong></label></div>
+                                    <label>{{ atendimento.isReturn ? 'Sim' : 'Não' }}</label>
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                              <div class="form-row">
+                                  <div class="mr-2"><label><strong>Data da Última Consulta:</strong></label></div>
+                                  <label>{{atendimento.ultimaConsulta}}</label>
+                              </div>
+                              <div class="form-row">
+                                  <div class="mr-2"><label><strong>Modalidade:</strong></label></div>
+                                  <label>{{atendimento.modalidade}}</label>
+                              </div>
+                              <div class="form-row">
+                                  <div class="mr-2"><label><strong>Sexo:</strong></label></div>
+                                  <label>{{atendimento.sexo}}</label>
+                                  <div class="mr-2"><label></label></div>
+                              </div>
+                              <div class="form-row">
+                                  <div class="mr-2"><label><strong>Grupo Sanguíneo:</strong></label></div>
+                                  <label>{{atendimento.tipoSanguineo}}</label>
+                                  <div class="mr-2"><label></label></div>
+                              </div>
+                              <div class="form-row">
+                                  <div class="mr-2"><label><strong>Telefone Paciente:</strong></label></div>
+                                  <label>{{atendimento.telefone}}</label>
+                              </div>
+                              <div class="form-row">
+                                  <div class="mr-2"><label><strong>Email Paciente:</strong></label></div>
+                                  <label>{{atendimento.email}}</label>
+                              </div>
+                          </div>
+                      </div>
+                      
+                        </div>
                     </nb-card-body>
                 </nb-card>
-                <nb-card>
-                    <nb-card-body>
-                        <nb-actions size="large" fullWidth>
-                            <nb-action>
-                              <nb-icon [ngClass]="{'action-icon-active': iconeAtivo === 'historico', 'action-icon': iconeAtivo !== 'historico'}"
-                                       icon="file-text-outline" (click)="consultaHistorico(true)"></nb-icon>
-                              <span>Consultar Histórico</span>
-                            </nb-action>
-                            <nb-action *ngIf="atendimento.status === '03 - Consulta Confirmada' && !checkedConsulta">
-                              <nb-icon [ngClass]="{'action-icon-active': iconeAtivo === 'atendimento', 'action-icon': iconeAtivo !== 'atendimento'}"
-                                       icon="wifi-outline" (click)="detalhesConsulta()"></nb-icon>
-                              <span>Atendimento</span>
-                            </nb-action>
-                          </nb-actions>
-                          
-                    </nb-card-body>
+                <nb-card class="custom-card">
+                  <nb-card-body>
+                    <div class="card-actions">
+                      <button (click)="consultaHistorico(true)" class="action-button" [ngClass]="{'action-button-active': iconeAtivo === 'historico'}">
+                        <nb-icon class="action-icon" icon="file-text-outline" style="color: white;"></nb-icon>
+                        <span>Consultar Histórico</span>
+                      </button>
+                      <button *ngIf="atendimento.status === '03 - Consulta Confirmada' && !checkedConsulta" (click)="detalhesConsulta()" class="action-button" [ngClass]="{'action-button-active': iconeAtivo === 'atendimento'}">
+                        <nb-icon class="action-icon" icon="wifi-outline" style="color: white;"></nb-icon>
+                        <span>Atendimento</span>
+                      </button>
+                    </div>
+                  </nb-card-body>
                 </nb-card>
+                
                 <div *ngIf="isDetalhes">
                     <form id="form-consulta-paciente" [formGroup]="formConsultaPaciente">
                         <nb-card>
@@ -410,7 +412,7 @@
                                 </nb-card-body>
                             </nb-card>
                             <nb-card>
-                            <nb-card-body>
+                            <nb-card-body *ngIf="bloqueioSave">
 
                                   <div>
                                     <h5>Agendamento de Retorno:</h5>
@@ -535,30 +537,27 @@
 
                         <nb-card>
                           <nb-card-body>
-                              <div class="form-row">
-                                  <div class="col-md-12">
-                                    <div class="text-left" *ngIf="bloqueioSave">
-
-
+                            <div class="form-row" *ngIf="!atendimento.isReturn">
+                              <div class="col-md-12">
+                                  <div class="text-left" *ngIf="bloqueioSave">
                                       <div>
-                                        <h5>Emissão de Nota Fiscal:</h5>
-                                    </div>
-                                    <label class="encaixe">Emitir Nota Fiscal?*</label>
-                                    <div class="d-flex align-items-center">
-                                      <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="EmitirNotaFiscalSim" name="emitirNotaFiscal" value="S" formControlName="emitirNotaFiscal" (click)="emitirNotaFiscal('S',formConsultaPaciente.value)">
-                                        <label class="form-check-label" for="EmitirNotaFiscalSim">Sim</label>
+                                          <h5>Emissão de Nota Fiscal:</h5>
                                       </div>
-                                      <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="EmitirNotaFiscalNao" name="emitirNotaFiscal" value="N" formControlName="emitirNotaFiscal" (click)="emitirNotaFiscal('N',formConsultaPaciente.value)">
-                                        <label class="form-check-label" for="EmitirNotaFiscalNao">Não</label>
+                                      <label class="encaixe">Emitir Nota Fiscal?*</label>
+                                      <div class="d-flex align-items-center">
+                                          <div class="form-check form-check-inline">
+                                              <input class="form-check-input" type="radio" id="EmitirNotaFiscalSim" name="emitirNotaFiscal" value="S" formControlName="emitirNotaFiscal" (click)="emitirNotaFiscal('S',formConsultaPaciente.value)">
+                                              <label class="form-check-label" for="EmitirNotaFiscalSim">Sim</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                              <input class="form-check-input" type="radio" id="EmitirNotaFiscalNao" name="emitirNotaFiscal" value="N" formControlName="emitirNotaFiscal" (click)="emitirNotaFiscal('N',formConsultaPaciente.value)">
+                                              <label class="form-check-label" for="EmitirNotaFiscalNao">Não</label>
+                                          </div>
                                       </div>
-                                    </div>
-                                    
-                                    
                                   </div>
-                                </div>
-                                </div>
+                              </div>
+                          </div>
+                          
                                 
                               </nb-card-body>
                               </nb-card>

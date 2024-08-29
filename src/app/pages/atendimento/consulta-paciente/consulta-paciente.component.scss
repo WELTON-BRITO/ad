@@ -90,6 +90,46 @@
 .btn + .btn {
   margin-left: 10px;
 }
+.custom-card {
+  border: 16px solid rgb(114, 124, 245); /* Azul claro */
+  border-top: 16px solid rgb(57, 176, 218); /* Azul mais escuro */
+  margin: 10px;
+  transition: transform 0.3s;
+}
+
+.custom-card:hover {
+  transform: scale(1.05);
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.action-button {
+  background-color: rgb(114, 124, 245); /* Azul claro */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.action-button:hover {
+  background-color: rgb(57, 176, 218); /* Azul mais escuro */
+  transform: scale(1.1);
+}
+
+.action-button-active {
+  background-color: rgb(57, 176, 218); /* Azul mais escuro */
+}
+
+.action-icon {
+  margin-right: 5px;
+}
+  
 
 :host ::ng-deep .ngx-datatable.bootstrap {
   border: 1px solid #d1d4d7;

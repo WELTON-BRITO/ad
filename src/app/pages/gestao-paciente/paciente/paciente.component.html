@@ -50,36 +50,39 @@
                                         <div class="text-center">
                                             <img src="{{row.avatar}}" style="height: 55px; border-radius: 50%;">
                                         </div>
-                                        <p class="card-text">Paciente: {{ row?.nameChild || row.name }}</p>
-                                        <p class="card-text" *ngIf="row?.nameChild">Nome Responsável: {{ row?.name }}</p>
+                                        <p class="card-text"><strong>Paciente:</strong> {{ row?.nameChild || row.name }}</p>
+                                        <p class="card-text" *ngIf="row?.nameChild"><strong>Nome Responsável:</strong> {{ row?.name }}</p>
                                         <p class="card-text" *ngIf="!row?.nameChild"> </p> <!-- Mantém a quebra de linha -->
-                                        <p class="card-text">Telefone: {{ row.cellPhone }}</p> 
-                                        <p class="card-text">Email: {{ row.email }}</p>
-                                        <p class="card-text">CPF: {{ row.federalId }}</p>
-                                        
-                                        
-    
+                                        <p class="card-text"><strong>Telefone:</strong> {{ row.cellPhone }}</p>
+                                        <p class="card-text"><strong>Email:</strong> {{ row.email }}</p>
+                                        <p class="card-text"><strong>CPF:</strong> {{ row.federalId }}</p>
+
                                         <div class="datatable-body-box-actions">
-                                          <button class="btn home-icon pt-4"
-                                          (click)="cadastrar(row)"
-                                          title="Cadastrar dependente">
-                                    <i class="fas fa-user-plus" aria-label="Cadastrar dependente"></i>
-                                  </button>
-                                          <button style="margin: 0 15px;" class="btn home-icon pt-4"
-                                                  (click)="visualizar(row)"
-                                                  title="Visualizar dependente">
-                                            <i class="far fa-eye" aria-label="Visualizar dependente"></i>
+                                          <button *ngIf="!row?.nameChild" class="btn home-icon" (click)="cadastrar(row)" title="Cadastrar dependente">
+                                            <i class="fas fa-user-plus" aria-label="Cadastrar dependente"></i>
+                                            <div class="icon-label">Adicionar Dependente</div>
+                                        </button>
+                                        
+                                          <button class="btn home-icon" (click)="visualizar(row)" title="Visualizar dependente">
+                                              <i class="far fa-eye" aria-label="Visualizar dependente"></i>
+                                              <div class="icon-label">Visualizar Dependente</div>
                                           </button>
-                                          <button class="btn home-icon pt-4" (click)="precoEspecial(row)" title="Preço especial">
-                                            <i class="fas fa-dollar-sign" aria-label="Preço especial"></i>
+                                          <button class="btn home-icon" (click)="precoEspecial(row)" title="Preço especial">
+                                              <i class="fas fa-dollar-sign" aria-label="Preço especial"></i>
+                                              <div class="icon-label">Definir Preço</div>
                                           </button>
-                                          <button class="btn home-icon pt-4" (click)="buscaHistorico(row)" title="Visualizar histórico">
-                                            <i class="fas fa-history" aria-label="Visualizar histórico"></i>
+                                          <button class="btn home-icon" (click)="buscaHistorico(row)" title="Visualizar histórico">
+                                              <i class="fas fa-history" aria-label="Visualizar histórico"></i>
+                                              <div class="icon-label">Visualizar Histórico</div>
                                           </button>
-                                          <button class="btn home-icon pt-4" (click)="notaFiscal(row)" title="Dados da Nota">
-                                            <i class="fa fa-money-bill-alt" aria-label="Dados da Nota"></i>
+                                          <button class="btn home-icon" (click)="notaFiscal(row)" title="Dados da Nota">
+                                              <i class="fa fa-money-bill-alt" aria-label="Dados da Nota"></i>
+                                              <div class="icon-label">Dados da Nota Fiscal</div>
                                           </button>
-                                        </div>
+                                      </div>
+                                      
+                                      
+                                      
                                                                                 
                                     </nb-card-body>
                                 </nb-card>

@@ -118,6 +118,7 @@ declare var $: any;
         avatar: null,
         findhistorico: null,
         emitirNotaFiscal:null,
+        isReturn: null,
             };
     public anexoAtestado = null;
     public anexoReceita = null;
@@ -172,6 +173,7 @@ declare var $: any;
             emitirNotaFiscal:null,
             prescricao:null,
             pedido:null,
+            isReturn: null,
         })
 
          var data = history.state
@@ -233,6 +235,7 @@ declare var $: any;
           avatar: data[0].rowData.avatarChild ?? data[0].rowData.avatar ?? this.avatar,
           findhistorico: false,
           emitirNotaFiscal:null,
+          isReturn: data[0].rowData.isReturn
       };
            
       this.atendimento = allData;
@@ -590,9 +593,6 @@ declare var $: any;
         const ageInMonths = (serviceDate.getFullYear() - birthDate.getFullYear()) * 12 + (serviceDate.getMonth() - birthDate.getMonth());
         return ageInMonths;
     }
-
-    
-
     
     createChartCabeca(gender, currentAgeInMonths,altura,peso,type) {
 
@@ -740,8 +740,6 @@ declare var $: any;
     
 }
 
-
-    
     createChart(gender, currentAgeInMonths,altura,peso,type) {
 
         const totalMonths = currentAgeInMonths+4; // Ajustado para 24 meses
@@ -1682,7 +1680,8 @@ ctx = this.heightZChartCanvas.nativeElement.getContext('2d');
                     cellPhoneUser: data.userPhone,
                     emailUser:data.userEmail,
                     federalIdUser: data.userFederalId,
-                    NameResponse: data.userName
+                    NameResponse: data.userName,
+                    isReturn:data.isReturn
                 });
             });
 
@@ -2257,6 +2256,8 @@ ctx = this.heightZChartCanvas.nativeElement.getContext('2d');
            }
 
            var alturaEmCm = null;
+           var pesoTratado = null;
+
 
             // Verifica se a altura está em metros (menor que 3 metros)
             if (response?.height < 3 && response?.height != null ) {
@@ -2265,13 +2266,18 @@ ctx = this.heightZChartCanvas.nativeElement.getContext('2d');
                 alturaEmCm = Math.round(response?.height)
             }
 
-
+            if (response?.weight >= 1000 && response?.weight != null) {
+                // Converte o peso para quilogramas e formata com ponto decimal
+                pesoTratado = (response.weight / 1000).toFixed(3);
+            } else {
+                pesoTratado = response?.weight;
+            }
 
             // Defina o valor no controle do formulário
             this.formConsultaPaciente.controls['detalhesCliente'].setValue(this.decodeHexadecimalString(v_descriptionUser));
             this.formConsultaPaciente.controls['tempoRetorno'].setValue(response?.timeReturn ?? null);
             this.formConsultaPaciente.controls['altura'].setValue(alturaEmCm ?? null);
-            this.formConsultaPaciente.controls['peso'].setValue(response?.weight ?? null);
+            this.formConsultaPaciente.controls['peso'].setValue(pesoTratado ?? null);
             this.formConsultaPaciente.controls['circCabeca'].setValue(response?.headSize ?? null);
             this.formConsultaPaciente.controls['circAbdomen'].setValue(response?.abdomenSize ?? null);
          //   this.formConsultaPaciente.controls['urlReceita'].setValue(response?.urlPrescription ?? null);
@@ -2389,13 +2395,30 @@ validar_valor(data){
             this.html_string = this.sanitizer.bypassSecurityTrustHtml(response?.descriptionClinic);
 
            }
+          var pesoTratado = null;
+          var alturaEmCm = null;
+
+           if (response?.weight >= 1000 && response?.weight != null) {
+            // Converte o peso para quilogramas e formata com ponto decimal
+            pesoTratado = (response.weight / 1000).toFixed(3);
+        } else {
+            pesoTratado = response?.weight;
+        }
+
+            // Verifica se a altura está em metros (menor que 3 metros)
+            if (response?.height < 3 && response?.height != null ) {
+             alturaEmCm = Math.round(response?.height * 100)
+          }else{
+            alturaEmCm = Math.round(response?.height)
+            }
+        
            
             // Defina o valor no controle do formulário
             this.formConsultaPaciente.controls['detalhesCliente'].setValue(this.decodeHexadecimalString(v_descriptionUser));
             this.formConsultaPaciente.controls['detalhesInterno'].setValue(this.decodeHexadecimalString(v_descriptionClinic));
             this.formConsultaPaciente.controls['tempoRetorno'].setValue(response?.timeReturn ?? null);
-            this.formConsultaPaciente.controls['altura'].setValue(response?.height ?? null);
-            this.formConsultaPaciente.controls['peso'].setValue(response?.weight ?? null);
+            this.formConsultaPaciente.controls['altura'].setValue(alturaEmCm ?? null);
+            this.formConsultaPaciente.controls['peso'].setValue(pesoTratado ?? null);
             this.formConsultaPaciente.controls['circCabeca'].setValue(response?.headSize ?? null);
             this.formConsultaPaciente.controls['circAbdomen'].setValue(response?.abdomenSize ?? null);
             this.formConsultaPaciente.controls['urlReceita'].setValue(response?.urlPrescription ?? null);

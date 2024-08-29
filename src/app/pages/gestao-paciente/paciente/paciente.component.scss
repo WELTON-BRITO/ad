@@ -18,6 +18,40 @@
   }
 }
 
+.datatable-body-box-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.btn.home-icon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin: 5px; /* Reduz o espaçamento entre os botões */
+  width: 30%; /* Limita a largura para garantir no máximo 3 por linha */
+}
+
+.btn.home-icon .icon-label {
+  margin-top: 3px; /* Reduz o espaçamento entre o ícone e a legenda */
+  font-size: 12px;
+  color: #000;
+}
+
+.btn.home-icon:hover {
+  color: #007bff; /* Cor ao passar o mouse */
+}
+
+.btn.home-icon:hover .icon-label {
+  color: #007bff; /* Cor da legenda ao passar o mouse */
+}
+
+
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Suaviza a transição de transformação e sombra */
 }

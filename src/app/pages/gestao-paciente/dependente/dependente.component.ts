@@ -138,7 +138,7 @@ export class DependenteComponent implements OnDestroy {
   
         this.isActive = false;
         this.rowData = response
-  
+        console.log("aqui"+ this.rowData)
         this.rowData = this.rowData.map(data => {
           return {
             name: data.name || null,
@@ -148,7 +148,7 @@ export class DependenteComponent implements OnDestroy {
             idChild: data.idChild || null,
             nameMother: data.nameMother || null,
             nameFather: data.nameFather || null,
-            cpf: data.cpf || null,
+            cpf:  this.formatCPF(data.cpf) || null,
             rg: data.rg || null,
             biologicalSex: data.biologicalSex || null,
             dateRegister: data.dateRegister || null,
@@ -161,6 +161,14 @@ export class DependenteComponent implements OnDestroy {
               ? 'data:application/pdf;base64,' + data.avatar
               : this.avatar || null,
             status: data.status || null,
+            bairro: this.history.data.bairro,
+            cep:this.history.data.cep,
+            complemento: this.history.data.complemento,
+            nameCity: this.history.data.nameCity,
+            numero: this.history.data.numero,
+            rua: this.history.data.rua,
+            ufName: this.history.data.ufName,
+            id: this.history.data.id,
           }
         })
         this.fetchData(false)
@@ -184,7 +192,7 @@ export class DependenteComponent implements OnDestroy {
         idChild: this.history.data.idChild || null,
         nameMother: this.history.data.nameMother || null,
         nameFather: this.history.data.nameFather || null,
-        cpf: this.history.data.cpf || null,
+        cpf: this.formatCPF(this.history.data.cpf) || null,
         rg: this.history.data.rg || null,
         biologicalSex: this.history.data.biologicalSex || null,
         dateRegister: this.history.data.dateRegister || null,
@@ -197,6 +205,13 @@ export class DependenteComponent implements OnDestroy {
           ? 'data:application/pdf;base64,' + this.history.data.avatar
           : this.avatar || null,
         status: this.history.data.status || null,
+        bairro: this.history.data.bairro,
+        cep:this.history.data.cep,
+        complemento: this.history.data.complemento,
+        nameCity: this.history.data.nameCity,
+        numero: this.history.data.numero,
+        rua: this.history.data.rua,
+        ufName: this.history.data.ufName,
       };
           }
 
@@ -208,6 +223,7 @@ export class DependenteComponent implements OnDestroy {
   }
 
   buscaAgenda(data){
+    console.log(data)
     this.router.navigateByUrl('/pages/gestao-paciente/visualizar-AgendaHistorico', { state: data });
 
   }
@@ -222,6 +238,14 @@ export class DependenteComponent implements OnDestroy {
     });
 
   }
+
+  formatCPF(cpf: string): string {
+    // Remove qualquer caractere que não seja número
+    const cleanedCPF = cpf.replace(/\D/g, '');
+
+    // Formata o CPF com pontos e hífen
+    return cleanedCPF.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
 
   buscaCidade(data) {
 

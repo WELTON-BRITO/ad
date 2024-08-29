@@ -138,11 +138,12 @@ export class PacienteComponent implements OnInit {
     if (data.cpf !== null && data.cpf !== undefined || 
       data.medico !== null && data.medico !== undefined || 
       data.nome !== null && data.nome !== undefined) {
-        
+
 
       this.isActive = true;
       let allData = []; // Crie uma variável vazia para armazenar os dados
       this.service.buscaPaciente(params, (response) => {
+        
         allData = response
         .map(data => ({
          avatar: this.getAvatar(data),
@@ -151,7 +152,7 @@ export class PacienteComponent implements OnInit {
           idChild: data.idChild,
           cellPhone: data.cellPhone,
           email: data.emailUser,
-          federalId: data.federalId,
+          federalId: this.formatCPF(data.federalId),
           id: data.idUser  ,
           city: data.idCityUser ,
           uf: data.idUfUser,
@@ -159,6 +160,13 @@ export class PacienteComponent implements OnInit {
           doctorId: data.idDoctor,
           birthDateChild:  data.birthDateChild,
           birthDate:  data.birthDate,
+          nameCity:data.city,
+          ufName: data.uf,
+          cep: data.zipCode,
+          rua: data.street,
+          bairro: data.neighborhood,
+          numero: data.number,
+          complemento: data.complement
                         }));
          this.fetchData(false)
 
@@ -252,11 +260,19 @@ export class PacienteComponent implements OnInit {
 
   visualizar(data) {
     let register = {
-      data: data,
+      data:  data,
       tipo: 'visualizar'
     }
     this.router.navigateByUrl('/pages/gestao-paciente/dependente', { state: register });
   }
+
+  formatCPF(cpf: string): string {
+    // Remove qualquer caractere que não seja número
+    const cleanedCPF = cpf.replace(/\D/g, '');
+
+    // Formata o CPF com pontos e hífen
+    return cleanedCPF.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
 
   novoPaciente() {
     this.router.navigate(['/pages/gestao-paciente/novo-paciente']);

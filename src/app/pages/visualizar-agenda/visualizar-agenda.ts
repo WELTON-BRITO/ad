@@ -25,4 +25,8 @@ export class VisualizarAgendaService {
     return this.httpService.doGet('/api/appointments/paymentProof/' + id, data, successHandle, erroHandle)
   }
 
+  agendaDoctor(data:any, successHandle: Function, erroHandle: Function){
+    return this.httpService.doGet('/api/schedule/all', data, successHandle, erroHandle)
+  }
+
 }

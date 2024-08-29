@@ -24,6 +24,21 @@ nb-card-body {
   z-index: 9999;
 }
 
+
+
+.login_btn {
+  width: 100%; /* Garante que o contêiner ocupe toda a largura disponível */
+  display: flex;
+  justify-content: flex-end; /* Alinha o botão à direita */
+}
+
+.btn-align-right {
+  margin-right: 0; /* Remove qualquer margem à direita */
+}
+
+
+
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

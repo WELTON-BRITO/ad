@@ -27,9 +27,8 @@
                   </div>
                   <div class="card-body">
                     <p class="card-text mb-0"><strong>Responsável:</strong> {{ NewowData.name }}</p>
-                    <p class="card-text mb-0"><strong>Telefone:</strong> {{ NewowData.cellPhone }}</p>
                     <p class="card-text mb-0"><strong>Email:</strong> {{ NewowData.email }}</p>
-                    <p class="card-text mb-0"><strong>CPF:</strong> {{ NewowData.federalId }}</p>
+                    <p class="card-text mb-0"><strong>CPF:</strong> {{ NewowData.federalId }}</p>    
                   </div>
                 </div>
                          
@@ -43,17 +42,18 @@
                         <label for="nomeDep">Nome do Dependente*</label>
                         <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
                       </div>
-                      <div class="form-group col-md-4">
-                        <label for="dateNascDep">Data de Nascimento*</label>
-                        <input class="form-control" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
-                          maxlength="10" (blur)="validaData($event.target.value)" />
-                      </div>
-                      <div class="form-group col-md-3">
+                      <div class="form-group col-md-2">
                         <label for="cpfDep">CPF*</label>
                         <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
                           value="cpfDep" mask="000.000.000-00" (change)="isValidCpf($event.target,formDependente.value)" />
                       </div>
-                      <div class="form-group col-md-4">
+                      <div class="form-group col-md-2">
+                        <label for="dateNascDep">Data de Nascimento*</label>
+                        <input class="form-control" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
+                          maxlength="10" (blur)="validaData($event.target.value)" />
+                      </div>
+
+                      <div class="form-group col-md-2">
                         <label class="mat-button mb-3">Sexo Biológico*</label>
                         <div class="row">
                           <label class="radio-inline mr-3 pl-3">
@@ -66,11 +66,8 @@
                           </label>
                         </div>
                       </div>
-                      <div class="form-group col-md-3">
-                        <label for="rgDep">RG</label>
-                        <input class="form-control" name="rgDep" id="rgDep" type="text" formControlName="rgDep"
-                          mask="00.000.000-0" />
-                      </div>
+
+
                       <div class="form-group col-md-2">
                         <label for="tipoSanguineo">Tipo Sanguíneo</label>
                         <select class="form-control" formControlName="tipoSanguineo">
@@ -80,6 +77,7 @@
                           </option>
                         </select>
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -128,17 +126,25 @@
                         <nb-card-body>
                           <div class="text-center">
                             <img src="{{row.avatar}}" style="height: 55px; border-radius: 50%;">
-                          </div>
-                          <p class="card-text">Paciente: {{ row?.nameChild || row.name }}</p>
-                          <p class="card-text" *ngIf="row?.nameChild && row?.name">Nome Paciente: {{ row?.name }}</p>
-                          <p class="card-text">Telefone: {{ row.cellPhone }}</p>
-                          <p class="card-text">Email: {{ row.email }}</p>
-                          <p class="card-text">Nome da Mãe: {{ row.nameMother }}</p>
-                          <p class="card-text">Nome do Pai: {{ row.nameFather }}</p>
-                          <p class="card-text">Sexo: {{ row.biologicalSex }}</p>
-                          <p class="card-text">Data Cadastro: {{ row.dateRegister }}</p>
-                          <p class="card-text">Data de Nascimento: {{ row.birthDate }}</p>
-                          <p class="card-text">Tipo do Sangue: {{ row.bloodType }}</p>
+                          </div>  
+                          <p class="card-text"><strong>Paciente:</strong> {{ row?.nameChild || row.name }}</p>
+                          <p class="card-text" *ngIf="row?.nameChild && row?.name"><strong>Nome Paciente:</strong> {{ row?.name }}</p>
+                          <p class="card-text"><strong>CPF:</strong> {{ row.cpf }}</p>
+                          <p class="card-text"><strong>Nome da Mãe:</strong> {{ row.nameMother }}</p>
+                          <p class="card-text"><strong>Nome do Pai:</strong> {{ row.nameFather }}</p>
+                          <p class="card-text"><strong>Sexo:</strong> {{ row.biologicalSex }}</p>
+                          <p class="card-text"><strong>Data Cadastro:</strong> {{ row.dateRegister }}</p>
+                          <p class="card-text"><strong>Data de Nascimento:</strong> {{ row.birthDate }}</p>
+                          <p class="card-text"><strong>Tipo do Sangue:</strong> {{ row.bloodType }}</p>
+                          <p class="card-text mb-0"><strong>CEP:</strong> {{ row.cep }}</p>
+                          <p class="card-text mb-0"><strong>UF:</strong> {{ row.ufName }}</p>
+                          <p class="card-text mb-0"><strong>Cidade:</strong> {{ row.nameCity }}</p>
+                          <p class="card-text mb-0"><strong>Bairro:</strong> {{ row.bairro }}</p>
+                          <p class="card-text mb-0"><strong>Rua:</strong> {{ row.rua }}</p>
+                          <p class="card-text mb-0"><strong>Número:</strong> {{ row.numero }}</p>
+                          <p class="card-text mb-0"><strong>Complemento:</strong> {{ row.complemento }}</p>
+                          
+                          
               
                           <div class="datatable-body-box-actions">
                             <button class="btn edit-icon pt-4" (click)="EditarDependente(row)" title="Editar Cadastro">

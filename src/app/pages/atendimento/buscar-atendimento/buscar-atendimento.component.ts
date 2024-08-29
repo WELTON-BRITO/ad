@@ -269,8 +269,6 @@ export class BuscarAtendimentoComponent implements OnInit {
     }
       */
 
-    
-
   }
 
   findPositionById(listMedico: { id: number; name: string }[], targetId: number): number | null {
@@ -340,7 +338,7 @@ export class BuscarAtendimentoComponent implements OnInit {
           params = params.append('doctorId', data.medicoId ?? data.medico);
           let allData = []; // Crie uma variável vazia para armazenar os dados
           this.service.buscaAtendimentos(params, (response) => {
-                                       
+                              
             allData = response
               .filter(data => data.status !== '05 - Consulta Cancelada')
               .map(data => ({
@@ -364,8 +362,10 @@ export class BuscarAtendimentoComponent implements OnInit {
                 isConfirmed: data.isConfirmed ? 'Confirmado' : 'Não Confirmado',
                 avatar: this.getAvatar(data),
                 valorConsulta: data.priceSpecific,
-
+                isReturn: data.isReturn,
                             }));
+
+                         
 
             if (allData.length === 0) {
               this.toastrService.warning("Não Foram Encontradas Atendimentos Para Este Médico.", 'Aditi Care');
@@ -383,8 +383,6 @@ export class BuscarAtendimentoComponent implements OnInit {
                 const compressedData = JSON.stringify(allData);
                 localStorage.setItem('meuCardData', compressedData);
               }
-
-
 
               this.isActive = false;
               this.rowData = allData;
@@ -639,6 +637,8 @@ if(data.medico ==null || data.medico ==""){
   }
 
   detalhes(data) {
+
+    console.log(data.atendimento)
     this.router.navigateByUrl('/pages/atendimento/detalhe-atendimento', { state: data.atendimento });
   }
 
@@ -659,6 +659,10 @@ if(data.medico ==null || data.medico ==""){
       tela: 'atendimento',
       rowData: data.atendimento
     }]
+
+    console.log("aqui mano!")
+
+    console.log(data.atendimento)
  
     this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: this.rowData });
   }

@@ -175,30 +175,32 @@
 
               </div>
 
-              <div class="row" *ngIf="isSearch">
-                <div class="col-md-4" *ngFor="let row of rowData">
-                  <div class="card mb-3" [ngClass]="{
-                    'card-pendente': row.status === '02 - Aguardando Pagamento',
-                    'card-bloqueado': row.nomeResponsavel === 'Bloqueado',
-                    'card-finalizado': row.status === '04 - Consulta Finalizada',
-                    'card-confirmada': row.status === '03 - Consulta Confirmada'
-                  }">
-                    <div class="card-body">
-                      <!-- Div para o avatar à direita -->
-                      <div class="text-right">
-                        <img src="{{row?.avatar || this.avatar}}" style="height: 55px; border-radius: 50%; float: right;">
-                      </div>
-                      <!-- Conteúdo do texto -->
-                      <h6 class="card-title">Data: {{ row?.data }}</h6>
-                      <h6 class="card-title">Horário: {{ row?.horario }}</h6>
-                      <p class="card-text">Paciente: {{ row?.nomeDependente || row?.nomeResponsavel }}</p>
-                      <p class="card-text" *ngIf="row?.nomeDependente">Responsável: {{ row?.nomeResponsavel }}</p>
-                      <p class="card-text" *ngIf="!row?.nomeDependente"> </p> <!-- Mantém a quebra de linha -->
-                      <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
-                      <p class="card-text">Situação: {{ row?.status }}</p>
-                      <p class="card-text">Telefone: {{ row?.telefone }}</p>
-                      <p class="card-text">Valor Consulta: R$ {{ row?.valorConsulta }}</p>
-                      
+                <div class="row" *ngIf="isSearch">
+                  <div class="col-md-4" *ngFor="let row of rowData">
+                    <div class="card mb-3" [ngClass]="{
+                      'card-pendente': row.status === '02 - Aguardando Pagamento',
+                      'card-bloqueado': row.nomeResponsavel === 'Bloqueado',
+                      'card-finalizado': row.status === '04 - Consulta Finalizada',
+                      'card-confirmada': row.status === '03 - Consulta Confirmada'
+                    }">
+                      <div class="card-body">
+                        <!-- Div para o avatar à direita -->
+                        <div class="text-right">
+                          <img src="{{row?.avatar || this.avatar}}" style="height: 55px; border-radius: 50%; float: right;">
+                        </div>
+                        <!-- Conteúdo do texto -->
+                        <h6 class="card-title">Data: {{ row?.data }}</h6>
+                        <h6 class="card-title">Horário: {{ row?.horario }}</h6>
+                        <p class="card-text">Paciente: {{ row?.nomeDependente || row?.nomeResponsavel }}</p>
+                        <p class="card-text" *ngIf="row?.nomeDependente">Responsável: {{ row?.nomeResponsavel }}</p>
+                        <p class="card-text" *ngIf="!row?.nomeDependente"> </p> <!-- Mantém a quebra de linha -->
+                        <p class="card-text">Modalidade: {{ row?.modalidade }}</p>
+                        <p class="card-text">Situação: {{ row?.status }}</p>
+                        <p class="card-text">Telefone: {{ row?.telefone }}</p>
+                        <p class="card-text">Valor Consulta: 
+                          <span *ngIf="!row.isReturn">R$ {{ row?.valorConsulta }}</span>
+                          <span *ngIf="row.isReturn"><strong>Consulta de Retorno</strong></span>
+                        </p>                        
 
                       <p class="card-text">
                         Consulta Confirmada:

@@ -63,47 +63,35 @@
       </div>
     </nb-card-body>
   </nb-card>
-  <nb-card>
+  <nb-card class="custom-card">
     <nb-card-body>
-      <nb-actions size="large" fullWidth>
-        <nb-action *ngIf="atendimento.status ==='01 - Aguardando Aprovação'
-        || atendimento.status ==='03 - Consulta Confirmada'
-        || atendimento.status ==='02 - Aguardando Pagamento'" (click)="abrirModalCancelamento()">
+      <div class="card-actions">
+        <button *ngIf="atendimento.status === '01 - Aguardando Aprovação' || atendimento.status === '03 - Consulta Confirmada' || atendimento.status === '02 - Aguardando Pagamento'" (click)="abrirModalCancelamento()" class="action-button">
           <nb-icon class="action-icon" icon="trash-2-outline"></nb-icon>
           <span>Cancelar</span>
-        </nb-action>
-        <nb-action
-          *ngIf="atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='02 - Aguardando Pagamento'"
-          (click)="aprovarPagamento()">
+        </button>
+        <button *ngIf="atendimento.status === '01 - Aguardando Aprovação' || atendimento.status === '02 - Aguardando Pagamento'" (click)="aprovarPagamento()" class="action-button">
           <nb-icon class="action-icon" icon="checkmark-circle-outline"></nb-icon>
           <span>Aprovar Pagamento</span>
-        </nb-action>
-        <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'
-        && atendimento.modalidade ==='Consulta por Video Chamada'
-        && atendimento.urlCall !== null" (click)="goToLink(atendimento.urlCall)">
+        </button>
+        <button *ngIf="atendimento.status === '03 - Consulta Confirmada' && atendimento.modalidade === 'Consulta por Video Chamada' && atendimento.urlCall !== null" (click)="goToLink(atendimento.urlCall)" class="action-button">
           <nb-icon class="action-icon" icon="wifi-outline"></nb-icon>
           <span>Atender</span>
-        </nb-action>
-
-        <nb-action *ngIf="atendimento.status ==='03 - Consulta Confirmada'  || atendimento.status ==='02 - Aguardando Pagamento'
-        " (click)="editarConsulta(atendimento.urlCall)">
+        </button>
+        <button *ngIf="atendimento.status === '03 - Consulta Confirmada' || atendimento.status === '02 - Aguardando Pagamento'" (click)="editarConsulta(atendimento.urlCall)" class="action-button">
           <nb-icon class="action-icon" icon="edit-outline"></nb-icon>
           <span>Reagendar</span>
-        </nb-action>
-        
-        <nb-action *ngIf="(atendimento.status ==='01 - Aguardando Aprovação' || atendimento.status ==='03 - Consulta Confirmada'
-        || atendimento.status ==='02 - Aguardando Pagamento') && atendimento.formaPagamento === 'PIX'"
-          (click)="abrirComprovante()">
+        </button>
+        <button *ngIf="(atendimento.status === '01 - Aguardando Aprovação' || atendimento.status === '03 - Consulta Confirmada' || atendimento.status === '02 - Aguardando Pagamento') && atendimento.formaPagamento === 'PIX'" (click)="abrirComprovante()" class="action-button">
           <nb-icon class="action-icon" icon="attach-outline"></nb-icon>
           <span>Ver Comprovante</span>
-        </nb-action>
-        <nb-action
-          *ngIf="atendimento.status ==='03 - Consulta Confirmada' || atendimento.status === '04 - Consulta Finalizada'">
-          <nb-icon class="action-icon" icon="file-outline" (click)="abrirConsulta()"></nb-icon>
+        </button>
+        <button *ngIf="atendimento.status === '03 - Consulta Confirmada' || atendimento.status === '04 - Consulta Finalizada'" (click)="abrirConsulta()" class="action-button">
+          <nb-icon class="action-icon" icon="file-outline"></nb-icon>
           <span>Atualizar Prontuário</span>
-        </nb-action>
-
-      </nb-actions>
+        </button>
+      </div>
     </nb-card-body>
   </nb-card>
+  
 </div>

@@ -50,6 +50,8 @@ export class AgendaComponent implements OnInit {
   public medicoId = null;
   public isLoader: boolean = false;
   public isSearch = false; 
+  public horariosPorDia: string[][] = [];
+
 
 
 
@@ -449,6 +451,9 @@ export class AgendaComponent implements OnInit {
 
           allData = this.calendarEvents;
 
+          console.log("calendario "+this.calendarEvents)
+
+
           this.fetchData(false)
 
           if (allData.length === 0) {
@@ -510,7 +515,8 @@ export class AgendaComponent implements OnInit {
       }
       this.fetchData(false)
     }
-
+    console.log("calendario "+this.calendarEvents)
+   // this.verificaHorario()
   }
 
   isMobile() {
@@ -542,6 +548,147 @@ export class AgendaComponent implements OnInit {
     }
     return x;
 }
+verificaHorario() {
+  // this.isActive = true
+  this.rowData = [];
+  let params = new HttpParams();
+
+  // Inicializar this.horariosPorDia como um array de arrays
+  this.horariosPorDia = Array.from({ length: 7 }, () => []);
+
+  params = params.append('doctorId', this.medicoId);
+
+  this.fetchData(true);
+
+  this.service.agendaDoctor(params, (response: any[]) => {
+    if (response.length !== 0) {
+      this.rowData = response;
+
+      this.rowData.forEach(data => {
+        const diaSemana = data.weekday;
+        const horario = `${data.startTime} - ${data.endTime}`;
+
+     
+        if (horario.trim() !== '' && Array.isArray(this.horariosPorDia[diaSemana]) && !this.horariosPorDia[diaSemana].includes(horario)) {
+          this.horariosPorDia[diaSemana].push(horario);
+        }
+
+      this.isActive = false;
+      this.fetchData(false);
+      });
+
+      this.isActive = false;
+      this.fetchData(false);
+
+      console.log('agenda efetiva: ' + JSON.stringify(this.horariosPorDia));
+
+      // Gerar eventos de bloqueio
+      this.generateAndAddEvents();
+    } else {
+      this.toastrService.danger('Este Médico Ainda não Possui Horários Cadastrados', 'Aditi Care');
+      this.isActive = false;
+      this.fetchData(false);
+    }
+  }, (error) => {
+    this.isActive = false;
+    this.toastrService.danger(error.error.message, 'Aditi Care');
+    this.fetchData(false);
+  });
+}
+
+
+
+ generateAndAddEvents() {
+  const allHours = [
+      '06:00 - 08:00',
+      '08:00 - 12:00',
+      '12:00 - 13:30',
+      '13:30 - 18:30',
+      '18:30 - 23:59'
+  ];
+
+  const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+
+  daysOfWeek.forEach((day, index) => {
+      const availableHours = this.horariosPorDia[index] || [];
+
+      allHours.forEach(hour => {
+          const [start, end] = hour.split(' - ');
+          const isBlocked = !availableHours.some(availableHour => {
+              const [availableStart, availableEnd] = availableHour.split(' - ');
+              return (start >= availableStart && end <= availableEnd);
+          });
+
+          if (isBlocked) {
+              this.calendarEvents.push({
+                  title: 'Bloqueado',
+                  start: `2024-08-29T${start}`,
+                  end: `2024-08-29T${end}`,
+                  color: '#77747762'
+              });
+          }
+      });
+  });
+
+  // Adicionar eventos ao calendário
+  this.rowData.forEach(evento => {
+      let color;
+
+      switch (evento.status) {
+          case '01 - Aguardando Aprovação':
+          case '02 - Aguardando Pagamento':
+              color = '#fd2205';
+              break;
+          case '03 - Consulta Confirmada':
+              color = '#727df5';
+              break;
+          case '04 - Consulta Finalizada':
+              color = '#54dfb1';
+              break;
+          default:
+              color = 'green';
+      }
+
+      if (!evento.isConfirmed && evento.userName !== 'Bloqueado' && evento.status !== '04 - Consulta Finalizada') {
+          color = 'orange';
+      }
+
+      if (evento.userName == 'Bloqueado') {
+          color = '#77747762';
+      }
+
+      this.isSearch = true;
+
+      const start = evento.dateService ? evento.dateService.concat('T', evento.startTime || '') : '';
+      const end = evento.dateService ? evento.dateService.concat('T', evento.endTime || '') : '';
+
+      this.calendarEvents.push({
+          title: evento.childName ?? evento.userName,
+          start: start,
+          end: end,
+          id: evento.id,
+          responsavel: evento.userName,
+          medico: evento.doctorName,
+          paciente: evento.childName ?? evento.userName,
+          data: evento.dateService,
+          nameFather: evento.childFather ?? null,
+          nameMother: evento.childMother ?? null,
+          typePayment: evento.typePayment,
+          typeService: evento.typeServiceName,
+          status: evento.status,
+          horario: evento.startTime.concat(' - ', evento.endTime),
+          dados: evento,
+          isConfirmed: evento.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado',
+          patchPaciente: 'googleCalendar',
+          color: color
+      });
+  });
+
+  console.log(this.calendarEvents); // Verifica se os eventos foram adicionados
+}
+
+
+
 
   validaCampo(data) {
     

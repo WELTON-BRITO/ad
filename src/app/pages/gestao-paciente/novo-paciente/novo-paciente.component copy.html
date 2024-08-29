@@ -18,7 +18,8 @@
                   <div class="form-group">
                     <h5 class="pt-3">Cadastro de Paciente / Responsável</h5>
                   </div>
-                <!--<div class="form-row align-items-center">
+                </div>
+                <div class="form-row align-items-center">
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="btn_clinica">
@@ -39,7 +40,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-3">
+                 <!-- <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="btn_clinica">
                         <button nbButton outline status="primary" type="button" id="contato"
@@ -48,7 +49,7 @@
                             icon="email-outline"></nb-icon> Contato</button>
                       </div>
                     </div>
-                  </div>
+                  </div>-->
                   <div class="form-group col-md-3">
                     <div class="form-group">
                       <div class="btn_clinica">
@@ -71,13 +72,12 @@
                     </div>
                   </div>-->
                 </div>
-                  <!--<div class="col-md-12 col-xs-12 align-items-center" *ngIf="isInformacao">-->
-                    <div>
+                  <div class="col-md-12 col-xs-12 align-items-center" *ngIf="isInformacao">
                     <div class="form-row align-items-center">
                       <h6 class="p-1">Dados Pessoais:</h6>
                     </div>
                       <div class="form-row align-items-center">
-                       <!--  <div class="form-group col-md-4">
+                        <div class="form-group col-md-4">
                           <label for="nome">Informe o Médico*</label>
                           <select class="form-control" formControlName="medico"
                             (change)="verificaMedico($event.target.value)">
@@ -85,38 +85,26 @@
                             <option *ngFor="let medico of listMedico" value="{{ medico.id }}">{{
                               medico.name}}</option>
                           </select>
-                        </div>-->
-                        
+                        </div>
                           <div class="form-group col-md-4">
                             <label for="nome">Nome*</label>
                             <input class="form-control" name="nome" id="nome" type="text" formControlName="nome"
                             (change)="nameMae($event.target.value)" />
                           </div>
-                          <div class="form-group col-md-4">
+                          <div class="form-group col-md-2">
                             <label for="CPF">CPF*</label>
                             <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf" value="cpf"
                               mask="000.000.000-00" (change)="isValidCpf($event.target,formNovoPaciente.value)" />
                           </div>
-                          <div class="form-group col-md-4">
+                          <div class="form-group col-md-2">
                             <label for="dateNasc">Data de Nascimento*</label>
                             <input class="form-control" type="date" id="dateNasc" name="mydate" formControlName="dateNasc"
                               maxlength="10" (blur)="validaData($event.target.value)" />
                           </div>
-
-                          
                         </div>
                     
                         <div class="form-row">
-    
-                            <div class="form-group col-md-4">
-                              <label for="celular">Celular*</label>
-                              <input class="form-control" name="celular" id="celular" type="text" formControlName="celular"
-                                mask="(00) 0 0000-0000 || (00) 0000-0000" />
-                            </div>
-                            <div class="form-group col-md-4">
-                              <label for="email">E-mail*</label>
-                              <input class="form-control" name="email" id="email" type="text" formControlName="email" />
-                          </div>
+     
                           <div class="form-group col-md-4">
                             <label>Sexo Biológico*</label>
                             <div class="d-flex align-items-center">
@@ -130,11 +118,19 @@
                               </div>
                             </div>
                           </div>
+                            <div class="form-group col-md-4">
+                              <label for="celular">Celular*</label>
+                              <input class="form-control" name="celular" id="celular" type="text" formControlName="celular"
+                                mask="(00) 0 0000-0000 || (00) 0000-0000" />
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label for="email">E-mail*</label>
+                              <input class="form-control" name="email" id="email" type="text" formControlName="email" />
+                          </div>
                         </div>
                         
                 </div>
-                <!-- <div *ngIf="isLocalizacao"> -->
-                <div>
+                <div *ngIf="isLocalizacao">
                   <div class="form-row align-items-center">
                     <h6 class="p-1">Localização</h6>
                   </div>
@@ -144,22 +140,23 @@
                       <input class="form-control" name="cep" id="cep" type="text" formControlName="cep" mask="00000-000"
                         (blur)="buscaCep(formNovoPaciente.value)" />
                     </div>
-
+                    <div class="form-group col-md-1">
+                      <label for="numero">N°*</label>
+                      <input class="form-control" name="numero" id="numero" type="text" formControlName="numero" />
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="complemento">Complemento</label>
+                      <input class="form-control" name="complemento" id="complemento" type="text"
+                        formControlName="complemento" [dropSpecialCharacters]="true" />
+                    </div>
+                  </div>
+                  <div class="form-row align-items-center">
                     <div class="form-group col-md-4">
                       <label for="endereco">Endereço*</label>
                       <input class="form-control" name="endereco" id="endereco" type="text"
                         formControlName="endereco" />
                     </div>
-                    <div class="form-group col-md-1">
-                      <label for="numero">N°*</label>
-                      <input class="form-control" name="numero" id="numero" type="text" formControlName="numero" />
-                    </div>
-                    <div class="form-group col-md-2">
-                      <label for="complemento">Complemento</label>
-                      <input class="form-control" name="complemento" id="complemento" type="text"
-                        formControlName="complemento" />
-                    </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-4">
                       <label for="bairro">Bairro*</label>
                       <input class="form-control" name="bairro" id="bairro" type="text" formControlName="bairro" />
                     </div>
@@ -201,10 +198,9 @@
                     </div>
                   </div>
                 </div>
-              <!--  <div *ngIf="isAddDependente">-->
-                <div>
+                <div *ngIf="isAddDependente">
                   <div class="form-row align-items-center">
-                    <h6 class="p-1">Cadastro de Dependentes (Opcional)</h6>
+                    <h6 class="p-1">Informações Gerais</h6>
                   </div>
 
                   <div class="form-row">
@@ -213,30 +209,32 @@
                       <input class="form-control" name="nomeDep" id="nomeDep" type="text" formControlName="nomeDep" />
                     </div>
                     <div class="form-group col-md-3">
-                      <label for="cpfDep">CPF*</label>
-                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
-                        value="cpfDep" mask="000.000.000-00"
-                        (change)="isValidCpf($event.target,formNovoPaciente.value)" />
-                      </div>
-                    <div class="form-group col-md-3">
                       <label for="dateNascDep">Data de Nascimento*</label>
                       <div class="row pl-3">
                         <input class="date" type="date" id="dateNascDep" name="mydate" formControlName="dateNascDep"
                           maxlength="10" (blur)="validaData($event.target.value)" />
                       </div>
                     </div>
+                    <div class="form-group col-md-3">
+                      <label for="cpfDep">CPF*</label>
+                      <input class="form-control" name="cpfDep" id="cpfDep" type="text" formControlName="cpfDep"
+                        value="cpfDep" mask="000.000.000-00"
+                        (change)="isValidCpf($event.target,formNovoPaciente.value)" />
+                      </div>
                   </div>
                   <div class="form-row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-6">
                       <label for="nome">Nome da Mãe*</label>
                       <input class="form-control" name="nomeResp01" id="nomeResp01" type="text"
                         formControlName="nomeResp01" />
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-6">
                       <label for="nome">Nome do Pai</label>
                       <input class="form-control" name="nomeResp02" id="nomeResp02" type="text"
                         formControlName="nomeResp02" />
                     </div>
+                  </div>
+                  <div class="form-row">
                     <div class="form-group col-md-3">
                       <label class="mat-button mb-3">Sexo Biologico:</label>
                       <div class="row">
@@ -249,8 +247,7 @@
                             (click)="viewdiv($event.target.value)"> Feminino</label>
                       </div>
                     </div>
-
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                       <label for="tipoSanguineo">Tipo Sanguineo</label>
                       <select class="form-control" formControlName="tipoSanguineo">
                         <option value="null" selected>SELECIONE</option>
@@ -376,7 +373,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>-->
                 <div class="form-row align-items-center pt-5 modal-footer">
                   <div class="form-group col-md-2" *ngIf="isVoltar">
                     <div class="form-group">
@@ -394,16 +391,15 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-md-2 mr-lg-n4" *ngIf="isCadastrar">-->
-                    <div class="form-group login_btn ">
-                          <button type="button" id="cadastrar" class="btn btn-success btn-align-right"
-                            (click)="cadastrarPaciente(formNovoPaciente.value)">Cadastrar
-                          </button>
+                  <div class="form-group col-md-2 mr-lg-n4" *ngIf="isCadastrar">
+                    <div class="form-group">
+                      <div class="login_btn">
+                        <button type="button" id="cadastrar" class="btn btn-success nb-custom-message-full-width"
+                          (click)="cadastrarPaciente(formNovoPaciente.value)">Cadastrar</button>
+                      </div>
+                    </div>
                   </div>
-                  
-                  
-                  
-
+                </div>
               </div>
             </form>
           </nb-card-body>

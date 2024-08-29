@@ -130,6 +130,7 @@ export class DetalheAtendimentoComponent implements OnInit {
         specialtyId: data.specialtyId,
         typeServiceId: data.typeServiceId,
         patchPaciente: data.patchPaciente,
+        isReturn: data.isReturn
     };
         
     this.paciente = allData

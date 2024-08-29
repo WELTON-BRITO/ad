@@ -125,7 +125,7 @@ export class NovoPacienteComponent implements OnDestroy {
     this.buscaEstado();
     this.buscaConvenio();
     this.formNovoPaciente = this.formBuilder.group({
-      medico: [this.listMedico[0], Validators.required],
+      medico: [''],
       codigo: [null],
       nome: [null],
       dateNasc: [null],
@@ -159,7 +159,7 @@ export class NovoPacienteComponent implements OnDestroy {
       dataExpiracao: [null],
     })
 
-    this.formNovoPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+    //this.formNovoPaciente.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
   }
 
   tipoFormulario(data) {
@@ -391,29 +391,35 @@ export class NovoPacienteComponent implements OnDestroy {
 
     const trimOrEmpty = (value) => (value ? value.trim() : '');
 
+    if (!CPFValidator.isValidCPF(data.cpf)) {
+      this.toastrService.danger('O Cpf Informado não é Inválido','Aditi Care');
+      this.formNovoPaciente.get('cpf').setValue(null); // Clear the value
+      return false;
+    }
+
     if (data.nomeDep != null) {
         this.register = {
-            doctorId: this.doctorId,
+            doctorId: this.doctorId ?? 1,
             user: {
-                name:  this.capitalizeWords(trimOrEmpty(data.nome)),
+                name:  this.formatName(this.capitalizeWords(trimOrEmpty(data.nome))),
                 birthDate: data.dateNasc,
                 cellPhone: this.formatPhoneNumber(data.celular),
-                email: this.capitalizeWords(trimOrEmpty(data.email)),
+                email: this.capitalizeWords(trimOrEmpty(data.email)).toLowerCase(),
                 avatar: null,
                 cityId: data.cidade,
                 ufId: data.estado,
                 zipCode: data.cep,
-                street: data.bairro,
-                neighborhood: this.capitalizeWords(trimOrEmpty(data.endereco)),
+                street: this.formatName(this.capitalizeWords(trimOrEmpty(data.endereco))), 
+                neighborhood:  this.formatName(this.capitalizeWords(trimOrEmpty(data.bairro))),
                 number: data.numero,
-                complement: data.complemento,
+                complement: this.formatName(this.capitalizeWords(trimOrEmpty(data.complemento))),
                 password: 'Aditi@21*19',
                 federalId: data.cpf,
             },
             child: {
-                name: trimOrEmpty(data.nomeDep),
-                nameMother: this.capitalizeWords(trimOrEmpty(data.nomeResp01)),
-                nameFather: this.capitalizeWords(trimOrEmpty(data.nomeResp02)),
+                name: this.formatName(this.capitalizeWords(trimOrEmpty(data.nomeDep))),
+                nameMother: this.formatName(this.capitalizeWords(trimOrEmpty(data.nomeResp01))),
+                nameFather: this.formatName(this.capitalizeWords(trimOrEmpty(data.nomeResp02))),
                 cpf: data.cpfDep,
                 rg: data.rgDep,
                 biologicalSex: this.sexo,
@@ -485,7 +491,7 @@ export class NovoPacienteComponent implements OnDestroy {
 
       this.service.salvarPaciente(this.register, (response => {
         this.fetchData(false)
-        this.toastrService.success('Registro Realizado com Sucesso !!!','Aditi Care!');
+        this.toastrService.success('Registro Realizado com Sucesso!','Aditi Care!');
         this.previousPage()
       }), (error) => {
         this.isActive = false;
@@ -497,6 +503,12 @@ export class NovoPacienteComponent implements OnDestroy {
     this.fetchData(false)
 
   }
+
+  formatName(name: string): string {
+    return name.split(' ')
+               .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+               .join(' ');
+}
 
   formatPhoneNumber(phoneNumber: string): string {
     // Remove todos os caracteres não numéricos
@@ -700,9 +712,7 @@ export class NovoPacienteComponent implements OnDestroy {
       if (!CPFValidator.isValidCPF(data.cpf)) {
         this.toastrService.danger('O Cpf Informado não é Inválido','Aditi Care');
         this.formNovoPaciente.get('cpf').setValue(null); // Clear the value
-
         return false;
-      return false;
       }
       return true;
     } else if (element.id === 'cpfDep') {
