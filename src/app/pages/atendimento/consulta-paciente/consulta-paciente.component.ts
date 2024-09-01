@@ -664,11 +664,14 @@ declare var $: any;
 
 
 
-       this.listChatHistory.forEach(item => {
-           const ageInMonths = this.calculateAgeInMonthsD(item.dateService, this.calcularIdadeEmMeses(this.dataNascimento));
-               data[ageInMonths - 1] = item.headSize
-           
-       });
+  // Adiciona os dados históricos
+if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
+    this.listChatHistory.forEach(item => {
+        const ageInMonths = this.calculateAgeInMonthsD(item.dateService, this.calcularIdadeEmMeses(this.dataNascimento));
+        data[ageInMonths - 1] = item.headSize;
+    });
+} 
+
     
 
 //        const data = Array(totalMonths).fill(null).map((_, i) => (i === currentAgeInMonths - 1 ? altura : null));
@@ -1066,12 +1069,14 @@ declare var $: any;
        // Adiciona os dados históricos
 
 
+// Adiciona os dados históricos
+if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
+    this.listChatHistory.forEach(item => {
+        const ageInMonths = this.calculateAgeInMonthsD(item.dateService, this.calcularIdadeEmMeses(this.dataNascimento));
+        data[ageInMonths - 1] = item.weight;
+    });
+} 
 
-       this.listChatHistory.forEach(item => {
-           const ageInMonths = this.calculateAgeInMonthsD(item.dateService, this.calcularIdadeEmMeses(this.dataNascimento));
-               data[ageInMonths - 1] = item.weight
-           
-       });
 
              
 
@@ -1126,15 +1131,15 @@ declare var $: any;
        // Adiciona o ponto atual
        data[currentAgeInMonths - 1] = altura;
        
-       // Adiciona os dados históricos
-       this.listChatHistory.forEach(item => {
-           const ageInMonths = this.calculateAgeInMonthsD(item.dateService, this.calcularIdadeEmMeses(this.dataNascimento));
-           data[ageInMonths - 1] = item.height
+    // Adiciona os dados históricos
+    if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
+        this.listChatHistory.forEach(item => {
+            const ageInMonths = this.calculateAgeInMonthsD(item.dateService, this.calcularIdadeEmMeses(this.dataNascimento));
+            data[ageInMonths - 1] = item.height;
+        });
+    } 
 
-
-       });
-             
-
+            
       }
 
       const media = medias[gender][currentAgeInMonths];

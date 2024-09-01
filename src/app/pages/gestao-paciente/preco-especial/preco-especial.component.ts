@@ -20,6 +20,7 @@ export class PrecoEspecialComponent implements OnDestroy {
   public checkVideo = null;
   public checkEmergencial = null;
   public checkCasa = null;
+  public isLoader: boolean = false;
   public checkValorVideo = null;
   public isActive = false;
   public checked = false;
@@ -31,6 +32,8 @@ export class PrecoEspecialComponent implements OnDestroy {
   public clinic = null;
   public history = null;
   public isBloqueio = false;
+  public doctorId = null;
+  public isUpdate = false;
   public atendimento = {
     name: null,
     id: null,
@@ -64,21 +67,27 @@ export class PrecoEspecialComponent implements OnDestroy {
         }
     }
 
-    this.clinic = localStorage.getItem('bway-domain');
+    this.clinic = localStorage.getItem('bway-domain'); 
+
+    if(this.atendimento.name == null){
+
+      this.router.navigate(['/pages/gestao-paciente/paciente']);
+
+    }
 
     this.formPrecoEspecial = this.formBuilder.group({
       valorPresencial: [null],
       valorEmergencial: [null],
       valorVideo: [null],
       valorCasa: [null],
-      medico: [this.listMedico[0], Validators.required],
+      medico: [''],
       clinica: [null],
       dataExpiracao: [null],
       valorVideoChamada: [null],
     })
-    this.formPrecoEspecial.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
+   // this.formPrecoEspecial.controls['medico'].setValue(this.listMedico[0].id, { onlySelf: true });
 
-    this.pesquisaClinica(this.listMedico[0].id)
+    //this.pesquisaClinica(this.listMedico[0].id)
 
   }
 
@@ -116,10 +125,13 @@ export class PrecoEspecialComponent implements OnDestroy {
 
   salvar(data) {
 
+    this.fetchData(true)
+
     if ((data.medico == null) || ((data.valorPresencial == null) && (data.valorEmergencial == null) &&
       (data.valorVideo == null) && (data.valorCasa == null) && (data.valorVideoChamada) && (data.clinica == null) && (this.atendimento.cpf == null))) {
 
       this.toastrService.danger('Preencher os campos obrigatórios!!!');
+
 
     } else {
 
@@ -175,24 +187,33 @@ export class PrecoEspecialComponent implements OnDestroy {
       }
 
       let register = {
-        doctorId: data.medico,
-        clinicId: data.clinica,
+        doctorId: this.doctorId,
+        clinicId: this.clinicaId,
         userId: this.atendimento.id,
         items: this.listConsulta
       }
 
-      this.isActive = true;
+      this.fetchData(true)
+
+      if(this.isUpdate == true){
+
+        this.toastrService.warning('Esta funcionalidade ainda não esta Disponível','Aditi Care!');
+
+      }else{
+
       this.service.cadastrarPriceExclusive(register, (response => {
-        this.isActive = false;
-        this.toastrService.success('Registro cadastrado com sucesso !!!','Aditi Care!');
+        this.fetchData(false)
+        this.toastrService.success('Registro cadastrado com sucesso','Aditi Care!');
         this.limpaForm()
         this.previousPage()
       }), (error) => {
-        this.isActive = false;
+        this.fetchData(false)
         this.toastrService.danger(error.error.message);
       });
+    }
 
     }
+    this.fetchData(false)
 
   }
 
@@ -252,147 +273,26 @@ export class PrecoEspecialComponent implements OnDestroy {
 
   verificaValor(data) {
 
-    let params = new HttpParams();
+    this.doctorId = data;
 
-    params = params.append('federalId', this.atendimento.cpf);
-    params = params.append('doctorId', data.medico);
-    params = params.append('clinicId', data.clinica);
-    this.isActive = true
-    if (this.validaCampo(data)) {
-      this.service.buscaValor(params, (response) => {
-        this.isActive = false;
-
-        if (response.length == 0) {
-          this.atualizar = 0;
-          this.toastrService.warning('Configurar qual tipo de atendimento para o médico.');
-        } else {
-
-          this.atualizar = response;
-
-          let dataExpiracao = moment(response[0].expirationDate).format('YYYY-MM-DD')
-
-          this.formPrecoEspecial.controls['dataExpiracao'].setValue(dataExpiracao);
-
-          for (var i = 0; i < response.length; i++) {
-
-            if (response[i].typeService.id == 1) {
-
-              this.formPrecoEspecial.controls['valorPresencial'].setValue(response[i].value);
-
-              var checkbox = document.querySelector("#presencial");
-              function ativarCheckbox(el) {
-                el.checked = true;
-              }
-              ativarCheckbox(checkbox);
-
-            } else if (response[i].typeService.id == 2) {
-
-              this.formPrecoEspecial.controls['valorVideo'].setValue(response[i].value);
-
-              var checkbox = document.querySelector("#video");
-              function ativarCheckbox(el) {
-                el.checked = true;
-              }
-              ativarCheckbox(checkbox);
-
-            } else if (response[i].typeService.id == 3) {
-
-              this.formPrecoEspecial.controls['valorEmergencial'].setValue(response[i].value);
-
-              var checkbox = document.querySelector("#emergencial");
-              function ativarCheckbox(el) {
-                el.checked = true;
-              }
-              ativarCheckbox(checkbox);
-
-            } else if (response[i].typeService.id == 4) {
-
-              this.formPrecoEspecial.controls['valorCasa'].setValue(response[i].value);
-
-              var checkbox = document.querySelector("#casa");
-              function ativarCheckbox(el) {
-                el.checked = true;
-              }
-              ativarCheckbox(checkbox);
-
-            } else if (response[i].typeService.id == 5) {
-
-              this.formPrecoEspecial.controls['valorVideoChamada'].setValue(response[i].value);
-
-              var checkbox = document.querySelector("#videoChamada");
-              function ativarCheckbox(el) {
-                el.checked = true;
-              }
-              ativarCheckbox(checkbox);
-
-            }
-
-          }
-
-        }
-
-      }, (error) => {
-        this.isActive = false;
-        if (error == undefined) {
-
-          this.formPrecoEspecial.controls['valorEmergencial'].setValue(null);
-
-          var checkbox = document.querySelector("#emergencial");
-          function ativarCheckbox(el) {
-            el.checked = false;
-          }
-          ativarCheckbox(checkbox);
-        }
-        if (error == undefined) {
-          this.formPrecoEspecial.controls['valorVideo'].setValue(null);
-          var checkbox = document.querySelector("#video");
-          function ativarCheckbox(el) {
-            el.checked = false;
-          }
-          ativarCheckbox(checkbox);
-        }
-        if (error == undefined) {
-          this.formPrecoEspecial.controls['valorPresencial'].setValue(null);
-          var checkbox = document.querySelector("#presencial");
-          function ativarCheckbox(el) {
-            el.checked = false;
-          }
-          ativarCheckbox(checkbox);
-        }
-        if (error == undefined) {
-          this.formPrecoEspecial.controls['valorCasa'].setValue(null);
-          var checkbox = document.querySelector("#casa");
-          function ativarCheckbox(el) {
-            el.checked = false;
-          }
-          ativarCheckbox(checkbox);
-        }
-        if (error == undefined) {
-          this.formPrecoEspecial.controls['valorVideoChamada'].setValue(null);
-          var checkbox = document.querySelector("#videoChamada");
-          function ativarCheckbox(el) {
-            el.checked = false;
-          }
-          ativarCheckbox(checkbox);
-        }
-
-      });
-    } else {
-      this.isActive = false
-    }
+    this.pesquisaClinica(data)
   }
+
+  
 
   validaCampo(data) {
 
-    if (data.medico == null) {
+    if (data == null) {
       this.toastrService.danger('O campo médico é obrigatório!!!');
       return false
     }
+
     if (this.atendimento.cpf == null) {
-      this.toastrService.danger('O campo cpf é obrigatório!!!');
+      this.toastrService.danger('O campo Paciente é obrigatório!!!');
       return false
     }
-    if (data.clinica == null) {
+
+    if (this.clinicaId == null) {
       this.toastrService.danger('O campo clínica é obrigatório!!!');
       return false
     }
@@ -402,13 +302,16 @@ export class PrecoEspecialComponent implements OnDestroy {
 
   pesquisaClinica(data) {
 
+    this.fetchData(true)
+
+
     this.service.buscaClinica(data, null, (response) => {
 
       this.listClinica = response
-      this.isActive = false
+      this.fetchData(false)
 
     }, (error) => {
-      this.isActive = false;
+      this.fetchData(false)
       this.toastrService.danger(error.error.message);
     });
 
@@ -418,11 +321,157 @@ export class PrecoEspecialComponent implements OnDestroy {
     this.clinicaId = data;
   }
 
+  formatacpf(cpf: string): string {
+    return cpf.replace(/[.-]/g, '');
+}
+
+
+fetchData(data) {
+  if(data){
+  // Mostra o loader
+  this.isLoader =true
+  }else{
+    setTimeout(() => {
+      // Oculta o loader após o atraso
+      this.isLoader =false
+  }, 2000);
+}
+}
+
   buscarAtendimento(data) {
     this.isBloqueio = true
-    this.verificaValor(data)
 
-  }
+    let params = new HttpParams();
+
+  //params = params.append('federalId', this.atendimento.cpf);
+  params = params.append('doctorId', this.doctorId);
+  params = params.append('clinicId', this.clinicaId);
+  params = params.append('federalId', this.formatacpf(this.atendimento.cpf));
+
+if (this.validaCampo(this.doctorId)) {
+  this.service.buscaValor(params, (response) => {
+
+    if (response.length == 0) {
+      this.atualizar = 0;
+    } else {
+
+      this.isUpdate = true;
+
+      this.atualizar = response;
+
+      let dataExpiracao = moment(response[0].expirationDate).format('YYYY-MM-DD')
+
+      this.formPrecoEspecial.controls['dataExpiracao'].setValue(dataExpiracao);
+
+      for (var i = 0; i < response.length; i++) {
+
+        if (response[i].typeService.id == 1) {
+
+          this.formPrecoEspecial.controls['valorPresencial'].setValue(response[i].value);
+
+          var checkbox = document.querySelector("#presencial");
+          function ativarCheckbox(el) {
+            el.checked = true;
+          }
+          ativarCheckbox(checkbox);
+
+        } else if (response[i].typeService.id == 2) {
+
+          this.formPrecoEspecial.controls['valorVideo'].setValue(response[i].value);
+
+          var checkbox = document.querySelector("#video");
+          function ativarCheckbox(el) {
+            el.checked = true;
+          }
+          ativarCheckbox(checkbox);
+
+        } else if (response[i].typeService.id == 3) {
+
+          this.formPrecoEspecial.controls['valorEmergencial'].setValue(response[i].value);
+
+          var checkbox = document.querySelector("#emergencial");
+          function ativarCheckbox(el) {
+            el.checked = true;
+          }
+          ativarCheckbox(checkbox);
+
+        } else if (response[i].typeService.id == 4) {
+
+          this.formPrecoEspecial.controls['valorCasa'].setValue(response[i].value);
+
+          var checkbox = document.querySelector("#casa");
+          function ativarCheckbox(el) {
+            el.checked = true;
+          }
+          ativarCheckbox(checkbox);
+
+        } else if (response[i].typeService.id == 5) {
+
+          this.formPrecoEspecial.controls['valorVideoChamada'].setValue(response[i].value);
+
+          var checkbox = document.querySelector("#videoChamada");
+          function ativarCheckbox(el) {
+            el.checked = true;
+          }
+          ativarCheckbox(checkbox);
+
+        }
+
+      }
+
+    }
+
+  }, (error) => {
+    this.fetchData(false)
+    if (error == undefined) {
+
+      this.formPrecoEspecial.controls['valorEmergencial'].setValue(null);
+
+      var checkbox = document.querySelector("#emergencial");
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    if (error == undefined) {
+      this.formPrecoEspecial.controls['valorVideo'].setValue(null);
+      var checkbox = document.querySelector("#video");
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    if (error == undefined) {
+      this.formPrecoEspecial.controls['valorPresencial'].setValue(null);
+      var checkbox = document.querySelector("#presencial");
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    if (error == undefined) {
+      this.formPrecoEspecial.controls['valorCasa'].setValue(null);
+      var checkbox = document.querySelector("#casa");
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+    if (error == undefined) {
+      this.formPrecoEspecial.controls['valorVideoChamada'].setValue(null);
+      var checkbox = document.querySelector("#videoChamada");
+      function ativarCheckbox(el) {
+        el.checked = false;
+      }
+      ativarCheckbox(checkbox);
+    }
+
+  });
+} else {
+  this.fetchData(false)
+}
+}
+
 
   previousPage() {
     this.router.navigate(['/pages/gestao-paciente/paciente'])

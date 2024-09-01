@@ -12,6 +12,10 @@ export class PrecoEspecialService {
     return this.httpService.doPost('/api/doctor/price/exclusive', data, successHandle, errorHandle);
   }
 
+  updatePriceExclusive(data: any, successHandle: Function, errorHandle: Function) {
+    return this.httpService.doPost('/api/doctor/price/exclusive', data, successHandle, errorHandle);
+  }
+
   buscaValor(data:any, successHandle: Function, erroHandle: Function){
     return this.httpService.doGet('/api/doctor/price/exclusive', data, successHandle, erroHandle)
   }
