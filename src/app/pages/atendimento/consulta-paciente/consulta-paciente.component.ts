@@ -2031,6 +2031,19 @@ ctx = this.heightZChartCanvas.nativeElement.getContext('2d');
             this.isSaving = false;
             this.fetchData(false);
             return false;
+        }else
+        if(this.emitirNotaFiscalFlag==null){
+            this.toastrService.warning('Por Favor Informe se deve ser Emitido a Nota Fiscal','Aditi Care!');
+            this.isSaving = false;
+            this.fetchData(false)
+            return false;
+
+        }        if(this.isretorno==null){
+            this.toastrService.warning('Por Favor Informe se deve ser Agendado o Retorno','Aditi Care!');
+            this.isSaving = false;
+            this.fetchData(false)
+            return false;
+
         }
     
         else{

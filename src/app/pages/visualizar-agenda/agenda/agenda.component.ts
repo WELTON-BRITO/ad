@@ -237,7 +237,7 @@ export class AgendaComponent implements OnInit {
 
     var time = new Date();
     var outraData = new Date();
-    outraData.setDate(time.getDate() + 90);
+    outraData.setDate(time.getDate() + 180);
     this.FinalDate = moment(outraData).format('YYYY-MM-DD')
 
     var outraData2 = new Date();
