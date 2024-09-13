@@ -117,7 +117,6 @@ export class CadastroWebComponent implements OnInit {
           token: function (token: any) {
             // You can access the token ID with `token.id`.
             // Get the token ID to your server-side code for use.
-            console.log(token)
             alert('Payment Success!!');
           }
         });
@@ -136,7 +135,6 @@ export class CadastroWebComponent implements OnInit {
       token: function (token: any) {
         // You can access the token ID with `token.id`.
         // Get the token ID to your server-side code for use.
-        console.log(token)
         alert('Token Created!!');
       }
     });

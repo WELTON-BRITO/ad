@@ -192,7 +192,7 @@ export class PacienteComponent implements OnInit {
 
       }, (error) => {
         this.isActive = false;
-        this.toastrService.danger(error.error.message);
+        this.toastrService.danger(error.error.message,'Aditi Care');
         this.fetchData(false)
 
       });

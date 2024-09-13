@@ -445,13 +445,12 @@ export class AgendaComponent implements OnInit {
               dados: evento,
               isConfirmed: evento.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado',
               patchPaciente: 'googleCalendar',
+              telefone: this.formatPhoneNumber(evento.userPhone),
               color: color
             };
           });
 
           allData = this.calendarEvents;
-
-          console.log("calendario "+this.calendarEvents)
 
 
           this.fetchData(false)
@@ -514,10 +513,29 @@ export class AgendaComponent implements OnInit {
 
       }
       this.fetchData(false)
-    }
-    console.log("calendario "+this.calendarEvents)
-   // this.verificaHorario()
+    }   // this.verificaHorario()
   }
+
+  formatPhoneNumber(phoneNumber: string): string {
+    // Remove todos os caracteres não numéricos
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+
+    // Verifica se o número tem 11 dígitos (com o nono dígito)
+    const match = cleaned.match(/^(\d{2})(\d{5})(\d{4})$/);
+
+    if (match) {
+        return `(${match[1]}) ${match[2]}-${match[3]}`;
+    }
+
+    // Verifica se o número tem 10 dígitos (sem o nono dígito)
+    const matchOldFormat = cleaned.match(/^(\d{2})(\d{4})(\d{4})$/);
+
+    if (matchOldFormat) {
+        return `(${matchOldFormat[1]}) ${matchOldFormat[2]}-${matchOldFormat[3]}`;
+    }
+
+    return phoneNumber; // Retorna o número original se não corresponder aos formatos esperados
+}
 
   isMobile() {
     const userAgent = navigator.userAgent.toLowerCase();
@@ -579,8 +597,6 @@ verificaHorario() {
 
       this.isActive = false;
       this.fetchData(false);
-
-      console.log('agenda efetiva: ' + JSON.stringify(this.horariosPorDia));
 
       // Gerar eventos de bloqueio
       this.generateAndAddEvents();
@@ -680,15 +696,11 @@ verificaHorario() {
           dados: evento,
           isConfirmed: evento.isConfirmed ? 'Horário Confirmado' : 'Horário Não Confirmado',
           patchPaciente: 'googleCalendar',
+          telefone: evento.userPhone,
           color: color
       });
   });
-
-  console.log(this.calendarEvents); // Verifica se os eventos foram adicionados
 }
-
-
-
 
   validaCampo(data) {
     

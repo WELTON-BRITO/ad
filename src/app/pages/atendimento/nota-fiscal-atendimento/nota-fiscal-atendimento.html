@@ -74,12 +74,14 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                   <label for="cidade">Cidade*</label>
-                                  <select class="form-control" formControlName="cidade">
+                                  <select class="form-control" id="cidade" formControlName="cidade" (change)="updateCidadeInfo()">
                                     <option value="null" selected>SELECIONE</option>
-                                    <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{
-                                      cidade.description}}</option>
+                                    <option *ngFor="let cidade of listCidade" value="{{ cidade.id }}">{{ cidade.description }}</option>
                                   </select>
+                                  <input type="hidden" id="cidadeId" name="cidadeId" />
+                                  <input type="hidden" id="cidadeDescription" name="cidadeDescription" />
                                 </div>
+                                
                               </div>
                               <div class="form-row align-items-center">
                                 <h6 class="p-1">Contato</h6>
@@ -88,7 +90,7 @@
                                 <div class="form-group col-md-4">
                                   <label for="celular">Celular*</label>
                                   <input class="form-control" name="celular" id="celular" type="text" formControlName="celular"
-                                         mask="(00) 0 0000-0000 || (00) 0000-0000" />
+                                  mask="(00) 0 0000-0000" />
                                 </div>
                                 <div class="form-group col-md-4">
                                   <label for="email">E-mail*</label>

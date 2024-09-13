@@ -7,6 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 import { environment } from "../../../../../environments/environment";
 import { Router } from '@angular/router';
 import { delay } from "rxjs-compat/operator/delay";
+import { error } from "console";
 
 
 @Injectable()
@@ -45,8 +46,6 @@ export class HttpService {
             this.loadingBarService.complete();
           }
           else if (parseInt(err.status) == 500 ||parseInt(err.status) == 401 ) {
-            console.log("aqui1"+ err)
-            console.log("aqui1"+ err.message)
             {
              setTimeout(() => {
                  this.router.navigate(['/login']);
@@ -76,36 +75,47 @@ export class HttpService {
     }
   }
   private getErrorMessage(err: any): any {
-    console.log("Erro xxxx:", err);
 
-    if (parseInt(err.status) >= 400 && parseInt(err.status) < 500) {
-        if (parseInt(err.status) == 401) {
-            setTimeout(() => {
-                this.router.navigate(['/login']);
-            }, 3000); // 3000 milissegundos = 3 segundos
-        } else if (parseInt(err.status) == 200) {
-            return { message: "Realizar a operação.", status: err.status };
-        } else if (parseInt(err.status) >= 500) {
-            return { message: "Não foi possível realizar a operação.", status: err.status };
-        } else if (parseInt(err.status) == 500) {
-            console.log("Erro 500:", err);
-            console.log("Mensagem de erro:", err.message);
-            setTimeout(() => {
-                this.router.navigate(['/login']);
-            }, 3000); // 3000 milissegundos = 3 segundos
-        } else if (err.error.errors && err.error.errors.length > 0) {
-            let errMessage = "";
-            if (err.error.errors[0].simpleUserMessage) {
-                errMessage = err.error.errors[0].simpleUserMessage;
-            } else if (err.error.errors[0].userMessage) {
-                errMessage = err.error.errors[0].userMessage;
-            } else {
-                errMessage = err.error.errors[0].technicalMessage;
-            }
-            return { message: errMessage, status: err.status };
-        }
-    } else {
-        return { message: 'Erro não verificado.', status: err.status };
+    if (parseInt(err.status) >= 400 && parseInt(err.status) <= 500) {
+      if (parseInt(err.status) == 401) {
+          setTimeout(() => {
+              this.router.navigate(['/login']);
+          }, 3000); // 3000 milissegundos = 3 segundos
+      } else if (parseInt(err.status) == 200) {
+          return { message: "Realizar a operação.", status: err.status };
+      } else if (parseInt(err.status) == 500 && err.error.message === 'Invalid token') {
+
+        let errMessage = {  message: err.error.message  };
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+      }, 3000); // 3000 milissegundos = 3 segundos
+
+        return { error: errMessage, status: err.status };
+
+      } else if (err.error.errors && err.error.errors.length > 0) {
+          let errMessage = "";
+          if (err.error.errors[0].simpleUserMessage) {
+              errMessage = err.error.errors[0].simpleUserMessage;
+          } else if (err.error.errors[0].userMessage) {
+              errMessage = err.error.errors[0].userMessage;
+          } else {
+              errMessage = err.error.errors[0].technicalMessage;
+          }
+          return { message: errMessage, status: err.status };
+      }
+  } else {
+
+      let errMessage = "";
+      if (err.error.errors[0].simpleUserMessage) {
+          errMessage = err.error.errors[0].simpleUserMessage;
+      } else if (err.error.errors[0].userMessage) {
+          errMessage = err.error.errors[0].userMessage;
+      } else {
+          errMessage = err.error.errors[0].technicalMessage;
+      }
+      return { message: errMessage, status: err.status }
+        //return { message: 'Erro não verificado.', status: err.status };
     }
 }
 
@@ -192,23 +202,18 @@ export class HttpService {
 
     let url = this.urlBase + path;
     if (params == null) params = {};
-
-    console.log("Iniciando requisição...");
-
     this.http.get(url, { params, observe: "response" }).subscribe(
         (response: any) => {
             this.loadingBarService.complete();
             if (response.status === 200 && response.body) {
                 successHandle(response.body);
             } else {
-                console.log("Erro na resposta:", response);
                 const errorMessage = this.getErrorMessage(response);
                 errorHandle(errorMessage);
             }
         },
         (error: any) => {
             this.loadingBarService.complete();
-            console.log("Erro na requisição:", error);
             const errorMessage = this.getErrorMessage(error);
             errorHandle(errorMessage);
         }

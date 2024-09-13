@@ -47,7 +47,7 @@ export class notaFiscalComponent {
     ngOnInit() {
 
         let data = history.state
-
+console.log(data)
 
         if (data && data.atendimento && data.atendimento.userId != null) {
             this.userid = data.atendimento.userId;
@@ -77,8 +77,14 @@ export class notaFiscalComponent {
             email: [null],
             celular: [null],
             complemento: [null],
-          })      
-    }
+            cidadeDescription: [null],
+            cidadeId: [null],
+          })  
+           
+          if (data && data.atendimento && data.atendimento.userFederalId) {
+            this.pesquisaGeral(data.atendimento.userFederalId);
+          }
+              }
 
     fetchData(data) {
         if(data){
@@ -92,6 +98,49 @@ export class notaFiscalComponent {
     }
     }
 
+
+    pesquisaGeral(data) {
+      this.fetchData(true);
+    
+      let params = new HttpParams();
+      params = params.append('federalId', data);
+    
+      this.isActive = true;
+    
+      this.service.buscaPaciente(params, data, (response) => {
+        // Verifique se a resposta é um objeto
+        if (response && typeof response === 'object') {
+          const allData = {
+            nameCity: response.city,
+            ufName: response.uf,
+            cep: response.zipCode,
+            rua: response.street,
+            bairro: response.neighborhood,
+            numero: response.number,
+            complemento: response.complement
+          };
+    
+          this.formNovoPaciente.get('bairro').setValue(allData.bairro); // Clear the value
+          this.formNovoPaciente.get('complemento').setValue(allData.complemento); // Clear the value
+          this.formNovoPaciente.get('numero').setValue(allData.numero); // Clear the value
+          this.formNovoPaciente.get('endereco').setValue(allData.rua); // Clear the value
+          this.formNovoPaciente.get('cep').setValue(allData.cep); // Clear the value
+          this.formNovoPaciente.get('cidadeId').setValue(allData.nameCity.id); // Clear the value
+          this.formNovoPaciente.get('cidadeDescription').setValue(allData.nameCity.description); // Clear the value     
+
+          console.log("aaaa "+ this.formNovoPaciente)
+        } else {
+          console.error('A resposta não é um objeto:', response);
+        }
+    
+        this.fetchData(false);
+      }, (error) => {
+        this.isActive = false;
+        this.toastrService.danger(error.error.message, 'Aditi Care');
+        this.fetchData(false);
+      });
+    }
+    
     
 
     ValidateRegister(data) {
@@ -115,6 +164,14 @@ export class notaFiscalComponent {
             this.formNovoPaciente.get('nome').setValue(this.validate.name); // Clear the value
             this.formNovoPaciente.get('email').setValue(this.validate.email); // Clear the value
             this.formNovoPaciente.get('celular').setValue(this.validate.phone); // Clear the value
+            this.formNovoPaciente.get('bairro').setValue(this.validate.neighborhood); // Clear the value
+            this.formNovoPaciente.get('complemento').setValue(this.validate.complement); // Clear the value
+            this.formNovoPaciente.get('numero').setValue(this.validate.number); // Clear the value
+            this.formNovoPaciente.get('endereco').setValue(this.validate.street); // Clear the value
+            this.formNovoPaciente.get('cep').setValue(this.validate.zipCode); // Clear the value
+            this.formNovoPaciente.get('cidadeId').setValue(this.validate.city); // Clear the value
+            this.formNovoPaciente.get('cidadeDescription').setValue(this.validate.codeCity); // Clear the value       
+
           }
     
           this.fetchData(false)
@@ -190,11 +247,36 @@ export class notaFiscalComponent {
         return true
     }
 
+    formatName(name: string): string {
+      return name.split(' ')
+                 .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                 .join(' ');
+  }
+
+   updateCidadeInfo() {
+
+    const select = document.getElementById('cidade') as HTMLSelectElement;
+    const selectedOption = select.options[select.selectedIndex];
+    const cidadeId = selectedOption.value;
+    const cidadeDescription = selectedOption.text;
+  
+    this.formNovoPaciente.get('cidadeId').setValue(cidadeId); // Clear the value
+    this.formNovoPaciente.get('cidadeDescription').setValue(cidadeDescription); // Clear the value
+
+
+  }
+  
+  
+
     CadastrarNota(data) {
 
         this.fetchData(true)
 
         if(this.validaCampos(data)){
+
+          const trimOrEmpty = (value) => (value ? value.trim() : '');
+
+          console.log(data)
 
             let register = 
             {
@@ -202,7 +284,17 @@ export class notaFiscalComponent {
               "federalId": data.cpf,
               "name": data.nome.trim(),
               "phone": data.celular.trim(),
-              "email": data.email.trim()
+              "email": data.email.trim(),
+              "city":data.cidadeDescription,
+              "codeCity": data.cidade,
+              "ufId": data.estado,
+              "zipCode": data.cep,
+              "street":this.formatName(this.capitalizeWords(trimOrEmpty(data.endereco))), 
+              "neighborhood":this.formatName(this.capitalizeWords(trimOrEmpty(data.bairro))),
+              "number": data.numero,
+              "complement": data.complemento,
+              "country": "BRASIL",
+              "codeCountry": "1058",
             }
 
 
@@ -242,13 +334,20 @@ export class notaFiscalComponent {
 
     }
     }
+    
 
     this.fetchData(false)
 
         
     }
 
-
+    capitalizeWords(name: string | null | undefined): string {
+      if (!name) {
+          return ''; // Retorna uma string vazia se o valor for null ou undefined
+      }
+      return name.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+    }
+  
 
     previousPage() {
 

@@ -638,7 +638,6 @@ if(data.medico ==null || data.medico ==""){
 
   detalhes(data) {
 
-    console.log(data.atendimento)
     this.router.navigateByUrl('/pages/atendimento/detalhe-atendimento', { state: data.atendimento });
   }
 
@@ -660,9 +659,7 @@ if(data.medico ==null || data.medico ==""){
       rowData: data.atendimento
     }]
 
-    console.log("aqui mano!")
 
-    console.log(data.atendimento)
  
     this.router.navigateByUrl('/pages/atendimento/consulta-paciente', { state: this.rowData });
   }

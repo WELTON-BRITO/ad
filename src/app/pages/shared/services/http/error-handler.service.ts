@@ -12,7 +12,6 @@ export class ErrorHandlerService implements ErrorHandler {
         if (error instanceof HttpErrorResponse) {
             // Tratar erros de requisição HTTP
 
-            console.log("ai ai "+error)
             if (error.status === 401) {
                 // Redirecionar para a página de login
                 router.navigate(['/login']);

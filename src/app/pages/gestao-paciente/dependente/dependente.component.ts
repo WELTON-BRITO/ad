@@ -138,7 +138,6 @@ export class DependenteComponent implements OnDestroy {
   
         this.isActive = false;
         this.rowData = response
-        console.log("aqui"+ this.rowData)
         this.rowData = this.rowData.map(data => {
           return {
             name: data.name || null,
@@ -223,7 +222,6 @@ export class DependenteComponent implements OnDestroy {
   }
 
   buscaAgenda(data){
-    console.log(data)
     this.router.navigateByUrl('/pages/gestao-paciente/visualizar-AgendaHistorico', { state: data });
 
   }

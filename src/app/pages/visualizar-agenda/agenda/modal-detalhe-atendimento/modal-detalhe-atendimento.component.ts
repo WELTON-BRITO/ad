@@ -43,6 +43,7 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
     nameMother: null,
     nameFather: null,
     isConfirmed: null,
+    telefone: null,
   };
   public isActive = false;
 
@@ -88,6 +89,8 @@ export class ModalDetalheAtendimentoComponent implements OnInit {
       this.atendimento.nameFather = this.dados._def.extendedProps.nameFather,
       this.atendimento.nomeResponsavel = this.dados._def.extendedProps.responsavel;
       this.atendimento.isConfirmed = this.dados._def.extendedProps.isConfirmed;
+      this.atendimento.telefone = this.dados._def.extendedProps.telefone;
+
 
   }
 
