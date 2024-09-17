@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { dA } from '@fullcalendar/core/internal-common';
 
 
+
 declare var $: any;
 @Component({
     selector: 'ngx-consulta-paciente',
@@ -69,6 +70,7 @@ declare var $: any;
     public doctorId = null;
     public agendado = false;
     public zScores = null;
+    public safeUrl = null;
     public avatar = "assets/images/avatar.png";
     public chartInstance = null;
     public notaFiscal = true;
@@ -119,6 +121,7 @@ declare var $: any;
         findhistorico: null,
         emitirNotaFiscal:null,
         isReturn: null,
+        urlCall: null,
             };
     public anexoAtestado = null;
     public anexoReceita = null;
@@ -127,6 +130,7 @@ declare var $: any;
     public startDate = new Date();
     public historico = null;
     public emitirNotaFiscalFlag = true;
+
 
     
     constructor(private formBuilder: FormBuilder,
@@ -174,6 +178,7 @@ declare var $: any;
             prescricao:null,
             pedido:null,
             isReturn: null,
+            urlCall: null,
         })
 
          var data = history.state
@@ -190,14 +195,18 @@ declare var $: any;
               const parsedData = JSON.parse(allData);
               this.atendimento = parsedData;
 
+              this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.atendimento.urlCall);
+      
               this.dataNascimento = this.atendimento.dateNasc;    
+
               this.sexo =  this.atendimento.sexo === 'M' ? 'male' : 'female' ?? 'male';
             }
 
     }else if(data[0].tela =='atendimento' && data[0].rowData.userName!=null){
 
 
-        this.dataNascimento = data[0].rowData.childBirthDate ?? data[0].rowData.BirthDate ?? '2024-01-01'; // to-do incluir campo de aniversario do usuario no retorno
+        this.dataNascimento = data[0].rowData.childBirthDate ?? data[0].rowData.userBirthDate ?? '2024-01-01'; // to-do incluir campo de aniversario do usuario no retorno
+
         const idadePessoa = this.calcularIdade(this.dataNascimento) ?? null;
 
         this.sexo = data[0].rowData.childBiologicalSex === 'M' ? 'male' : 'female' ?? 'male';
@@ -237,9 +246,12 @@ declare var $: any;
           emitirNotaFiscal:null,
           isReturn: data[0].rowData.isReturn
       };
+
            
       this.atendimento = allData;
 
+      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.atendimento.urlCall);
+      
       this.atendimento.status = data[0].rowData.status?? null;
   
       this.saveData('detalhesData', allData);
@@ -250,13 +262,50 @@ declare var $: any;
     }
 
     this.GetTemplates();
+    
+    if(this.atendimento.idChild !=null){
     this.getHistoricoChart()
-
+    }
     
 
     }
 
+    calcularIdadeEmSemanas(data: string): number {
+        const hoje = new Date();
+        let dataNascimento: Date;
+    
+        if (data.includes('-')) {
+            // Formato "2024-08-21"
+            dataNascimento = new Date(data);
+        } else if (data.includes('Nasceu em')) {
+            // Formato "Nasceu em 2024, e Tem 0 anos 3 Meses e 29 Dias de Vida"
+            const partes = data.match(/(\d+) anos (\d+) Meses e (\d+) Dias/);
+            if (partes) {
+                const anos = parseInt(partes[1], 10);
+                const meses = parseInt(partes[2], 10);
+                const dias = parseInt(partes[3], 10);
+    
+                dataNascimento = new Date(
+                    hoje.getFullYear() - anos,
+                    hoje.getMonth() - meses,
+                    hoje.getDate() - dias
+                );
+            } else {
+                throw new Error('Formato de data inválido');
+            }
+        } else {
+            throw new Error('Formato de data inválido');
+        }
+    
+        const diff = hoje.getTime() - dataNascimento.getTime();
+        const idadeEmSemanas = Math.floor(diff / (1000 * 60 * 60 * 24 * 7));
+    
+        return idadeEmSemanas;
+    }
+    
+
     calcularIdadeEmMeses(data: string): number {
+
         const hoje = new Date();
         let dataNascimento: Date;
     
@@ -428,15 +477,22 @@ declare var $: any;
 
             this.chartZ=true;
             
+            if(meses<=3){  // calculo para 13 semanas
+
+             meses = this.calcularIdadeEmSemanas(this.dataNascimento)
 
 
-            if(meses>60){
+                this.createHeightChart(sexo, meses, data.altura, 'Altura');
+                this.createHeightChart(sexo, meses, data.peso, 'Peso');
+                this.createChartCabeca(sexo, meses, data.circCabeca,data.peso, 'Circunferencia');
+
+            }else if(meses>60){ // calcula para 5 anos
 
                 this.createHeightChartPlus(sexo, meses, data.altura, 'Altura');
                 this.createHeightChartPlus(sexo, meses, data.peso, 'Peso');
                // this.createChartCabeca(sexo, meses, data.circCabeca,data.peso, 'Circunferencia');
 
-            }else{
+            }else{ // calculo para 2 anos
             
             this.createHeightChart(sexo, meses, data.altura, 'Altura');
             this.createHeightChart(sexo, meses, data.peso, 'Peso');
@@ -596,6 +652,7 @@ declare var $: any;
     
     createChartCabeca(gender, currentAgeInMonths,altura,peso,type) {
 
+        var v_periodo ='Idade (meses)';
         const totalMonths = currentAgeInMonths + 4; // Ajustado para 24 meses
 
         var medias = null;
@@ -620,7 +677,44 @@ declare var $: any;
                 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8, 1.8
             ]
         };
+
+        if(currentAgeInMonths<=13)
+            {
+                this.zScores = {
+                    male: {
+                    height: {
+                        '-3':[30.7,31.5,32.4,33,33.6,34.1,34.6,35,35.4,35.7,36.1,36.4,36.7,37],
+                        '-2':[31.9,32.7,33.5,34.2,34.8,35.3,35.7,36.1,36.5,36.9,37.2,37.5,37.9,38.1],
+                        '-1':[33.2,33.9,34.7,35.4,35.9,36.4,36.9,37.3,37.7,38.1,38.4,38.7,39,39.3],
+                        '0':[34.5,35.2,35.9,36.5,37.1,37.6,38.1,38.5,38.9,39.2,39.6,39.9,40.2,40.5],
+                        '1':[35.7,36.4,37,37.7,38.3,38.8,39.2,39.7,40,40.4,40.8,41.1,41.4,41.7],
+                        '2':[37,37.6,38.2,38.9,39.4,39.9,40.4,40.8,41.2,41.6,41.9,42.3,42.6,42.9],
+                        '3':[38.3,38.8,39.4,40,40.6,41.1,41.6,42,42.4,42.8,43.1,43.4,43.7,44]
+    
+                ,
+                    weight: [8, 9, 10] // Exemplo de z-scores de peso para meninos
+                },
+                    female: {
+                    height: {
+                        '-3': [30.3,31.1,31.8,32.4,32.9,33.3,33.7,34.1,34.4,34.7,35,35.3,35.5,35.8],
+                        '-2': [31.5,32.2,32.9,33.5,34,34.5,34.9,35.3,35.6,35.9,36.2,36.5,36.8,37],
+                        '-1': [32.7,33.4,34.1,34.7,35.2,35.7,36.1,36.5,36.8,37.1,37.4,37.7,38,38.3],
+                        '0': [33.9,34.6,35.2,35.8,36.4,36.8,37.3,37.7,38,38.4,38.7,39,39.3,39.5],
+                        '1': [35.1,35.7,36.4,37,37.5,38,38.5,38.9,39.2,39.6,39.9,40.2,40.5,40.8],
+                        '2': [36.2,36.9,37.5,38.2,38.7,39.2,39.6,40.1,40.4,40.8,41.1,41.4,41.7,42],
+                        '3': [37.4,38.1,38.7,39.3,39.9,40.4,40.8,41.3,41.6,42,42.3,42.7,43,43.2],
+    
+                    weight: [8, 9, 10] // Exemplo de z-scores de peso para meninos
+                }
+            }
+        }
         
+          }
+
+          v_periodo ='Idade (Semanas)';
+
+            }    
+        else{
 
         this.zScores = {
                 male: {
@@ -652,6 +746,8 @@ declare var $: any;
     }
     
       }
+
+    }
 
  ctx = this.circunferenciaCanvas.nativeElement.getContext('2d');
 
@@ -752,7 +848,7 @@ if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Idade (meses)'
+                            labelString: v_periodo
                         }
                     }]
                 }
@@ -1028,6 +1124,8 @@ if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
 
         const totalMonths = currentAgeInMonths + 4; // Ajustado para 24 meses
 
+        var v_periodo ='Idade (meses)';
+
         // Inicializa o array de dados com null
        const data = Array(totalMonths).fill(null);
 
@@ -1055,36 +1153,72 @@ if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
             ]
         };
 
-        this.zScores = {
-            male: {
-                height: {
-                    '-3': [2.1,2.9,3.8,4.4,4.9,5.3,5.7,5.9,6.2,6.4,6.6,6.8,6.9,7.1,7.2,7.4,7.5,7.7,7.8,8,8.1,8.2,8.4,8.5,8.6,8.8,8.9,9,9.1,9.2,9.4,9.5,9.6,9.7,9.8,9.9,10,10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8,10.9,11,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8,11.9,12,12.1,12.2,12.3,12.4],
-                    '-2': [2.5,3.4,4.3,5,5.6,6,6.4,6.7,6.9,7.1,7.4,7.6,7.7,7.9,8.1,8.3,8.4,8.6,8.8,8.9,9.1,9.2,9.4,9.5,9.7,9.8,10,10.1,10.2,10.4,10.5,10.7,10.8,10.9,11,11.2,11.3,11.4,11.5,11.6,11.8,11.9,12,12.1,12.2,12.4,12.5,12.6,12.7,12.8,12.9,13.1,13.2,13.3,13.4,13.5,13.6,13.7,13.8,14,14.1],
-                    '-1': [2.9,3.9,4.9,5.7,6.2,6.7,7.1,7.4,7.7,8,8.2,8.4,8.6,8.8,9,9.2,9.4,9.6,9.8,10,10.1,10.3,10.5,10.7,10.8,11,11.2,11.3,11.5,11.7,11.8,12,12.1,12.3,12.4,12.6,12.7,12.9,13,13.1,13.3,13.4,13.6,13.7,13.8,14,14.1,14.3,14.4,14.5,14.7,14.8,15,15.1,15.2,15.4,15.5,15.6,15.8,15.9,16],
-                    '0': [3.3,4.5,5.6,6.4,7,7.5,7.9,8.3,8.6,8.9,9.2,9.4,9.6,9.9,10.1,10.3,10.5,10.7,10.9,11.1,11.3,11.5,11.8,12,12.2,12.4,12.5,12.7,12.9,13.1,13.3,13.5,13.7,13.8,14,14.2,14.3,14.5,14.7,14.8,15,15.2,15.3,15.5,15.7,15.8,16,16.2,16.3,16.5,16.7,16.8,17,17.2,17.3,17.5,17.7,17.8,18,18.2,18.3],
-                    '1': [3.9,5.1,6.3,7.2,7.8,8.4,8.8,9.2,9.6,9.9,10.2,10.5,10.8,11,11.3,11.5,11.7,12,12.2,12.5,12.7,12.9,13.2,13.4,13.6,13.9,14.1,14.3,14.5,14.8,15,15.2,15.4,15.6,15.8,16,16.2,16.4,16.6,16.8,17,17.2,17.4,17.6,17.8,18,18.2,18.4,18.6,18.8,19,19.2,19.4,19.6,19.8,20,20.2,20.4,20.6,20.8,21],
-                    '2': [4.4,5.8,7.1,8,8.7,9.3,9.8,10.3,10.7,11,11.4,11.7,12,12.3,12.6,12.8,13.1,13.4,13.7,13.9,14.2,14.5,14.7,15,15.3,15.5,15.8,16.1,16.3,16.6,16.9,17.1,17.4,17.6,17.8,18.1,18.3,18.6,18.8,19,19.3,19.5,19.7,20,20.2,20.5,20.7,20.9,21.2,21.4,21.7,21.9,22.2,22.4,22.7,22.9,23.2,23.4,23.7,23.9,24.2] ,
-                    '3': [5,6.6,8,9,9.7,10.4,10.9,11.4,11.9,12.3,12.7,13,13.3,13.7,14,14.3,14.6,14.9,15.3,15.6,15.9,16.2,16.5,16.8,17.1,17.5,17.8,18.1,18.4,18.7,19,19.3,19.6,19.9,20.2,20.4,20.7,21,21.3,21.6,21.9,22.1,22.4,22.7,23,23.3,23.6,23.9,24.2,24.5,24.8,25.1,25.4,25.7,26,26.3,26.6,26.9,27.2,27.6,27.9] ,
-        },
-                weight: [8, 9, 10] // Exemplo de z-scores de peso para meninos
+        if(currentAgeInMonths<=13)
+        {
+
+            this.zScores = {
+                male: {
+                    height: {
+                        '-3': [2.1,2.2,2.4,2.6,2.9,3.1,3.3,3.5,3.7,3.8,4,4.2,4.3,4.4],
+                        '-2': [2.5,2.6,2.8,3.1,3.3,3.5,3.8,4,4.2,4.4,4.5,4.7,4.9,5],
+                        '-1': [2.9,3,3.2,3.5,3.8,4.1,4.3,4.6,4.8,5,5.2,5.3,5.5,5.7],
+                        '0': [3.3,3.5,3.8,4.1,4.4,4.7,4.9,5.2,5.4,5.6,5.8,6,6.2,6.4],
+                        '1': [3.9,4,4.3,4.7,5,5.3,5.6,5.9,6.1,6.4,6.6,6.8,7,7.2],
+                        '2': [4.4,4.6,4.9,5.3,5.7,6,6.3,6.6,6.9,7.2,7.4,7.6,7.8,8] ,
+                        '3': [5,5.3,5.6,6,6.4,6.8,7.2,7.5,7.8,8,8.3,8.5,8.8,9] ,
             },
-                female: {
-                    '-3': [2,2.7,3.4,4,4.4,4.8,5.1,5.3,5.6,5.8,5.9,6.1,6.3,6.4,6.6,6.7,6.9,7,7.2,7.3,7.5,7.6,7.8,7.9,8.1,8.2,8.4,8.5,8.6,8.8,8.9,9,9.1,9.3,9.4,9.5,9.6,9.7,9.8,9.9,10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8,10.9,11,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8,11.9,12,12.1],
-                    '-2': [2.4,3.2,3.9,4.5,5,5.4,5.7,6,6.3,6.5,6.7,6.9,7,7.2,7.4,7.6,7.7,7.9,8.1,8.2,8.4,8.6,8.7,8.9,9,9.2,9.4,9.5,9.7,9.8,10,10.1,10.3,10.4,10.5,10.7,10.8,10.9,11.1,11.2,11.3,11.5,11.6,11.7,11.8,12,12.1,12.2,12.3,12.4,12.6,12.7,12.8,12.9,13,13.2,13.3,13.4,13.5,13.6,13.7],
-                    '-1': [2.8,3.6,4.5,5.2,5.7,6.1,6.5,6.8,7,7.3,7.5,7.7,7.9,8.1,8.3,8.5,8.7,8.9,9.1,9.2,9.4,9.6,9.8,10,10.2,10.3,10.5,10.7,10.9,11.1,11.2,11.4,11.6,11.7,11.9,12,12.2,12.4,12.5,12.7,12.8,13,13.1,13.3,13.4,13.6,13.7,13.9,14,14.2,14.3,14.5,14.6,14.8,14.9,15.1,15.2,15.3,15.5,15.6,15.8],
-                    '0': [3.2,4.2,5.1,5.8,6.4,6.9,7.3,7.6,7.9,8.2,8.5,8.7,8.9,9.2,9.4,9.6,9.8,10,10.2,10.4,10.6,10.9,11.1,11.3,11.5,11.7,11.9,12.1,12.3,12.5,12.7,12.9,13.1,13.3,13.5,13.7,13.9,14,14.2,14.4,14.6,14.8,15,15.2,15.3,15.5,15.7,15.9,16.1,16.3,16.4,16.6,16.8,17,17.2,17.3,17.5,17.7,17.9,18,18.2],
-                    '1': [3.7,4.8,5.8,6.6,7.3,7.8,8.2,8.6,9,9.3,9.6,9.9,10.1,10.4,10.6,10.9,11.1,11.4,11.6,11.8,12.1,12.3,12.5,12.8,13,13.3,13.5,13.7,14,14.2,14.4,14.7,14.9,15.1,15.4,15.6,15.8,16,16.3,16.5,16.7,16.9,17.2,17.4,17.6,17.8,18.1,18.3,18.5,18.8,19,19.2,19.4,19.7,19.9,20.1,20.3,20.6,20.8,21,21.2],
-                    '2': [4.2,5.5,6.6,7.5,8.2,8.8,9.3,9.8,10.2,10.5,10.9,11.2,11.5,11.8,12.1,12.4,12.6,12.9,13.2,13.5,13.7,14,14.3,14.6,14.8,15.1,15.4,15.7,16,16.2,16.5,16.8,17.1,17.3,17.6,17.9,18.1,18.4,18.7,19,19.2,19.5,19.8,20.1,20.4,20.7,20.9,21.2,21.5,21.8,22.1,22.4,22.6,22.9,23.2,23.5,23.8,24.1,24.4,24.6,24.9] ,
-                    '3': [4.8,6.2,7.5,8.5,9.3,10,10.6,11.1,11.6,12,12.4,12.8,13.1,13.5,13.8,14.1,14.5,14.8,15.1,15.4,15.7,16,16.4,16.7,17,17.3,17.7,18,18.3,18.7,19,19.3,19.6,20,20.3,20.6,20.9,21.3,21.6,22,22.3,22.7,23,23.4,23.7,24.1,24.5,24.8,25.2,25.5,25.9,26.3,26.6,27,27.4,27.7,28.1,28.5,28.8,29.2,29.5] ,
-        },   weight: [7, 8, 9] // Exemplo de z-scores de peso para meninas
-            
-        };
+                    weight: [8, 9, 10] // Exemplo de z-scores de peso para meninos
+                },
+                    female: {
+                        '-3': [2,2.1,2.3,2.5,2.7,2.9,3,3.2,3.3,3.5,3.6,3.8,3.9,4],
+                        '-2': [2.4,2.5,2.7,2.9,3.1,3.3,3.5,3.7,3.8,4,4.1,4.3,4.4,4.5],
+                        '-1': [2.8,2.9,3.1,3.3,3.6,3.8,4,4.2,4.4,4.6,4.7,4.9,5,5.1],
+                        '0': [3.2,3.3,3.6,3.8,4.1,4.3,4.6,4.8,5,5.2,5.4,5.5,5.7,5.8],
+                        '1': [3.7,3.9,4.1,4.4,4.7,5,5.2,5.5,5.7,5.9,6.1,6.3,6.5,6.6],
+                        '2': [4.2,4.4,4.7,5,5.4,5.7,6,6.2,6.5,6.7,6.9,7.1,7.3,7.5] ,
+                        '3': [4.8,5.1,5.4,5.7,6.1,6.5,6.8,7.1,7.3,7.6,7.8,8.1,8.3,8.5] ,
+            },   weight: [7, 8, 9] // Exemplo de z-scores de peso para meninas
+                
+            };
+
+            v_periodo ='Idade (Semanas)';
+
+        }else{
+
+            this.zScores = {
+                male: {
+                    height: {
+                        '-3': [2.1,2.9,3.8,4.4,4.9,5.3,5.7,5.9,6.2,6.4,6.6,6.8,6.9,7.1,7.2,7.4,7.5,7.7,7.8,8,8.1,8.2,8.4,8.5,8.6,8.8,8.9,9,9.1,9.2,9.4,9.5,9.6,9.7,9.8,9.9,10,10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8,10.9,11,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8,11.9,12,12.1,12.2,12.3,12.4],
+                        '-2': [2.5,3.4,4.3,5,5.6,6,6.4,6.7,6.9,7.1,7.4,7.6,7.7,7.9,8.1,8.3,8.4,8.6,8.8,8.9,9.1,9.2,9.4,9.5,9.7,9.8,10,10.1,10.2,10.4,10.5,10.7,10.8,10.9,11,11.2,11.3,11.4,11.5,11.6,11.8,11.9,12,12.1,12.2,12.4,12.5,12.6,12.7,12.8,12.9,13.1,13.2,13.3,13.4,13.5,13.6,13.7,13.8,14,14.1],
+                        '-1': [2.9,3.9,4.9,5.7,6.2,6.7,7.1,7.4,7.7,8,8.2,8.4,8.6,8.8,9,9.2,9.4,9.6,9.8,10,10.1,10.3,10.5,10.7,10.8,11,11.2,11.3,11.5,11.7,11.8,12,12.1,12.3,12.4,12.6,12.7,12.9,13,13.1,13.3,13.4,13.6,13.7,13.8,14,14.1,14.3,14.4,14.5,14.7,14.8,15,15.1,15.2,15.4,15.5,15.6,15.8,15.9,16],
+                        '0': [3.3,4.5,5.6,6.4,7,7.5,7.9,8.3,8.6,8.9,9.2,9.4,9.6,9.9,10.1,10.3,10.5,10.7,10.9,11.1,11.3,11.5,11.8,12,12.2,12.4,12.5,12.7,12.9,13.1,13.3,13.5,13.7,13.8,14,14.2,14.3,14.5,14.7,14.8,15,15.2,15.3,15.5,15.7,15.8,16,16.2,16.3,16.5,16.7,16.8,17,17.2,17.3,17.5,17.7,17.8,18,18.2,18.3],
+                        '1': [3.9,5.1,6.3,7.2,7.8,8.4,8.8,9.2,9.6,9.9,10.2,10.5,10.8,11,11.3,11.5,11.7,12,12.2,12.5,12.7,12.9,13.2,13.4,13.6,13.9,14.1,14.3,14.5,14.8,15,15.2,15.4,15.6,15.8,16,16.2,16.4,16.6,16.8,17,17.2,17.4,17.6,17.8,18,18.2,18.4,18.6,18.8,19,19.2,19.4,19.6,19.8,20,20.2,20.4,20.6,20.8,21],
+                        '2': [4.4,5.8,7.1,8,8.7,9.3,9.8,10.3,10.7,11,11.4,11.7,12,12.3,12.6,12.8,13.1,13.4,13.7,13.9,14.2,14.5,14.7,15,15.3,15.5,15.8,16.1,16.3,16.6,16.9,17.1,17.4,17.6,17.8,18.1,18.3,18.6,18.8,19,19.3,19.5,19.7,20,20.2,20.5,20.7,20.9,21.2,21.4,21.7,21.9,22.2,22.4,22.7,22.9,23.2,23.4,23.7,23.9,24.2] ,
+                        '3': [5,6.6,8,9,9.7,10.4,10.9,11.4,11.9,12.3,12.7,13,13.3,13.7,14,14.3,14.6,14.9,15.3,15.6,15.9,16.2,16.5,16.8,17.1,17.5,17.8,18.1,18.4,18.7,19,19.3,19.6,19.9,20.2,20.4,20.7,21,21.3,21.6,21.9,22.1,22.4,22.7,23,23.3,23.6,23.9,24.2,24.5,24.8,25.1,25.4,25.7,26,26.3,26.6,26.9,27.2,27.6,27.9] ,
+            },
+                    weight: [8, 9, 10] // Exemplo de z-scores de peso para meninos
+                },
+                    female: {
+                        '-3': [2,2.7,3.4,4,4.4,4.8,5.1,5.3,5.6,5.8,5.9,6.1,6.3,6.4,6.6,6.7,6.9,7,7.2,7.3,7.5,7.6,7.8,7.9,8.1,8.2,8.4,8.5,8.6,8.8,8.9,9,9.1,9.3,9.4,9.5,9.6,9.7,9.8,9.9,10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8,10.9,11,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8,11.9,12,12.1],
+                        '-2': [2.4,3.2,3.9,4.5,5,5.4,5.7,6,6.3,6.5,6.7,6.9,7,7.2,7.4,7.6,7.7,7.9,8.1,8.2,8.4,8.6,8.7,8.9,9,9.2,9.4,9.5,9.7,9.8,10,10.1,10.3,10.4,10.5,10.7,10.8,10.9,11.1,11.2,11.3,11.5,11.6,11.7,11.8,12,12.1,12.2,12.3,12.4,12.6,12.7,12.8,12.9,13,13.2,13.3,13.4,13.5,13.6,13.7],
+                        '-1': [2.8,3.6,4.5,5.2,5.7,6.1,6.5,6.8,7,7.3,7.5,7.7,7.9,8.1,8.3,8.5,8.7,8.9,9.1,9.2,9.4,9.6,9.8,10,10.2,10.3,10.5,10.7,10.9,11.1,11.2,11.4,11.6,11.7,11.9,12,12.2,12.4,12.5,12.7,12.8,13,13.1,13.3,13.4,13.6,13.7,13.9,14,14.2,14.3,14.5,14.6,14.8,14.9,15.1,15.2,15.3,15.5,15.6,15.8],
+                        '0': [3.2,4.2,5.1,5.8,6.4,6.9,7.3,7.6,7.9,8.2,8.5,8.7,8.9,9.2,9.4,9.6,9.8,10,10.2,10.4,10.6,10.9,11.1,11.3,11.5,11.7,11.9,12.1,12.3,12.5,12.7,12.9,13.1,13.3,13.5,13.7,13.9,14,14.2,14.4,14.6,14.8,15,15.2,15.3,15.5,15.7,15.9,16.1,16.3,16.4,16.6,16.8,17,17.2,17.3,17.5,17.7,17.9,18,18.2],
+                        '1': [3.7,4.8,5.8,6.6,7.3,7.8,8.2,8.6,9,9.3,9.6,9.9,10.1,10.4,10.6,10.9,11.1,11.4,11.6,11.8,12.1,12.3,12.5,12.8,13,13.3,13.5,13.7,14,14.2,14.4,14.7,14.9,15.1,15.4,15.6,15.8,16,16.3,16.5,16.7,16.9,17.2,17.4,17.6,17.8,18.1,18.3,18.5,18.8,19,19.2,19.4,19.7,19.9,20.1,20.3,20.6,20.8,21,21.2],
+                        '2': [4.2,5.5,6.6,7.5,8.2,8.8,9.3,9.8,10.2,10.5,10.9,11.2,11.5,11.8,12.1,12.4,12.6,12.9,13.2,13.5,13.7,14,14.3,14.6,14.8,15.1,15.4,15.7,16,16.2,16.5,16.8,17.1,17.3,17.6,17.9,18.1,18.4,18.7,19,19.2,19.5,19.8,20.1,20.4,20.7,20.9,21.2,21.5,21.8,22.1,22.4,22.6,22.9,23.2,23.5,23.8,24.1,24.4,24.6,24.9] ,
+                        '3': [4.8,6.2,7.5,8.5,9.3,10,10.6,11.1,11.6,12,12.4,12.8,13.1,13.5,13.8,14.1,14.5,14.8,15.1,15.4,15.7,16,16.4,16.7,17,17.3,17.7,18,18.3,18.7,19,19.3,19.6,20,20.3,20.6,20.9,21.3,21.6,22,22.3,22.7,23,23.4,23.7,24.1,24.5,24.8,25.2,25.5,25.9,26.3,26.6,27,27.4,27.7,28.1,28.5,28.8,29.2,29.5] ,
+            },   weight: [7, 8, 9] // Exemplo de z-scores de peso para meninas
+                
+            };
+
+        }
+
+
 
         ctx = this.weightZChartCanvas.nativeElement.getContext('2d');
 
 
        // Inicializa o array de dados com null
-      
+
        // Adiciona o ponto atual
        data[currentAgeInMonths - 1] = altura;
        
@@ -1124,6 +1258,38 @@ if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
             ]
         };
 
+        if(currentAgeInMonths<=13)
+            {
+    
+                this.zScores = {
+                    male: {
+                        height: {
+                            '-3': [44.2,45.4,46.6,47.6,48.6,49.5,50.3,51.1,51.9,52.6,53.3,54,54.7,55.3],
+                            '-2': [46.1,47.3,48.5,49.5,50.5,51.4,52.3,53.1,53.9,54.6,55.4,56,56.7,57.3],
+                            '-1': [48,49.2,50.4,51.5,52.4,53.4,54.3,55.1,55.9,56.6,57.4,58.1,58.7,59.4],
+                            '0': [49.9,51.1,52.3,53.4,54.4,55.3,56.2,57.1,57.9,58.7,59.4,60.1,60.8,61.4],
+                            '1': [51.8,53,54.3,55.3,56.3,57.3,58.2,59.1,59.9,60.7,61.4,62.1,62.8,63.4],
+                            '2': [53.7,54.9,56.2,57.2,58.3,59.2,60.2,61,61.9,62.7,63.4,64.1,64.8,65.5] ,
+                            '3': [55.6,56.8,58.1,59.2,60.2,61.2,62.1,63,63.9,64.7,65.4,66.2,66.9,67.5] ,
+                },
+                        weight: [8, 9, 10] // Exemplo de z-scores de peso para meninos
+                    },  
+                        female: {
+                            '-3': [43.6,44.7,45.8,46.7,47.5,48.3,49.1,49.8,50.5,51.2,51.8,52.4,52.9,53.5],
+                            '-2': [45.4,46.6,47.7,48.6,49.5,50.3,51.1,51.8,52.5,53.2,53.8,54.4,55,55.6],
+                            '-1': [47.3,48.4,49.6,50.5,51.4,52.3,53.1,53.8,54.6,55.2,55.9,56.5,57.1,57.7],
+                            '0': [49.1,50.3,51.5,52.5,53.4,54.2,55.1,55.8,56.6,57.3,57.9,58.6,59.2,59.8],
+                            '1': [51,52.2,53.4,54.4,55.3,56.2,57.1,57.8,58.6,59.3,60,60.7,61.3,61.9],
+                            '2': [52.9,54.1,55.3,56.3,57.3,58.2,59,59.9,60.6,61.4,62.1,62.7,63.4,64] ,
+                            '3': [54.7,56,57.2,58.2,59.2,60.1,61,61.9,62.6,63.4,64.1,64.8,65.5,66.1] ,
+                },   weight: [7, 8, 9] // Exemplo de z-scores de peso para meninas
+                    
+                };
+    
+                v_periodo ='Idade (Semanas)';
+    
+            }else{
+
         this.zScores = {
                 male: {
                 height: {
@@ -1152,6 +1318,7 @@ if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
     }
     
 }
+            }
  ctx = this.heightZChartCanvas.nativeElement.getContext('2d');
 
       
@@ -1244,7 +1411,7 @@ if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
                       display: true,
                       scaleLabel: {
                           display: true,
-                          labelString: 'Idade (meses)'
+                          labelString: v_periodo
                       }
                   }]
               }
@@ -2533,8 +2700,11 @@ validar_valor(data){
 
                 const alturaInput = data.controls.altura.value.toString();
                 const pesoInput = data.controls.peso.value.toString();
-                const idadeMeses = this.calcularIdadeEmMeses(this.dataNascimento)
+                const idadeMeses = this.calcularIdadeEmMeses(this.dataNascimento);
 
+                if (idadeMeses === null || isNaN(idadeMeses)) {
+                    this.toastrService.warning(' Não foi possível calcular a idade ou o valor está nulo.', 'Aditi Care!');
+                }
         
                 // Substitua vírgulas por pontos
                 const altura = parseFloat(alturaInput.replace(/,/g, '.'));
@@ -2589,21 +2759,32 @@ validar_valor(data){
         
 
         
-calcularIdade(dataNascimento: string){
-    const hoje = new Date();
-    const nascimento = new Date(dataNascimento);
+        calcularIdade(dataNascimento: string) {
 
-    const diff = hoje.getTime() - nascimento.getTime();
-    const idade = new Date(diff);
-
-    const anos = idade.getUTCFullYear() - 1970;
-    const meses = idade.getUTCMonth();
-    const dias = idade.getUTCDate() - 1;
-
-    const dataCompleta = `Nasceu em ${nascimento.getFullYear()}, e Tem ${anos} anos ${meses} Meses e ${dias} Dias de Vida.`;
-
-    return dataCompleta;
-}
-
+            const hoje = new Date();
+            const nascimento = new Date(dataNascimento);
+        
+            let anos = hoje.getFullYear() - nascimento.getFullYear();
+            let meses = hoje.getMonth() - nascimento.getMonth();
+            let dias = hoje.getDate() - nascimento.getDate();
+        
+            // Ajustar os meses e anos se necessário
+            if (meses < 0 || (meses === 0 && dias < 0)) {
+                anos--;
+                meses += 12;
+            }
+        
+            // Ajustar os dias se necessário
+            if (dias < 0) {
+                const ultimoDiaMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
+                dias += ultimoDiaMesAnterior;
+                meses--;
+            }
+        
+            const dataCompleta = `Nasceu em ${nascimento.getFullYear()}, e Tem ${anos} anos ${meses} Meses e ${dias} Dias de Vida.`;
+        
+            return dataCompleta;
+        }
+        
 
 }

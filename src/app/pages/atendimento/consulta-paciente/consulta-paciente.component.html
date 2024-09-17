@@ -112,6 +112,19 @@
                 
                 <div *ngIf="isDetalhes">
                     <form id="form-consulta-paciente" [formGroup]="formConsultaPaciente">
+
+                      <nb-card *ngIf="atendimento.modalidade === 'Consulta por Video Chamada' || atendimento.modalidade === 'Consulta por Video Chamada Emergencial'">
+                        <nb-card-body>
+                          <div class="form-group col-md-12 d-flex justify-content-between align-items-center input-medica">
+                            <label><h6>Tele Atendimento:</h6></label>
+                          </div>
+                          <div *ngIf="safeUrl">
+                            <iframe [src]="safeUrl" width="100%" height="500px" frameborder="0" allow="camera; microphone" allowfullscreen></iframe>
+                          </div>
+                        </nb-card-body>
+                      </nb-card>
+                      
+                      
                         <nb-card>
 
                             <nb-card-body>
@@ -191,7 +204,9 @@
                                     
                             </nb-card-body>
                         </nb-card>
-                        <nb-card>
+
+                        
+                        <nb-card *ngIf="atendimento.especialidade === 'Pediatria'">
                           <nb-card-body>
                             <div class="form-group col-md-12 d-flex justify-content-between align-items-center input-medica">
                               <label><h6>Gráficos de Evolução:</h6></label>
@@ -200,16 +215,16 @@
                               </button>
                             </div>
                             <div id="grafico">
-                                <canvas #heightZChartCanvas id="canvas" class="half-width" style="margin-bottom: 5px;"></canvas>
-                                <canvas #weightZChartCanvas id="peso" class="half-width" style="margin-top: 5px;"></canvas>      
-                                <canvas #circunferenciaCanvas id="circunferencia" class="half-width" style="margin-top: 5px;"></canvas>
-                                <canvas #heightChartCanvas id="canvas" class="half-width" style="margin-bottom: 5px;"></canvas>
-                                <canvas #weightChartCanvas id="peso" class="half-width" style="margin-top: 5px;"></canvas>
-                                <canvas #pesoChartCanvas id="pesoChartCanvas" class="half-width" style="margin-top: 5px;"></canvas>
+                              <canvas #heightZChartCanvas id="canvas" class="half-width" style="margin-bottom: 5px;"></canvas>
+                              <canvas #weightZChartCanvas id="peso" class="half-width" style="margin-top: 5px;"></canvas>      
+                              <canvas #circunferenciaCanvas id="circunferencia" class="half-width" style="margin-top: 5px;"></canvas>
+                              <canvas #heightChartCanvas id="canvas" class="half-width" style="margin-bottom: 5px;"></canvas>
+                              <canvas #weightChartCanvas id="peso" class="half-width" style="margin-top: 5px;"></canvas>
+                              <canvas #pesoChartCanvas id="pesoChartCanvas" class="half-width" style="margin-top: 5px;"></canvas>
                             </div>
-
                           </nb-card-body>
                         </nb-card>
+                        
                         
                         <nb-card>
                             <nb-card-body>

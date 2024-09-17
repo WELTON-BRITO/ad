@@ -97,7 +97,8 @@ export class DetalheAtendimentoComponent implements OnInit {
         this.patchPaciente= true;
       }
 
-      const dataNascimento = data.childBirthDate ?? data.user?.birthDate ?? '20240101';
+      const dataNascimento = data.childBirthDate ?? data.userBirthDate ?? '2023-01-01';
+
       const idadePessoa = this.calcularIdade(dataNascimento) ?? null;
    
       let allData = {
