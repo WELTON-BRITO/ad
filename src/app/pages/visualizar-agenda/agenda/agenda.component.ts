@@ -374,7 +374,19 @@ export class AgendaComponent implements OnInit {
     this.fetchData(true)
 
     let params = new HttpParams();
-    let clinica = localStorage.getItem('bway-entityId');
+// Obtém o item do local storage
+    let clinicaData = localStorage.getItem('bway-clinica');
+
+if (clinicaData) {
+    // Parseia o JSON para um objeto
+
+    let clinicaArray = JSON.parse(clinicaData);
+
+    // Verifica se o array não está vazio e captura o id da primeira clínica
+    if (clinicaArray.length > 0) {
+        clinicaData = clinicaArray[0].id;
+    } 
+} 
 
     if (localStorage.getItem('googleData') === null || checked == true || localStorage.getItem('googleData') === '') {
       localStorage.removeItem('googleData');
@@ -382,7 +394,7 @@ export class AgendaComponent implements OnInit {
       params = params.append('startDate', data.dataInicio)
       params = params.append('endDate', data.dataFim)
       params = params.append('statusIds', this.DefaultStatus);
-      params = params.append('clinicId', clinica)
+      params = params.append('clinicId', clinicaData)
 
       this.isActive = true
 
