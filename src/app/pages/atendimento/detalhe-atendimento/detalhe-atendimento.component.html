@@ -86,10 +86,11 @@
           <nb-icon class="action-icon" icon="attach-outline"></nb-icon>
           <span>Ver Comprovante</span>
         </button>
-        <button *ngIf="atendimento.status === '03 - Consulta Confirmada' || atendimento.status === '04 - Consulta Finalizada'" (click)="abrirConsulta()" class="action-button">
+        <button *ngIf="(atendimento.status === '03 - Consulta Confirmada' || atendimento.status === '04 - Consulta Finalizada') && typeAcess !== 'CLINIC'" (click)="abrirConsulta()" class="action-button">
           <nb-icon class="action-icon" icon="file-outline"></nb-icon>
           <span>Atualizar Prontuário</span>
         </button>
+        
       </div>
     </nb-card-body>
   </nb-card>

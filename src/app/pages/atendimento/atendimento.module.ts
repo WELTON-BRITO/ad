@@ -21,6 +21,8 @@ import { bloquearAtendimentoComponent } from "./bloquear-atendimento/bloquear-at
 import { reagendarAtendimentoComponent } from "./reagendar/reagendar-atendimento.component";
 import { AnteciparAtendimentoComponent } from "./antecipar-atendimento/antecipar-atendimento.component";
 import { notaFiscalComponent } from "./nota-fiscal-atendimento/nota-fiscal-atendimento";
+import { TriagemComponent} from "./triagem/triagem";
+
 
 
 
@@ -62,6 +64,7 @@ import { notaFiscalComponent } from "./nota-fiscal-atendimento/nota-fiscal-atend
     reagendarAtendimentoComponent,
     AnteciparAtendimentoComponent,
     notaFiscalComponent,
+    TriagemComponent,
   ],  
 })
 export class AtendimentoModule { }

@@ -450,6 +450,12 @@ export class BuscarAtendimentoComponent implements OnInit {
     this.router.navigate(['/pages/atendimento/nota-fiscal-atendimento'], { state: data });
 
   }
+
+  triagem(data) {
+
+    this.router.navigate(['/pages/atendimento/triagem'], { state: data });
+
+  }
   
   formatPhoneNumber(phoneNumber: string): string {
     // Remove todos os caracteres não numéricos

@@ -133,8 +133,11 @@
                   <p class="mr-3 mb-2">
                     <i class="fa fa-wifi text-success"></i> Iniciar Atendimento
                   </p>
-                  <p class="mr-3 mb-2">
+               <!--   <p class="mr-3 mb-2">
                     <i class="fa fa-video text-danger"></i> Iniciar Video Atendimento
+                  </p>-->
+                  <p class="mr-3 mb-2">
+                    <i class="fa fa-stethoscope text-warning"></i> Registrar Triagem
                   </p>
                   <p class="mr-3 mb-2">
                     <i class="fa fa-key text-warning"></i> Desbloquear Horário
@@ -218,10 +221,17 @@
                           *ngIf="row && row.atendimento && row.atendimento.status === '03 - Consulta Confirmada'" title="Iniciar Atendimento">
                           <i class="fa fa-wifi"></i>
                         </button>
+                        <!--
                         <button style="margin: 0 15px;"  class="btn btn-danger mb-2" (click)="videoAtendimento(row)"
                           *ngIf="row && row.atendimento.meetingUrl !== null" title="Inicio Video Atendimento">
                           <i class="fa fa-video"></i>
                         </button>
+                        -->
+                        <button style="margin: 0 15px;" class="btn btn-danger mb-2" (click)="triagem(row)"
+                        *ngIf="row && row.atendimento && row.atendimento.status === '03 - Consulta Confirmada'" title="Realizar Triagem">
+                    <i class="fa fa-stethoscope"></i>
+                </button>
+                
                         <button style="margin: 0 15px;" class="btn btn-warning mb-2" (click)="desbloquear(row)"
                         *ngIf="row.nomeResponsavel === 'Bloqueado' && row.status !== '04 - Consulta Finalizada'" title="Desbloquear Horário">
                         <i class="fa fa-key"></i>

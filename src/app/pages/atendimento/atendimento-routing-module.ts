@@ -12,6 +12,7 @@ import { bloquearAtendimentoComponent } from "./bloquear-atendimento/bloquear-at
 import { reagendarAtendimentoComponent } from "./reagendar/reagendar-atendimento.component";
 import { AnteciparAtendimentoComponent } from "./antecipar-atendimento/antecipar-atendimento.component";
 import { notaFiscalComponent } from "./nota-fiscal-atendimento/nota-fiscal-atendimento";
+import { TriagemComponent} from "./triagem/triagem";
 
 
 const routes: Routes = [{
@@ -58,6 +59,10 @@ const routes: Routes = [{
     {
       path: 'nota-fiscal-atendimento',
       component: notaFiscalComponent,
+    },
+    {
+      path: 'triagem',
+      component: TriagemComponent,
     }
   ],
 

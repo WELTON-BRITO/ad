@@ -47,7 +47,6 @@ export class notaFiscalComponent {
     ngOnInit() {
 
         let data = history.state
-console.log(data)
 
         if (data && data.atendimento && data.atendimento.userId != null) {
             this.userid = data.atendimento.userId;
@@ -128,7 +127,6 @@ console.log(data)
           this.formNovoPaciente.get('cidadeId').setValue(allData.nameCity.id); // Clear the value
           this.formNovoPaciente.get('cidadeDescription').setValue(allData.nameCity.description); // Clear the value     
 
-          console.log("aaaa "+ this.formNovoPaciente)
         } else {
           console.error('A resposta não é um objeto:', response);
         }
@@ -275,9 +273,6 @@ console.log(data)
         if(this.validaCampos(data)){
 
           const trimOrEmpty = (value) => (value ? value.trim() : '');
-
-          console.log(data)
-
             let register = 
             {
               "userId": this.userid,

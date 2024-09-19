@@ -1,3 +1,12 @@
+<script>
+  window.addEventListener('message', (event) => {
+    const dadosRecebidos = event.data;
+    Object.keys(dadosRecebidos).forEach(key => {
+      localStorage.setItem(key, dadosRecebidos[key]);
+    });
+  });
+</script>
+
 <div class="loader" *ngIf="isLoader"></div>
 
 <div class="container-fluid">
@@ -98,10 +107,10 @@
                 <nb-card class="custom-card">
                   <nb-card-body>
                     <div class="card-actions">
-                      <button (click)="consultaHistorico(true)" class="action-button" [ngClass]="{'action-button-active': iconeAtivo === 'historico'}">
+                      <button *ngIf="typeAcess !== 'CLINIC'" (click)="consultaHistorico(true)" class="action-button" [ngClass]="{'action-button-active': iconeAtivo === 'historico'}">
                         <nb-icon class="action-icon" icon="file-text-outline" style="color: white;"></nb-icon>
                         <span>Consultar Histórico</span>
-                      </button>
+                      </button>                      
                       <button *ngIf="atendimento.status === '03 - Consulta Confirmada' && !checkedConsulta" (click)="detalhesConsulta()" class="action-button" [ngClass]="{'action-button-active': iconeAtivo === 'atendimento'}">
                         <nb-icon class="action-icon" icon="wifi-outline" style="color: white;"></nb-icon>
                         <span>Atendimento</span>
@@ -549,6 +558,18 @@
 
                             </nb-card-body>
                         </nb-card>
+
+                        <nb-card *ngIf="isretorno">
+                          <nb-card-body>
+                            <div class="form-group col-md-12 d-flex justify-content-between align-items-center input-medica">
+                              <label><h6>Agenda de Atendimento:</h6></label>
+                            </div>
+                            <iframe [src]="urlCalendario" width="100%" height="500px" frameborder="0" allow="camera; microphone" allowfullscreen></iframe>
+                          </nb-card-body>
+                        </nb-card>
+                        
+                        
+                        
 
                         <nb-card>
                           <nb-card-body>

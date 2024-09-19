@@ -1,0 +1,83 @@
+<div class="loader" *ngIf="isLoader"></div>
+<div class="container-fluid">
+  <nb-card>
+    <nb-card-header class="aditi-header">
+      <div class="back-link">
+        <a class="m-lg-n3" (click)="previousPage()" aria-label="back">
+          <nb-icon icon="arrow-back" title="voltar"></nb-icon>
+        </a>
+      </div>
+      <h5>Triagem de Atendimento</h5>
+    </nb-card-header>
+  </nb-card>
+
+
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="dialog-body">
+                <nb-card>
+                    <nb-card-body>
+                          <form id="formNovoPaciente" [formGroup]="formNovoPaciente">
+                            <div class="col-md-12 col-xs-12 align-items-center">
+                              <div class="form-row align-items-center">
+                                  <h6 class="p-1">Dados de Triagem Médica:</h6>
+                              </div>
+                              <div class="form-row align-items-center">
+                                  <div class="form-group col-md-6">
+                                      <label for="nome">Nome*</label>
+                                      <input class="form-control" name="nome" id="nome" type="text" formControlName="nome" />
+                                  </div>
+                                  <div class="form-group col-md-6">
+                                      <label for="CPF">CPF*</label>
+                                      <input class="form-control" name="cpf" id="cpf" type="text" formControlName="cpf" value="cpf"
+                                          mask="000.000.000-00"  />
+                                  </div>
+                              </div>
+                              <div class="form-row align-items-center">
+                                  <div class="form-group col-md-4">
+                                      <label for="pressao">Pressão</label>
+                                      <input class="form-control" name="pressao" id="pressao" type="text" formControlName="pressao" />
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label for="frequencia">Frequência Cardíaca</label>
+                                      <input class="form-control" name="frequencia" id="frequencia" type="number" step="0.1" formControlName="frequencia" />
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label for="temperatura">Temperatura</label>
+                                      <input class="form-control" name="temperatura" id="temperatura" type="number" step="0.1" formControlName="temperatura" />
+                                  </div>
+                              </div>
+                              <div class="form-row align-items-center">
+                                  <div class="form-group col-md-8">
+                                      <label for="sintomas">Sintomas</label>
+                                      <textarea class="form-control" name="sintomas" id="sintomas" formControlName="sintomas"></textarea>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                    <label for="classificacao">Classificação de Risco</label>
+                                    <select class="form-control" name="classificacao" id="classificacao" formControlName="classificacao">
+                                        <option value="">Selecione</option>
+                                        <option value="baixo">Baixo</option>
+                                        <option value="moderado">Moderado</option>
+                                        <option value="alto">Alto</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                              <div class="form-row">
+                                  <div class="form-group col-md-12 text-right">
+                                      <button type="button" id="cadastrar" class="btn btn-success btn-sm"
+                                          (click)="registrar(formNovoPaciente.value)">Registrar</button>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                            
+                          
+
+                          </form>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

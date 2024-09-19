@@ -74,7 +74,9 @@ declare var $: any;
     public avatar = "assets/images/avatar.png";
     public chartInstance = null;
     public notaFiscal = true;
+    public urlCalendario = this.sanitizer.bypassSecurityTrustResourceUrl ("https://aditihealth.com.br/#/pages/visualizar-agenda/agenda");
     public listChatHistory = null;
+    public typeAcess = null;
     public tipoCardEncaixe: any[] = [{
         id: '',
         horaInicio: '',
@@ -122,6 +124,7 @@ declare var $: any;
         emitirNotaFiscal:null,
         isReturn: null,
         urlCall: null,
+        encaixe: null,
             };
     public anexoAtestado = null;
     public anexoReceita = null;
@@ -142,6 +145,9 @@ declare var $: any;
 
     ngOnDestroy() { }
     ngOnInit() {
+
+        this.typeAcess = localStorage.getItem('bway-domain');
+
 
         this.startDate.setFullYear(this.startDate.getFullYear() - 5);
 
@@ -179,11 +185,22 @@ declare var $: any;
             pedido:null,
             isReturn: null,
             urlCall: null,
+            encaixe: null,
         })
 
          var data = history.state
 
          this.historico = data;
+
+         window.onload = () => {
+            const iframe = document.querySelector('iframe');
+            const keys = ['Authorization', 'bway-domain', 'bway-medico'];
+            const dados = this.getLocalStorageItems(keys);
+      
+            if (iframe && dados) {
+              iframe.contentWindow.postMessage(dados, '*');
+            }
+          };
 
 
         if(localStorage.getItem('detalhesData')!==null){
@@ -244,7 +261,8 @@ declare var $: any;
           avatar: data[0].rowData.avatarChild ?? data[0].rowData.avatar ?? this.avatar,
           findhistorico: false,
           emitirNotaFiscal:null,
-          isReturn: data[0].rowData.isReturn
+          isReturn: data[0].rowData.isReturn,
+          encaixe: null,
       };
 
            
@@ -267,9 +285,17 @@ declare var $: any;
     this.getHistoricoChart()
     }
     
-
     }
 
+    getLocalStorageItems(keys: string[]): { [key: string]: any } {
+        const items: { [key: string]: any } = {};
+        keys.forEach(key => {
+          items[key] = localStorage.getItem(key);
+        });
+        return items;
+      }
+
+    
     calcularIdadeEmSemanas(data: string): number {
         const hoje = new Date();
         let dataNascimento: Date;

@@ -50,6 +50,7 @@ export class DetalheAtendimentoComponent implements OnInit {
   public listTipoConsulta = [];
   public patchPaciente:  boolean = false;
   public isLoader: boolean = false;
+  public typeAcess = null;
  
 
   settings = {
@@ -87,6 +88,9 @@ export class DetalheAtendimentoComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.typeAcess = localStorage.getItem('bway-domain');
+
     let data = history.state
     
     if(localStorage.getItem('detalhesData')==null){
