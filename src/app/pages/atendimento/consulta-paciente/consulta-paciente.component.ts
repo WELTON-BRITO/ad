@@ -804,82 +804,83 @@ if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
 
 //        const data = Array(totalMonths).fill(null).map((_, i) => (i === currentAgeInMonths - 1 ? altura : null));
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: totalMonths }, (_, i) => i + 1),
-                datasets: [
-                    {
-                        label: 'Z-score -3',
-                        data: this.zScores[gender].height['-3'],
-                        borderColor: '#ff1000',
-                        fill: false
-                    },
-                    {
-                        label: 'Z-score -2',
-                        data: this.zScores[gender].height['-2'],
-                        borderColor: '#ff0000',
-                        fill: false
-                    },
-                    {
-                        label: 'Z-score -1',
-                        data: this.zScores[gender].height['-1'],
-                        borderColor: '#ff8000',
-                        fill: false
-                    },
-                    {
-                        label: 'Z-score 0',
-                        data: this.zScores[gender].height['0'],
-                        borderColor: '#ffff00',
-                        fill: false
-                    },
-                    {
-                        label: 'Z-score 1',
-                        data: this.zScores[gender].height['1'],
-                        borderColor: '#80ff00',
-                        fill: false
-                    },
-                    {
-                        label: 'Z-score 2',
-                        data: this.zScores[gender].height['2'],
-                        borderColor: '#00ff00',
-                        fill: false
-                    },
-                    {
-                        label: 'Z-score 3',
-                        data: this.zScores[gender].height['3'],
-                        borderColor: '#00ffff',
-                        fill: false
-                    },
-                    {
-                        label: type,
-                        data: data,
-                        borderColor: '#0000ff',
-                        fill: false,
-                        borderDash: [5, 5],
-                        pointBackgroundColor: '#0000ff',
-                        pointBorderColor: '#0000ff',
-                        pointRadius: 5
-                    }
-                ]
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: Array.from({ length: totalMonths }, (_, i) => i + 1),
+        datasets: [
+            {
+                label: 'Z-score -3',
+                data: this.zScores[gender].height['-3'],
+                borderColor: '#FF0000', // Vermelho
+                fill: false
             },
-            options: {
-                responsive: true,
-                title: {
-                    display: true,
-                    text: type
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: v_periodo
-                        }
-                    }]
-                }
+            {
+                label: 'Z-score -2',
+                data: this.zScores[gender].height['-2'],
+                borderColor: '#FF7F00', // Laranja
+                fill: false
+            },
+            {
+                label: 'Z-score -1',
+                data: this.zScores[gender].height['-1'],
+                borderColor: '#FFFF00', // Amarelo
+                fill: false
+            },
+            {
+                label: 'Z-score 0',
+                data: this.zScores[gender].height['0'],
+                borderColor: '#00FF00', // Verde
+                fill: false
+            },
+            {
+                label: 'Z-score 1',
+                data: this.zScores[gender].height['1'],
+                borderColor: '#00FFFF', // Ciano
+                fill: false
+            },
+            {
+                label: 'Z-score 2',
+                data: this.zScores[gender].height['2'],
+                borderColor: '#0000FF', // Azul
+                fill: false
+            },
+            {
+                label: 'Z-score 3',
+                data: this.zScores[gender].height['3'],
+                borderColor: '#8B00FF', // Roxo
+                fill: false
+            },
+            {
+                label: type,
+                data: data,
+                borderColor: '#000000', // Preto
+                fill: false,
+                borderDash: [5, 5],
+                pointBackgroundColor: '#000000',
+                pointBorderColor: '#000000',
+                pointRadius: 5
             }
-        });
+        ]
+    },
+    options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: type
+        },
+        scales: {
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: v_periodo
+                }
+            }]
+        }
+    }
+});
+
     
 }
 
@@ -1368,82 +1369,82 @@ if (this.listChatHistory && Array.isArray(this.listChatHistory)) {
       
       
       new Chart(ctx, {
-          type: 'line',
-          data: {
-              labels: Array.from({ length: totalMonths }, (_, i) => i + 1),
-              datasets: [
+        type: 'line',
+        data: {
+            labels: Array.from({ length: totalMonths }, (_, i) => i + 1),
+            datasets: [
                 {
                     label: 'Z-score -3',
                     data: this.zScores[gender].height['-3'],
-                    borderColor: '#ff0020',
+                    borderColor: '#FF0000', // Vermelho
                     fill: false
                 },
-                  {
-                      label: 'Z-score -2',
-                      data: this.zScores[gender].height['-2'],
-                      borderColor: '#ff0000',
-                      fill: false
-                  },
-                  {
-                      label: 'Z-score -1',
-                      data: this.zScores[gender].height['-1'],
-                      borderColor: '#ff8000',
-                      fill: false
-                  },
-                  {
-                      label: 'Z-score 0',
-                      data: this.zScores[gender].height['0'],
-                      borderColor: '#ffff00',
-                      fill: false
-                  },
-                  {
-                      label: 'Z-score 1',
-                      data: this.zScores[gender].height['1'],
-                      borderColor: '#80ff00',
-                      fill: false
-                  },
-                  {
-                      label: 'Z-score 2',
-                      data: this.zScores[gender].height['2'],
-                      borderColor: '#00ff00',
-                      fill: false
-                  },
-                  {
+                {
+                    label: 'Z-score -2',
+                    data: this.zScores[gender].height['-2'],
+                    borderColor: '#FF7F00', // Laranja
+                    fill: false
+                },
+                {
+                    label: 'Z-score -1',
+                    data: this.zScores[gender].height['-1'],
+                    borderColor: '#FFFF00', // Amarelo
+                    fill: false
+                },
+                {
+                    label: 'Z-score 0',
+                    data: this.zScores[gender].height['0'],
+                    borderColor: '#00FF00', // Verde
+                    fill: false
+                },
+                {
+                    label: 'Z-score 1',
+                    data: this.zScores[gender].height['1'],
+                    borderColor: '#00FFFF', // Ciano
+                    fill: false
+                },
+                {
+                    label: 'Z-score 2',
+                    data: this.zScores[gender].height['2'],
+                    borderColor: '#0000FF', // Azul
+                    fill: false
+                },
+                {
                     label: 'Z-score 3',
                     data: this.zScores[gender].height['3'],
-                    borderColor: '#00ff04',
+                    borderColor: '#8B00FF', // Roxo
                     fill: false
                 },
-                  {
-                      label: type,
-                      data: data,
-                      borderColor: '#0000ff',
-                      fill: false,
-                      borderDash: [5, 5],
-                      pointBackgroundColor: '#0000ff',
-                      pointBorderColor: '#0000ff',
-                      pointRadius: 5
-                  }
-              ]
-          },
-          options: {
-              responsive: true,
-              title: {
-                  display: true,
-                  text: type
-              },
-              scales: {
-                  xAxes: [{
-                      display: true,
-                      scaleLabel: {
-                          display: true,
-                          labelString: v_periodo
-                      }
-                  }]
-              }
-          }
-      });
-      
+                {
+                    label: type,
+                    data: data,
+                    borderColor: '#000000', // Preto
+                    fill: false,
+                    borderDash: [5, 5],
+                    pointBackgroundColor: '#000000',
+                    pointBorderColor: '#000000',
+                    pointRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: type
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: v_periodo
+                    }
+                }]
+            }
+        }
+    });
+    
     
 }
 

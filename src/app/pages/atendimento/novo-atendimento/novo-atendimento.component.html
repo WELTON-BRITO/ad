@@ -186,7 +186,7 @@
                                     
                                         <div class="form-group col-md-3">
                                             <div class="form-group">
-                                                <label for="nomeResponsavel">Buscar por CPF</label>
+                                                <label for="nomeResponsavel">CPF do Responsável</label>
                                                 <input class="form-control" name="cpf" id="cpf" type="text"
                                                     formControlName="cpf" mask="000.000.000-00" maxlength="14"
                                                     placeholder="000.000.000-00" />
@@ -205,29 +205,45 @@
                                                 (click)="isValidCpf(formNovoAtendimento.value)">
                                                 Pesquisar
                                             </button>
-                                        </div>
-                                        <div class="col-md-4" *ngFor="let row of rowData">
-                                            <nb-card>
-                                                <nb-card-body class="card" *ngIf="isbuscarNome">
-                                                    <div class="text-center">
-                                                        <img src="{{row.avatar}}" style="height: 55px; border-radius: 50%;">
-                                                    </div>
-                                                    <p class="card-text">Paciente: {{ row?.nameChild || row.name }}</p>
-                                                    <p class="card-text" *ngIf="row?.nameChild">Responsável: {{ row?.name }}</p>
-                                                    <p class="card-text" *ngIf="!row?.nameChild"> </p> <!-- Mantém a quebra de linha -->
 
-                                                    <p class="card-text">Telefone: {{ row.cellPhone }}</p> 
-                                                    <p class="card-text">Email: {{ row.email }}</p>
-                                                    <p class="card-text">CPF: {{ row.federalId }}</p>
-                                                    
-                                                    <div class="datatable-body-box-actions">
-                                                        <button class="btn btn-success" size="small" (click)="SelecionarPaciente(row)">
-                                                            Selecionar
-                                                          </button>
-                                                    </div>                                  
-                                                </nb-card-body>
-                                            </nb-card>
+                                            <button class="btn btn-success m-4" 
+                                            (click)="Cadastrar(formNovoAtendimento.value)">
+                                            Cadastrar Paciente
+                                        </button>
+
                                         </div>
+
+                                                  <div *ngIf="isCadastrar" class="col-md-12" >
+                                                    <iframe [src]="safeUrl" width="100%" height="900px" frameborder="0" allow="camera; microphone" allowfullscreen></iframe>
+                                                  </div>
+
+
+
+                                        <ng-container *ngIf="isDadosAtendimento2">
+                                            <div class="col-md-4" *ngFor="let row of rowData">
+                                                <nb-card>
+                                                    <nb-card-body class="card" *ngIf="isbuscarNome">
+                                                        <div class="text-center">
+                                                            <img src="{{row.avatar}}" style="height: 55px; border-radius: 50%;">
+                                                        </div>
+                                                        <p class="card-text">Paciente: {{ row?.nameChild || row.name }}</p>
+                                                        <p class="card-text" *ngIf="row?.nameChild">Responsável: {{ row?.name }}</p>
+                                                        <p class="card-text" *ngIf="!row?.nameChild"> </p> <!-- Mantém a quebra de linha -->
+                                        
+                                                        <p class="card-text">Telefone: {{ row.cellPhone }}</p> 
+                                                        <p class="card-text">Email: {{ row.email }}</p>
+                                                        <p class="card-text">CPF: {{ row.federalId }}</p>
+                                                        
+                                                        <div class="datatable-body-box-actions">
+                                                            <button class="btn btn-success" size="small" (click)="SelecionarPaciente(row)">
+                                                                Selecionar
+                                                            </button>
+                                                        </div>                                  
+                                                    </nb-card-body>
+                                                </nb-card>
+                                            </div>
+                                        </ng-container>
+                                        
                                         <div class="form-group col-md-12" *ngIf="isDadosAtendimento">
                                             <div class="form-row">
                                                 <div class="form-group col-md-4">

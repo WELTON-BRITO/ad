@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild,AfterViewInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
@@ -6,6 +6,7 @@ import { NbToastrService } from '@nebular/theme';
 import { AtendimentoService } from '../atendimento.service';
 import { CPFValidator } from '../../shared/validators/CPFValidator';
 import * as moment from 'moment';
+import { DomSanitizer } from '@angular/platform-browser';
 import { CombineLatestOperator } from 'rxjs/internal-compatibility';
 
 @Component({
@@ -67,6 +68,10 @@ export class NovoAtendimentoComponent {
     public antecipada: boolean = false;
     public patchPaciente = null;
     public avatar = "assets/images/avatar.png";
+    public isDadosAtendimento2=false;
+    public isCadastrar=false;
+    public safeUrl = null;
+
 
 
     public tipoCardEncaixe: any[] = [{
@@ -81,6 +86,7 @@ export class NovoAtendimentoComponent {
     constructor(private formBuilder: FormBuilder,
         private router: Router,
         private toastrService: NbToastrService,
+        private sanitizer: DomSanitizer, private elRef: ElementRef, private cdRef: ChangeDetectorRef,
         private service: AtendimentoService) {
 
         this.listTipoConsulta = [
@@ -165,6 +171,18 @@ export class NovoAtendimentoComponent {
               }
           }
 
+          window.onload = () => {
+            const iframe = document.querySelector('iframe');
+            const keys = ['Authorization', 'bway-domain', 'bway-medico'];
+            const dados = this.getLocalStorageItems(keys);
+      
+            if (iframe && dados) {
+              iframe.contentWindow.postMessage(dados, '*');
+            }
+          };
+
+          this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:4200/#/pages/gestao-paciente/novo-paciente');
+
         this.pagamento();
         this.formNovoAtendimento = this.formBuilder.group({
             medico: [this.listMedico[0]],
@@ -247,15 +265,27 @@ export class NovoAtendimentoComponent {
         return 0;
     }
 
+    getLocalStorageItems(keys: string[]): { [key: string]: any } {
+        const items: { [key: string]: any } = {};
+        keys.forEach(key => {
+          items[key] = localStorage.getItem(key);
+        });
+        return items;
+      }
+
+
     pagamento() {
         this.fetchData(true)
 
         this.isActive = true
+
         this.service.buscaPagamentos(null, (response) => {
 
             this.listPagto = response
             this.isActive = false
             this.fetchData(false)
+
+            console.log(response)
 
 
         }, (error) => {
@@ -455,6 +485,7 @@ export class NovoAtendimentoComponent {
 
         this.fetchData(true)
 
+
         if (data.cpf != null) {
 
             this.isActive = true;
@@ -510,6 +541,7 @@ export class NovoAtendimentoComponent {
 
         this.listDependente = [];
         this.isDependente = false;
+        this.isCadastrar=false;
 
         if(data.nome == null){
 
@@ -520,18 +552,23 @@ export class NovoAtendimentoComponent {
             return false;
         }
 
+        this.isDadosAtendimento2 =true;
+
         this.pesquisaPaciente(data)
         return true;
 
     }else{
 
         let params = new HttpParams();
-        params = params.append('name', data.nome)
+        
+        params = params.append('name',data.nome.toLowerCase())
+
         let allData = []; // Crie uma variável vazia para armazenar os dados
+
 
         this.service.buscaPacienteSearch(params, (response) => {
             allData = response
-            .map(data => ({
+            .map(data => ({ 
              avatar: this.getAvatar(data),
              name: data.name,
               nameChild: data.nameChild,
@@ -549,6 +586,9 @@ export class NovoAtendimentoComponent {
                             }));
 
              this.fetchData(false)
+
+             this.isDadosAtendimento2 =true;
+
     
       if (allData.length === 0) {
           this.toastrService.warning("Não Foram Encontradas Usuários", 'Aditi Care');
@@ -919,6 +959,10 @@ export class NovoAtendimentoComponent {
         this.formNovoAtendimento.controls['emailResponsavel'].setValue(data.email);
         this.isConvenio = false;
         this.isbuscarNome =false;
+        this.isHorario=false;
+        this.isDadosAtendimento2 =false;
+
+
 
         if(data.idChild !== null){
 
@@ -928,6 +972,7 @@ export class NovoAtendimentoComponent {
 
         this.optDep= true;  
         this.isDependente = true;
+
 
          //const position = this.findPositionById(this.listDependente, this.childId);
 
@@ -963,6 +1008,24 @@ export class NovoAtendimentoComponent {
             this.isHorario = false;
                this.isConfAtendimento = true;
         }
+
+    }
+
+    Cadastrar(){
+
+        if( this.isCadastrar == true){
+
+            this.isCadastrar=false;
+
+
+        }else{
+
+            this.isCadastrar=true;
+
+
+        }
+
+
 
     }
 

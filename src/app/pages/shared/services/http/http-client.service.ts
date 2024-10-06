@@ -76,12 +76,12 @@ export class HttpService {
   }
   private getErrorMessage(err: any): any {
 
-    if (parseInt(err.status) >= 400 && parseInt(err.status) <= 500) {
+    if (parseInt(err.status) >= 300 && parseInt(err.status) <= 600) {
       if (parseInt(err.status) == 401) {
           setTimeout(() => {
               this.router.navigate(['/login']);
           }, 3000); // 3000 milissegundos = 3 segundos
-      } else if (parseInt(err.status) == 200) {
+      } else if (parseInt(err.status) == 200 || parseInt(err.status) == 204) {
           return { message: "Realizar a operação.", status: err.status };
       } else if (parseInt(err.status) == 500 && err.error.message === 'Invalid token') {
 
@@ -207,6 +207,8 @@ export class HttpService {
             this.loadingBarService.complete();
             if (response.status === 200 && response.body) {
                 successHandle(response.body);
+            } else if (response.status === 204) {
+                successHandle(null); // ou qualquer valor que faça sentido para o seu caso
             } else {
                 const errorMessage = this.getErrorMessage(response);
                 errorHandle(errorMessage);
@@ -219,6 +221,7 @@ export class HttpService {
         }
     );
 }
+
 
 
 
